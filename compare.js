@@ -17,7 +17,7 @@ function mk() {
     y: rand(-H * .1, H),
     spd,
     len: spd * C.exp,
-    col: `rgba(255,255,255,${rand(C.al[0], C.al[1]).toFixed(3)})`
+    a: rand(C.al[0], C.al[1])
   };
 }
 
@@ -52,10 +52,15 @@ function frame(ts) {
       p.x = rand(-60, W + 60);
       p.y = -p.len - rand(0, H * .12);
     }
-    ctx.strokeStyle = p.col;
+    const ty = p.y - p.len;
+    const g = ctx.createLinearGradient(p.x, p.y, p.x, ty);
+    g.addColorStop(0, `rgba(255,255,255,0)`);
+    g.addColorStop(.5, `rgba(255,255,255,${p.a.toFixed(3)})`);
+    g.addColorStop(1, `rgba(255,255,255,0)`);
+    ctx.strokeStyle = g;
     ctx.beginPath();
     ctx.moveTo(p.x, p.y);
-    ctx.lineTo(p.x, p.y - p.len);
+    ctx.lineTo(p.x, ty);
     ctx.stroke();
   }
   requestAnimationFrame(frame);
