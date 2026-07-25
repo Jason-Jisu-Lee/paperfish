@@ -23,3 +23,6 @@ body.idle{cursor:none}
 }
 #ui span:hover{color:#8F8F8F}
 #ui span.on{color:#D6D6D6}
+#ui.lanes{gap:0}
+#ui.lanes span{flex:1;text-align:center;cursor:default}
+#ui.lanes span:hover{color:#4A4A4A}
