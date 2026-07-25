@@ -1,0 +1,25 @@
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:#000;overflow:hidden}
+body.idle{cursor:none}
+#c{position:fixed;inset:0;display:block}
+#ui{
+  position:fixed;left:0;right:0;bottom:16px;
+  display:flex;justify-content:center;gap:4px;
+  opacity:0;pointer-events:none;
+  transition:opacity .6s ease;
+}
+#ui.show{opacity:1;pointer-events:auto}
+#ui span{
+  font:11px ui-monospace,"Cascadia Mono",Consolas,monospace;
+  letter-spacing:.14em;
+  color:#4A4A4A;
+  padding:10px 12px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .25s;
+}
+#ui span:hover{color:#8F8F8F}
+#ui span.on{color:#D6D6D6}
