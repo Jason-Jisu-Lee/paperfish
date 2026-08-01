@@ -32,6 +32,18 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement (rewritten)
+- Fish nose always matches actual travel direction exactly (full
+  rotation, verified zero error headless), not a small clamped tilt.
+  Base speed roughly doubled. Two independent speed layers: slow
+  personality drift (10-24s) and frequent mood swings (cruise/brisk/
+  dash/rest, 0.4-2.6s, per-event variable ease rate). Dash picks a far
+  target and bursts 3 bubbles. Release/leave state is a fast, near
+  instant 3.8-5.2x burst out of the tank.
+- Ambient: bubbles rise from the bottom continuously plus burst on
+  fish dashes; faint tiny background fish drift far behind the main
+  tank, pure decoration, max 4 concurrent.
+
 ## Open
 - Pacing is placeholder (gates ~25-55, breeds 14-120s). Real target: ~1h
   per depth, 5h total.
