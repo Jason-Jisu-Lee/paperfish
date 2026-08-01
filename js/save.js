@@ -3,7 +3,7 @@ const SAVE = {
   timer: 0,
 
   save() {
-    if (STATE.mode !== 'play') return;
+    if (this.disabled || STATE.mode !== 'play') return;
     const data = {
       d: STATE.depth,
       lin: STATE.lineage,
@@ -39,6 +39,7 @@ const SAVE = {
   },
 
   reset() {
+    this.disabled = true;
     try { localStorage.removeItem(this.KEY); } catch (e) {}
     location.reload();
   },
