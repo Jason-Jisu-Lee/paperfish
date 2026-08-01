@@ -68,7 +68,7 @@ const GATE = {
       const w = s.size * 0.32, h = w * s.asp;
       ctx.save();
       ctx.translate(fx0, fy0);
-      if (Math.sin(a + Math.PI / 2) > 0) ctx.scale(-1, 1);
+      if (Math.sin(a) > 0) ctx.scale(-1, 1);
       ctx.globalAlpha = 0.13;
       ctx.drawImage(img, -w / 2, -h / 2, w, h);
       ctx.restore();

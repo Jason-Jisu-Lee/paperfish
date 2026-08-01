@@ -34,11 +34,11 @@ const TRADER = {
     return get.type === 'egg' ? SP[get.sp].value * 2.2 : 10 + 6 * STATE.depth + (TANK.capacity - 20) * 1.5;
   },
 
-  findPay(targetValue) {
+  findPay(targetValue, keepPair) {
     for (const spId of TANK.ownedSpecies()) {
       const n = Math.max(1, Math.round(targetValue / SP[spId].value));
       const cnt = TANK.count(spId);
-      const spare = cnt > 2 ? cnt - 2 : cnt;
+      const spare = keepPair ? Math.max(0, cnt - 2) : (cnt > 2 ? cnt - 2 : cnt);
       if (n <= spare) return { sp: spId, n };
     }
     return null;
@@ -62,7 +62,7 @@ const TRADER = {
     else if (locked.length) order = [{ type: 'egg', sp: locked[0].id }];
     else return null;
     for (const get of order) {
-      const pay = this.findPay(this.price(get));
+      const pay = this.findPay(this.price(get), get.type !== 'egg');
       if (pay) return { get, pay };
     }
     const get = order[0];
@@ -110,7 +110,6 @@ const TRADER = {
     const w = s.size * 2.6, h = w * s.asp;
     ctx.save();
     ctx.translate(tr.x, tr.y + Math.sin(tr.bob * 0.9) * 5);
-    ctx.scale(-1, 1);
     ctx.globalAlpha = 0.13;
     ctx.drawImage(img, -w / 2, -h / 2, w, h);
     ctx.restore();

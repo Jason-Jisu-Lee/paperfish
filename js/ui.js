@@ -5,7 +5,7 @@ const UI = {
   toastTimer: null,
 
   init() {
-    for (const id of ['depthlabel', 'count', 'indexbtn', 'offer', 'offerwant', 'offerget', 'deal', 'pass', 'panel', 'paneltitle', 'panelrows', 'panelsum', 'panelok', 'panelcancel', 'indexov', 'indexgrid', 'toast', 'fishtip', 'endov', 'endtext', 'endindex', 'again'])
+    for (const id of ['depthlabel', 'count', 'indexbtn', 'resetbtn', 'offer', 'offerwant', 'offerget', 'deal', 'pass', 'panel', 'paneltitle', 'panelrows', 'panelsum', 'panelok', 'panelcancel', 'indexov', 'indexgrid', 'toast', 'fishtip', 'endov', 'endtext', 'endindex', 'again'])
       this.el[id] = document.getElementById(id);
     this.el.deal.addEventListener('click', () => TRADER.accept());
     this.el.pass.addEventListener('click', () => TRADER.pass());
@@ -14,6 +14,12 @@ const UI = {
     this.el.panelcancel.addEventListener('click', () => { this.el.panel.hidden = true; });
     this.el.panelok.addEventListener('click', () => this.confirmPanel());
     this.el.again.addEventListener('click', () => SAVE.reset());
+    this.el.resetbtn.addEventListener('click', () => {
+      if (this.resetArmed) { SAVE.reset(); return; }
+      this.resetArmed = true;
+      this.el.resetbtn.textContent = 'sure?';
+      setTimeout(() => { this.resetArmed = false; this.el.resetbtn.textContent = 'reset'; }, 3000);
+    });
     addEventListener('keydown', e => {
       if (e.key === 'Escape') { this.el.panel.hidden = true; this.el.indexov.hidden = true; }
     });
@@ -32,6 +38,7 @@ const UI = {
     this.el.depthlabel.hidden = true;
     this.el.count.hidden = true;
     this.el.indexbtn.hidden = true;
+    this.el.resetbtn.hidden = true;
   },
 
   showOffer(o) {
@@ -136,9 +143,15 @@ const UI = {
 
   confirmPanel() {
     if (this.panelMode === 'gate') {
-      if (this.sum() > 0) GATE.feed(this.sel, innerWidth, innerHeight);
+      if (this.sum() > 0) {
+        if (!TANK.keepsPair(this.sel)) { this.toast('keep a pair'); return; }
+        GATE.feed(this.sel, innerWidth, innerHeight);
+      }
       this.el.panel.hidden = true;
     } else {
+      let pair = false;
+      for (const k in this.sel) if (this.sel[k] >= 2) pair = true;
+      if (!pair) { this.toast('carry a pair'); return; }
       this.el.panel.hidden = true;
       MAIN.descend(this.sel);
     }
@@ -153,7 +166,7 @@ const UI = {
       const cell = document.createElement('div');
       cell.className = 'cell' + (un ? '' : ' locked');
       const img = document.createElement('img');
-      img.src = 'assets/' + s.id + '.svg?v=2';
+      img.src = 'assets/' + s.id + '.svg?v=3';
       const cn = document.createElement('div');
       cn.className = 'cname';
       cn.textContent = un ? s.name : '?';

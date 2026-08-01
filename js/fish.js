@@ -10,7 +10,7 @@ class Fish {
     this.phase = rnd(0, TAU);
     this.scale = juv ? 0.45 : 1;
     this.state = 'swim';
-    this.face = Math.cos(this.dir) > 0 ? -1 : 1;
+    this.face = Math.cos(this.dir) > 0 ? 1 : -1;
     this.wanderT = 0;
     this.tx = x; this.ty = y;
     this.speedMul = rnd(0.85, 1.15);
@@ -56,7 +56,7 @@ class Fish {
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
     this.x += vx * dt; this.y += vy * dt;
     this.x = clamp(this.x, 30, W - 30); this.y = clamp(this.y, 60, H - 60);
-    this.face = vx > 2 ? -1 : vx < -2 ? 1 : this.face;
+    this.face = vx > 2 ? 1 : vx < -2 ? -1 : this.face;
     this.vy = vy;
   }
   draw(ctx, t, alpha = 1) {

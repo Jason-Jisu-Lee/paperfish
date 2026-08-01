@@ -59,7 +59,7 @@ const WILD = {
     const w = this.active;
     if (!w || w.state !== 'cross') return;
     if (TANK.total() >= TANK.capacity) { UI.toast('no room'); return; }
-    const pay = TRADER.findPay(SP[w.sp].value * 1.2);
+    const pay = TRADER.findPay(SP[w.sp].value * 1.2, true);
     if (!pay) { UI.toast('nothing it wants'); return; }
     w.state = 'wait';
     w.wx = clamp(w.x, 110, W - 110);
@@ -78,12 +78,13 @@ const WILD = {
     const wd = s.size, h = wd * s.asp;
     ctx.save();
     ctx.translate(w.x, w.y + Math.sin(t * 1.6 + w.phase) * 3);
-    if ((w.state === 'cross' ? w.vx > 0 : Math.cos(w.t * 0.5) < 0)) ctx.scale(-1, 1);
+    const movingRight = w.state === 'cross' ? w.vx > 0 : Math.sin(w.t * 0.5) < 0;
+    if (!movingRight) ctx.scale(-1, 1);
     ctx.globalAlpha = w.state === 'join' ? w.alpha : 0.34;
     ctx.drawImage(img, -wd / 2, -h / 2, wd, h);
     ctx.restore();
     if (w.state === 'cross') {
-      const pay = TRADER.findPay(s.value * 1.2);
+      const pay = TRADER.findPay(s.value * 1.2, true);
       ctx.globalAlpha = 0.5;
       ctx.fillStyle = '#fff';
       ctx.font = '11px system-ui, sans-serif';

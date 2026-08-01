@@ -10,6 +10,8 @@ button:hover{background:rgba(255,255,255,.9);color:#000;border-color:rgba(255,25
 #count{position:absolute;top:18px;right:22px;opacity:.5}
 #indexbtn{position:absolute;bottom:18px;left:22px;pointer-events:auto;border:none;opacity:.4;padding:6px 8px}
 #indexbtn:hover{background:transparent;color:rgba(255,255,255,.95);opacity:1}
+#resetbtn{position:absolute;bottom:18px;right:22px;pointer-events:auto;border:none;opacity:.25;padding:6px 8px}
+#resetbtn:hover{background:transparent;color:rgba(255,255,255,.95);opacity:1}
 #offer{position:fixed;left:50%;top:96px;transform:translateX(-50%);text-align:center;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:14px 22px;font-size:13px;letter-spacing:.08em}
 #offerwant{opacity:.85}
 #offerget{opacity:.55;margin-top:5px;font-size:12px}

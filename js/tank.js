@@ -47,6 +47,13 @@ const TANK = {
     return true;
   },
 
+  keepsPair(sel) {
+    for (const spId of this.ownedSpecies()) {
+      if (this.count(spId) - (sel[spId] || 0) >= 2) return true;
+    }
+    return false;
+  },
+
   cancelRitual(sp) {
     const r = this.rituals[sp];
     if (!r) return;
@@ -56,6 +63,15 @@ const TANK = {
   },
 
   update(dt, t, W, H) {
+    if (this.fishes.length === 0 && this.eggs.length === 0 && STATE.mode === 'play') {
+      this.strayT = (this.strayT || 0) + dt;
+      if (this.strayT > 6) {
+        this.strayT = 0;
+        this.addFish('bass', W * 0.4, H * 0.45, false);
+        this.addFish('bass', W * 0.6, H * 0.5, false);
+        UI.toast('strays drift in');
+      }
+    } else this.strayT = 0;
     const mult = 1 + 0.15 * STATE.lineage;
     for (const spId of this.ownedSpecies()) {
       const s = SP[spId];

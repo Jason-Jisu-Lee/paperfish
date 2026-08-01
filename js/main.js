@@ -188,7 +188,7 @@ const MAIN = {
         const sy = y0 + dr.y + Math.sin(this.T * 1.4 + dr.phase) * 3;
         ctx.save();
         ctx.translate(dr.x, sy);
-        if (dr.dir > 0) ctx.scale(-1, 1);
+        if (dr.dir < 0) ctx.scale(-1, 1);
         ctx.globalAlpha = 0.5;
         ctx.drawImage(img, -w / 2, -h / 2, w, h);
         ctx.restore();
