@@ -56,8 +56,7 @@ class Fish {
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
     this.x += vx * dt; this.y += vy * dt;
     this.x = clamp(this.x, 30, W - 30); this.y = clamp(this.y, 60, H - 60);
-    const wantFace = vx > 2 ? -1 : vx < -2 ? 1 : this.face < 0 ? -1 : 1;
-    this.face += (wantFace - this.face) * Math.min(1, dt * 5);
+    this.face = vx > 2 ? -1 : vx < -2 ? 1 : this.face;
     this.vy = vy;
   }
   draw(ctx, t, alpha = 1) {

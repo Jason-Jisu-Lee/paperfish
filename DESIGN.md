@@ -11,6 +11,13 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Species = three numbers only: breed speed, trade value, per-species cap
   (default 5, varies). No per-fish abilities, ever.
 
+## Active play
+- Wild fish: faint silhouettes cross the water every 20-45s, weighted
+  toward locked species. Click to lure: costs live fish as chum
+  (value x 1.2), chum swims out, the wild one brightens and joins as
+  an adult. The main acquisition verb; traders are secondary
+  (egg pairs, room).
+
 ## Structure
 - 5 depths, one gate each. Gate is fed fish over time (count-based).
 - Gate opens -> choose carried fish (2/3/4/5), rest released, descend.

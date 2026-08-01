@@ -153,7 +153,7 @@ const UI = {
       const cell = document.createElement('div');
       cell.className = 'cell' + (un ? '' : ' locked');
       const img = document.createElement('img');
-      img.src = 'assets/' + s.id + '.svg?v=1';
+      img.src = 'assets/' + s.id + '.svg?v=2';
       const cn = document.createElement('div');
       cn.className = 'cname';
       cn.textContent = un ? s.name : '?';

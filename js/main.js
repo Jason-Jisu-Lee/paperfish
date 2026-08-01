@@ -44,6 +44,7 @@ const MAIN = {
     if (STATE.mode !== 'play' || UI.anyOpen()) return;
     const mx = e.clientX, my = e.clientY;
     if (GATE.hit(mx, my, this.W, this.H)) { GATE.click(this.W, this.H); return; }
+    if (WILD.hit(mx, my)) { WILD.tryLure(this.W, this.H); return; }
     let best = null, bd = 1e9;
     for (const f of TANK.fishes) {
       if (f.dead) continue;
@@ -123,6 +124,7 @@ const MAIN = {
     if (STATE.mode === 'play') {
       TANK.update(dt, this.T, this.W, this.H);
       TRADER.update(dt, this.W, this.H);
+      WILD.update(dt, this.W, this.H);
       GATE.update(dt);
       FX.update(dt, this.T);
       SAVE.update(dt);
@@ -152,6 +154,7 @@ const MAIN = {
     FX.drawSnow(ctx);
     GATE.draw(ctx, this.T, this.W, this.H);
     TRADER.draw(ctx, this.T);
+    WILD.draw(ctx, this.T);
     TANK.drawEggs(ctx);
     const sorted = TANK.fishes.slice().sort((a, b) => SP[a.sp].size - SP[b.sp].size);
     for (const f of sorted) f.draw(ctx, this.T);
@@ -202,5 +205,5 @@ const MAIN = {
   }
 };
 
-window.FT = { STATE, TANK, TRADER, GATE, SAVE, MAIN };
+window.FT = { STATE, TANK, TRADER, WILD, GATE, SAVE, MAIN };
 MAIN.init();

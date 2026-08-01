@@ -1,6 +1,6 @@
 const SPECIES = [
   { id: 'minnow', name: 'minnow', depth: 1, size: 34, asp: 0.364, breed: 14, value: 1, max: 8 },
-  { id: 'bass', name: 'bass', depth: 1, size: 52, asp: 0.4, breed: 20, value: 2, max: 5 },
+  { id: 'bass', name: 'bass', depth: 1, size: 52, asp: 0.313, breed: 20, value: 2, max: 5 },
   { id: 'perch', name: 'perch', depth: 1, size: 58, asp: 0.308, breed: 24, value: 3, max: 5 },
   { id: 'cod', name: 'cod', depth: 1, size: 55, asp: 0.4, breed: 26, value: 4, max: 5 },
   { id: 'angelfish', name: 'angelfish', depth: 1, size: 60, asp: 0.935, breed: 30, value: 6, max: 4 },

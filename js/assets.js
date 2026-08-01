@@ -12,7 +12,7 @@ const ASSETS = {
         res();
       };
       im.onerror = () => res();
-      im.src = 'assets/' + s.id + '.svg?v=1';
+      im.src = 'assets/' + s.id + '.svg?v=2';
     })));
   }
 };
