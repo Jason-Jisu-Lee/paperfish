@@ -32,6 +32,31 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 2
+- Fixed sustained rotation instability during pairing (the "clock
+  needle" bug): steering toward a near/moving point via atan2 is
+  numerically unstable at near-zero distance. Pairing motion is now a
+  closed-form kinematic orbit (position and heading both computed
+  directly from t), not steered - eliminates the instability by
+  construction. All other steering states got a minimum-distance
+  guard (skip steering under ~4.5px) as a general defense.
+- Species cap (s.max) is now enforced at the moment a fish would be
+  added (egg hatch waits for room, wild lure refuses and refunds
+  nothing if already at cap), not just at breeding-ritual start. Old
+  bug let counts silently exceed max over a long session, so trader
+  offers referencing the inflated count looked broken but were
+  technically consistent with actual (buggy) state.
+- Wander targets now bias toward diagonal/sideways headings; a rare
+  ~12% "diving" pick allows a steep vertical target but forces 1.75x
+  speed for that leg, matching real fish (mostly lateral, fast when
+  vertical).
+- Bubbles reworked: rare localized streams (4-9 bubbles, one spot,
+  every 12-24s) replacing constant scattered spawn; live long enough
+  to actually reach the surface. Fish-triggered dash bubbles kept.
+  Removed near-invisible tiny background fish, replaced with sediment
+  puffs (rest near bottom), light shafts (two, near-static, faint),
+  and a rare (75-150s) large distant silhouette crossing slowly.
+
 ## Movement (rewritten)
 - Fish nose always matches actual travel direction exactly (full
   rotation, verified zero error headless), not a small clamped tilt.

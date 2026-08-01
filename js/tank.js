@@ -109,7 +109,7 @@ const TANK = {
     for (const e of this.eggs) {
       e.t += dt;
       e.y += 3.5 * dt;
-      if (e.t >= 7 && this.total() < this.capacity) {
+      if (e.t >= 7 && this.total() < this.capacity && this.count(e.sp) < SP[e.sp].max) {
         e.hatched = true;
         this.addFish(e.sp, e.x, e.y, true);
       }

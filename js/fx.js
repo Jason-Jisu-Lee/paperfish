@@ -2,15 +2,31 @@ const FX = {
   ripples: [],
   snow: [],
   bubbles: [],
-  bubbleClock: rnd(0.4, 1),
-  bg: [],
-  bgClock: rnd(3, 7),
+  bubbleClock: rnd(8, 16),
+  sediment: [],
+  giant: null,
+  giantClock: rnd(45, 90),
+  shafts: [
+    { baseX: 0.26, sway: rnd(0, TAU), swaySp: rnd(0.045, 0.08), width: 90, alpha: rnd(0.02, 0.032) },
+    { baseX: 0.64, sway: rnd(0, TAU), swaySp: rnd(0.035, 0.065), width: 130, alpha: rnd(0.014, 0.026) }
+  ],
   ripple(x, y, r0, r1, dur, alpha = 0.35) {
     FX.ripples.push({ x, y, r0, r1, dur, a: alpha, t: 0 });
   },
   bubbleBurst(x, y) {
     for (let i = 0; i < 3; i++)
       FX.bubbles.push({ x: x + rnd(-5, 5), y: y + rnd(-4, 4), r: rnd(1, 2.3), v: rnd(30, 55), sway: rnd(0, TAU), swaySp: rnd(2, 4), a: rnd(0.15, 0.3), life: rnd(1, 1.7), age: 0 });
+  },
+  bubbleStream() {
+    const x = rnd(innerWidth * 0.15, innerWidth * 0.85);
+    const n = Math.round(rnd(4, 9));
+    for (let i = 0; i < n; i++)
+      FX.bubbles.push({ x: x + rnd(-10, 10), y: innerHeight + rnd(0, 20), r: rnd(1.6, 3.6), v: rnd(48, 78), sway: rnd(0, TAU), swaySp: rnd(1, 2.2), a: rnd(0.12, 0.24), life: rnd(9, 15), age: -i * rnd(0.08, 0.16) });
+  },
+  sedimentPuff(x, y) {
+    const n = Math.round(rnd(3, 5));
+    for (let i = 0; i < n; i++)
+      FX.sediment.push({ x: x + rnd(-10, 10), y: y + rnd(2, 10), vx: rnd(-14, 14), vy: rnd(-10, -2), r: rnd(1.2, 2.6), a: rnd(0.1, 0.2), life: rnd(1.4, 2.4), age: 0 });
   },
   initSnow(density) {
     FX.snow = [];
@@ -28,27 +44,70 @@ const FX = {
     }
     FX.bubbleClock -= dt;
     if (FX.bubbleClock <= 0) {
-      FX.bubbleClock = rnd(0.5, 1.2);
-      FX.bubbles.push({ x: rnd(0, innerWidth), y: innerHeight + rnd(0, 40), r: rnd(1.2, 3.2), v: rnd(18, 38), sway: rnd(0, TAU), swaySp: rnd(1.2, 2.6), a: rnd(0.08, 0.2), life: rnd(3.5, 7), age: 0 });
+      FX.bubbleClock = rnd(12, 24);
+      FX.bubbleStream();
     }
     for (const b of FX.bubbles) {
       b.age += dt;
+      if (b.age < 0) continue;
       b.y -= b.v * dt;
       b.x += Math.sin(t * b.swaySp + b.sway) * 8 * dt;
     }
     FX.bubbles = FX.bubbles.filter(b => b.age < b.life && b.y > -20);
-    FX.bgClock -= dt;
-    if (FX.bgClock <= 0 && FX.bg.length < 4) {
-      FX.bgClock = rnd(8, 16);
-      const sp = pick(SPECIES).id;
-      const toRight = Math.random() < 0.5;
-      FX.bg.push({
-        sp, x: toRight ? -70 : innerWidth + 70, y: rnd(innerHeight * 0.12, innerHeight * 0.82),
-        dir: toRight ? 1 : -1, speed: rnd(6, 12), scale: rnd(0.26, 0.4), a: rnd(0.045, 0.09), phase: rnd(0, TAU)
-      });
+    for (const p of FX.sediment) {
+      p.age += dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      const dr = Math.exp(-1.5 * dt);
+      p.vx *= dr; p.vy *= dr;
     }
-    for (const f of FX.bg) { f.x += f.dir * f.speed * dt; f.y += Math.sin(t * 0.3 + f.phase) * 2 * dt; }
-    FX.bg = FX.bg.filter(f => f.x > -110 && f.x < innerWidth + 110);
+    FX.sediment = FX.sediment.filter(p => p.age < p.life);
+    FX.giantClock -= dt;
+    if (!FX.giant && FX.giantClock <= 0) {
+      FX.giantClock = rnd(75, 150);
+      const sp = pick(['shark', 'ray', 'oarfish', 'gulper']);
+      const toRight = Math.random() < 0.5;
+      FX.giant = {
+        sp, x: toRight ? -220 : innerWidth + 220, y: rnd(innerHeight * 0.16, innerHeight * 0.58),
+        dir: toRight ? 1 : -1, speed: rnd(9, 15), scale: rnd(2.6, 3.6), a: rnd(0.16, 0.24), phase: rnd(0, TAU)
+      };
+    }
+    if (FX.giant) {
+      FX.giant.x += FX.giant.dir * FX.giant.speed * dt;
+      FX.giant.y += Math.sin(t * 0.15 + FX.giant.phase) * 3 * dt;
+      if (FX.giant.x < -260 || FX.giant.x > innerWidth + 260) FX.giant = null;
+    }
+  },
+  drawShafts(ctx, t, W, H) {
+    for (const sh of FX.shafts) {
+      const cx = W * sh.baseX + Math.sin(t * sh.swaySp + sh.sway) * 40;
+      const topW = sh.width, botW = sh.width * 2.4, botY = H * 0.75;
+      const g = ctx.createLinearGradient(cx, 0, cx, botY);
+      g.addColorStop(0, 'rgba(255,255,255,' + sh.alpha + ')');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(cx - topW / 2, 0);
+      ctx.lineTo(cx + topW / 2, 0);
+      ctx.lineTo(cx + botW / 2, botY);
+      ctx.lineTo(cx - botW / 2, botY);
+      ctx.closePath();
+      ctx.fill();
+    }
+  },
+  drawGiant(ctx) {
+    const g = FX.giant;
+    if (!g) return;
+    const s = SP[g.sp];
+    const img = ASSETS.ras[g.sp];
+    if (!img) return;
+    const w = s.size * g.scale, h = w * s.asp;
+    ctx.save();
+    ctx.translate(g.x, g.y);
+    if (g.dir < 0) ctx.scale(-1, 1);
+    ctx.globalAlpha = g.a;
+    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+    ctx.restore();
+    ctx.globalAlpha = 1;
   },
   drawSnow(ctx) {
     for (const s of FX.snow) {
@@ -60,7 +119,8 @@ const FX = {
   },
   drawBubbles(ctx) {
     for (const b of FX.bubbles) {
-      const k = b.age < 0.3 ? b.age / 0.3 : (b.life - b.age < 0.6 ? (b.life - b.age) / 0.6 : 1);
+      if (b.age < 0) continue;
+      const k = b.age < 0.3 ? b.age / 0.3 : (b.life - b.age < 0.8 ? (b.life - b.age) / 0.8 : 1);
       ctx.globalAlpha = b.a * Math.max(0, k);
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 1;
@@ -68,18 +128,12 @@ const FX = {
     }
     ctx.globalAlpha = 1;
   },
-  drawBg(ctx) {
-    for (const f of FX.bg) {
-      const s = SP[f.sp];
-      const img = ASSETS.ras[f.sp];
-      if (!img) continue;
-      const w = s.size * f.scale, h = w * s.asp;
-      ctx.save();
-      ctx.translate(f.x, f.y);
-      if (f.dir < 0) ctx.scale(-1, 1);
-      ctx.globalAlpha = f.a;
-      ctx.drawImage(img, -w / 2, -h / 2, w, h);
-      ctx.restore();
+  drawSediment(ctx) {
+    for (const p of FX.sediment) {
+      const k = 1 - p.age / p.life;
+      ctx.globalAlpha = p.a * k;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, TAU); ctx.fill();
     }
     ctx.globalAlpha = 1;
   },

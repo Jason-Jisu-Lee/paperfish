@@ -59,6 +59,7 @@ const WILD = {
     const w = this.active;
     if (!w || w.state !== 'cross') return;
     if (TANK.total() >= TANK.capacity) { UI.toast('no room'); return; }
+    if (TANK.count(w.sp) >= SP[w.sp].max) { UI.toast('already plenty of ' + SP[w.sp].name); return; }
     const pay = TRADER.findPay(SP[w.sp].value * 1.2, true);
     if (!pay) { UI.toast('nothing it wants'); return; }
     w.state = 'wait';
