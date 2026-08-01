@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>fish tank assets</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:rgba(255,255,255,.5);font:11px system-ui,sans-serif;letter-spacing:.1em;padding:40px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:44px 26px;align-items:end}
+.cell{text-align:center}
+.cell img{display:block;margin:0 auto 12px}
+.cell .n{opacity:.8}
+.cell .s{opacity:.35;margin-top:3px;font-size:10px}
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script src="js/util.js?v=1"></script>
+<script src="js/species.js?v=1"></script>
+<script>
+const grid = document.getElementById('grid');
+for (const s of SPECIES) {
+  const cell = document.createElement('div');
+  cell.className = 'cell';
+  const img = document.createElement('img');
+  img.src = 'assets/' + s.id + '.svg?v=1';
+  img.style.width = s.size * 1.6 + 'px';
+  img.style.height = s.size * 1.6 * s.asp + 'px';
+  const n = document.createElement('div');
+  n.className = 'n';
+  n.textContent = s.name;
+  const st = document.createElement('div');
+  st.className = 's';
+  st.textContent = 'depth ' + s.depth + ' · keeps ' + s.max + ' · breeds ' + s.breed + 's · worth ' + s.value;
+  cell.append(img, n, st);
+  grid.append(cell);
+}
+</script>
+</body>
+</html>

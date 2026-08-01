@@ -1,25 +1,40 @@
 *{margin:0;padding:0;box-sizing:border-box}
-[hidden]{display:none!important}
+[hidden]{display:none !important}
 html,body{height:100%}
-body{background:#000;overflow:hidden}
-body.idle{cursor:none}
-#c{position:fixed;inset:0;display:block}
-#ui{
-  position:fixed;left:0;right:0;bottom:16px;
-  display:flex;justify-content:center;gap:4px;
-  opacity:0;pointer-events:none;
-  transition:opacity .6s ease;
-}
-#ui.show{opacity:1;pointer-events:auto}
-#ui span{
-  font:11px ui-monospace,"Cascadia Mono",Consolas,monospace;
-  letter-spacing:.14em;
-  color:#4A4A4A;
-  padding:10px 12px;
-  cursor:pointer;
-  user-select:none;
-  -webkit-tap-highlight-color:transparent;
-  transition:color .25s;
-}
-#ui span:hover{color:#8F8F8F}
-#ui span.on{color:#D6D6D6}
+body{background:#000;overflow:hidden;user-select:none;-webkit-user-select:none;font-family:system-ui,sans-serif;color:rgba(255,255,255,.65)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+button{background:transparent;border:1px solid rgba(255,255,255,.28);border-radius:7px;color:rgba(255,255,255,.7);font:500 12px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:lowercase;padding:7px 14px;cursor:pointer;transition:background .18s,color .18s,border-color .18s,opacity .3s}
+button:hover{background:rgba(255,255,255,.9);color:#000;border-color:rgba(255,255,255,.9)}
+#hud{position:fixed;inset:0;pointer-events:none;font-size:12px;letter-spacing:.14em}
+#depthlabel{position:absolute;top:18px;left:22px;opacity:.5}
+#count{position:absolute;top:18px;right:22px;opacity:.5}
+#indexbtn{position:absolute;bottom:18px;left:22px;pointer-events:auto;border:none;opacity:.4;padding:6px 8px}
+#indexbtn:hover{background:transparent;color:rgba(255,255,255,.95);opacity:1}
+#offer{position:fixed;left:50%;top:96px;transform:translateX(-50%);text-align:center;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:14px 22px;font-size:13px;letter-spacing:.08em}
+#offerwant{opacity:.85}
+#offerget{opacity:.55;margin-top:5px;font-size:12px}
+#offer .row{margin-top:11px;display:flex;gap:9px;justify-content:center}
+#panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);min-width:270px;background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:18px 22px;font-size:13px;letter-spacing:.06em}
+#paneltitle{opacity:.8;margin-bottom:12px;letter-spacing:.1em}
+#panelrows{display:flex;flex-direction:column;gap:7px;max-height:46vh;overflow-y:auto}
+#panelrows .prow{display:flex;align-items:center;gap:10px}
+#panelrows .pname{flex:1;opacity:.75}
+#panelrows .pown{opacity:.35;font-size:11px;min-width:26px;text-align:right}
+#panelrows .pbtn{border:1px solid rgba(255,255,255,.25);border-radius:5px;width:22px;height:22px;padding:0;line-height:1}
+#panelrows .pval{min-width:20px;text-align:center;opacity:.85}
+#panelsum{margin-top:12px;opacity:.5;font-size:12px}
+#panel .row{margin-top:13px;display:flex;gap:9px;justify-content:flex-end}
+#indexov{position:fixed;inset:0;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center}
+#indexgrid{display:grid;grid-template-columns:repeat(6,110px);gap:26px 22px;max-width:860px;max-height:80vh;overflow-y:auto;padding:20px}
+#indexgrid .cell{text-align:center;font-size:11px;letter-spacing:.08em}
+#indexgrid .cell img{width:74px;height:52px;object-fit:contain;display:block;margin:0 auto 7px}
+#indexgrid .cell.locked img{opacity:.1}
+#indexgrid .cell.locked .cname{opacity:.25}
+#indexgrid .cname{opacity:.75}
+#indexgrid .cstat{opacity:.35;margin-top:3px;font-size:10px}
+#toast{position:fixed;left:50%;top:14%;transform:translateX(-50%);font-size:14px;letter-spacing:.22em;opacity:0;transition:opacity .5s;pointer-events:none}
+#fishtip{position:fixed;font-size:11px;letter-spacing:.14em;opacity:.7;pointer-events:none}
+#endov{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#endtext{font-size:16px;letter-spacing:.24em;opacity:.85}
+#endindex{font-size:12px;letter-spacing:.16em;opacity:.4}
+#again{margin-top:22px}
