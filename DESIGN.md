@@ -32,6 +32,29 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 6 - rotation removed entirely
+- Pass 5's decoupled/capped/slow-eased pitch still read as jitter to
+  the user after a genuine refresh. Rather than keep tuning, cut the
+  whole thing: fish rendering now has ZERO rotation calls (verified
+  by monkey-patching ctx.rotate and confirming 0 invocations across
+  fish.js and wild.js). Only two things move a fish's sprite now:
+  the left/right mirror flip (tracks true direction every frame, no
+  lag - this is correct and was never the problem) and the small
+  vertical bob (position offset, not rotation, unchanged since the
+  original build, never complained about).
+- shadow.svg (trader) never got the tail-closing-line fix applied to
+  every other species 4 rounds ago. Its simple shape plus the open
+  tail made it visually pattern-match to "a giant broken bass" even
+  though it is a wholly separate asset. Closed it the same way.
+- Terminology going forward: "facing" = the mirror flip, always
+  correct, always tracks this.dir. "bob" = the small vertical sway,
+  cosmetic, unrelated to direction. There is no more "bend", "pitch",
+  "lean", or "wobble" - all removed. Do not reintroduce ANY of these
+  without an explicit, specific ask - this exact cycle (add subtle
+  rotation -> tune -> still reads as jitter -> repeat) burned 3 full
+  rounds. If asked for swim animation again, propose it in words
+  first and get a yes before writing code.
+
 ## Movement pass 5 - visual pitch decoupled from steering direction
 - Root cause of "still looking up/down, seizuring every 5 sec": the
   renderer was making the sprite's rotation fully equal the true

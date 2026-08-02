@@ -13,8 +13,6 @@ class Fish {
     this.wanderT = 0;
     this.tx = x; this.ty = y;
     this.diving = false;
-    this.curSpeed = 20;
-    this.renderPitch = 0;
     this.baseMul = rnd(0.8, 1.3);
     this.baseTarget = this.baseMul;
     this.baseT = rnd(10, 22);
@@ -94,7 +92,6 @@ class Fish {
       this.x = clamp(this.pairPt.x + Math.cos(o) * Ax, 30, W - 30);
       this.y = clamp(this.pairPt.y + Math.sin(o) * Ay, 60, H - 60);
       this.dir = Math.atan2(Math.cos(o) * Ay, -Math.sin(o) * Ax);
-      this.easePitch(dt, false);
       return;
     }
     let target = null;
@@ -131,7 +128,6 @@ class Fish {
       }
     }
     const speed = s.spd * mul;
-    this.curSpeed = speed;
     if (target) {
       const dx = target.x - this.x, dy = target.y - this.y;
       if (dx * dx + dy * dy > 20) {
@@ -144,12 +140,6 @@ class Fish {
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
     this.x += vx * dt; this.y += vy * dt;
     this.x = clamp(this.x, 30, W - 30); this.y = clamp(this.y, 60, H - 60);
-    this.easePitch(dt, this.diving);
-  }
-  easePitch(dt, diving) {
-    const cap = diving ? 0.3 : 0.07;
-    const target = clamp(Math.sin(this.dir) * 1.8, -1, 1) * cap;
-    this.renderPitch += (target - this.renderPitch) * Math.min(1, dt * 1.1);
   }
   draw(ctx, t, alpha = 1) {
     const s = SP[this.sp];
@@ -158,18 +148,9 @@ class Fish {
     const w = s.size * this.scale, h = w * s.asp;
     const bob = Math.sin(t * 1.8 + this.phase) * 2.2;
     const face = Math.cos(this.dir) >= 0 ? 1 : -1;
-    let wobble = 0;
-    if (this.state !== 'pairing') {
-      const sp = Math.min(this.curSpeed || 20, 110);
-      const freq = 3.2 + sp * 0.05;
-      const amp = 0.06 + Math.min(0.09, sp * 0.0012);
-      wobble = Math.sin(t * freq + this.phase * 3) * amp;
-    }
-    const lean = this.renderPitch + wobble;
     ctx.save();
     ctx.translate(this.x, this.y + bob);
     ctx.scale(face, 1);
-    ctx.rotate(face >= 0 ? lean : -lean);
     if (s.lamp) {
       const lx = (s.lamp.x - 0.5) * w, ly = (s.lamp.y - 0.5) * h;
       const pr = w * (0.55 + 0.08 * Math.sin(t * 2.1 + this.phase));

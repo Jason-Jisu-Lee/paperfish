@@ -78,11 +78,9 @@ const WILD = {
     const wd = s.size, h = wd * s.asp;
     const movingRight = w.state === 'cross' ? w.vx > 0 : Math.sin(w.t * 0.5) < 0;
     const face = movingRight ? 1 : -1;
-    const wobble = Math.sin(t * 5.2 + w.phase * 3) * 0.14;
     ctx.save();
     ctx.translate(w.x, w.y);
     ctx.scale(face, 1);
-    ctx.rotate(face >= 0 ? wobble : -wobble);
     ctx.globalAlpha = w.state === 'join' ? w.alpha : 0.34;
     ctx.drawImage(img, -wd / 2, -h / 2, wd, h);
     ctx.restore();
