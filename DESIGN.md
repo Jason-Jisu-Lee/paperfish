@@ -32,6 +32,25 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 4
+- Dash ("spazz") was firing every ~8s per fish (rolled inside the
+  fast ~1-2s mood cycle at 15% chance) - way too often. Pulled it out
+  into its own independent per-fish timer, 75-130s between dashes,
+  interrupting whatever mood was active then handing back control.
+  Verified headless: 1 dash in a 140s window per fish.
+  visible when it does: the wobble frequency scaled directly off
+  uncapped speed, so a dash (or dash+diving, though those can't
+  stack) could push it to 20+ Hz, reading as a blur/buzz. Speed value
+  used for wobble math now clamped to 110 before computing freq/amp,
+  capping the tail-beat around 1.4Hz max.
+- shadow.svg (trader silhouette) was authored nose-left/tail-right,
+  backwards from the "nose faces right" convention every other asset
+  uses. Trader always moves left-to-right with no flip logic, so it
+  visibly swam tail-first. Mirrored the path coordinates to match.
+- Reminder: file edits don't propagate to an already-open browser tab.
+  Several "still broken" reports across rounds have turned out to be
+  a stale tab. Always explicitly say "refresh the tab" after a fix.
+
 ## Movement pass 3
 - Wild fish only ever offer species you don't have yet (removed the
   "extras" path that let you re-catch an already-owned species like

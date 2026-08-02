@@ -22,6 +22,7 @@ class Fish {
     this.moodTarget = 1;
     this.moodEase = 1.5;
     this.moodT = rnd(0.8, 2);
+    this.dashT = rnd(75, 130);
     this.dead = false;
     this.pairPt = null;
     this.leaveTarget = null;
@@ -47,19 +48,12 @@ class Fish {
   }
   pickMood(W, H) {
     const r = Math.random();
-    if (r < 0.15) {
-      this.mood = 'dash';
-      this.moodTarget = rnd(2.4, 3.8);
-      this.moodT = rnd(0.4, 0.8);
-      this.moodEase = rnd(3.8, 6.2);
-      this.pickTarget(W, H, true);
-      FX.bubbleBurst(this.x, this.y);
-    } else if (r < 0.38) {
+    if (r < 0.42) {
       this.mood = 'brisk';
       this.moodTarget = rnd(1.5, 2.1);
       this.moodT = rnd(0.6, 1.5);
       this.moodEase = rnd(2.2, 3.6);
-    } else if (r < 0.5) {
+    } else if (r < 0.58) {
       this.mood = 'rest';
       this.moodTarget = rnd(0.12, 0.38);
       this.moodT = rnd(0.9, 2.1);
@@ -74,6 +68,14 @@ class Fish {
       this.moodT = rnd(0.8, 2.2);
       this.moodEase = rnd(1.2, 2.6);
     }
+  }
+  triggerDash(W, H) {
+    this.mood = 'dash';
+    this.moodTarget = rnd(2.4, 3.8);
+    this.moodT = rnd(0.4, 0.8);
+    this.moodEase = rnd(3.8, 6.2);
+    this.pickTarget(W, H, true);
+    FX.bubbleBurst(this.x, this.y);
   }
   update(dt, t, W, H) {
     const s = SP[this.sp];
@@ -92,8 +94,12 @@ class Fish {
     if (this.state === 'swim') {
       this.wanderT -= dt;
       if (this.wanderT <= 0 || Math.hypot(this.tx - this.x, this.ty - this.y) < 22) this.pickTarget(W, H, false);
-      this.moodT -= dt;
-      if (this.moodT <= 0) this.pickMood(W, H);
+      this.dashT -= dt;
+      if (this.dashT <= 0) { this.dashT = rnd(75, 130); this.triggerDash(W, H); }
+      else {
+        this.moodT -= dt;
+        if (this.moodT <= 0) this.pickMood(W, H);
+      }
       this.moodMul += (this.moodTarget - this.moodMul) * Math.min(1, dt * this.moodEase);
       this.baseT -= dt;
       if (this.baseT <= 0) { this.baseTarget = rnd(0.75, 1.35); this.baseT = rnd(12, 24); }
@@ -140,7 +146,7 @@ class Fish {
     const localAngle = face >= 0 ? this.dir : Math.PI - this.dir;
     let wobble = 0;
     if (this.state !== 'pairing') {
-      const sp = this.curSpeed || 20;
+      const sp = Math.min(this.curSpeed || 20, 110);
       const freq = 3.2 + sp * 0.05;
       const amp = 0.09 + Math.min(0.14, sp * 0.0018);
       wobble = Math.sin(t * freq + this.phase * 3) * amp;
