@@ -14,6 +14,7 @@ class Fish {
     this.tx = x; this.ty = y;
     this.diving = false;
     this.curSpeed = 20;
+    this.renderPitch = 0;
     this.baseMul = rnd(0.8, 1.3);
     this.baseTarget = this.baseMul;
     this.baseT = rnd(10, 22);
@@ -30,17 +31,24 @@ class Fish {
     this.leaveMul = 0;
   }
   pickTarget(W, H, far) {
-    const preferSteep = !far && Math.random() < 0.06;
-    let tx = this.tx, ty = this.ty;
+    const preferSteep = !far && Math.random() < 0.05;
+    let tx = this.tx, ty = this.ty, ok = false;
     for (let tries = 0; tries < 8; tries++) {
       tx = rnd(50, W - 50);
       ty = rnd(80, H - 150);
+      const steepness = Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1);
       if (far) {
-        if (Math.hypot(tx - this.x, ty - this.y) > Math.min(W, H) * 0.4) break;
+        if (Math.hypot(tx - this.x, ty - this.y) > Math.min(W, H) * 0.4 && steepness < 2.7) { ok = true; break; }
         continue;
       }
-      const steepness = Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1);
-      if (preferSteep ? steepness > 1.4 : steepness < 0.7) break;
+      if (preferSteep ? (steepness > 1.4 && steepness < 3.5) : steepness < 0.65) { ok = true; break; }
+    }
+    if (!ok) {
+      const dx = (Math.random() < 0.5 ? -1 : 1) * rnd(120, 320);
+      const maxSteep = far ? 2.5 : preferSteep ? 2.2 : 0.55;
+      const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0.3, maxSteep);
+      tx = clamp(this.x + dx, 50, W - 50);
+      ty = clamp(this.y + dy, 80, H - 150);
     }
     this.tx = tx; this.ty = ty;
     this.wanderT = rnd(3, 7);
@@ -86,6 +94,7 @@ class Fish {
       this.x = clamp(this.pairPt.x + Math.cos(o) * Ax, 30, W - 30);
       this.y = clamp(this.pairPt.y + Math.sin(o) * Ay, 60, H - 60);
       this.dir = Math.atan2(Math.cos(o) * Ay, -Math.sin(o) * Ax);
+      this.easePitch(dt, false);
       return;
     }
     let target = null;
@@ -135,6 +144,12 @@ class Fish {
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
     this.x += vx * dt; this.y += vy * dt;
     this.x = clamp(this.x, 30, W - 30); this.y = clamp(this.y, 60, H - 60);
+    this.easePitch(dt, this.diving);
+  }
+  easePitch(dt, diving) {
+    const cap = diving ? 0.3 : 0.07;
+    const target = clamp(Math.sin(this.dir) * 1.8, -1, 1) * cap;
+    this.renderPitch += (target - this.renderPitch) * Math.min(1, dt * 1.1);
   }
   draw(ctx, t, alpha = 1) {
     const s = SP[this.sp];
@@ -143,18 +158,18 @@ class Fish {
     const w = s.size * this.scale, h = w * s.asp;
     const bob = Math.sin(t * 1.8 + this.phase) * 2.2;
     const face = Math.cos(this.dir) >= 0 ? 1 : -1;
-    const localAngle = face >= 0 ? this.dir : Math.PI - this.dir;
     let wobble = 0;
     if (this.state !== 'pairing') {
       const sp = Math.min(this.curSpeed || 20, 110);
       const freq = 3.2 + sp * 0.05;
-      const amp = 0.09 + Math.min(0.14, sp * 0.0018);
+      const amp = 0.06 + Math.min(0.09, sp * 0.0012);
       wobble = Math.sin(t * freq + this.phase * 3) * amp;
     }
+    const lean = this.renderPitch + wobble;
     ctx.save();
     ctx.translate(this.x, this.y + bob);
     ctx.scale(face, 1);
-    ctx.rotate(localAngle + (face >= 0 ? wobble : -wobble));
+    ctx.rotate(face >= 0 ? lean : -lean);
     if (s.lamp) {
       const lx = (s.lamp.x - 0.5) * w, ly = (s.lamp.y - 0.5) * h;
       const pr = w * (0.55 + 0.08 * Math.sin(t * 2.1 + this.phase));

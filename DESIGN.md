@@ -32,6 +32,34 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 5 - visual pitch decoupled from steering direction
+- Root cause of "still looking up/down, seizuring every 5 sec": the
+  renderer was making the sprite's rotation fully equal the true
+  steering angle (this.dir). Wander targets repick every 3-7s, and
+  even with a tight target-angle bias, the SHORTEST interpolation
+  path between two near-horizontal-but-opposite-side headings still
+  sweeps through ~90 deg at the midpoint - inherent to continuous
+  rotation between arbitrary angles, not fixable by biasing the
+  target alone. The "turn faster during big reversals" boost from
+  pass 3 made this MORE visible (fast disconnect between rotation and
+  actual translation speed = reads as broken/jittery, worse than the
+  slow version).
+- Fix: render pitch is now its own field (this.renderPitch), eased
+  SLOWLY (dt*1.1, ~1s time constant) toward a small capped target
+  derived from sin(dir) - normal cap ~4 deg (0.07 rad, mid of the
+  "2-5 degree" ask), diving cap ~17 deg (0.3 rad). Left/right facing
+  (the mirror flip) still tracks true direction every frame with zero
+  lag - that part of the pass-3-ago fix was correct and stays. Only
+  the vertical PITCH component is now decoupled from literally
+  representing the steering angle.
+- Also bounded dash's far-target selection to under ~70 deg from
+  horizontal (previously unconstrained - dash could theoretically aim
+  anywhere including near-vertical, only the destination distance was
+  checked, not the angle).
+- Verified headless: max render pitch 16.8 deg, max pitch change rate
+  ~14-18 deg/sec (slow, not a snap), regardless of how fast the
+  underlying logical dir needs to turn for actual steering.
+
 ## Movement pass 4
 - Dash ("spazz") was firing every ~8s per fish (rolled inside the
   fast ~1-2s mood cycle at 15% chance) - way too often. Pulled it out
