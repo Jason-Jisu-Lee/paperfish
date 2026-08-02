@@ -13,13 +13,11 @@ const SPECIES = [
   { id: 'shark', name: 'shark', depth: 2, size: 110, asp: 0.424, breed: 70, value: 34, max: 2 },
   { id: 'lantern', name: 'lanternfish', depth: 3, size: 40, asp: 0.385, breed: 40, value: 30, max: 5 },
   { id: 'jelly', name: 'jellyfish', depth: 3, size: 48, asp: 1.098, breed: 35, value: 34, max: 6 },
-  { id: 'hatchet', name: 'hatchetfish', depth: 3, size: 46, asp: 0.8, breed: 45, value: 40, max: 4 },
+  { id: 'hatchet', name: 'hatchetfish', depth: 3, size: 46, asp: 0.764, breed: 45, value: 40, max: 4 },
   { id: 'seahorse', name: 'seahorse', depth: 3, size: 36, asp: 1.643, breed: 50, value: 46, max: 4 },
-  { id: 'gulper', name: 'gulper eel', depth: 4, size: 88, asp: 0.414, breed: 70, value: 60, max: 3 },
-  { id: 'dumbo', name: 'dumbo octopus', depth: 4, size: 54, asp: 1.068, breed: 80, value: 70, max: 3 },
-  { id: 'oarfish', name: 'oarfish', depth: 4, size: 150, asp: 0.18, breed: 90, value: 85, max: 2 },
+  { id: 'oarfish', name: 'oarfish', depth: 4, size: 150, asp: 0.25, breed: 90, value: 85, max: 2 },
   { id: 'viper', name: 'viperfish', depth: 5, size: 76, asp: 0.303, breed: 90, value: 100, max: 3 },
-  { id: 'vampire', name: 'vampire squid', depth: 5, size: 58, asp: 0.682, breed: 100, value: 120, max: 2 },
+  { id: 'vampire', name: 'vampire squid', depth: 5, size: 58, asp: 0.778, breed: 100, value: 120, max: 2 },
   { id: 'angler', name: 'anglerfish', depth: 5, size: 64, asp: 0.625, breed: 120, value: 140, max: 2, lamp: { x: 0.884, y: 0.129 } }
 ];
 const SP = {};

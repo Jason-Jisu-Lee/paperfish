@@ -101,18 +101,5 @@ const TRADER = {
     UI.hideOffer();
   },
 
-  draw(ctx, t) {
-    const tr = this.active;
-    if (!tr) return;
-    const img = ASSETS.ras.shadow;
-    if (!img) return;
-    const s = EX.shadow;
-    const w = s.size * 1.7, h = w * s.asp;
-    ctx.save();
-    ctx.translate(tr.x, tr.y + Math.sin(tr.bob * 0.9) * 5);
-    ctx.globalAlpha = 0.13;
-    ctx.drawImage(img, -w / 2, -h / 2, w, h);
-    ctx.restore();
-    ctx.globalAlpha = 1;
-  }
+  draw(ctx, t) {}
 };

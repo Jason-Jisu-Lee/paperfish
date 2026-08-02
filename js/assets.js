@@ -1,7 +1,3 @@
-const EXTRA_ASSETS = [{ id: 'shadow', size: 160, asp: 54 / 160 }];
-const EX = {};
-EXTRA_ASSETS.forEach(s => EX[s.id] = s);
-
 function loadRaster(s) {
   return new Promise(res => {
     const im = new Image();
@@ -14,13 +10,13 @@ function loadRaster(s) {
       res();
     };
     im.onerror = () => res();
-    im.src = 'assets/' + s.id + '.svg?v=8';
+    im.src = 'assets/' + s.id + '.svg?v=9';
   });
 }
 
 const ASSETS = {
   ras: {},
   load() {
-    return Promise.all(SPECIES.concat(EXTRA_ASSETS).map(loadRaster));
+    return Promise.all(SPECIES.map(loadRaster));
   }
 };

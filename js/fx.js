@@ -47,7 +47,7 @@ const FX = {
     FX.giantClock -= dt;
     if (!FX.giant && FX.giantClock <= 0) {
       FX.giantClock = rnd(75, 150);
-      const sp = pick(['shark', 'ray', 'oarfish', 'gulper']);
+      const sp = pick(['shark', 'ray', 'oarfish']);
       const toRight = Math.random() < 0.5;
       FX.giant = {
         sp, x: toRight ? -220 : innerWidth + 220, y: rnd(innerHeight * 0.16, innerHeight * 0.58),

@@ -19,14 +19,14 @@ body{background:#000;color:rgba(255,255,255,.5);font:11px system-ui,sans-serif;l
 <div style="margin-top:60px;opacity:.6">reference</div>
 <img src="fish_grid_edited.png" style="max-width:900px;width:100%;margin-top:14px">
 <script src="js/util.js?v=1"></script>
-<script src="js/species.js?v=3"></script>
+<script src="js/species.js?v=7"></script>
 <script>
 const grid = document.getElementById('grid');
 for (const s of SPECIES) {
   const cell = document.createElement('div');
   cell.className = 'cell';
   const img = document.createElement('img');
-  img.src = 'assets/' + s.id + '.svg?v=8';
+  img.src = 'assets/' + s.id + '.svg?v=9';
   img.style.width = s.size * 1.6 + 'px';
   img.style.height = s.size * 1.6 * s.asp + 'px';
   const n = document.createElement('div');

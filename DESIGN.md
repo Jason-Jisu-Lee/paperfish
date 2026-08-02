@@ -32,6 +32,44 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Asset pass 2 - real structural bug found, more fixes, 2 species cut
+- Found and fixed a real structural bug in shark.svg and dogfish.svg:
+  the body path's start point and its pre-Z-close endpoint were two
+  DIFFERENT nearby coordinates (e.g. shark: started at 31,36, ended
+  at 33,50), so the Z auto-close drew a short stray diagonal segment
+  right at the tail junction - this was the "extra line in the
+  middle." Fixed by unifying both ends of the body path to the exact
+  same coordinate and dropping the Z (path already returns to its
+  start, no closing segment needed).
+- Angelfish's curves were too weak/subtle, reading as a flat
+  triangle instead of the reference's dramatic full sail. Redesigned
+  with much more pronounced bulge.
+- Ray reconfirmed and refined: orientation fix from the prior round
+  was correct and on disk, but the shape itself needed sharper
+  points and a straighter, more level tail-whip to match the
+  reference more closely.
+- Minnow's fin base points sat below/inside the body's actual top
+  curve instead of touching it, leaving a visible gap - fin looked
+  detached. Fixed to sit exactly on the curve.
+- Custom species massively reworked: oarfish now has a continuous
+  wavy crest along most of the body (was 2 isolated squiggles, unrecognizable);
+  hatchet is now a clear deep-blade-tapering-to-thin-tail-stalk shape
+  (was an ambiguous wedge); vampire squid is now a scalloped cape/
+  mantle dome (was curled ear-antennae that read as an insect).
+- REMOVED per explicit user instruction: gulper eel and dumbo octopus
+  (species cut entirely, also removed from FX.giant's pick list) and
+  the trader's shadow.svg silhouette (TRADER.draw() is now a no-op -
+  trader has zero visual body now, only the offer popup). Do not
+  reintroduce any of these without being asked.
+- Consequence worth flagging: depth 4 now has only ONE species
+  (oarfish) after removing gulper+dumbo. This thins that depth's
+  wild-discovery pool significantly. Not fixed unilaterally - would
+  need either a new approved design or moving another species down,
+  both are asset/balance decisions for the user, not mine to make.
+- assets.html now shows this as the live reference sheet with the
+  original PNG pinned below it - use that page, not memory, for any
+  future asset claim.
+
 ## Movement pass 9 - normal legs almost purely horizontal
 - Pass 8 only shortened the DIVE hop; normal (non-dive) legs still
   allowed up to 45 degrees off horizontal over the FULL long travel
