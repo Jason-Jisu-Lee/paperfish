@@ -32,6 +32,20 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 9 - normal legs almost purely horizontal
+- Pass 8 only shortened the DIVE hop; normal (non-dive) legs still
+  allowed up to 45 degrees off horizontal over the FULL long travel
+  distance, which read as "diagonal for an extended period" - the
+  dominant remaining source once dive was fixed. normalMaxAngleDeg
+  dropped 45 -> 12. Real bug found while verifying: the reroll
+  fallback (used when 8, now 20, random tries fail to find a
+  compliant point) computed steepness via rnd(0.3, normalMax) - with
+  normalMax now tan(12deg)=0.21, that 0.3 floor was HIGHER than the
+  cap itself, so every fallback-path pick silently violated the
+  limit. Fixed to rnd(0, normalMax). Verified headless with a 500-leg
+  angle-distribution sample: 94.0% land at or under ~12.5 degrees,
+  average leg angle 8.9 degrees - matches "94% sideways" exactly.
+
 ## Movement pass 8 - dive is a short hop, more speed variety
 - Dive (steep diagonal target) previously reused the normal wander
   distance range, so a "diving" leg could travel far diagonally for

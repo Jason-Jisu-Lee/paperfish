@@ -45,7 +45,7 @@ class Fish {
     const normalMax = Math.tan(MOVE.normalMaxAngleDeg * Math.PI / 180);
     const dashMax = Math.tan(MOVE.dashTargetMaxAngleDeg * Math.PI / 180);
     let tx = this.tx, ty = this.ty, ok = false;
-    for (let tries = 0; tries < 8; tries++) {
+    for (let tries = 0; tries < 20; tries++) {
       tx = rnd(50, W - 50);
       ty = rnd(80, H - 150);
       const steepness = Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1);
@@ -57,7 +57,7 @@ class Fish {
     }
     if (!ok) {
       const dx = (Math.random() < 0.5 ? -1 : 1) * rnd(120, 320);
-      const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0.3, far ? dashMax : normalMax);
+      const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0, far ? dashMax : normalMax);
       tx = clamp(this.x + dx, 50, W - 50);
       ty = clamp(this.y + dy, 80, H - 150);
     }

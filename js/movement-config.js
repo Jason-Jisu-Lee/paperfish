@@ -31,7 +31,7 @@ const MOVE = {
 
   legSpeedEase: 1.8,
 
-  normalMaxAngleDeg: 45,
+  normalMaxAngleDeg: 12,
   diveChance: 0.05,
   diveMinAngleDeg: 54,
   diveMaxAngleDeg: 70,
