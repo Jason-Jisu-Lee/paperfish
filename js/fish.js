@@ -13,6 +13,7 @@ class Fish {
     this.wanderT = 0;
     this.tx = x; this.ty = y;
     this.diving = false;
+    this.curSpeed = 20;
     this.baseMul = rnd(0.8, 1.3);
     this.baseTarget = this.baseMul;
     this.baseT = rnd(10, 22);
@@ -20,7 +21,7 @@ class Fish {
     this.moodMul = 1;
     this.moodTarget = 1;
     this.moodEase = 1.5;
-    this.moodT = rnd(1, 2.4);
+    this.moodT = rnd(0.8, 2);
     this.dead = false;
     this.pairPt = null;
     this.leaveTarget = null;
@@ -28,9 +29,9 @@ class Fish {
     this.leaveMul = 0;
   }
   pickTarget(W, H, far) {
-    const preferSteep = !far && Math.random() < 0.12;
+    const preferSteep = !far && Math.random() < 0.06;
     let tx = this.tx, ty = this.ty;
-    for (let tries = 0; tries < 7; tries++) {
+    for (let tries = 0; tries < 8; tries++) {
       tx = rnd(50, W - 50);
       ty = rnd(80, H - 150);
       if (far) {
@@ -38,52 +39,51 @@ class Fish {
         continue;
       }
       const steepness = Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1);
-      if (preferSteep ? steepness > 1.3 : steepness < 1.15) break;
+      if (preferSteep ? steepness > 1.4 : steepness < 0.7) break;
     }
     this.tx = tx; this.ty = ty;
     this.wanderT = rnd(3, 7);
-    this.diving = !far && (Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1)) > 1.3;
+    this.diving = !far && (Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1)) > 1.4;
   }
   pickMood(W, H) {
     const r = Math.random();
-    if (r < 0.14) {
+    if (r < 0.15) {
       this.mood = 'dash';
-      this.moodTarget = rnd(2.3, 3.6);
-      this.moodT = rnd(0.4, 0.9);
-      this.moodEase = rnd(3.5, 6);
+      this.moodTarget = rnd(2.4, 3.8);
+      this.moodT = rnd(0.4, 0.8);
+      this.moodEase = rnd(3.8, 6.2);
       this.pickTarget(W, H, true);
       FX.bubbleBurst(this.x, this.y);
-    } else if (r < 0.32) {
+    } else if (r < 0.38) {
       this.mood = 'brisk';
-      this.moodTarget = rnd(1.4, 2.0);
-      this.moodT = rnd(0.7, 1.7);
-      this.moodEase = rnd(2, 3.4);
-    } else if (r < 0.46) {
+      this.moodTarget = rnd(1.5, 2.1);
+      this.moodT = rnd(0.6, 1.5);
+      this.moodEase = rnd(2.2, 3.6);
+    } else if (r < 0.5) {
       this.mood = 'rest';
-      this.moodTarget = rnd(0.15, 0.42);
-      this.moodT = rnd(1.1, 2.4);
-      this.moodEase = rnd(1.2, 2.2);
-      this.tx = clamp(this.x + rnd(-30, 30), 50, W - 50);
-      this.ty = clamp(this.y + rnd(-22, 22), 80, H - 150);
-      this.wanderT = this.moodT + 0.6;
+      this.moodTarget = rnd(0.12, 0.38);
+      this.moodT = rnd(0.9, 2.1);
+      this.moodEase = rnd(1.3, 2.3);
+      this.tx = clamp(this.x + rnd(-28, 28), 50, W - 50);
+      this.ty = clamp(this.y + rnd(-20, 20), 80, H - 150);
+      this.wanderT = this.moodT + 0.5;
       this.diving = false;
-      if (this.y > H - 200) FX.sedimentPuff(this.x, this.y + SP[this.sp].size * 0.25);
     } else {
       this.mood = 'cruise';
-      this.moodTarget = rnd(0.7, 1.35);
-      this.moodT = rnd(1, 2.6);
-      this.moodEase = rnd(1, 2.4);
+      this.moodTarget = rnd(0.75, 1.4);
+      this.moodT = rnd(0.8, 2.2);
+      this.moodEase = rnd(1.2, 2.6);
     }
   }
   update(dt, t, W, H) {
     const s = SP[this.sp];
     if (this.scale < 1) this.scale = Math.min(1, this.scale + dt / 30);
     if (this.state === 'pairing') {
-      const R = 16, Ry = 10, w = 0.7;
+      const Ax = 15, Ay = 3, w = 0.55;
       const o = t * w + this.phase;
-      this.x = clamp(this.pairPt.x + Math.cos(o) * R, 30, W - 30);
-      this.y = clamp(this.pairPt.y + Math.sin(o) * Ry, 60, H - 60);
-      this.dir = Math.atan2(Math.cos(o) * Ry, -Math.sin(o) * R);
+      this.x = clamp(this.pairPt.x + Math.cos(o) * Ax, 30, W - 30);
+      this.y = clamp(this.pairPt.y + Math.sin(o) * Ay, 60, H - 60);
+      this.dir = Math.atan2(Math.cos(o) * Ay, -Math.sin(o) * Ax);
       return;
     }
     let target = null;
@@ -116,11 +116,14 @@ class Fish {
       }
     }
     const speed = s.spd * mul;
+    this.curSpeed = speed;
     if (target) {
       const dx = target.x - this.x, dy = target.y - this.y;
       if (dx * dx + dy * dy > 20) {
         const want = Math.atan2(dy, dx);
-        this.dir += angDiff(want, this.dir) * Math.min(1, dt * turnEase);
+        const diff = angDiff(want, this.dir);
+        const boost = Math.abs(diff) > 1.6 ? 2.4 : 1;
+        this.dir += diff * Math.min(1, dt * turnEase * boost);
       }
     }
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
@@ -132,13 +135,20 @@ class Fish {
     const img = ASSETS.ras[this.sp];
     if (!img) return;
     const w = s.size * this.scale, h = w * s.asp;
-    const sway = Math.sin(t * 1.8 + this.phase) * 2.2;
+    const bob = Math.sin(t * 1.8 + this.phase) * 2.2;
     const face = Math.cos(this.dir) >= 0 ? 1 : -1;
     const localAngle = face >= 0 ? this.dir : Math.PI - this.dir;
+    let wobble = 0;
+    if (this.state !== 'pairing') {
+      const sp = this.curSpeed || 20;
+      const freq = 3.2 + sp * 0.05;
+      const amp = 0.09 + Math.min(0.14, sp * 0.0018);
+      wobble = Math.sin(t * freq + this.phase * 3) * amp;
+    }
     ctx.save();
-    ctx.translate(this.x, this.y + sway);
+    ctx.translate(this.x, this.y + bob);
     ctx.scale(face, 1);
-    ctx.rotate(localAngle);
+    ctx.rotate(localAngle + (face >= 0 ? wobble : -wobble));
     if (s.lamp) {
       const lx = (s.lamp.x - 0.5) * w, ly = (s.lamp.y - 0.5) * h;
       const pr = w * (0.55 + 0.08 * Math.sin(t * 2.1 + this.phase));

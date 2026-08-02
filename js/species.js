@@ -23,4 +23,4 @@ const SPECIES = [
   { id: 'angler', name: 'anglerfish', depth: 5, size: 64, asp: 0.625, breed: 120, value: 140, max: 2, lamp: { x: 0.884, y: 0.129 } }
 ];
 const SP = {};
-SPECIES.forEach(s => { SP[s.id] = s; s.spd = clamp(50 - s.size * 0.11, 28, 54); });
+SPECIES.forEach(s => { SP[s.id] = s; s.spd = clamp(64 - s.size * 0.12, 34, 70); });

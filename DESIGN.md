@@ -32,6 +32,47 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 3
+- Wild fish only ever offer species you don't have yet (removed the
+  "extras" path that let you re-catch an already-owned species like
+  the starter bass - breeding is how you grow what you have, wild is
+  purely discovery now).
+- Wild-crossing fish had a real bug: y-position used a sine VALUE
+  multiplied by dt as an increment (accumulating drift, not a clean
+  oscillation) and had zero rotation, reading as "moving like a car".
+  Fixed to a clean bounded sin offset plus a proper yaw wobble
+  (tail-beat look) shared with the main Fish class's renderer.
+- Added a face-consistent yaw wobble (small oscillating rotation on
+  top of true heading, amplitude/frequency scaled by current speed)
+  to both Fish and WILD rendering - the "swim like a fish, head
+  sweeps side to side" look. Verified the sign math the same way as
+  the original tilt fix (rotate-then-scale order in the transform
+  stack); a naive same-sign wobble flips visually wrong on left-facing
+  fish, needs negating for the mirrored case specifically (unlike the
+  base heading angle, which does NOT need negating - two different
+  fixes, easy to conflate, don't).
+- Wander steepness threshold tightened hard: normal targets must be
+  within ~35% of horizontal, only ~6% of picks deliberately go steep
+  (diving/surfacing), and those force 1.75x speed. Big reversals
+  (>~90deg heading change) get a 2.4x turn-speed boost so passing
+  through vertical during a flip reads as quick, not a slow visible
+  sweep.
+- Pairing motion changed from a full 16x10 elliptical orbit (which
+  swept through ~160 degrees of heading per cycle, visibly "circling")
+  to a small 15x3 mostly-horizontal sway - heading stays close to
+  horizontal except brief instants at the sway's turnaround.
+- Base speed bumped again (was 28-54, now 34-70).
+- Trader's silhouette swapped from real species art (shark/oarfish/
+  gulper - has dorsal fins/spikes that read wrong as a flat low-alpha
+  silhouette) to a dedicated plain shape, assets/shadow.svg - smooth
+  body, simple open tail, no fin. Loaded via a small EXTRA_ASSETS list
+  in assets.js parallel to SPECIES, not itself a catchable species.
+- Removed: light shafts (execution wasn't landing, cut entirely) and
+  sediment puffs (best guess for "random unexplained dots" - newest,
+  least-clearly-caused addition; marine snow kept since it's original/
+  foundational and wasn't clearly the thing being flagged - flag it
+  by name if it's actually that).
+
 ## Movement pass 2
 - Fixed sustained rotation instability during pairing (the "clock
   needle" bug): steering toward a near/moving point via atan2 is

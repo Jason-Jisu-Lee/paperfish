@@ -26,7 +26,7 @@ const TRADER = {
     const offer = this.genOffer();
     this.active = {
       x: -300, y: H * rnd(0.13, 0.2), speed: 27, bob: rnd(0, TAU),
-      sil: DEPTHS[STATE.depth].sil, offer, shown: false, dealt: false, leaving: false, window: 26
+      offer, shown: false, dealt: false, leaving: false, window: 26
     };
   },
 
@@ -104,10 +104,10 @@ const TRADER = {
   draw(ctx, t) {
     const tr = this.active;
     if (!tr) return;
-    const img = ASSETS.ras[tr.sil];
+    const img = ASSETS.ras.shadow;
     if (!img) return;
-    const s = SP[tr.sil];
-    const w = s.size * 2.6, h = w * s.asp;
+    const s = EX.shadow;
+    const w = s.size * 1.7, h = w * s.asp;
     ctx.save();
     ctx.translate(tr.x, tr.y + Math.sin(tr.bob * 0.9) * 5);
     ctx.globalAlpha = 0.13;

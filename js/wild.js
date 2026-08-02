@@ -11,7 +11,7 @@ const WILD = {
     w.t += dt;
     if (w.state === 'cross') {
       w.x += w.vx * dt;
-      w.y += Math.sin(w.t * 0.7 + w.phase) * 9 * dt;
+      w.y = w.baseY + Math.sin(w.t * 0.7 + w.phase) * 9;
       if ((w.vx > 0 && w.x > W + 130) || (w.vx < 0 && w.x < -130)) this.despawn();
     } else if (w.state === 'wait') {
       const o = w.t * 0.5;
@@ -33,17 +33,16 @@ const WILD = {
 
   spawn(W, H) {
     const lockedHere = poolFor(STATE.depth).filter(s => !STATE.index.has(s.id));
-    const extras = poolUpTo(STATE.depth).filter(s => STATE.index.has(s.id) && TANK.count(s.id) < s.max);
-    let sp = null;
-    if (lockedHere.length && (Math.random() < 0.65 || !extras.length)) sp = pick(lockedHere).id;
-    else if (extras.length) sp = pick(extras).id;
-    else if (lockedHere.length) sp = lockedHere[0].id;
-    else return;
+    const lockedAny = poolUpTo(STATE.depth).filter(s => !STATE.index.has(s.id));
+    const locked = lockedHere.length ? lockedHere : lockedAny;
+    if (!locked.length) return;
+    const sp = pick(locked).id;
     const toRight = Math.random() < 0.5;
+    const baseY = rnd(H * 0.18, H * 0.6);
     this.active = {
       sp, t: 0, phase: rnd(0, TAU),
       x: toRight ? -110 : W + 110,
-      y: rnd(H * 0.18, H * 0.6),
+      y: baseY, baseY,
       vx: (toRight ? 1 : -1) * rnd(14, 21),
       state: 'cross', alpha: 0.34
     };
@@ -77,10 +76,13 @@ const WILD = {
     const img = ASSETS.ras[w.sp];
     if (!img) return;
     const wd = s.size, h = wd * s.asp;
-    ctx.save();
-    ctx.translate(w.x, w.y + Math.sin(t * 1.6 + w.phase) * 3);
     const movingRight = w.state === 'cross' ? w.vx > 0 : Math.sin(w.t * 0.5) < 0;
-    if (!movingRight) ctx.scale(-1, 1);
+    const face = movingRight ? 1 : -1;
+    const wobble = Math.sin(t * 5.2 + w.phase * 3) * 0.14;
+    ctx.save();
+    ctx.translate(w.x, w.y);
+    ctx.scale(face, 1);
+    ctx.rotate(face >= 0 ? wobble : -wobble);
     ctx.globalAlpha = w.state === 'join' ? w.alpha : 0.34;
     ctx.drawImage(img, -wd / 2, -h / 2, wd, h);
     ctx.restore();

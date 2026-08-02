@@ -151,7 +151,6 @@ const MAIN = {
     const ctx = this.ctx;
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, this.W, this.H);
-    FX.drawShafts(ctx, this.T, this.W, this.H);
     FX.drawGiant(ctx);
     FX.drawSnow(ctx);
     GATE.draw(ctx, this.T, this.W, this.H);
@@ -160,7 +159,6 @@ const MAIN = {
     TANK.drawEggs(ctx);
     const sorted = TANK.fishes.slice().sort((a, b) => SP[a.sp].size - SP[b.sp].size);
     for (const f of sorted) f.draw(ctx, this.T);
-    FX.drawSediment(ctx);
     FX.drawBubbles(ctx);
     FX.drawRipples(ctx);
   },
