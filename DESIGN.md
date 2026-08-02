@@ -32,6 +32,20 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 8 - dive is a short hop, more speed variety
+- Dive (steep diagonal target) previously reused the normal wander
+  distance range, so a "diving" leg could travel far diagonally for
+  several seconds - user wants diagonal movement to always be brief,
+  just enough to change vertical position. Dive targets are now
+  picked directly in polar form (short distance 70-170px, angle from
+  vertical within the dive band), guaranteeing both the steepness AND
+  a short hop. Verified headless: sampled dive distances land 77-163px.
+- Added per-fish indivMul (0.82-1.22, set once at spawn, personality
+  baseline pace) applied on top of every leg's speed. Widened cruise
+  range (0.65-1.5, was 0.75-1.3) and brisk frequency/range (36% chance
+  at 1.4-2.1x, was 28% at 1.4-1.9x) for more day-to-day speed variety
+  without touching the rare dash.
+
 ## Movement pass 7 - committed legs, shear bend, config file
 - Re-verified all 12 reference-grid species against fresh high-zoom
   crops (assets.html now has the reference PNG pinned at the bottom

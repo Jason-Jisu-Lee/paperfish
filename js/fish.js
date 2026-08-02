@@ -21,6 +21,7 @@ class Fish {
     this.dashUntil = 0;
     this.dashMul = 1;
     this.bend = 0;
+    this.indivMul = rnd(MOVE.indivMulMin, MOVE.indivMulMax);
     this.dead = false;
     this.pairPt = null;
     this.leaveTarget = null;
@@ -29,9 +30,19 @@ class Fish {
   }
   pickTargetAngled(W, H, far) {
     const preferSteep = !far && Math.random() < MOVE.diveChance;
+    if (preferSteep) {
+      const dist = rnd(MOVE.diveDistMin, MOVE.diveDistMax);
+      const fromVert = rnd(90 - MOVE.diveMaxAngleDeg, 90 - MOVE.diveMinAngleDeg) * Math.PI / 180;
+      const updown = Math.random() < 0.5 ? -1 : 1;
+      const side = Math.random() < 0.5 ? -1 : 1;
+      const dx = Math.sin(fromVert) * side * dist;
+      const dy = Math.cos(fromVert) * updown * dist;
+      this.tx = clamp(this.x + dx, 50, W - 50);
+      this.ty = clamp(this.y + dy, 80, H - 150);
+      this.diving = true;
+      return;
+    }
     const normalMax = Math.tan(MOVE.normalMaxAngleDeg * Math.PI / 180);
-    const diveMin = Math.tan(MOVE.diveMinAngleDeg * Math.PI / 180);
-    const diveMax = Math.tan(MOVE.diveMaxAngleDeg * Math.PI / 180);
     const dashMax = Math.tan(MOVE.dashTargetMaxAngleDeg * Math.PI / 180);
     let tx = this.tx, ty = this.ty, ok = false;
     for (let tries = 0; tries < 8; tries++) {
@@ -42,17 +53,16 @@ class Fish {
         if (Math.hypot(tx - this.x, ty - this.y) > Math.min(W, H) * 0.4 && steepness < dashMax) { ok = true; break; }
         continue;
       }
-      if (preferSteep ? (steepness > diveMin && steepness < diveMax) : steepness < normalMax) { ok = true; break; }
+      if (steepness < normalMax) { ok = true; break; }
     }
     if (!ok) {
       const dx = (Math.random() < 0.5 ? -1 : 1) * rnd(120, 320);
-      const maxSteep = far ? dashMax : preferSteep ? diveMax : normalMax;
-      const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0.3, maxSteep);
+      const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0.3, far ? dashMax : normalMax);
       tx = clamp(this.x + dx, 50, W - 50);
       ty = clamp(this.y + dy, 80, H - 150);
     }
     this.tx = tx; this.ty = ty;
-    this.diving = !far && (Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1)) > diveMin;
+    this.diving = false;
   }
   startLeg(W, H) {
     this.pickTargetAngled(W, H, false);
@@ -148,7 +158,7 @@ class Fish {
         return;
       }
     }
-    const speed = s.spd * mul;
+    const speed = s.spd * mul * this.indivMul;
     if (target) {
       const dx = target.x - this.x, dy = target.y - this.y;
       if (dx * dx + dy * dy > 20) {

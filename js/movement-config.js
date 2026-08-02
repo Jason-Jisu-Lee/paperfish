@@ -1,9 +1,11 @@
 const MOVE = {
-  cruiseMulMin: 0.75, cruiseMulMax: 1.3,
-  cruiseChance: 0.5,
+  indivMulMin: 0.82, indivMulMax: 1.22,
 
-  briskMulMin: 1.4, briskMulMax: 1.9,
-  briskChance: 0.28,
+  cruiseMulMin: 0.65, cruiseMulMax: 1.5,
+  cruiseChance: 0.44,
+
+  briskMulMin: 1.4, briskMulMax: 2.1,
+  briskChance: 0.36,
 
   restMulMin: 0.1, restMulMax: 0.3,
   restChance: 0.22,
@@ -34,6 +36,8 @@ const MOVE = {
   diveMinAngleDeg: 54,
   diveMaxAngleDeg: 70,
   diveSpeedMul: 1.75,
+  diveDistMin: 70,
+  diveDistMax: 170,
 
   dashTargetMaxAngleDeg: 68,
 
