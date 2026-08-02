@@ -32,6 +32,42 @@ Economy game where fish are the currency. PC / Steam target. Prototype v0.
 - Traders drift by with one offer: species egg pair or +room.
 - Eggs from pairing ritual (two adults meet, egg sinks, hatches young).
 
+## Movement pass 7 - committed legs, shear bend, config file
+- Re-verified all 12 reference-grid species against fresh high-zoom
+  crops (assets.html now has the reference PNG pinned at the bottom
+  for direct comparison). Found and fixed 4 real bugs: ray had its
+  tail-whip and nose on the WRONG sides (backwards, matching the
+  earlier "faces right" convention violation class of bug); flounder
+  had an invented protruding fin-arm the reference never has (just a
+  plain rounder body + simple tail); perch and minnow had their
+  proportions effectively swapped (perch should be the plump
+  deep-bodied one with a tall fin, minnow the thin one with a modest
+  fin - was the other way around).
+- Movement rebuilt around committed LEGS instead of independent short
+  mood timers: pick a target + a speed (cruise/brisk), travel at that
+  speed the whole way, only decelerate in the final 70-95% of the
+  distance (arriveSlowStart/End), then decide to rest or start a new
+  leg. Rest duration is now genuinely variable - sometimes 2-5s,
+  sometimes 10-26s (restLongChance). Dash remains a rare independent
+  per-fish timer (75-130s) but can now also sometimes last 2-5s
+  instead of always a brief burst (dashLongChance).
+- Body bend reintroduced, but as a canvas SHEAR (ctx.transform x-into-y
+  skew) instead of a rotation - front and back of the body lean
+  opposite directions like a real flexing spine, capped at 30 degrees,
+  eased slowly (bendEase), scales with how vertical the CURRENT
+  heading is (not the target - avoids the old snap-through-vertical
+  issue). Verified headless: max 28 deg observed, zero ctx.rotate()
+  calls (uses transform, confirmed via the same rotate-interception
+  test as before).
+- All movement numbers now live in js/movement-config.js (global
+  MOVE object), consumed by fish.js, nothing hardcoded inline anymore.
+  movement-chart.html renders it as a live, always-in-sync reference
+  table with descriptions - open it directly to see/discuss exact
+  values instead of guessing from vague before/after descriptions.
+- Process change per explicit user request: do NOT silently invent or
+  redesign non-reference fish species going forward. Propose new/
+  changed designs as a described list first, get approval, then draw.
+
 ## Movement pass 6 - rotation removed entirely
 - Pass 5's decoupled/capped/slow-eased pitch still read as jitter to
   the user after a genuine refresh. Rather than keep tuning, cut the

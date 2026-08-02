@@ -10,78 +10,65 @@ class Fish {
     this.phase = rnd(0, TAU);
     this.scale = juv ? 0.45 : 1;
     this.state = 'swim';
-    this.wanderT = 0;
     this.tx = x; this.ty = y;
     this.diving = false;
-    this.baseMul = rnd(0.8, 1.3);
-    this.baseTarget = this.baseMul;
-    this.baseT = rnd(10, 22);
-    this.mood = 'cruise';
-    this.moodMul = 1;
-    this.moodTarget = 1;
-    this.moodEase = 1.5;
-    this.moodT = rnd(0.8, 2);
-    this.dashT = rnd(75, 130);
+    this.moving = true;
+    this.legMul = 1;
+    this.legDist = 1;
+    this.restT = 0;
+    this.hoverT = 0;
+    this.dashT = rnd(MOVE.dashIntervalMin, MOVE.dashIntervalMax);
+    this.dashUntil = 0;
+    this.dashMul = 1;
+    this.bend = 0;
     this.dead = false;
     this.pairPt = null;
     this.leaveTarget = null;
     this.onLeft = null;
     this.leaveMul = 0;
   }
-  pickTarget(W, H, far) {
-    const preferSteep = !far && Math.random() < 0.05;
+  pickTargetAngled(W, H, far) {
+    const preferSteep = !far && Math.random() < MOVE.diveChance;
+    const normalMax = Math.tan(MOVE.normalMaxAngleDeg * Math.PI / 180);
+    const diveMin = Math.tan(MOVE.diveMinAngleDeg * Math.PI / 180);
+    const diveMax = Math.tan(MOVE.diveMaxAngleDeg * Math.PI / 180);
+    const dashMax = Math.tan(MOVE.dashTargetMaxAngleDeg * Math.PI / 180);
     let tx = this.tx, ty = this.ty, ok = false;
     for (let tries = 0; tries < 8; tries++) {
       tx = rnd(50, W - 50);
       ty = rnd(80, H - 150);
       const steepness = Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1);
       if (far) {
-        if (Math.hypot(tx - this.x, ty - this.y) > Math.min(W, H) * 0.4 && steepness < 2.7) { ok = true; break; }
+        if (Math.hypot(tx - this.x, ty - this.y) > Math.min(W, H) * 0.4 && steepness < dashMax) { ok = true; break; }
         continue;
       }
-      if (preferSteep ? (steepness > 1.4 && steepness < 3.5) : steepness < 0.65) { ok = true; break; }
+      if (preferSteep ? (steepness > diveMin && steepness < diveMax) : steepness < normalMax) { ok = true; break; }
     }
     if (!ok) {
       const dx = (Math.random() < 0.5 ? -1 : 1) * rnd(120, 320);
-      const maxSteep = far ? 2.5 : preferSteep ? 2.2 : 0.55;
+      const maxSteep = far ? dashMax : preferSteep ? diveMax : normalMax;
       const dy = (Math.random() < 0.5 ? -1 : 1) * Math.abs(dx) * rnd(0.3, maxSteep);
       tx = clamp(this.x + dx, 50, W - 50);
       ty = clamp(this.y + dy, 80, H - 150);
     }
     this.tx = tx; this.ty = ty;
-    this.wanderT = rnd(3, 7);
-    this.diving = !far && (Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1)) > 1.4;
+    this.diving = !far && (Math.abs(ty - this.y) / (Math.abs(tx - this.x) + 1)) > diveMin;
   }
-  pickMood(W, H) {
+  startLeg(W, H) {
+    this.pickTargetAngled(W, H, false);
+    this.legDist = Math.max(1, Math.hypot(this.tx - this.x, this.ty - this.y));
     const r = Math.random();
-    if (r < 0.42) {
-      this.mood = 'brisk';
-      this.moodTarget = rnd(1.5, 2.1);
-      this.moodT = rnd(0.6, 1.5);
-      this.moodEase = rnd(2.2, 3.6);
-    } else if (r < 0.58) {
-      this.mood = 'rest';
-      this.moodTarget = rnd(0.12, 0.38);
-      this.moodT = rnd(0.9, 2.1);
-      this.moodEase = rnd(1.3, 2.3);
-      this.tx = clamp(this.x + rnd(-28, 28), 50, W - 50);
-      this.ty = clamp(this.y + rnd(-20, 20), 80, H - 150);
-      this.wanderT = this.moodT + 0.5;
-      this.diving = false;
-    } else {
-      this.mood = 'cruise';
-      this.moodTarget = rnd(0.75, 1.4);
-      this.moodT = rnd(0.8, 2.2);
-      this.moodEase = rnd(1.2, 2.6);
-    }
+    this.legMul = r < MOVE.cruiseChance ? rnd(MOVE.cruiseMulMin, MOVE.cruiseMulMax)
+      : r < MOVE.cruiseChance + MOVE.briskChance ? rnd(MOVE.briskMulMin, MOVE.briskMulMax)
+      : rnd(MOVE.cruiseMulMin, MOVE.cruiseMulMax);
+    this.moving = true;
   }
-  triggerDash(W, H) {
-    this.mood = 'dash';
-    this.moodTarget = rnd(2.4, 3.8);
-    this.moodT = rnd(0.4, 0.8);
-    this.moodEase = rnd(3.8, 6.2);
-    this.pickTarget(W, H, true);
-    FX.bubbleBurst(this.x, this.y);
+  startRest(W, H) {
+    this.moving = false;
+    const long = Math.random() < MOVE.restLongChance;
+    this.restT = long ? rnd(MOVE.restLongMin, MOVE.restLongMax) : rnd(MOVE.restShortMin, MOVE.restShortMax);
+    this.hoverT = 0;
+    this.diving = false;
   }
   update(dt, t, W, H) {
     const s = SP[this.sp];
@@ -92,35 +79,69 @@ class Fish {
       this.x = clamp(this.pairPt.x + Math.cos(o) * Ax, 30, W - 30);
       this.y = clamp(this.pairPt.y + Math.sin(o) * Ay, 60, H - 60);
       this.dir = Math.atan2(Math.cos(o) * Ay, -Math.sin(o) * Ax);
+      this.easeBend(dt);
       return;
     }
     let target = null;
     let mul = 1;
-    let turnEase = 2.4;
+    let turnEase = MOVE.turnEaseNormal;
     if (this.state === 'swim') {
-      this.wanderT -= dt;
-      if (this.wanderT <= 0 || Math.hypot(this.tx - this.x, this.ty - this.y) < 22) this.pickTarget(W, H, false);
       this.dashT -= dt;
-      if (this.dashT <= 0) { this.dashT = rnd(75, 130); this.triggerDash(W, H); }
-      else {
-        this.moodT -= dt;
-        if (this.moodT <= 0) this.pickMood(W, H);
+      if (this.dashUntil > 0) {
+        this.dashUntil -= dt;
+        mul = this.dashMul;
+        turnEase = MOVE.turnEaseNormal * 1.4;
+        target = { x: this.tx, y: this.ty };
+        if (Math.hypot(this.tx - this.x, this.ty - this.y) < 22 || this.dashUntil <= 0) {
+          this.dashUntil = 0;
+          this.startLeg(W, H);
+        }
+      } else if (this.dashT <= 0) {
+        this.dashT = rnd(MOVE.dashIntervalMin, MOVE.dashIntervalMax);
+        this.dashMul = rnd(MOVE.dashMulMin, MOVE.dashMulMax);
+        this.dashUntil = Math.random() < MOVE.dashLongChance ? rnd(MOVE.dashLongMin, MOVE.dashLongMax) : rnd(MOVE.dashShortMin, MOVE.dashShortMax);
+        this.pickTargetAngled(W, H, true);
+        this.diving = false;
+        FX.bubbleBurst(this.x, this.y);
+        mul = this.dashMul;
+        turnEase = MOVE.turnEaseNormal * 1.4;
+        target = { x: this.tx, y: this.ty };
+      } else if (this.moving) {
+        const distNow = Math.hypot(this.tx - this.x, this.ty - this.y);
+        const progress = clamp(1 - distNow / this.legDist, 0, 1);
+        let speedMul = this.legMul;
+        if (progress > MOVE.arriveSlowStart) {
+          const k = clamp((progress - MOVE.arriveSlowStart) / (MOVE.arriveSlowEnd - MOVE.arriveSlowStart), 0, 1);
+          speedMul = lerp(this.legMul, this.legMul * MOVE.arriveSlowFloor, k);
+          turnEase = MOVE.turnEaseSlow;
+        }
+        mul = speedMul * (this.diving ? MOVE.diveSpeedMul : 1);
+        target = { x: this.tx, y: this.ty };
+        if (distNow < 18 || progress >= 0.995) {
+          if (Math.random() < MOVE.restChance) this.startRest(W, H);
+          else this.startLeg(W, H);
+        }
+      } else {
+        this.restT -= dt;
+        this.hoverT -= dt;
+        if (this.hoverT <= 0) {
+          this.hoverT = rnd(1.2, 2.4);
+          this.tx = clamp(this.x + rnd(-22, 22), 50, W - 50);
+          this.ty = clamp(this.y + rnd(-16, 16), 80, H - 150);
+        }
+        mul = rnd(MOVE.restMulMin, MOVE.restMulMax);
+        turnEase = MOVE.turnEaseSlow;
+        target = { x: this.tx, y: this.ty };
+        if (this.restT <= 0) this.startLeg(W, H);
       }
-      this.moodMul += (this.moodTarget - this.moodMul) * Math.min(1, dt * this.moodEase);
-      this.baseT -= dt;
-      if (this.baseT <= 0) { this.baseTarget = rnd(0.75, 1.35); this.baseT = rnd(12, 24); }
-      this.baseMul += (this.baseTarget - this.baseMul) * Math.min(1, dt * 0.35);
-      mul = this.baseMul * this.moodMul * (this.diving ? 1.75 : 1);
-      turnEase = this.mood === 'dash' ? 2.6 : this.mood === 'rest' ? 0.9 : 1.5;
-      target = { x: this.tx, y: this.ty };
     } else if (this.state === 'pairto') {
       target = this.pairPt;
-      mul = 1.3;
+      mul = MOVE.pairtoMul;
     } else if (this.state === 'leave') {
-      if (!this.leaveMul) this.leaveMul = rnd(3.8, 5.2);
+      if (!this.leaveMul) this.leaveMul = rnd(MOVE.leaveMulMin, MOVE.leaveMulMax);
       target = this.leaveTarget();
       mul = this.leaveMul;
-      turnEase = 4.5;
+      turnEase = MOVE.turnEaseLeave;
       if (Math.hypot(target.x - this.x, target.y - this.y) < 18) {
         this.dead = true;
         if (this.onLeft) this.onLeft();
@@ -133,13 +154,19 @@ class Fish {
       if (dx * dx + dy * dy > 20) {
         const want = Math.atan2(dy, dx);
         const diff = angDiff(want, this.dir);
-        const boost = Math.abs(diff) > 1.6 ? 2.4 : 1;
+        const boost = Math.abs(diff) > MOVE.bigReversalThresholdRad ? MOVE.bigReversalBoost : 1;
         this.dir += diff * Math.min(1, dt * turnEase * boost);
       }
     }
     const vx = Math.cos(this.dir) * speed, vy = Math.sin(this.dir) * speed;
     this.x += vx * dt; this.y += vy * dt;
     this.x = clamp(this.x, 30, W - 30); this.y = clamp(this.y, 60, H - 60);
+    this.easeBend(dt);
+  }
+  easeBend(dt) {
+    const maxK = Math.tan(MOVE.bendMaxDeg * Math.PI / 180);
+    const target = clamp(Math.sin(this.dir), -1, 1) * maxK;
+    this.bend += (target - this.bend) * Math.min(1, dt * MOVE.bendEase);
   }
   draw(ctx, t, alpha = 1) {
     const s = SP[this.sp];
@@ -151,6 +178,7 @@ class Fish {
     ctx.save();
     ctx.translate(this.x, this.y + bob);
     ctx.scale(face, 1);
+    ctx.transform(1, this.bend, 0, 1, 0, 0);
     if (s.lamp) {
       const lx = (s.lamp.x - 0.5) * w, ly = (s.lamp.y - 0.5) * h;
       const pr = w * (0.55 + 0.08 * Math.sin(t * 2.1 + this.phase));

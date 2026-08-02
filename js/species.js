@@ -1,10 +1,10 @@
 const SPECIES = [
-  { id: 'minnow', name: 'minnow', depth: 1, size: 34, asp: 0.473, breed: 14, value: 1, max: 8 },
+  { id: 'minnow', name: 'minnow', depth: 1, size: 34, asp: 0.294, breed: 14, value: 1, max: 8 },
   { id: 'bass', name: 'bass', depth: 1, size: 52, asp: 0.325, breed: 20, value: 2, max: 5 },
-  { id: 'perch', name: 'perch', depth: 1, size: 58, asp: 0.271, breed: 24, value: 3, max: 5 },
+  { id: 'perch', name: 'perch', depth: 1, size: 58, asp: 0.376, breed: 24, value: 3, max: 5 },
   { id: 'cod', name: 'cod', depth: 1, size: 55, asp: 0.547, breed: 26, value: 4, max: 5 },
   { id: 'angelfish', name: 'angelfish', depth: 1, size: 60, asp: 0.96, breed: 30, value: 6, max: 4 },
-  { id: 'flounder', name: 'flounder', depth: 1, size: 66, asp: 0.563, breed: 34, value: 8, max: 4 },
+  { id: 'flounder', name: 'flounder', depth: 1, size: 66, asp: 0.667, breed: 34, value: 8, max: 4 },
   { id: 'trout', name: 'trout', depth: 2, size: 60, asp: 0.365, breed: 30, value: 10, max: 5 },
   { id: 'mackerel', name: 'mackerel', depth: 2, size: 62, asp: 0.339, breed: 32, value: 12, max: 5 },
   { id: 'pike', name: 'pike', depth: 2, size: 78, asp: 0.274, breed: 40, value: 16, max: 4 },

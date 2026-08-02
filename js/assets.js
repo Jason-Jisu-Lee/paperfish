@@ -14,7 +14,7 @@ function loadRaster(s) {
       res();
     };
     im.onerror = () => res();
-    im.src = 'assets/' + s.id + '.svg?v=7';
+    im.src = 'assets/' + s.id + '.svg?v=8';
   });
 }
 
