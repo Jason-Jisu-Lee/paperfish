@@ -18,15 +18,15 @@ body{background:#000;color:rgba(255,255,255,.5);font:11px system-ui,sans-serif;l
 <div id="grid"></div>
 <div style="margin-top:60px;opacity:.6">reference</div>
 <img src="fish_grid_edited.png" style="max-width:900px;width:100%;margin-top:14px">
-<script src="js/util.js?v=1"></script>
-<script src="js/species.js?v=7"></script>
+<script src="js/util.js?v=2"></script>
+<script src="js/species.js?v=13"></script>
 <script>
 const grid = document.getElementById('grid');
 for (const s of SPECIES) {
   const cell = document.createElement('div');
   cell.className = 'cell';
   const img = document.createElement('img');
-  img.src = 'assets/' + s.id + '.svg?v=9';
+  img.src = 'assets/' + s.id + '.svg?v=11';
   img.style.width = s.size * 1.6 + 'px';
   img.style.height = s.size * 1.6 * s.asp + 'px';
   const n = document.createElement('div');
@@ -34,7 +34,7 @@ for (const s of SPECIES) {
   n.textContent = s.name;
   const st = document.createElement('div');
   st.className = 's';
-  st.textContent = 'depth ' + s.depth + ' · keeps ' + s.max + ' · breeds ' + s.breed + 's · worth ' + s.value;
+  st.textContent = 'pays ' + s.pay + ' · costs ' + fmt(s.cost);
   cell.append(img, n, st);
   grid.append(cell);
 }

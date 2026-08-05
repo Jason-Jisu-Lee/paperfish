@@ -4,48 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>fish tank</title>
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="hud">
-  <div id="depthlabel"></div>
-  <div id="count"></div>
-  <button id="indexbtn">index</button>
+<div id="side">
+  <div id="goldwrap">
+    <div id="goldnum">0</div>
+    <div id="goldrate"></div>
+  </div>
+  <div class="stitle">upgrades</div>
+  <div id="uprows"></div>
+  <div class="stitle" id="fishtitle">fish</div>
+  <div id="fishrows"></div>
+  <div id="morefish" hidden></div>
   <button id="resetbtn">reset</button>
 </div>
-<div id="offer" hidden>
-  <div id="offerwant"></div>
-  <div id="offerget"></div>
-  <div class="row"><button id="deal">deal</button><button id="pass">pass</button></div>
-</div>
-<div id="panel" hidden>
-  <div id="paneltitle"></div>
-  <div id="panelrows"></div>
-  <div id="panelsum"></div>
-  <div class="row"><button id="panelok"></button><button id="panelcancel">close</button></div>
-</div>
-<div id="indexov" hidden><div id="indexgrid"></div></div>
 <div id="toast" hidden></div>
 <div id="fishtip" hidden></div>
-<div id="endov" hidden>
-  <div id="endtext"></div>
-  <div id="endindex"></div>
-  <button id="again">again</button>
-</div>
-<script src="js/util.js?v=1"></script>
-<script src="js/movement-config.js?v=3"></script>
-<script src="js/species.js?v=7"></script>
-<script src="js/depths.js?v=2"></script>
-<script src="js/assets.js?v=9"></script>
-<script src="js/fx.js?v=5"></script>
-<script src="js/fish.js?v=14"></script>
-<script src="js/tank.js?v=3"></script>
-<script src="js/trader.js?v=5"></script>
-<script src="js/wild.js?v=5"></script>
-<script src="js/gate.js?v=2"></script>
-<script src="js/ui.js?v=5"></script>
-<script src="js/save.js?v=2"></script>
-<script src="js/main.js?v=6"></script>
+<script src="js/util.js?v=2"></script>
+<script src="js/movement-config.js?v=4"></script>
+<script src="js/species.js?v=13"></script>
+<script src="js/assets.js?v=13"></script>
+<script src="js/fx.js?v=9"></script>
+<script src="js/fish.js?v=17"></script>
+<script src="js/tank.js?v=6"></script>
+<script src="js/ui.js?v=10"></script>
+<script src="js/save.js?v=5"></script>
+<script src="js/main.js?v=9"></script>
 </body>
 </html>

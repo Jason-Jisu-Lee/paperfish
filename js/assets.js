@@ -10,7 +10,7 @@ function loadRaster(s) {
       res();
     };
     im.onerror = () => res();
-    im.src = 'assets/' + s.id + '.svg?v=9';
+    im.src = 'assets/' + s.id + '.svg?v=11';
   });
 }
 

@@ -1,56 +1,113 @@
 const UI = {
   el: {},
-  sel: {},
-  panelMode: null,
+  refs: [],
   toastTimer: null,
 
   init() {
-    for (const id of ['depthlabel', 'count', 'indexbtn', 'resetbtn', 'offer', 'offerwant', 'offerget', 'deal', 'pass', 'panel', 'paneltitle', 'panelrows', 'panelsum', 'panelok', 'panelcancel', 'indexov', 'indexgrid', 'toast', 'fishtip', 'endov', 'endtext', 'endindex', 'again'])
+    for (const id of ['goldnum', 'goldrate', 'fishtitle', 'uprows', 'fishrows', 'morefish', 'resetbtn', 'toast', 'fishtip'])
       this.el[id] = document.getElementById(id);
-    this.el.deal.addEventListener('click', () => TRADER.accept());
-    this.el.pass.addEventListener('click', () => TRADER.pass());
-    this.el.indexbtn.addEventListener('click', () => this.toggleIndex());
-    this.el.indexov.addEventListener('click', e => { if (e.target === this.el.indexov) this.el.indexov.hidden = true; });
-    this.el.panelcancel.addEventListener('click', () => { this.el.panel.hidden = true; });
-    this.el.panelok.addEventListener('click', () => this.confirmPanel());
-    this.el.again.addEventListener('click', () => SAVE.reset());
     this.el.resetbtn.addEventListener('click', () => {
       if (this.resetArmed) { SAVE.reset(); return; }
       this.resetArmed = true;
       this.el.resetbtn.textContent = 'sure?';
       setTimeout(() => { this.resetArmed = false; this.el.resetbtn.textContent = 'reset'; }, 3000);
     });
-    addEventListener('keydown', e => {
-      if (e.key === 'Escape') { this.el.panel.hidden = true; this.el.indexov.hidden = true; }
-    });
   },
 
-  anyOpen() {
-    return !this.el.panel.hidden || !this.el.indexov.hidden;
+  row(name, sub, right) {
+    const btn = document.createElement('button');
+    btn.className = 'row';
+    const left = document.createElement('span');
+    left.className = 'rl';
+    const nm = document.createElement('span');
+    nm.className = 'rname';
+    nm.textContent = name;
+    const sb = document.createElement('span');
+    sb.className = 'rsub';
+    sb.textContent = sub;
+    left.append(nm, sb);
+    const rt = document.createElement('span');
+    rt.className = 'rcost';
+    rt.textContent = right;
+    btn.append(left, rt);
+    return btn;
   },
 
-  updateHud() {
-    this.el.depthlabel.textContent = DEPTHS[STATE.depth].label;
-    this.el.count.textContent = TANK.total() + ' / ' + TANK.capacity;
+  build() {
+    this.refs = [];
+    const iv = tickInterval(STATE.up);
+    const up = this.el.uprows;
+    up.innerHTML = '';
+    for (const u of UPGRADES) {
+      const lvl = STATE.up[u.id];
+      const maxed = lvl >= u.max;
+      const cost = maxed ? 0 : upCost(u, lvl);
+      const btn = this.row(u.name + (lvl ? ' · ' + lvl : ''), u.sub, maxed ? 'max' : fmt(cost));
+      if (!maxed) {
+        btn.addEventListener('click', () => this.buyUpgrade(u));
+        this.refs.push({ btn, cost });
+      }
+      up.append(btn);
+    }
+    const fr = this.el.fishrows;
+    fr.innerHTML = '';
+    let shown = 0;
+    let nextShown = false;
+    for (const s of SPECIES) {
+      const owned = TANK.count(s.id);
+      if (owned === 0 && nextShown) continue;
+      if (owned === 0) nextShown = true;
+      shown++;
+      const full = owned >= ECON.cap;
+      const cost = full ? 0 : fishCost(s, owned);
+      const name = owned ? s.name + ' · ' + owned : s.name;
+      const sub = '+' + fmt(payoutOf(s, STATE.up)) + ' every ' + iv + 's';
+      const btn = this.row(name, sub, full ? 'full' : fmt(cost));
+      if (!full) {
+        btn.addEventListener('click', () => this.buyFish(s));
+        this.refs.push({ btn, cost });
+      }
+      fr.append(btn);
+    }
+    const hiddenN = SPECIES.length - shown;
+    this.el.morefish.hidden = hiddenN <= 0;
+    this.el.morefish.textContent = hiddenN + ' more wait below';
   },
 
-  hideHud() {
-    this.el.depthlabel.hidden = true;
-    this.el.count.hidden = true;
-    this.el.indexbtn.hidden = true;
-    this.el.resetbtn.hidden = true;
+  buyFish(s) {
+    const owned = TANK.count(s.id);
+    if (owned >= ECON.cap) return;
+    const cost = fishCost(s, owned);
+    if (STATE.gold < cost) return;
+    STATE.gold -= cost;
+    TANK.addFish(s.id, rnd(MAIN.W * 0.2, MAIN.W * 0.8), rnd(MAIN.H * 0.25, MAIN.H * 0.7));
+    if (owned === 0) this.toast(s.name + ' arrives');
+    SAVE.save();
+    this.build();
   },
 
-  showOffer(o) {
-    this.el.offerwant.textContent = 'trader wants ' + o.pay.n + ' ' + SP[o.pay.sp].name;
-    this.el.offerget.textContent = o.get.type === 'egg'
-      ? 'offers two ' + SP[o.get.sp].name + ' eggs'
-      : 'offers +' + o.get.amount + ' room';
-    this.el.offer.hidden = false;
+  buyUpgrade(u) {
+    const lvl = STATE.up[u.id];
+    if (lvl >= u.max) return;
+    const cost = upCost(u, lvl);
+    if (STATE.gold < cost) return;
+    STATE.gold -= cost;
+    STATE.up[u.id]++;
+    SAVE.save();
+    this.build();
   },
 
-  hideOffer() {
-    this.el.offer.hidden = true;
+  setText(el, s) {
+    if (el._t !== s) { el._t = s; el.textContent = s; }
+  },
+
+  tick() {
+    this.setText(this.el.goldnum, fmt(STATE.gold));
+    let sum = 0;
+    for (const f of TANK.fishes) sum += payoutOf(SP[f.sp], STATE.up);
+    this.setText(this.el.goldrate, '+' + fmt(sum) + ' gold every ' + tickInterval(STATE.up) + 's');
+    this.setText(this.el.fishtitle, 'fish · ' + TANK.total());
+    for (const r of this.refs) r.btn.classList.toggle('can', STATE.gold >= r.cost);
   },
 
   toast(msg) {
@@ -65,137 +122,16 @@ const UI = {
     }, 2300);
   },
 
-  buildPanel(mode) {
-    this.panelMode = mode;
-    this.sel = {};
-    const rows = this.el.panelrows;
-    rows.innerHTML = '';
-    for (const spId of TANK.ownedSpecies()) {
-      const cnt = TANK.count(spId);
-      if (cnt < 1) continue;
-      this.sel[spId] = 0;
-      const row = document.createElement('div');
-      row.className = 'prow';
-      const name = document.createElement('span');
-      name.className = 'pname';
-      name.textContent = SP[spId].name;
-      const own = document.createElement('span');
-      own.className = 'pown';
-      own.textContent = '×' + cnt;
-      const minus = document.createElement('button');
-      minus.className = 'pbtn';
-      minus.textContent = '−';
-      const val = document.createElement('span');
-      val.className = 'pval';
-      val.textContent = '0';
-      const plus = document.createElement('button');
-      plus.className = 'pbtn';
-      plus.textContent = '+';
-      minus.addEventListener('click', () => { this.bump(spId, -1, val); });
-      plus.addEventListener('click', () => { this.bump(spId, 1, val); });
-      row.append(name, own, minus, val, plus);
-      rows.append(row);
-    }
-    this.refreshSum();
-  },
-
-  limit() {
-    return this.panelMode === 'gate'
-      ? GATE.need() - GATE.fed
-      : DEPTHS[STATE.depth].carry;
-  },
-
-  sum() {
-    let s = 0;
-    for (const k in this.sel) s += this.sel[k];
-    return s;
-  },
-
-  bump(spId, d, valEl) {
-    const next = this.sel[spId] + d;
-    if (next < 0 || next > TANK.count(spId)) return;
-    if (d > 0 && this.sum() >= this.limit()) return;
-    this.sel[spId] = next;
-    valEl.textContent = next;
-    this.refreshSum();
-  },
-
-  refreshSum() {
-    if (this.panelMode === 'gate')
-      this.el.panelsum.textContent = this.sum() + ' chosen · the gate takes ' + (GATE.need() - GATE.fed) + ' more';
-    else
-      this.el.panelsum.textContent = this.sum() + ' / ' + this.limit() + ' carried down';
-  },
-
-  showGatePanel() {
-    this.buildPanel('gate');
-    this.el.paneltitle.textContent = 'feed the gate';
-    this.el.panelok.textContent = 'release';
-    this.el.panel.hidden = false;
-  },
-
-  showCarryPanel() {
-    this.buildPanel('carry');
-    this.el.paneltitle.textContent = 'the gate opens · choose what comes down';
-    this.el.panelok.textContent = 'descend';
-    this.el.panel.hidden = false;
-  },
-
-  confirmPanel() {
-    if (this.panelMode === 'gate') {
-      if (this.sum() > 0) {
-        if (!TANK.keepsPair(this.sel)) { this.toast('keep a pair'); return; }
-        GATE.feed(this.sel, innerWidth, innerHeight);
-      }
-      this.el.panel.hidden = true;
-    } else {
-      let pair = false;
-      for (const k in this.sel) if (this.sel[k] >= 2) pair = true;
-      if (!pair) { this.toast('carry a pair'); return; }
-      this.el.panel.hidden = true;
-      MAIN.descend(this.sel);
-    }
-  },
-
-  toggleIndex() {
-    if (!this.el.indexov.hidden) { this.el.indexov.hidden = true; return; }
-    const grid = this.el.indexgrid;
-    grid.innerHTML = '';
-    for (const s of SPECIES) {
-      const un = STATE.index.has(s.id);
-      const cell = document.createElement('div');
-      cell.className = 'cell' + (un ? '' : ' locked');
-      const img = document.createElement('img');
-      img.src = 'assets/' + s.id + '.svg?v=9';
-      const cn = document.createElement('div');
-      cn.className = 'cname';
-      cn.textContent = un ? s.name : '?';
-      cell.append(img, cn);
-      if (un) {
-        const st = document.createElement('div');
-        st.className = 'cstat';
-        st.textContent = 'keeps ' + s.max + ' · breeds ' + s.breed + 's · worth ' + s.value;
-        cell.append(st);
-      }
-      grid.append(cell);
-    }
-    this.el.indexov.hidden = false;
-  },
-
-  fishTip(f, cx, cy) {
+  fishHover(f, cx, cy) {
+    const s = SP[f.sp];
     const tip = this.el.fishtip;
-    tip.textContent = SP[f.sp].name + (f.scale < 0.95 ? ' · young' : '');
-    tip.style.left = cx + 12 + 'px';
-    tip.style.top = cy - 8 + 'px';
+    tip.textContent = s.name + ' · +' + fmt(payoutOf(s, STATE.up)) + ' every ' + tickInterval(STATE.up) + 's';
+    tip.style.left = Math.min(cx + 14, MAIN.W - 190) + 'px';
+    tip.style.top = cy - 10 + 'px';
     tip.hidden = false;
-    clearTimeout(this.tipTimer);
-    this.tipTimer = setTimeout(() => { tip.hidden = true; }, 1600);
   },
 
-  showEnd(n) {
-    this.hideOffer();
-    this.el.endtext.textContent = 'the tank is empty. the ocean is not.';
-    this.el.endindex.textContent = 'index ' + n + ' / ' + SPECIES.length;
-    this.el.endov.hidden = false;
+  hideHover() {
+    this.el.fishtip.hidden = true;
   }
 };

@@ -1,41 +1,33 @@
 const SAVE = {
-  KEY: 'fishtank1',
+  KEY: 'fishtank3',
   timer: 0,
 
   save() {
     if (this.disabled || STATE.mode !== 'play') return;
-    const data = {
-      d: STATE.depth,
-      lin: STATE.lineage,
-      cap: TANK.capacity,
-      fed: GATE.fed,
-      fedList: GATE.fedList,
-      idx: [...STATE.index],
-      rel: TANK.released,
-      fish: TANK.fishes.filter(f => !f.dead && f.state !== 'leave').map(f => ({ s: f.sp, sc: Math.round(f.scale * 100) / 100 }))
-    };
+    const c = {};
+    for (const s of SPECIES) {
+      const n = TANK.count(s.id);
+      if (n) c[s.id] = n;
+    }
+    const data = { g: Math.floor(STATE.gold), up: STATE.up, c };
     try { localStorage.setItem(this.KEY, JSON.stringify(data)); } catch (e) {}
   },
 
   load() {
     let data = null;
     try { data = JSON.parse(localStorage.getItem(this.KEY)); } catch (e) {}
-    if (!data || !data.fish) return false;
-    STATE.depth = data.d || 1;
-    STATE.lineage = data.lin || 0;
-    STATE.index = new Set(data.idx || []);
-    TANK.capacity = data.cap || 20;
-    TANK.released = data.rel || {};
-    GATE.fed = data.fed || 0;
-    GATE.fedList = data.fedList || [];
-    const W = innerWidth, H = innerHeight;
-    for (const rec of data.fish) {
-      if (!SP[rec.s]) continue;
-      const f = new Fish(rec.s, rnd(80, W - 80), rnd(100, H - 180), false);
-      f.scale = rec.sc || 1;
-      TANK.fishes.push(f);
+    if (!data || !data.c) return false;
+    STATE.gold = data.g || 0;
+    if (data.up) for (const k in STATE.up) STATE.up[k] = data.up[k] || 0;
+    let any = false;
+    for (const id in data.c) {
+      if (!SP[id]) continue;
+      for (let i = 0; i < data.c[id]; i++) {
+        TANK.addFish(id, rnd(MAIN.W * 0.15, MAIN.W * 0.85), rnd(MAIN.H * 0.2, MAIN.H * 0.75), true);
+        any = true;
+      }
     }
-    return true;
+    return any;
   },
 
   reset() {

@@ -1,5 +1,118 @@
 # FISH TANK - design tracker
 
+## Incremental redesign v1 (2026-08-04, uncommitted)
+- Full pivot to an incremental game per user direction. Player starts
+  with 1 minnow. Every fish pays gold on its own 10s timer (minnow
+  pays 1 per tick, exactly "1 gold every 10 seconds"). Payouts are
+  discrete, shown as a faint +n float above the fish. No click
+  income, no offline earnings.
+- Right side panel (320px, always visible): big gold number + rate
+  line, upgrades section, fish section. Rows are full-width buttons;
+  dim when unaffordable, bright + hover-invert when buyable. Fish
+  rows show name, owned count, payout each; buying the first of a
+  species unlocks it. Only owned species plus the next locked one are
+  listed ("n more wait below" under the list).
+- 13 species in one cost ladder (old depth order): pay 1 to 40k per
+  tick, base cost 3 to 700m, per-fish cost x1.35 per owned, cap 12
+  per species. All numbers are first-guess placeholders.
+- Upgrades (3, global): glow (+1 gold per payout per level, 5 max,
+  30 x8), current (payout 1s sooner per level, 5 max, min 5s,
+  150 x10), rich water (payouts double per level, 8 max, 400 x12).
+- Removed systems (files deleted): gate, trader, wild, depths,
+  breeding/eggs/rituals, stages/growth/death, feeding/pellets, gold
+  drop grab, index overlay, ascent/ending. Fish never leave or die -
+  no softlock possible. Kept untouched: movement (fish.js swim legs,
+  MOVE config), bubbles (perfect per user), kelp, ripples, rare giant
+  silhouette, angler lamp, hover tooltip (simplified), toasts, reset.
+- Tank sim area = window minus panel width; canvas still spans the
+  window, panel is opaque. Save key fishtank3 (gold, upgrade levels,
+  per-species counts; fish respawn at random positions on load).
+- Open: number tuning past the first 30 min, whether depth/descend
+  returns as prestige, species caps uniform at 12 (vary later?),
+  stage names/growth cut entirely (return?), upgrade set is minimal
+  on purpose - expand only after the loop is validated.
+
+## Asset round - oarfish out, ray + jelly reworked (2026-08-02, uncommitted)
+- Oarfish REMOVED per user: svg deleted from disk, species entry gone,
+  pulled from FX.giant's silhouette pick list (now shark/ray only).
+  Save load and gate rendering already skip unknown ids, verified.
+- Consequence: depth 4 now has ZERO species. Wild lure safely falls
+  back to undiscovered shallower species (spawn() returns on empty
+  pool), but the depth has no discovery of its own. Flagged, not
+  fixed - filling it is a design decision.
+- Ray retraced from a fresh measured crop of the reference cell
+  (pixel-profiled top/bottom/left/right outlines, bezier fit to the
+  samples). Old shape's real faults: tail cone ~3x too fat near the
+  tip and trailing edges sagging far below the reference's
+  near-straight lines. New path: whip-thin needle tail (outline gap
+  3-8px for the first third), hockey-stick sweep into wing tips at
+  55% of width, gently sagging straight-ish trailing edges. Verified
+  by headless side-by-side render against the crop.
+- Jelly redesigned (custom species, described here for review): bell
+  is now a proper hollow umbrella - rounded crown, rim flaring
+  slightly at the edges, underside curving UP in the middle (was a
+  closed convex muffin bottom); 3 identical clone tentacles replaced
+  with 4 strands of varied length and phase (short outer pair, long
+  inner pair, each a different s-curve) so they read as drifting;
+  stroke weight normalized from ~2.9 relative to ~1.9 (was nearly 2x
+  heavier than every other species; reference fish cluster ~1.6).
+
+## Lifespans (2026-08-02, uncommitted)
+- Stage names final: baby / juvenile / adult / elder / ancient (a
+  species uses the first N). 2-stage species skip juvenile entirely.
+- Every fish dies at its species' FINAL stage, never earlier ("adult
+  is the minimum stage a type can die at"). Final-stage duration =
+  stageT x 3 (LIFE_MUL), jittered 0.8-1.2x per individual so deaths
+  never synchronize. Feeding only speeds growth, it does NOT shorten
+  (or extend) the final stage. Grown fish ignore pellets now so
+  babies get the food.
+- Death visual: 2.5s quiet fade + slight sink + ripple. No toast.
+  Dying fish stop counting for income/breeding/caps/panels instantly.
+- Hover on a grown fish shows "fades in m:ss". Index shows "lives
+  ~Xm" total per species.
+- Economy note: starting/carried/stray fish arrive fully grown, so
+  their death clocks start immediately (~8-12 min for bass). The
+  loop demands breeding replacement. Known recovery hole: if a
+  species drops to 1 fish it cannot recover (wild offers only
+  undiscovered species, trader only locked eggs); full wipe recovers
+  via strays. Flagged, not solved - candidate fix: trader
+  occasionally offers eggs of an owned near-extinct species.
+
+## Overhaul v1 - gold economy (2026-08-02, uncommitted)
+- Gold replaces fish-as-currency for purchases. Fish generate gold
+  automatically: incomeOf = incAdult * (stage+1)/stages per minute.
+  Bass fry = +2/min (+1 per 30s per spec). HUD top-center shows total
+  and rate. Old save key retired (fishtank2) - fresh start, no reset
+  needed.
+- Stages: per-species count (2-5), loosely lifespan-accurate (shark 5,
+  pike/ray/angler 4, most 3, jelly/seahorse/minnow 2). Names:
+  fry / juvenile / adult / elder / ancient (first N). stageT per
+  species, each next stage takes 25% longer. Visual scale grows with
+  stage. Breeding requires fully grown. Eggs hatch at fry; wild-lured
+  fish join at middle stage; carried/stray fish arrive fully grown.
+- Hover a fish: name, stage (n/N), current /min + per-30s, grown /min,
+  time to next stage, fed marker.
+- Feeding: feed button (30 gold) drops 6 pellets; fish race to them;
+  each pellet eaten = 90s of double growth. Not constant - expensive.
+- Active grab: a gold drop drifts down every 70-140s; click = ~90s of
+  current total income. Misses sink away.
+- Fish list: "fish" toggle next to index; per-species count + /min +
+  total. State persists.
+- Wild lure and trader now cost gold (value x2 lure, x3 egg pair).
+  No payment fish swim out anymore (also removes the lure swirl).
+  Gate still takes FISH (kept as the prestige sink for now - flag).
+- Removed species (files + data): viper, vampire, lantern, hatchet,
+  angelfish, dogfish (+ earlier gulper, dumbo, shadow). 14 remain.
+  Depth pools now: d1 five, d2 five, d3 two, d4 one, d5 one - thin,
+  deliberately deferred until core loop settles.
+- Marine snow removed entirely (the "weird dots"). Bubbles untouched.
+  Ocean-ambience replacement TBD - proposals pending user pick.
+- Movement: sprint tier (10% of legs at 2.2-3x), dives rarer (2%),
+  faster (2.4x) so diagonals last ~1s; bend eases fast (2.4) and caps
+  22deg. Circling bug fixed: arrival radius scales with speed and legs
+  hard-timeout at 14s (turn circle could exceed arrival radius, fish
+  orbited forever - also hit leaving fish, turnEaseLeave now 6).
+
 Economy game where fish are the currency. PC / Steam target. Prototype v0.
 
 ## Core

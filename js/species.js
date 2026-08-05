@@ -1,24 +1,30 @@
 const SPECIES = [
-  { id: 'minnow', name: 'minnow', depth: 1, size: 34, asp: 0.294, breed: 14, value: 1, max: 8 },
-  { id: 'bass', name: 'bass', depth: 1, size: 52, asp: 0.325, breed: 20, value: 2, max: 5 },
-  { id: 'perch', name: 'perch', depth: 1, size: 58, asp: 0.376, breed: 24, value: 3, max: 5 },
-  { id: 'cod', name: 'cod', depth: 1, size: 55, asp: 0.547, breed: 26, value: 4, max: 5 },
-  { id: 'angelfish', name: 'angelfish', depth: 1, size: 60, asp: 0.96, breed: 30, value: 6, max: 4 },
-  { id: 'flounder', name: 'flounder', depth: 1, size: 66, asp: 0.667, breed: 34, value: 8, max: 4 },
-  { id: 'trout', name: 'trout', depth: 2, size: 60, asp: 0.365, breed: 30, value: 10, max: 5 },
-  { id: 'mackerel', name: 'mackerel', depth: 2, size: 62, asp: 0.339, breed: 32, value: 12, max: 5 },
-  { id: 'pike', name: 'pike', depth: 2, size: 78, asp: 0.274, breed: 40, value: 16, max: 4 },
-  { id: 'dogfish', name: 'dogfish', depth: 2, size: 72, asp: 0.412, breed: 45, value: 20, max: 3 },
-  { id: 'ray', name: 'ray', depth: 2, size: 92, asp: 0.631, breed: 60, value: 26, max: 3 },
-  { id: 'shark', name: 'shark', depth: 2, size: 110, asp: 0.424, breed: 70, value: 34, max: 2 },
-  { id: 'lantern', name: 'lanternfish', depth: 3, size: 40, asp: 0.385, breed: 40, value: 30, max: 5 },
-  { id: 'jelly', name: 'jellyfish', depth: 3, size: 48, asp: 1.098, breed: 35, value: 34, max: 6 },
-  { id: 'hatchet', name: 'hatchetfish', depth: 3, size: 46, asp: 0.764, breed: 45, value: 40, max: 4 },
-  { id: 'seahorse', name: 'seahorse', depth: 3, size: 36, asp: 1.643, breed: 50, value: 46, max: 4 },
-  { id: 'oarfish', name: 'oarfish', depth: 4, size: 150, asp: 0.25, breed: 90, value: 85, max: 2 },
-  { id: 'viper', name: 'viperfish', depth: 5, size: 76, asp: 0.303, breed: 90, value: 100, max: 3 },
-  { id: 'vampire', name: 'vampire squid', depth: 5, size: 58, asp: 0.778, breed: 100, value: 120, max: 2 },
-  { id: 'angler', name: 'anglerfish', depth: 5, size: 64, asp: 0.625, breed: 120, value: 140, max: 2, lamp: { x: 0.884, y: 0.129 } }
+  { id: 'minnow', name: 'minnow', size: 34, asp: 0.294, pay: 1, cost: 3 },
+  { id: 'bass', name: 'bass', size: 52, asp: 0.325, pay: 3, cost: 40 },
+  { id: 'perch', name: 'perch', size: 58, asp: 0.376, pay: 7, cost: 200 },
+  { id: 'cod', name: 'cod', size: 55, asp: 0.547, pay: 16, cost: 1000 },
+  { id: 'flounder', name: 'flounder', size: 66, asp: 0.667, pay: 38, cost: 5200 },
+  { id: 'trout', name: 'trout', size: 60, asp: 0.365, pay: 90, cost: 26000 },
+  { id: 'mackerel', name: 'mackerel', size: 62, asp: 0.339, pay: 210, cost: 120000 },
+  { id: 'pike', name: 'pike', size: 78, asp: 0.274, pay: 500, cost: 550000 },
+  { id: 'ray', name: 'ray', size: 92, asp: 0.7, pay: 1200, cost: 2400000 },
+  { id: 'shark', name: 'shark', size: 110, asp: 0.424, pay: 2800, cost: 10000000 },
+  { id: 'jelly', name: 'jellyfish', size: 48, asp: 1.098, pay: 6500, cost: 42000000 },
+  { id: 'seahorse', name: 'seahorse', size: 36, asp: 1.643, pay: 15000, cost: 170000000 },
+  { id: 'angler', name: 'anglerfish', size: 64, asp: 0.625, pay: 40000, cost: 700000000, lamp: { x: 0.884, y: 0.129 } }
 ];
 const SP = {};
-SPECIES.forEach(s => { SP[s.id] = s; s.spd = clamp(64 - s.size * 0.12, 34, 70); });
+SPECIES.forEach((s, i) => { SP[s.id] = s; s.tier = i; s.spd = clamp(64 - s.size * 0.12, 34, 70); });
+
+const ECON = { interval: 10, minInterval: 5, costGrowth: 1.35, cap: 12 };
+
+const UPGRADES = [
+  { id: 'glow', name: 'glow', sub: 'each payout gives 1 more gold', base: 30, growth: 8, max: 5 },
+  { id: 'current', name: 'current', sub: 'payouts come 1s sooner', base: 150, growth: 10, max: 5 },
+  { id: 'rich', name: 'rich water', sub: 'payouts double', base: 400, growth: 12, max: 8 }
+];
+
+const tickInterval = up => Math.max(ECON.minInterval, ECON.interval - up.current);
+const payoutOf = (s, up) => s.pay * Math.pow(2, up.rich) + up.glow;
+const fishCost = (s, owned) => Math.round(s.cost * Math.pow(ECON.costGrowth, Math.max(0, owned - (s.id === 'minnow' ? 1 : 0))));
+const upCost = (u, lvl) => Math.round(u.base * Math.pow(u.growth, lvl));

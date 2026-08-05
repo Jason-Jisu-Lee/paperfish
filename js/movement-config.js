@@ -2,10 +2,12 @@ const MOVE = {
   indivMulMin: 0.82, indivMulMax: 1.22,
 
   cruiseMulMin: 0.65, cruiseMulMax: 1.5,
-  cruiseChance: 0.44,
 
   briskMulMin: 1.4, briskMulMax: 2.1,
-  briskChance: 0.36,
+  briskChance: 0.22,
+
+  sprintMulMin: 2.2, sprintMulMax: 3.0,
+  sprintChance: 0.1,
 
   restMulMin: 0.1, restMulMax: 0.3,
   restChance: 0.22,
@@ -22,27 +24,27 @@ const MOVE = {
   arriveSlowStart: 0.7,
   arriveSlowEnd: 0.95,
   arriveSlowFloor: 0.35,
+  arriveSpeedFactor: 0.5,
+  legTimeout: 14,
 
   turnEaseNormal: 1.4,
   turnEaseSlow: 0.7,
-  turnEaseLeave: 4.5,
+  turnEaseLeave: 6,
   bigReversalThresholdRad: 1.6,
   bigReversalBoost: 2.4,
 
-  legSpeedEase: 1.8,
-
   normalMaxAngleDeg: 12,
-  diveChance: 0.05,
+  diveChance: 0.02,
   diveMinAngleDeg: 54,
   diveMaxAngleDeg: 70,
-  diveSpeedMul: 1.75,
+  diveSpeedMul: 2.4,
   diveDistMin: 70,
   diveDistMax: 170,
 
   dashTargetMaxAngleDeg: 68,
 
-  bendMaxDeg: 30,
-  bendEase: 0.9,
+  bendMaxDeg: 22,
+  bendEase: 2.4,
 
   pairtoMul: 1.3,
   leaveMulMin: 3.8, leaveMulMax: 5.2

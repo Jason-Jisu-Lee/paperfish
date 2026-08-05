@@ -1,20 +1,21 @@
 let FISH_SEQ = 1;
 
 class Fish {
-  constructor(spId, x, y, juv) {
+  constructor(spId, x, y) {
     const s = SP[spId];
     this.id = FISH_SEQ++;
     this.sp = spId;
     this.x = x; this.y = y;
     this.dir = rnd(0, TAU);
     this.phase = rnd(0, TAU);
-    this.scale = juv ? 0.45 : 1;
-    this.state = 'swim';
+    this.scale = rnd(0.92, 1.08);
+    this.payT = rnd(0, ECON.interval);
     this.tx = x; this.ty = y;
     this.diving = false;
     this.moving = true;
     this.legMul = 1;
     this.legDist = 1;
+    this.legT = 0;
     this.restT = 0;
     this.hoverT = 0;
     this.dashT = rnd(MOVE.dashIntervalMin, MOVE.dashIntervalMax);
@@ -22,11 +23,6 @@ class Fish {
     this.dashMul = 1;
     this.bend = 0;
     this.indivMul = rnd(MOVE.indivMulMin, MOVE.indivMulMax);
-    this.dead = false;
-    this.pairPt = null;
-    this.leaveTarget = null;
-    this.onLeft = null;
-    this.leaveMul = 0;
   }
   pickTargetAngled(W, H, far) {
     const preferSteep = !far && Math.random() < MOVE.diveChance;
@@ -35,10 +31,8 @@ class Fish {
       const fromVert = rnd(90 - MOVE.diveMaxAngleDeg, 90 - MOVE.diveMinAngleDeg) * Math.PI / 180;
       const updown = Math.random() < 0.5 ? -1 : 1;
       const side = Math.random() < 0.5 ? -1 : 1;
-      const dx = Math.sin(fromVert) * side * dist;
-      const dy = Math.cos(fromVert) * updown * dist;
-      this.tx = clamp(this.x + dx, 50, W - 50);
-      this.ty = clamp(this.y + dy, 80, H - 150);
+      this.tx = clamp(this.x + Math.sin(fromVert) * side * dist, 50, W - 50);
+      this.ty = clamp(this.y + Math.cos(fromVert) * updown * dist, 80, H - 150);
       this.diving = true;
       return;
     }
@@ -67,9 +61,10 @@ class Fish {
   startLeg(W, H) {
     this.pickTargetAngled(W, H, false);
     this.legDist = Math.max(1, Math.hypot(this.tx - this.x, this.ty - this.y));
+    this.legT = 0;
     const r = Math.random();
-    this.legMul = r < MOVE.cruiseChance ? rnd(MOVE.cruiseMulMin, MOVE.cruiseMulMax)
-      : r < MOVE.cruiseChance + MOVE.briskChance ? rnd(MOVE.briskMulMin, MOVE.briskMulMax)
+    this.legMul = r < MOVE.sprintChance ? rnd(MOVE.sprintMulMin, MOVE.sprintMulMax)
+      : r < MOVE.sprintChance + MOVE.briskChance ? rnd(MOVE.briskMulMin, MOVE.briskMulMax)
       : rnd(MOVE.cruiseMulMin, MOVE.cruiseMulMax);
     this.moving = true;
   }
@@ -82,81 +77,57 @@ class Fish {
   }
   update(dt, t, W, H) {
     const s = SP[this.sp];
-    if (this.scale < 1) this.scale = Math.min(1, this.scale + dt / 30);
-    if (this.state === 'pairing') {
-      const Ax = 15, Ay = 3, w = 0.55;
-      const o = t * w + this.phase;
-      this.x = clamp(this.pairPt.x + Math.cos(o) * Ax, 30, W - 30);
-      this.y = clamp(this.pairPt.y + Math.sin(o) * Ay, 60, H - 60);
-      this.dir = Math.atan2(Math.cos(o) * Ay, -Math.sin(o) * Ax);
-      this.easeBend(dt);
-      return;
-    }
     let target = null;
     let mul = 1;
     let turnEase = MOVE.turnEaseNormal;
-    if (this.state === 'swim') {
-      this.dashT -= dt;
-      if (this.dashUntil > 0) {
-        this.dashUntil -= dt;
-        mul = this.dashMul;
-        turnEase = MOVE.turnEaseNormal * 1.4;
-        target = { x: this.tx, y: this.ty };
-        if (Math.hypot(this.tx - this.x, this.ty - this.y) < 22 || this.dashUntil <= 0) {
-          this.dashUntil = 0;
-          this.startLeg(W, H);
-        }
-      } else if (this.dashT <= 0) {
-        this.dashT = rnd(MOVE.dashIntervalMin, MOVE.dashIntervalMax);
-        this.dashMul = rnd(MOVE.dashMulMin, MOVE.dashMulMax);
-        this.dashUntil = Math.random() < MOVE.dashLongChance ? rnd(MOVE.dashLongMin, MOVE.dashLongMax) : rnd(MOVE.dashShortMin, MOVE.dashShortMax);
-        this.pickTargetAngled(W, H, true);
-        this.diving = false;
-        FX.bubbleBurst(this.x, this.y);
-        mul = this.dashMul;
-        turnEase = MOVE.turnEaseNormal * 1.4;
-        target = { x: this.tx, y: this.ty };
-      } else if (this.moving) {
-        const distNow = Math.hypot(this.tx - this.x, this.ty - this.y);
-        const progress = clamp(1 - distNow / this.legDist, 0, 1);
-        let speedMul = this.legMul;
-        if (progress > MOVE.arriveSlowStart) {
-          const k = clamp((progress - MOVE.arriveSlowStart) / (MOVE.arriveSlowEnd - MOVE.arriveSlowStart), 0, 1);
-          speedMul = lerp(this.legMul, this.legMul * MOVE.arriveSlowFloor, k);
-          turnEase = MOVE.turnEaseSlow;
-        }
-        mul = speedMul * (this.diving ? MOVE.diveSpeedMul : 1);
-        target = { x: this.tx, y: this.ty };
-        if (distNow < 18 || progress >= 0.995) {
-          if (Math.random() < MOVE.restChance) this.startRest(W, H);
-          else this.startLeg(W, H);
-        }
-      } else {
-        this.restT -= dt;
-        this.hoverT -= dt;
-        if (this.hoverT <= 0) {
-          this.hoverT = rnd(1.2, 2.4);
-          this.tx = clamp(this.x + rnd(-22, 22), 50, W - 50);
-          this.ty = clamp(this.y + rnd(-16, 16), 80, H - 150);
-        }
-        mul = rnd(MOVE.restMulMin, MOVE.restMulMax);
+    this.dashT -= dt;
+    if (this.dashUntil > 0) {
+      this.dashUntil -= dt;
+      mul = this.dashMul;
+      turnEase = MOVE.turnEaseNormal * 1.4;
+      target = { x: this.tx, y: this.ty };
+      if (Math.hypot(this.tx - this.x, this.ty - this.y) < 26 || this.dashUntil <= 0) {
+        this.dashUntil = 0;
+        this.startLeg(W, H);
+      }
+    } else if (this.dashT <= 0) {
+      this.dashT = rnd(MOVE.dashIntervalMin, MOVE.dashIntervalMax);
+      this.dashMul = rnd(MOVE.dashMulMin, MOVE.dashMulMax);
+      this.dashUntil = Math.random() < MOVE.dashLongChance ? rnd(MOVE.dashLongMin, MOVE.dashLongMax) : rnd(MOVE.dashShortMin, MOVE.dashShortMax);
+      this.pickTargetAngled(W, H, true);
+      this.diving = false;
+      FX.bubbleBurst(this.x, this.y);
+      mul = this.dashMul;
+      target = { x: this.tx, y: this.ty };
+    } else if (this.moving) {
+      this.legT += dt;
+      const distNow = Math.hypot(this.tx - this.x, this.ty - this.y);
+      const progress = clamp(1 - distNow / this.legDist, 0, 1);
+      let speedMul = this.legMul;
+      if (progress > MOVE.arriveSlowStart) {
+        const k = clamp((progress - MOVE.arriveSlowStart) / (MOVE.arriveSlowEnd - MOVE.arriveSlowStart), 0, 1);
+        speedMul = lerp(this.legMul, this.legMul * MOVE.arriveSlowFloor, k);
         turnEase = MOVE.turnEaseSlow;
-        target = { x: this.tx, y: this.ty };
-        if (this.restT <= 0) this.startLeg(W, H);
       }
-    } else if (this.state === 'pairto') {
-      target = this.pairPt;
-      mul = MOVE.pairtoMul;
-    } else if (this.state === 'leave') {
-      if (!this.leaveMul) this.leaveMul = rnd(MOVE.leaveMulMin, MOVE.leaveMulMax);
-      target = this.leaveTarget();
-      mul = this.leaveMul;
-      turnEase = MOVE.turnEaseLeave;
-      if (Math.hypot(target.x - this.x, target.y - this.y) < 18) {
-        this.dead = true;
-        if (this.onLeft) this.onLeft();
-        return;
+      mul = speedMul * (this.diving ? MOVE.diveSpeedMul : 1);
+      target = { x: this.tx, y: this.ty };
+      const arriveR = Math.max(22, s.spd * mul * this.indivMul * MOVE.arriveSpeedFactor);
+      if (distNow < arriveR || progress >= 0.995 || this.legT > MOVE.legTimeout) {
+        if (Math.random() < MOVE.restChance) this.startRest(W, H);
+        else this.startLeg(W, H);
       }
+    } else {
+      this.restT -= dt;
+      this.hoverT -= dt;
+      if (this.hoverT <= 0) {
+        this.hoverT = rnd(1.2, 2.4);
+        this.tx = clamp(this.x + rnd(-22, 22), 50, W - 50);
+        this.ty = clamp(this.y + rnd(-16, 16), 80, H - 150);
+      }
+      mul = rnd(MOVE.restMulMin, MOVE.restMulMax);
+      turnEase = MOVE.turnEaseSlow;
+      target = { x: this.tx, y: this.ty };
+      if (this.restT <= 0) this.startLeg(W, H);
     }
     const speed = s.spd * mul * this.indivMul;
     if (target) {

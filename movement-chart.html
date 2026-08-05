@@ -27,7 +27,7 @@ td.d{opacity:.55}
 <div class="note">to edit: say the row name (left column) and the new value or range. this file is the only place movement numbers live.</div>
 
 <script src="js/util.js?v=1"></script>
-<script src="js/movement-config.js?v=3"></script>
+<script src="js/movement-config.js?v=4"></script>
 <script>
 const SECTIONS = [
   { title: 'cruise leg (default speed while traveling to a target)', plain: 'Most legs. Speed is picked once per leg and held for the whole trip.', rows: [
@@ -37,6 +37,10 @@ const SECTIONS = [
   { title: 'brisk leg (a faster-than-normal cruise)', plain: 'Occasional quicker legs, not a full dash.', rows: [
     ['briskMulMin / briskMulMax', MOVE.briskMulMin + ' – ' + MOVE.briskMulMax, 'speed multiplier'],
     ['briskChance', MOVE.briskChance, 'probability a new leg is brisk'],
+  ]},
+  { title: 'sprint leg (much faster, still a normal sideways leg)', plain: 'The "go much faster ~10% of the time" tier for regular sideways travel.', rows: [
+    ['sprintMulMin / sprintMulMax', MOVE.sprintMulMin + ' – ' + MOVE.sprintMulMax, 'speed multiplier'],
+    ['sprintChance', MOVE.sprintChance, 'probability a new leg is a sprint'],
   ]},
   { title: 'rest (staying mostly still)', plain: 'Fish barely drifts, hovering near one spot, refreshing a tiny hover point every 1.2–2.4s. Duration is either short or — sometimes — much longer.', rows: [
     ['restMulMin / restMulMax', MOVE.restMulMin + ' – ' + MOVE.restMulMax, 'speed multiplier while resting'],
@@ -56,6 +60,8 @@ const SECTIONS = [
     ['arriveSlowStart', (MOVE.arriveSlowStart*100).toFixed(0) + '%', 'fraction of the leg where slowdown begins'],
     ['arriveSlowEnd', (MOVE.arriveSlowEnd*100).toFixed(0) + '%', 'fraction where it reaches minimum speed'],
     ['arriveSlowFloor', MOVE.arriveSlowFloor, 'speed multiplier floor at the very end (fraction of leg speed)'],
+    ['arriveSpeedFactor', MOVE.arriveSpeedFactor, 'arrival radius scales with speed (prevents orbiting a target the turn circle cannot reach)'],
+    ['legTimeout', MOVE.legTimeout + 's', 'hard cap on one leg; past this the fish just picks a new target (anti-circling failsafe)'],
   ]},
   { title: 'turning', plain: 'How fast heading catches up to the target direction.', rows: [
     ['turnEaseNormal', MOVE.turnEaseNormal, 'normal turn responsiveness'],
