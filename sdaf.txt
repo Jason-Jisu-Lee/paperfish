@@ -1,0 +1,39 @@
+Paperfish — project brief
+
+Genre: idle/incremental hybrid. Setting: single-screen deep-sea ocean, descending through zones.
+
+Core loop
+
+Start with one fish. Fish generate currency passively.
+A fish's income scales with its age, up to a cap.
+Each fish type has its own age/income curve. Curves differ in shape — some pay little for a long stretch, then spike. Average income rises with age, with occasional dips. The starting fish uses a flat curve as a baseline.
+At growth stages, the player chooses traits (placeholder upgrades for now)
+
+
+
+Traits are a second decision layer, chosen periodically.
+ Each type has a population cap; upgrades can raise it. Currency unlocks new types.
+
+
+Zone progression
+
+Deeper zones require purchasing pressure-rated gear with a large lump sum — a save-versus-spend decision, not a passive threshold.
+Each zone uses its own currency. On descending, accumulated income converts into different currency with different ratio (undecided details)
+
+
+
+Prestige
+
+Prestige resets all zones and returns the player to zone 1, with permanent bonuses.
+
+
+
+
+Tone and pacing
+
+Medium pace. Always something for the player to do.
+Opens as lighthearted deep-sea exploration, then gradually turns unsettling. We'll add a story to this later. The player is the "diver" who's down in the ocean to explore and help fish grow.
+
+core thing in this game is a sense of progression and progressive introduction of new upgrades/mechanics, etc.
+
+none of this is a hard rule and we'll adjust as we go and test.
