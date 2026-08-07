@@ -7,6 +7,7 @@ progressively, always something to do. Medium pace. Opens lighthearted,
 gradually turns unsettling. Story layered in later.
 
 ## Visual theme (reference: image.png, 02-ink.html)
+
 - Paper, not void. Warm washi paper field (#f2efe6 with soft radial
   light), sumi ink strokes (#1c1b18), one reserved accent: hanko seal
   red (#b43a2b).
@@ -27,6 +28,7 @@ gradually turns unsettling. Story layered in later.
   the prestige seal).
 
 ## Core loop
+
 - Start with one fish. Fish generate currency passively.
 - Income scales with a fish's age, up to a cap.
 - Each type has its own age/income curve; shapes differ. Some pay
@@ -38,15 +40,18 @@ gradually turns unsettling. Story layered in later.
 - Currency unlocks new types.
 
 ## Zones
+
 - Descending requires pressure-rated gear bought as a large lump sum.
   A save-versus-spend decision, not a passive threshold.
 - Each zone has its own currency. On descent, accumulated income
   converts at a ratio (details undecided).
 
 ## Prestige
+
 - Resets all zones, returns to zone 1, grants permanent bonuses.
 
 ## Open questions
+
 - Kept SVG fish are white-stroke; need an ink recolor pass before
   they read on paper.
 - Fonts load from Google CDN in the reference; self-host for

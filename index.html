@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>paperfish</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Manrope:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="base.css?v=4" />
+  </head>
+  <body>
+    <canvas id="sea"></canvas>
+
+    <aside class="hud" id="hud" hidden>
+      <div class="micro">gold on hand</div>
+      <div class="gold"><span id="gold-num">0</span><span class="g">g</span></div>
+      <div class="micro faint" id="gold-rate">+0 / min</div>
+      <div class="rule"></div>
+      <div class="tabs">
+        <button class="tab on" id="tab-shoal">shoal</button>
+        <button class="tab" id="tab-depths">depths</button>
+      </div>
+      <div id="view-shoal">
+        <div class="micro sect">i · shoal</div>
+        <div id="shoal-rows"></div>
+        <div class="micro sect">ii · currents</div>
+        <div id="current-rows"></div>
+      </div>
+      <div id="view-depths" hidden>
+        <div class="micro sect">iii · depths</div>
+        <div id="depth-rows"></div>
+      </div>
+    </aside>
+
+    <nav class="corner" id="corner" hidden>
+      <button class="icon" id="music" aria-label="music">
+        <svg viewBox="0 0 24 24">
+          <circle class="note-head" cx="7.5" cy="17" r="2" />
+          <circle class="note-head" cx="16.5" cy="15.5" r="2" />
+          <path d="M9.5 17 V7.5" />
+          <path d="M18.5 15.5 V6" />
+          <path d="M9.5 7.5 L18.5 6" />
+          <path id="music-slash" d="M4.5 4.5 L19.5 19.5" hidden />
+        </svg>
+      </button>
+      <button class="icon" id="screen" aria-label="screen">
+        <svg viewBox="0 0 24 24">
+          <g id="glyph-expand">
+            <path d="M4.5 9 V4.5 H9" />
+            <path d="M15 4.5 H19.5 V9" />
+            <path d="M19.5 15 V19.5 H15" />
+            <path d="M9 19.5 H4.5 V15" />
+          </g>
+          <g id="glyph-contract" hidden>
+            <path d="M9 4.5 V9 H4.5" />
+            <path d="M19.5 9 H15 V4.5" />
+            <path d="M15 19.5 V15 H19.5" />
+            <path d="M4.5 15 H9 V19.5" />
+          </g>
+        </svg>
+      </button>
+      <button class="icon" id="pause" aria-label="pause">
+        <svg viewBox="0 0 24 24">
+          <g id="glyph-pause">
+            <path d="M9.2 5.5 V18.5" />
+            <path d="M14.8 5.5 V18.5" />
+          </g>
+          <g id="glyph-play" hidden>
+            <path d="M9 5.5 L18.5 12 L9 18.5 L9 5.5" />
+          </g>
+        </svg>
+      </button>
+      <button class="icon" id="settings" aria-label="settings">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6.5 H20" />
+          <path d="M4 12 H20" />
+          <path d="M4 17.5 H20" />
+          <circle class="knob" cx="14" cy="6.5" r="2" />
+          <circle class="knob" cx="8" cy="12" r="2" />
+          <circle class="knob" cx="16" cy="17.5" r="2" />
+        </svg>
+      </button>
+    </nav>
+
+    <div class="panel" id="panel" hidden>
+      <div class="panel-label">settings</div>
+      <button class="row" id="row-sound">
+        <span>sound</span><span class="leader"></span
+        ><span class="value">on</span>
+      </button>
+      <button class="row" id="row-screen">
+        <span>screen</span><span class="leader"></span
+        ><span class="value">window</span>
+      </button>
+      <button class="row" id="row-front">
+        <span>menu</span><span class="leader"></span
+        ><span class="value">front</span>
+      </button>
+    </div>
+
+    <div class="micro zone" id="zone" hidden>zone i</div>
+
+    <div class="veil" id="veil" hidden>
+      <div class="veil-mid">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 5 V19" />
+          <path d="M15 5 V19" />
+        </svg>
+        <div class="micro">paused</div>
+      </div>
+    </div>
+
+    <section class="front" id="front">
+      <nav class="corner front-corner">
+        <button class="icon" id="steam" aria-label="steam">
+          <svg viewBox="0 0 24 24">
+            <path d="M9.2 14.8 L14.6 9.4" />
+            <circle cx="12" cy="12" r="8.2" />
+            <circle class="knob" cx="9.2" cy="14.8" r="3.2" />
+            <circle class="knob" cx="16" cy="8" r="2.5" />
+          </svg>
+        </button>
+        <button class="icon" id="discord" aria-label="discord">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M6.9 7.1 Q8.6 6.2 10.4 6 L10.9 7 Q12 6.85 13.1 7 L13.6 6 Q15.4 6.2 17.1 7.1 Q19.4 10.6 18.9 14.8 Q17 16.4 14.8 17 L14.1 15.7 Q12 16.1 9.9 15.7 L9.2 17 Q7 16.4 5.1 14.8 Q4.6 10.6 6.9 7.1"
+            />
+            <circle class="note-head" cx="9.6" cy="11.3" r="1.2" />
+            <circle class="note-head" cx="14.4" cy="11.3" r="1.2" />
+          </svg>
+        </button>
+      </nav>
+      <div class="front-mid">
+        <div class="f-title">paperfish</div>
+        <div class="hero-wrap">
+          <svg class="hero" viewBox="0 0 340 200" aria-label="fish drawn in ink">
+            <path class="body" d="M30,100 Q160,10 310,148" />
+            <path class="body" d="M30,100 Q160,190 310,52" />
+            <path class="wash" d="M34,106 Q160,22 306,150" />
+            <path class="wash" d="M34,94 Q160,178 306,50" />
+          </svg>
+          <div class="pool"></div>
+        </div>
+        <nav class="menu">
+          <button id="m-play">play</button>
+          <button id="m-settings">settings</button>
+          <button id="m-quit">quit</button>
+        </nav>
+        <div class="front-set" id="front-set" hidden>
+          <button class="row" id="front-screen">
+            <span>screen</span><span class="leader"></span
+            ><span class="value">window</span>
+          </button>
+        </div>
+      </div>
+      <div class="vert">from the deep</div>
+      <div class="f-seal" aria-hidden="true">
+        <svg viewBox="0 0 340 200">
+          <path d="M30,100 Q160,10 310,148" />
+          <path d="M30,100 Q160,190 310,52" />
+        </svg>
+      </div>
+    </section>
+
+    <div class="dev" id="dev" hidden>
+      <div class="panel-label">dev</div>
+      <div class="dev-row">
+        <span class="dev-tag">speed</span>
+        <button data-speed="1" class="on">1</button>
+        <button data-speed="5">5</button>
+        <button data-speed="20">20</button>
+        <button data-speed="60">60</button>
+      </div>
+      <div class="dev-row">
+        <span class="dev-tag">gold</span>
+        <button data-gold="100">+100</button>
+        <button data-gold="1000">+1k</button>
+        <button data-gold="10000">+10k</button>
+      </div>
+      <div class="dev-row">
+        <span class="dev-tag">eggs</span>
+        <button data-act="hatch">hatch</button>
+      </div>
+      <div class="dev-row">
+        <span class="dev-tag">save</span>
+        <button data-act="reset">reset</button>
+      </div>
+    </div>
+
+    <script src="species.js?v=2"></script>
+    <script src="state.js?v=1"></script>
+    <script src="fish.js?v=2"></script>
+    <script src="ambience.js?v=2"></script>
+    <script src="panel.js?v=1"></script>
+    <script src="pause.js?v=1"></script>
+    <script src="dev.js?v=1"></script>
+    <script src="front.js?v=2"></script>
+    <script src="game.js?v=2"></script>
+    <script src="corner.js?v=2"></script>
+  </body>
+</html>
