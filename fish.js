@@ -51,25 +51,25 @@ const Stage = (() => {
 
   const pickMode = f => {
     const r = Math.random();
-    if (r < 0.15) {
-      f.mode = 'dart';
-      f.modeT = rand(0.5, 1.1);
-      f.target = rand(70, 115);
-      f.vyT *= 0.3;
-    } else if (r < 0.42) {
+    if (r < 0.07) {
       f.mode = 'glide';
-      f.modeT = rand(2, 4.5);
-      f.target = rand(5, 10);
+      f.modeT = rand(1.2, 2.8);
+      f.target = rand(6, 12);
+    } else if (r < 0.27) {
+      f.mode = 'dart';
+      f.modeT = rand(0.5, 1);
+      f.target = rand(130, 200);
+      f.vyT *= 0.3;
     } else {
       f.mode = 'cruise';
-      f.modeT = rand(3.5, 8);
-      f.target = rand(16, 32);
+      f.modeT = rand(3, 7);
+      f.target = rand(45, 85);
     }
   };
 
   const initMotion = f => {
     f.dir = Math.random() < 0.5 ? -1 : 1;
-    f.spd = rand(14, 26);
+    f.spd = rand(45, 80);
     f.target = f.spd;
     f.mode = 'cruise';
     f.modeT = rand(1.5, 5);
@@ -133,9 +133,9 @@ const Stage = (() => {
       const acc = f.mode === 'dart' ? 5.5 : 2.4;
       f.spd += (f.target - f.spd) * Math.min(acc * mdt, 1);
 
-      const sc = Math.min(f.spd, 130);
-      f.tailPh += mdt * Math.PI * 2 * (0.55 + sc * 0.02);
-      const ampT = f.turn !== null ? 0.3 : Math.min(0.18 + sc / 70, 1.25);
+      const sc = Math.min(f.spd, 200);
+      f.tailPh += mdt * Math.PI * 2 * (0.55 + Math.min(sc, 150) * 0.016);
+      const ampT = f.turn !== null ? 0.3 : Math.min(0.18 + sc / 110, 1.25);
       f.tailAmp += (ampT - f.tailAmp) * Math.min(3 * mdt, 1);
       f.slowPh += mdt * 0.4;
 
@@ -157,10 +157,11 @@ const Stage = (() => {
         if (f.turnT <= 0) {
           f.turnT = rand(7, 16);
           if (Math.random() < 0.45) startTurn(f);
-          else f.vyT = rand(-8, 8);
+          else f.vyT = rand(-10, 10);
         }
-        if (f.x < bounds.l + 50 && f.dir < 0) startTurn(f);
-        if (f.x > bounds.r - 50 && f.dir > 0) startTurn(f);
+        const m = 50 + f.spd * 0.6;
+        if (f.x < bounds.l + m && f.dir < 0) startTurn(f);
+        if (f.x > bounds.r - m && f.dir > 0) startTurn(f);
       }
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 4;
