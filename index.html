@@ -7,31 +7,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Manrope:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=4" />
+    <link rel="stylesheet" href="base.css?v=14" />
   </head>
   <body>
     <canvas id="sea"></canvas>
 
     <aside class="hud" id="hud" hidden>
-      <div class="micro">gold on hand</div>
       <div class="gold"><span id="gold-num">0</span><span class="g">g</span></div>
       <div class="micro faint" id="gold-rate">+0 / min</div>
       <div class="rule"></div>
       <div class="tabs">
-        <button class="tab on" id="tab-shoal">shoal</button>
-        <button class="tab" id="tab-depths">depths</button>
+        <button class="tab on" id="tab-shoal">school</button>
+        <button class="tab" id="tab-depths">discover</button>
       </div>
       <div id="view-shoal">
-        <div class="micro sect">i · shoal</div>
+        <div class="micro sect">i · school</div>
         <div id="shoal-rows"></div>
-        <div class="micro sect">ii · currents</div>
+        <div class="micro sect">ii · upgrades</div>
         <div id="current-rows"></div>
       </div>
       <div id="view-depths" hidden>
-        <div class="micro sect">iii · depths</div>
+        <div class="micro sect">iii · discover</div>
         <div id="depth-rows"></div>
       </div>
     </aside>
@@ -39,11 +38,9 @@
     <nav class="corner" id="corner" hidden>
       <button class="icon" id="music" aria-label="music">
         <svg viewBox="0 0 24 24">
-          <circle class="note-head" cx="7.5" cy="17" r="2" />
-          <circle class="note-head" cx="16.5" cy="15.5" r="2" />
-          <path d="M9.5 17 V7.5" />
-          <path d="M18.5 15.5 V6" />
-          <path d="M9.5 7.5 L18.5 6" />
+          <circle class="note-head" cx="9.8" cy="16.6" r="2.1" />
+          <path d="M11.9 16.6 V5.6" />
+          <path d="M11.9 5.6 C14.6 6.4 15.8 8.2 15.2 10.8" />
           <path id="music-slash" d="M4.5 4.5 L19.5 19.5" hidden />
         </svg>
       </button>
@@ -76,12 +73,16 @@
       </button>
       <button class="icon" id="settings" aria-label="settings">
         <svg viewBox="0 0 24 24">
-          <path d="M4 6.5 H20" />
-          <path d="M4 12 H20" />
-          <path d="M4 17.5 H20" />
-          <circle class="knob" cx="14" cy="6.5" r="2" />
-          <circle class="knob" cx="8" cy="12" r="2" />
-          <circle class="knob" cx="16" cy="17.5" r="2" />
+          <circle cx="12" cy="12" r="6.2" />
+          <circle cx="12" cy="12" r="2.1" />
+          <path d="M12 5.8 V3.2" />
+          <path d="M12 18.2 V20.8" />
+          <path d="M5.8 12 H3.2" />
+          <path d="M18.2 12 H20.8" />
+          <path d="M16.4 7.6 L18.2 5.8" />
+          <path d="M7.6 16.4 L5.8 18.2" />
+          <path d="M16.4 16.4 L18.2 18.2" />
+          <path d="M7.6 7.6 L5.8 5.8" />
         </svg>
       </button>
     </nav>
@@ -102,7 +103,37 @@
       </button>
     </div>
 
-    <div class="micro zone" id="zone" hidden>zone i</div>
+    <div class="tip" id="fishtip" hidden>
+      <span class="tip-head">
+        <span class="tip-fish" id="fishtip-fish"></span>
+        <span class="tip-name" id="fishtip-name"></span>
+      </span>
+      <span class="tip-stage" id="fishtip-stage"></span>
+      <span class="tip-rate" id="fishtip-rate"></span>
+      <span class="tip-ltv devred" id="fishtip-ltv"></span>
+    </div>
+    <div class="tip" id="uptip" hidden></div>
+
+    <div class="fishcard" id="fishcard" hidden>
+      <div class="fc-name" id="fc-name"></div>
+      <div class="row known">
+        <span>age</span><span class="leader"></span
+        ><span class="value" id="fc-age"></span>
+      </div>
+      <div class="row known">
+        <span>per min</span><span class="leader"></span
+        ><span class="value" id="fc-min"></span>
+      </div>
+      <div class="row known">
+        <span>earns</span><span class="leader"></span
+        ><span class="value" id="fc-freq"></span>
+      </div>
+      <div class="row known" data-hint>
+        <span>death</span><span class="leader"></span
+        ><span class="value" id="fc-death"></span>
+      </div>
+      <svg id="fc-graph" viewBox="0 0 250 130"></svg>
+    </div>
 
     <div class="veil" id="veil" hidden>
       <div class="veil-mid">
@@ -166,6 +197,21 @@
       </div>
     </section>
 
+    <div class="devnotes">
+      <div class="devnote">
+        <div class="devnote-title">mating logistics and pacing</div>
+        <div>mating: 0% base chance, rolled once at birth. +5% per Mating upgrade. adults only, once per life, pair passes within 130px (checked every 0.8s), 1 egg at meeting point.</div>
+        <div>firstF: life 5 min. baby 1/5s, adult 2/5s, ltv 90. egg 50 instant. start 100g. hungry 60-70s, hungry 20s then starving 10s then death. kelp 10g, 2 bites, 2s eat, half recharge. MECHANICS.md has full detail.</div>
+        <div>until fish 4: lots of fish, plants as food. from fish 5: predators eat prior fish. define prey-count threshold per predator at thirdF.</div>
+        <div>click chase: streak +1 to +5, 1.5s window. starving/dying pay 0. right-click = info.</div>
+        <div>no max fish count.</div>
+      </div>
+      <div class="devnote">
+        <div class="devnote-title">pending prestige upgrades</div>
+        <div>enable mating mechanic.</div>
+      </div>
+    </div>
+
     <div class="dev" id="dev" hidden>
       <div class="panel-label">dev</div>
       <div class="dev-row">
@@ -191,15 +237,16 @@
       </div>
     </div>
 
-    <script src="species.js?v=2"></script>
-    <script src="state.js?v=1"></script>
-    <script src="fish.js?v=3"></script>
-    <script src="ambience.js?v=2"></script>
-    <script src="panel.js?v=1"></script>
-    <script src="pause.js?v=1"></script>
+    <script src="species.js?v=10"></script>
+    <script src="state.js?v=10"></script>
+    <script src="fish.js?v=20"></script>
+    <script src="ambience.js?v=4"></script>
+    <script src="panel.js?v=8"></script>
+    <script src="pause.js?v=2"></script>
+    <script src="detail.js?v=13"></script>
     <script src="dev.js?v=1"></script>
-    <script src="front.js?v=2"></script>
-    <script src="game.js?v=2"></script>
+    <script src="front.js?v=3"></script>
+    <script src="game.js?v=12"></script>
     <script src="corner.js?v=2"></script>
   </body>
 </html>

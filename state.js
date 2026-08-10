@@ -1,6 +1,8 @@
 const Game = {
   gold: 0,
   stream: 0,
+  mating: 0,
+  maturity: 0,
   plants: 0,
   unlocked: 1,
   fish: [],
@@ -12,13 +14,69 @@ const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
 const streamCost = () => 30 * 2 ** Game.stream;
-const KELP_COST = 200;
-const HATCH_SECONDS = 60;
+const matingCost = () => 100 * 2 ** Game.mating;
+const maturityCost = () => 150 * 2 ** Game.maturity;
+const KELP_COST = 10;
+const START_GOLD = 100;
+const MAX_AGE = 10;
+const streamFor = s => s === 0 ? Game.stream : 0;
+const adultAtOf = s => {
+  const a = SPECIES[s].adultAt;
+  return a === undefined ? undefined : a * (1 - Math.min(Game.maturity * 0.1, 0.8));
+};
+
+const fmtG = n => {
+  n = Math.floor(n);
+  const one = v => {
+    const r = Math.floor(v * 10) / 10;
+    return Number.isInteger(r) ? String(r) : r.toFixed(1);
+  };
+  if (n >= 1e9) return one(n / 1e9) + 'b';
+  if (n >= 1e6) return one(n / 1e6) + 'm';
+  if (n >= 1e5) return one(n / 1e3) + 'k';
+  return n.toLocaleString('en-US');
+};
+const hatchTime = s => SPECIES[s].hatch || 60;
+
+const lifeOf = s => SPECIES[s].life || SPECIES[s].maxAge || MAX_AGE;
+
+const speciesPhases = s => {
+  const sp = SPECIES[s];
+  if (sp._ph) return sp._ph;
+  if (sp.phases) {
+    const dur = sp.life / sp.phases.length;
+    const tick = sp.tick || 5;
+    sp._ph = sp.phases.map(a => ({ dur, amt: a, tick, gpm: a * 60 / tick }));
+  } else {
+    const cap = sp.maxAge || MAX_AGE;
+    sp._ph = [];
+    for (let m = 0; m < cap; m++) sp._ph.push({ dur: 1, amt: sp.gpm * (12 + m), tick: 60, gpm: sp.gpm * (12 + m) });
+  }
+  return sp._ph;
+};
+
+const phaseAt = (s, age) => {
+  const ph = speciesPhases(s);
+  let t = age || 0;
+  for (const p of ph) {
+    if (t < p.dur) return p;
+    t -= p.dur;
+  }
+  return ph[ph.length - 1];
+};
+
+const speciesGpm = (s, age) => phaseAt(s, age).gpm;
+
+const ltvOf = s => {
+  let sum = 0;
+  for (const p of speciesPhases(s)) sum += p.gpm * p.dur;
+  return sum + streamFor(s) * lifeOf(s);
+};
 
 const ratePerMin = () => {
   let r = 0;
-  for (const f of Game.fish) if (!f.egg) r += SPECIES[f.s].gpm + Game.stream;
-  return r + Game.plants;
+  for (const f of Game.fish) if (!f.egg && f.dying === undefined) r += speciesGpm(f.s, f.age) + streamFor(f.s);
+  return r;
 };
 
 const saveGame = () => {
@@ -28,9 +86,16 @@ const saveGame = () => {
       v: 1,
       gold: Game.gold,
       stream: Game.stream,
+      mating: Game.mating,
+      maturity: Game.maturity,
       plants: Game.plants,
       unlocked: Game.unlocked,
-      fish: Game.fish.map(f => ({ s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0) }))
+      fish: Game.fish.map(f => ({
+        s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
+        a: Math.round((f.age || 0) * 100) / 100,
+        m: f.mated ? 1 : 0, c: f.canMate ? 1 : 0,
+        h: f.hstate || 0, ha: Math.round((f.hungerAt || 0) * 100) / 100
+      }))
     }));
   } catch (e) {}
 };
@@ -43,9 +108,11 @@ const loadGame = () => {
     Game.stream = d.stream || 0;
     Game.plants = d.plants || 0;
     Game.unlocked = Math.min(Math.max(d.unlocked || 1, 1), SPECIES.length);
+    Game.mating = d.mating || 0;
+    Game.maturity = d.maturity || 0;
     Game.fish = (d.fish || [])
       .filter(f => f && f.s >= 0 && f.s < SPECIES.length)
-      .map(f => ({ s: f.s, egg: !!f.egg, t: f.t || 0 }));
+      .map(f => ({ s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, mated: !!f.m, canMate: !!f.c, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 }));
     return true;
   } catch (e) { return false; }
 };
@@ -80,6 +147,24 @@ const buyKelp = () => {
   Game.gold -= KELP_COST;
   Game.plants += 1;
   Stage.spawnPlant();
+  saveGame();
+  return true;
+};
+
+const buyMating = () => {
+  const c = matingCost();
+  if (Game.gold < c) return false;
+  Game.gold -= c;
+  Game.mating += 1;
+  saveGame();
+  return true;
+};
+
+const buyMaturity = () => {
+  const c = maturityCost();
+  if (Game.gold < c || Game.maturity >= 8) return false;
+  Game.gold -= c;
+  Game.maturity += 1;
   saveGame();
   return true;
 };

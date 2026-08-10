@@ -15,7 +15,6 @@ const Pause = (() => {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) set(true);
   });
-  window.addEventListener('blur', () => set(true));
 
   return { get paused() { return paused; }, set };
 })();

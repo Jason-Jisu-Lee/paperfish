@@ -1,0 +1,279 @@
+const Detail = (() => {
+  const canvas = document.getElementById('sea');
+  const tip = document.getElementById('fishtip');
+  const tipName = document.getElementById('fishtip-name');
+  const tipStage = document.getElementById('fishtip-stage');
+  const tipRate = document.getElementById('fishtip-rate');
+  const tipFish = document.getElementById('fishtip-fish');
+  let tipFishS = -1;
+
+  const portrait = s => {
+    const sp = SPECIES[s];
+    let inner = sp.paths.map(d => `<path d="${d}" vector-effect="non-scaling-stroke"/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
+    return `<svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg>`;
+  };
+  const card = document.getElementById('fishcard');
+  const elName = document.getElementById('fc-name');
+  const elAge = document.getElementById('fc-age');
+  const elMin = document.getElementById('fc-min');
+  const elFreq = document.getElementById('fc-freq');
+  const elDeath = document.getElementById('fc-death');
+  const tipLtv = document.getElementById('fishtip-ltv');
+  const graph = document.getElementById('fc-graph');
+  const GX0 = 34, GX1 = 240, GY0 = 106, GY1 = 12;
+  let mx = null, my = null, hover = null, sel = null, selStream = -1, selMat = -1;
+
+  const fmt = fmtG;
+  const ageFmt = age => {
+    const m = Math.floor(age);
+    return m + ':' + String(Math.floor((age % 1) * 60)).padStart(2, '0');
+  };
+
+  const close = () => {
+    if (sel) Stage.release();
+    sel = null;
+    card.setAttribute('hidden', '');
+  };
+
+  const placeCard = (x, y, f) => {
+    const w = 284, h = 350, m = 14;
+    const fr = SPECIES[f.s].len * 0.65;
+    let left = f.x + fr + 18;
+    if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
+    if (left < m) left = Math.max(m, Math.min(x + 20, window.innerWidth - w - m));
+    const top = Math.max(m, Math.min(y - h / 2, window.innerHeight - h - m));
+    card.style.left = left + 'px';
+    card.style.top = top + 'px';
+  };
+
+  canvas.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
+  let streak = 0, lastClick = -9999;
+
+  canvas.addEventListener('click', e => {
+    if (hover && !hover.egg) {
+      if (hover.hstate === 2) return;
+      const now = performance.now();
+      streak = now - lastClick <= 1500 ? streak + 1 : 1;
+      lastClick = now;
+      const pay = Math.min(streak, 5);
+      Game.gold += pay;
+      Stage.spawnPop(hover.x, hover.y - SPECIES[hover.s].len * 0.3 - 8, '+' + pay);
+      Stage.escape(hover, pay);
+      Panel.tick();
+    } else if (!hover) {
+      close();
+    }
+  });
+
+  canvas.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    if (hover && !hover.egg) {
+      if (sel) Stage.release();
+      sel = hover;
+      Stage.hold(sel);
+      buildGraph(sel);
+      placeCard(e.clientX, e.clientY, sel);
+      card.removeAttribute('hidden');
+    } else {
+      close();
+    }
+  });
+
+  const hitTest = () => {
+    if (mx === null || !Game.started) return null;
+    let best = null, bd = Infinity;
+    for (const f of Game.fish) {
+      if (f.dying !== undefined) continue;
+      let r;
+      if (f.egg) {
+        r = 15;
+      } else {
+        if (f.birth < 1) continue;
+        r = SPECIES[f.s].len * 0.6;
+      }
+      const dx = f.x - mx, dy = f.y - my;
+      const d = dx * dx + dy * dy;
+      if (d < r * r && d < bd) { bd = d; best = f; }
+    }
+    return best;
+  };
+
+  const py = (v, ymax) => GY0 - (v / ymax) * (GY0 - GY1);
+
+  const buildGraph = f => {
+    const phs = speciesPhases(f.s);
+    const life = lifeOf(f.s);
+    const st = streamFor(f.s);
+    const y0 = phs[0].gpm + st;
+    const ymax = phs[phs.length - 1].gpm + st;
+    let pts = '';
+    let t = 0;
+    for (const p of phs) {
+      const x0 = GX0 + (t / life) * (GX1 - GX0);
+      t += p.dur;
+      const x1 = GX0 + (t / life) * (GX1 - GX0);
+      const yy = py(p.gpm + st, ymax);
+      pts += `${x0},${yy} ${x1},${yy} `;
+    }
+    const aAt = adultAtOf(f.s);
+    let evo = '';
+    if (aAt !== undefined) {
+      const ex = GX0 + (aAt / life) * (GX1 - GX0);
+      evo =
+        `<line class="g-evo" x1="${ex}" y1="${GY1}" x2="${ex}" y2="${GY0}"/>` +
+        `<text class="g-t" x="${(GX0 + ex) / 2}" y="${GY1 + 8}" text-anchor="middle">baby</text>` +
+        `<text class="g-t" x="${(ex + GX1) / 2}" y="${GY1 + 8}" text-anchor="middle">adult</text>`;
+    }
+    graph.innerHTML =
+      `<path class="g-axis" d="M${GX0} ${GY1 - 4} V${GY0} H${GX1}"/>` +
+      evo +
+      `<polyline class="g-line" fill="none" points="${pts}"/>` +
+      `<line class="g-guide" id="g-guide" x1="${GX0}" y1="${GY0}" x2="${GX0}" y2="${GY0}"/>` +
+      `<circle class="g-dot" id="g-dot" r="3" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
+      `<text class="g-t" x="${GX0 - 6}" y="${py(ymax, ymax) + 3}" text-anchor="end">${fmt(ymax)}</text>` +
+      `<text class="g-t" x="${GX0 - 6}" y="${py(y0, ymax) + 3}" text-anchor="end">${fmt(y0)}</text>` +
+      `<text class="g-t" x="${GX0}" y="${GY0 + 14}">0</text>` +
+      `<text class="g-t" x="${GX1}" y="${GY0 + 14}" text-anchor="end">${life} min</text>` +
+      `<g id="g-hover" hidden><line class="g-guide" id="g-hline"/><circle class="g-hdot" id="g-hdot" r="2.6"/><text class="g-t g-ht" id="g-htext"/><text class="g-t g-ht" id="g-htext2"/></g>`;
+    selStream = streamFor(f.s);
+    selMat = Game.maturity;
+  };
+
+  graph.addEventListener('mousemove', e => {
+    const hg = document.getElementById('g-hover');
+    if (!sel || !hg) return;
+    const r = graph.getBoundingClientRect();
+    const vx = (e.clientX - r.left) / r.width * 250;
+    if (vx < GX0 - 6 || vx > GX1 + 6) { hg.setAttribute('hidden', ''); return; }
+    const life = lifeOf(sel.s);
+    const phs = speciesPhases(sel.s);
+    const ymax = phs[phs.length - 1].gpm + streamFor(sel.s);
+    const u = Math.min(Math.max((vx - GX0) / (GX1 - GX0), 0), 1);
+    let age = Math.min(u * life, life - 0.0001);
+    let ax = GX0 + u * (GX1 - GX0);
+    let t = 0;
+    for (let i = 0; i < phs.length - 1; i++) {
+      t += phs[i].dur;
+      const bx = GX0 + (t / life) * (GX1 - GX0);
+      if (Math.abs(vx - bx) <= 7) {
+        ax = bx;
+        age = Math.min(t + 0.0001, life - 0.0001);
+        break;
+      }
+    }
+    const v = speciesGpm(sel.s, age) + streamFor(sel.s);
+    const ay = py(v, ymax);
+    const line = document.getElementById('g-hline');
+    line.setAttribute('x1', ax); line.setAttribute('x2', ax);
+    line.setAttribute('y1', GY0); line.setAttribute('y2', ay);
+    const dot = document.getElementById('g-hdot');
+    dot.setAttribute('cx', ax); dot.setAttribute('cy', ay);
+    const tx = Math.min(Math.max(ax, GX0 + 34), GX1 - 34);
+    const ty = Math.max(ay - 27, 12);
+    const txt = document.getElementById('g-htext');
+    txt.setAttribute('x', tx);
+    txt.setAttribute('y', ty);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.textContent = ageFmt(age);
+    const txt2 = document.getElementById('g-htext2');
+    txt2.setAttribute('x', tx);
+    txt2.setAttribute('y', ty + 13);
+    txt2.setAttribute('text-anchor', 'middle');
+    txt2.textContent = fmt(v) + ' / min';
+    hg.removeAttribute('hidden');
+  });
+  graph.addEventListener('mouseleave', () => {
+    const hg = document.getElementById('g-hover');
+    if (hg) hg.setAttribute('hidden', '');
+  });
+
+  const uptip = document.getElementById('uptip');
+  card.addEventListener('mouseover', e => {
+    const row = e.target.closest('[data-hint]');
+    if (!row) return;
+    uptip.textContent = '10% lifetime value';
+    const r = row.getBoundingClientRect();
+    uptip.style.right = 'auto';
+    uptip.style.left = r.left + 'px';
+    uptip.style.top = (r.bottom + 8) + 'px';
+    uptip.removeAttribute('hidden');
+  });
+  card.addEventListener('mouseout', e => {
+    if (e.target.closest('[data-hint]')) uptip.setAttribute('hidden', '');
+  });
+
+  const tick = () => {
+    if (!Game.started) {
+      tip.setAttribute('hidden', '');
+      close();
+      return;
+    }
+    if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
+    hover = hitTest();
+    canvas.style.cursor = hover && !hover.egg ? 'pointer' : '';
+    if (hover) {
+      const sp = SPECIES[hover.s];
+      tipName.textContent = sp.name;
+      if (tipFishS !== hover.s) {
+        tipFish.innerHTML = portrait(hover.s);
+        tipFishS = hover.s;
+      }
+      if (hover.egg) {
+        const total = sp.hatch || 60;
+        tipStage.textContent = 'egg';
+        tipStage.removeAttribute('hidden');
+        tipRate.textContent = Math.max(Math.ceil(total - (hover.t || 0)), 0) + ' / ' + total + ' sec';
+        tipLtv.setAttribute('hidden', '');
+        tip.style.top = (hover.y - 26) + 'px';
+      } else {
+        if (sp.adultAt !== undefined) {
+          tipStage.textContent = hover.adult ? 'adult' : 'baby';
+          tipStage.removeAttribute('hidden');
+        } else {
+          tipStage.setAttribute('hidden', '');
+        }
+        tipRate.textContent = fmt(speciesGpm(hover.s, hover.age) + streamFor(hover.s)) + ' / min';
+        tipLtv.textContent = 'ltv ' + fmt(ltvOf(hover.s));
+        tipLtv.removeAttribute('hidden');
+        tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
+      }
+      tip.style.left = hover.x + 'px';
+      tip.removeAttribute('hidden');
+    } else {
+      tip.setAttribute('hidden', '');
+    }
+    if (sel) {
+      const sp = SPECIES[sel.s];
+      if (selStream !== streamFor(sel.s) || selMat !== Game.maturity) buildGraph(sel);
+      const life = lifeOf(sel.s);
+      const phs = speciesPhases(sel.s);
+      const age = Math.min(sel.age || 0, life - 0.0001);
+      const gpm = speciesGpm(sel.s, age) + streamFor(sel.s);
+      const p = phaseAt(sel.s, age);
+      elName.textContent = sp.name;
+      elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
+      elMin.textContent = fmt(gpm);
+      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' / min' : fmt(p.amt) + ' / ' + p.tick + ' sec';
+      elDeath.textContent = fmt(ltvOf(sel.s) * 0.1);
+      const ymax = phs[phs.length - 1].gpm + streamFor(sel.s);
+      const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
+      const ay = py(gpm, ymax);
+      const guide = document.getElementById('g-guide');
+      const dot = document.getElementById('g-dot');
+      if (guide) {
+        guide.setAttribute('x1', ax);
+        guide.setAttribute('x2', ax);
+        guide.setAttribute('y2', ay);
+      }
+      if (dot) {
+        dot.setAttribute('cx', ax);
+        dot.setAttribute('cy', ay);
+      }
+    }
+  };
+
+  return { tick };
+})();

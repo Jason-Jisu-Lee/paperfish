@@ -1,5 +1,5 @@
 const Panel = (() => {
-  const fmt = n => Math.floor(n).toLocaleString('en-US');
+  const fmt = fmtG;
   const goldNum = document.getElementById('gold-num');
   const goldRate = document.getElementById('gold-rate');
   const shoalRows = document.getElementById('shoal-rows');
@@ -32,11 +32,17 @@ const Panel = (() => {
 
     currentRows.innerHTML = `
       <button class="row" data-up="stream">
-        <span class="fname">Steady Stream</span><span class="tag">+1 / min</span><span class="fmult">× ${Game.stream}</span>
+        <span class="fname">Fish Income</span><span class="tag">+1 / min</span><span class="fmult">× ${Game.stream}</span>
         <span class="leader"></span><span class="value">${fmt(streamCost())}</span></button>
       <button class="row" data-up="kelp">
-        <span class="fname">Drift Kelp</span><span class="tag">+1 / min</span><span class="fmult">× ${Game.plants}</span>
-        <span class="leader"></span><span class="value">${fmt(KELP_COST)}</span></button>`;
+        <span class="fname">Gold Kelp</span><span class="tag">food</span><span class="fmult">× ${Game.plants}</span>
+        <span class="leader"></span><span class="value">${fmt(KELP_COST)}</span></button>
+      <button class="row" data-up="mating">
+        <span class="fname">Mating</span><span class="tag">+5%</span><span class="fmult">× ${Game.mating}</span>
+        <span class="leader"></span><span class="value">${fmt(matingCost())}</span></button>
+      <button class="row" data-up="maturity">
+        <span class="fname">Maturity</span><span class="tag">-10%</span><span class="fmult">× ${Game.maturity}</span>
+        <span class="leader"></span><span class="value">${Game.maturity >= 8 ? 'max' : fmt(maturityCost())}</span></button>`;
 
     let d = '';
     for (let s = 0; s < SPECIES.length; s++) {
@@ -61,6 +67,8 @@ const Panel = (() => {
     const ups = currentRows.querySelectorAll('[data-up]');
     if (ups[0]) ups[0].classList.toggle('dim', Game.gold < streamCost());
     if (ups[1]) ups[1].classList.toggle('dim', Game.gold < KELP_COST);
+    if (ups[2]) ups[2].classList.toggle('dim', Game.gold < matingCost());
+    if (ups[3]) ups[3].classList.toggle('dim', Game.gold < maturityCost() || Game.maturity >= 8);
     const un = depthRows.querySelector('[data-unlock]');
     if (un) un.classList.toggle('dim', Game.gold < SPECIES[Game.unlocked].unlock);
   };
@@ -69,8 +77,29 @@ const Panel = (() => {
     const buy = e.target.closest('[data-buy]');
     if (buy && buyFish(+buy.dataset.buy)) refresh();
     const up = e.target.closest('[data-up]');
-    if (up && (up.dataset.up === 'stream' ? buyStream() : buyKelp())) refresh();
+    if (up && ({ stream: buyStream, kelp: buyKelp, mating: buyMating, maturity: buyMaturity })[up.dataset.up]()) refresh();
     if (e.target.closest('[data-unlock]') && unlockNext()) refresh();
+  });
+
+  const UP_DESC = {
+    stream: 'firstF earns +1 gold per minute. stacks.',
+    kelp: 'satisfies hunger for 1 minute',
+    mating: '+5% chance at birth to mate once in life. stacks.',
+    maturity: 'reaches adulthood 10% sooner per level. caps at 80%.'
+  };
+  const uptip = document.getElementById('uptip');
+  document.getElementById('hud').addEventListener('mouseover', e => {
+    const row = e.target.closest('[data-up], [data-unlock]');
+    if (!row) return;
+    uptip.textContent = row.dataset.up ? UP_DESC[row.dataset.up] : 'unlock to buy';
+    const r = row.getBoundingClientRect();
+    uptip.style.left = 'auto';
+    uptip.style.top = r.top + 'px';
+    uptip.style.right = (window.innerWidth - r.left + 14) + 'px';
+    uptip.removeAttribute('hidden');
+  });
+  document.getElementById('hud').addEventListener('mouseout', e => {
+    if (e.target.closest('[data-up], [data-unlock]')) uptip.setAttribute('hidden', '');
   });
 
   const setTab = depths => {

@@ -33,7 +33,7 @@ const Ambience = (() => {
 
   const spawnSil = () => {
     const { W, H } = Stage.size;
-    const sp = SPECIES[[3, 8, 9][Math.floor(Math.random() * 3)]];
+    const sp = SPECIES.find(s => s.file === 'ray');
     const ltr = Math.random() < 0.5;
     const sc = (sp.len / sp.vb[0]) * rand(3.2, 4.6);
     sil = {
