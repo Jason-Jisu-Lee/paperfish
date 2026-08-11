@@ -10,15 +10,17 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=17" />
+    <link rel="stylesheet" href="base.css?v=18" />
   </head>
   <body>
     <canvas id="sea"></canvas>
 
-    <aside class="hud" id="hud" hidden>
+    <div class="goldbox" id="goldbox" hidden>
       <div class="gold"><span id="gold-num">0</span><span class="g">g</span></div>
-      <div class="micro faint" id="gold-rate">+0 / min</div>
-      <div class="rule"></div>
+      <div class="micro goldrate" id="gold-rate">+0 / min</div>
+    </div>
+
+    <aside class="hud" id="hud" hidden>
       <div class="tabs">
         <button class="tab on" id="tab-shoal">school</button>
         <button class="tab" id="tab-depths">discover</button>
@@ -236,7 +238,7 @@
       </div>
     </div>
 
-    <script src="species.js?v=10"></script>
+    <script src="species.js?v=11"></script>
     <script src="state.js?v=15"></script>
     <script src="fish.js?v=23"></script>
     <script src="ambience.js?v=5"></script>
@@ -245,8 +247,8 @@
     <script src="tut.js?v=4"></script>
     <script src="detail.js?v=17"></script>
     <script src="dev.js?v=1"></script>
-    <script src="front.js?v=3"></script>
-    <script src="game.js?v=16"></script>
+    <script src="front.js?v=4"></script>
+    <script src="game.js?v=17"></script>
     <script src="corner.js?v=2"></script>
   </body>
 </html>

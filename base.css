@@ -89,16 +89,22 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   scrollbar-width:none;
 }
 .hud::-webkit-scrollbar{ display:none; }
+.goldbox{
+  position:absolute; z-index:18;
+  left:clamp(18px, 2.2vw, 32px);
+  top:clamp(12px, 2vh, 22px);
+  pointer-events:none;
+}
 .gold{
-  font-weight:300;
-  font-size:clamp(30px, 3.4vw, 44px);
+  font-weight:400;
+  font-size:clamp(28px, 3vw, 40px);
   letter-spacing:.08em;
   font-feature-settings:'tnum';
-  margin-top:14px;
   white-space:nowrap;
+  color:#8a6d1f;
 }
-.gold .g{ font-size:12px; margin-left:7px; opacity:.5; letter-spacing:.2em; }
-#gold-rate{ margin-top:6px; }
+.gold .g{ font-size:12px; margin-left:7px; opacity:.6; letter-spacing:.2em; }
+.goldrate{ color:rgba(138,109,31,.75); margin-top:3px; }
 .tabs{ display:flex; gap:20px; margin-bottom:8px; }
 .tab{
   font-size:10px; letter-spacing:.42em; text-transform:uppercase;

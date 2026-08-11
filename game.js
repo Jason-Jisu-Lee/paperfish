@@ -10,6 +10,7 @@ const startGame = () => {
   }
   document.getElementById('hud').removeAttribute('hidden');
   document.getElementById('corner').removeAttribute('hidden');
+  document.getElementById('goldbox').removeAttribute('hidden');
   Stage.resize();
   Stage.resetPlants();
   Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
