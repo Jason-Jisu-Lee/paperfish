@@ -45,7 +45,7 @@
 | opening choice | bank the 50 or buy a second egg immediately |
 | first kelp due | ~65s (12/min income covers the 10g) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
-| early income | direction: driftwood-style tappable debris, mechanic being picked from demos. bubbles are ambience only |
+| paper lanterns | early income. 12s into a fresh game, 3 lanterns drift in with the objective "Collect gold from Paper Lanterns 0/3" (top right, no pause). each lantern takes 3 taps at +5, dims per tap, bounces between edges until spent. objective completes with a green check flash. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
 | tutorials | freeze the game, small Okay box anchored to the subject. start: passive income, once first fish finishes drawing. hungry: first hunger, points at Kelp. death: first death |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
@@ -88,8 +88,13 @@ Mating levels (5%/level), rolled once at birth.
 - courtship: the pair drifts together, hovers overlapping for 4-5s, the egg
   appears between them, both scurry off. courting fish ignore clicks, kelp,
   and their spawn windows until done.
-- hud tabs: upgrades (default, soft-card button grid: name over cost, level in
-  corner, red seal mark until first purchase) and fish (buy rows + discover).
+- hud sits on the LEFT. tabs: upgrades (default) and fish. all buttons are
+  soft cards in a single column, one per line: name over cost, level in the
+  corner, red seal mark until first purchase. the fish tab lists buy buttons
+  per unlocked species plus one unlock button showing the next fish's
+  silhouette over its price ("unlocks a new fish" on hover). no discover
+  section. objectives appear top right without pausing; completion flashes a
+  green check.
 - upgrade hover tooltip: effect line, then "Current: total" on its own line.
 - fish hover tooltip: name, stage beneath. nothing else. eggs show "egg";
   click an egg to select it and see "hatches in" on its card. an egg with 5s

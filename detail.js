@@ -59,6 +59,10 @@ const Detail = (() => {
 
   canvas.addEventListener('click', e => {
     if (Tut.active) return;
+    if (Lantern.clickAt(e.clientX, e.clientY)) {
+      Panel.tick();
+      return;
+    }
     if (hover) {
       if (hover === sel) return;
       releaseSel();
@@ -209,8 +213,16 @@ const Detail = (() => {
     }
     if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
     hover = hitTest();
-    canvas.style.cursor = hover && !hover.egg ? 'pointer' : '';
-    if (hover) {
+    const lantHover = mx !== null && Lantern.hoverAt(mx, my);
+    canvas.style.cursor = lantHover || hover ? 'pointer' : '';
+    if (lantHover) {
+      hover = null;
+      tipName.textContent = 'Paper Lantern';
+      tipStage.setAttribute('hidden', '');
+      tip.style.left = mx + 'px';
+      tip.style.top = (my - 42) + 'px';
+      tip.removeAttribute('hidden');
+    } else if (hover) {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
       if (hover.egg) {

@@ -4,8 +4,7 @@ const Panel = (() => {
   const goldRate = document.getElementById('gold-rate');
   const goldSrc = document.getElementById('goldsrc');
   const upGrid = document.getElementById('up-grid');
-  const shoalRows = document.getElementById('shoal-rows');
-  const depthRows = document.getElementById('depth-rows');
+  const fishGrid = document.getElementById('fish-grid');
   const viewUp = document.getElementById('view-up');
   const viewFish = document.getElementById('view-fish');
   const tabUp = document.getElementById('tab-up');
@@ -66,24 +65,20 @@ const Panel = (() => {
     let h = '';
     for (let s = 0; s < Game.unlocked; s++) {
       const sp = SPECIES[s];
-      h += `<button class="row" data-buy="${s}">
-        <span class="fname">${sp.name}</span><span class="fmult">× ${count(s)}</span>
-        <span class="leader"></span><span class="value">${fmt(sp.cost)}</span></button>`;
+      h += `<button class="ubtn" data-buy="${s}">
+        <span class="ubtn-lvl">× ${count(s)}</span>
+        <span class="ubtn-name">${sp.name}</span>
+        <span class="ubtn-cost">${fmt(sp.cost)} g</span>
+      </button>`;
     }
-    shoalRows.innerHTML = h;
-
-    let d = '';
-    for (let s = 0; s < SPECIES.length; s++) {
-      if (s < Game.unlocked) {
-        d += `<div class="row known">${thumb(s)}<span class="fname">${SPECIES[s].name}</span></div>`;
-      } else if (s === Game.unlocked) {
-        d += `<button class="row" data-unlock>${thumb(s, true)}<span class="fname faded">?</span>
-          <span class="leader"></span><span class="value">${fmt(SPECIES[s].unlock)}</span></button>`;
-      } else {
-        d += `<div class="row known"><span class="bar"></span><span class="leader"></span><span class="value">?</span></div>`;
-      }
+    if (Game.unlocked < SPECIES.length) {
+      const s = Game.unlocked;
+      h += `<button class="ubtn" data-unlock>
+        <span class="ubtn-icon">${thumb(s, true)}</span>
+        <span class="ubtn-cost">${fmt(SPECIES[s].unlock)} g</span>
+      </button>`;
     }
-    depthRows.innerHTML = d;
+    fishGrid.innerHTML = h;
     tick();
   };
 
@@ -116,10 +111,10 @@ const Panel = (() => {
       const u = UPS.find(x => x.key === el.dataset.key);
       el.classList.toggle('off', Game.gold < u.cost() || !!(u.maxed && u.maxed()));
     }
-    for (const el of shoalRows.querySelectorAll('[data-buy]'))
-      el.classList.toggle('dim', Game.gold < SPECIES[+el.dataset.buy].cost);
-    const un = depthRows.querySelector('[data-unlock]');
-    if (un) un.classList.toggle('dim', Game.gold < SPECIES[Game.unlocked].unlock);
+    for (const el of fishGrid.querySelectorAll('[data-buy]'))
+      el.classList.toggle('off', Game.gold < SPECIES[+el.dataset.buy].cost);
+    const un = fishGrid.querySelector('[data-unlock]');
+    if (un) un.classList.toggle('off', Game.gold < SPECIES[Game.unlocked].unlock);
     if (!goldSrc.hidden) srcBuild();
   };
 
@@ -137,22 +132,26 @@ const Panel = (() => {
 
   document.getElementById('hud').addEventListener('mouseover', e => {
     const ub = e.target.closest('[data-key]');
+    const bf = e.target.closest('[data-buy]');
     const un = e.target.closest('[data-unlock]');
-    if (!ub && !un) return;
+    if (!ub && !bf && !un) return;
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
+    } else if (bf) {
+      const s = +bf.dataset.buy;
+      uptip.innerHTML = 'buys 1 ' + SPECIES[s].name + ' egg<br>Current: × ' + count(s);
     } else {
-      uptip.textContent = 'unlock to buy';
+      uptip.textContent = 'unlocks a new fish';
     }
-    const r = (ub || un).getBoundingClientRect();
-    uptip.style.left = 'auto';
+    const r = (ub || bf || un).getBoundingClientRect();
+    uptip.style.right = 'auto';
     uptip.style.top = r.top + 'px';
-    uptip.style.right = (window.innerWidth - r.left + 14) + 'px';
+    uptip.style.left = (r.right + 14) + 'px';
     uptip.removeAttribute('hidden');
   });
   document.getElementById('hud').addEventListener('mouseout', e => {
-    if (e.target.closest('[data-key], [data-unlock]')) uptip.setAttribute('hidden', '');
+    if (e.target.closest('[data-key], [data-buy], [data-unlock]')) uptip.setAttribute('hidden', '');
   });
 
   const setTab = fish => {

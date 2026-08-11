@@ -17,6 +17,7 @@ const startGame = () => {
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant();
   Game.started = true;
   Panel.refresh();
+  Lantern.start();
 };
 
 (() => {
@@ -160,9 +161,11 @@ const startGame = () => {
 
     Ambience.update(mdt);
     Stage.update(mdt);
+    Lantern.update(mdt);
     Stage.clear();
     Ambience.drawBack(Stage.ctx);
     Stage.drawScene();
+    Lantern.draw(Stage.ctx);
     Ambience.drawFront(Stage.ctx);
 
     if (hatched || removed) {

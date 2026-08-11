@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=23" />
+    <link rel="stylesheet" href="base.css?v=24" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -30,10 +30,7 @@
         <div class="ubgrid" id="up-grid"></div>
       </div>
       <div id="view-fish" hidden>
-        <div class="micro sect">i · fish</div>
-        <div id="shoal-rows"></div>
-        <div class="micro sect">ii · discover</div>
-        <div id="depth-rows"></div>
+        <div class="ubgrid" id="fish-grid"></div>
       </div>
     </aside>
 
@@ -103,6 +100,11 @@
         <span>menu</span><span class="leader"></span
         ><span class="value">front</span>
       </button>
+    </div>
+
+    <div class="objbox" id="objbox" hidden>
+      <span id="obj-text"></span>
+      <span class="obj-check" id="obj-check" hidden>✓</span>
     </div>
 
     <div class="tip" id="fishtip" hidden>
@@ -250,15 +252,16 @@
 
     <script src="species.js?v=11"></script>
     <script src="state.js?v=18"></script>
-    <script src="fish.js?v=28"></script>
+    <script src="fish.js?v=29"></script>
     <script src="ambience.js?v=7"></script>
-    <script src="panel.js?v=16"></script>
+    <script src="panel.js?v=17"></script>
     <script src="pause.js?v=3"></script>
+    <script src="lantern.js?v=1"></script>
     <script src="tut.js?v=5"></script>
-    <script src="detail.js?v=21"></script>
+    <script src="detail.js?v=22"></script>
     <script src="dev.js?v=1"></script>
     <script src="front.js?v=4"></script>
-    <script src="game.js?v=21"></script>
+    <script src="game.js?v=22"></script>
     <script src="corner.js?v=2"></script>
   </body>
 </html>

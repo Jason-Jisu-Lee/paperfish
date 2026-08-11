@@ -37,7 +37,8 @@ const Stage = (() => {
     const hud = document.getElementById('hud');
     const panelW = hud && !hud.hidden ? hud.getBoundingClientRect().width + 48 : Math.min(320, W * 0.28) + 48;
     const old = bounds;
-    bounds = { l: 50, r: Math.max(W - panelW - 40, 260), t: H * 0.13, b: H * 0.8 };
+    const nl = panelW + 20;
+    bounds = { l: nl, r: Math.max(W - 50, nl + 260), t: H * 0.13, b: H * 0.8 };
     const ow = old.r - old.l, oh = old.b - old.t;
     const remap = o => {
       if (o.x === undefined || ow <= 0 || oh <= 0) return;

@@ -82,9 +82,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .hud{
   position:absolute; z-index:5;
-  top:0; right:0; height:100%;
+  top:0; left:0; height:100%;
   width:clamp(250px, 26vw, 320px);
-  padding:clamp(84px, 12vh, 120px) clamp(22px, 2.4vw, 34px) 40px;
+  padding:clamp(96px, 14vh, 130px) clamp(22px, 2.4vw, 34px) 40px;
   overflow-y:auto;
   scrollbar-width:none;
 }
@@ -137,7 +137,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .tab:focus{ outline:none; }
 .tab:focus-visible{ outline:1px dotted rgba(28,27,24,.45); outline-offset:3px; }
 .micro.sect{ margin:26px 0 6px; }
-.ubgrid{ display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:14px; }
+.ubgrid{ display:grid; grid-template-columns:1fr; gap:11px; margin-top:14px; }
+.ubtn-icon{ display:flex; justify-content:center; }
+.ubtn-icon svg{ width:46px; height:21px; overflow:visible; }
+.ubtn-icon path{ fill:rgba(28,27,24,.14); stroke:rgba(28,27,24,.35); stroke-width:1.25; stroke-linecap:round; stroke-linejoin:round; }
+.ubtn-icon .dot{ fill:rgba(28,27,24,.35); }
 .ubtn{
   position:relative;
   display:flex; flex-direction:column; align-items:center; gap:3px;
@@ -180,6 +184,20 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   right:clamp(18px, 2.4vw, 32px);
   bottom:clamp(16px, 3vh, 28px);
 }
+
+.objbox{
+  position:absolute; z-index:12;
+  top:calc(clamp(14px, 2.4vh, 26px) + 52px);
+  right:clamp(16px, 2.2vw, 30px);
+  font-size:13.5px;
+  color:rgba(28,27,24,.85);
+  display:flex; align-items:center; gap:8px;
+  transition:color .4s ease, opacity .5s ease;
+}
+.objbox.done{ color:#3f7d44; }
+.objbox.done .obj-check{ animation:objflash .5s ease 3; }
+.obj-check{ color:#3f7d44; font-size:15px; }
+@keyframes objflash{ 50%{ opacity:.15; } }
 
 .front{
   position:absolute; inset:0; z-index:20;
