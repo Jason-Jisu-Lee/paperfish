@@ -19,11 +19,11 @@ loop first. MECHANICS.md holds exact numbers.
 ## core loop (firstF era)
 - Buy eggs, fish earn passively by age stage, click-chase fish for streak
   gold, feed kelp on hunger cycles or fish starve and die, fish die of old
-  age paying 10% lifetime value. Population is sustained by buying now;
-  mating comes later as a prestige unlock plus chance upgrades.
-- Left-click chases for gold, right-click inspects.
-- Upgrades so far: Fish Income (firstF), Gold Kelp (food), Mating (chance),
-  Maturity (faster adulthood).
+  age paying 10% lifetime value. Spawning sustains population once its
+  chance upgrades are bought; no prestige gate.
+- Click chases for gold; hold catches a fish and opens its card.
+- Upgrades so far: firstF Income (per-tick), Gold Kelp (food), Spawning
+  (chance), Growth (faster adulthood).
 
 ## species ladder (plan)
 - firstF fully designed first, then generalize. Until fish 4: many fish,
@@ -34,7 +34,7 @@ loop first. MECHANICS.md holds exact numbers.
 
 ## later (direction held, not yet built)
 - Zone descent via lump-sum gear, per-zone currency with conversion,
-  prestige resetting to zone 1 (first prestige upgrade: enable mating).
+  prestige resetting to zone 1.
 - Trait picks at growth stages, floating plant upgrades, story layer,
   the unsettling turn, self-hosted fonts for Steam.
 

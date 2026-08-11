@@ -22,7 +22,7 @@ const MAX_AGE = 10;
 const streamFor = s => s === 0 ? Game.stream : 0;
 const adultAtOf = s => {
   const a = SPECIES[s].adultAt;
-  return a === undefined ? undefined : a * (1 - Math.min(Game.maturity * 0.1, 0.8));
+  return a === undefined ? undefined : Math.max(a - Game.maturity * 5 / 60, a * 0.2);
 };
 
 const fmtG = n => {
@@ -166,7 +166,7 @@ const buyMating = () => {
 
 const buyMaturity = () => {
   const c = maturityCost();
-  if (Game.gold < c || Game.maturity >= 8) return false;
+  if (Game.gold < c || Game.maturity >= 24) return false;
   Game.gold -= c;
   Game.maturity += 1;
   saveGame();

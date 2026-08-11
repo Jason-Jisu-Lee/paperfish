@@ -20,6 +20,10 @@ const Detail = (() => {
   const elMin = document.getElementById('fc-min');
   const elFreq = document.getElementById('fc-freq');
   const elDeath = document.getElementById('fc-death');
+  const fertRow = document.getElementById('fc-fert-row');
+  const elFert = document.getElementById('fc-fert');
+  const adultRow = document.getElementById('fc-adult-row');
+  const elAdult = document.getElementById('fc-adult');
   const tipLtv = document.getElementById('fishtip-ltv');
   const graph = document.getElementById('fc-graph');
   const GX0 = 34, GX1 = 240, GY0 = 106, GY1 = 12;
@@ -302,6 +306,19 @@ const Detail = (() => {
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
       elMin.textContent = fmt(gpm);
+      if (Game.mating >= 1) {
+        elFert.textContent = sel.mated ? 'spent' : sel.canMate ? 'yes' : 'no';
+        fertRow.removeAttribute('hidden');
+      } else {
+        fertRow.setAttribute('hidden', '');
+      }
+      const aAt = adultAtOf(sel.s);
+      if (Game.maturity >= 1 && aAt !== undefined && !sel.adult) {
+        elAdult.textContent = ageFmt(aAt);
+        adultRow.removeAttribute('hidden');
+      } else {
+        adultRow.setAttribute('hidden', '');
+      }
       elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' / min' : fmt(p.amt + streamFor(sel.s)) + ' / ' + p.tick + ' sec';
       elDeath.textContent = fmt(ltvOf(sel.s) * 0.1);
       const ymax = phaseVal(sel.s, phs[phs.length - 1]);

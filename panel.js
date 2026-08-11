@@ -38,11 +38,11 @@ const Panel = (() => {
         <span class="fname">Gold Kelp</span><span class="tag">food</span><span class="fmult">× ${Game.plants}</span>
         <span class="leader"></span><span class="value">${fmt(KELP_COST)}</span></button>
       <button class="row" data-up="mating">
-        <span class="fname">Mating</span><span class="tag">+5%</span><span class="fmult">× ${Game.mating}</span>
+        <span class="fname">Spawning</span><span class="tag">+5%</span><span class="fmult">× ${Game.mating}</span>
         <span class="leader"></span><span class="value">${fmt(matingCost())}</span></button>
       <button class="row" data-up="maturity">
-        <span class="fname">Maturity</span><span class="tag">-10%</span><span class="fmult">× ${Game.maturity}</span>
-        <span class="leader"></span><span class="value">${Game.maturity >= 8 ? 'max' : fmt(maturityCost())}</span></button>`;
+        <span class="fname">Growth</span><span class="tag">-5s</span><span class="fmult">× ${Game.maturity}</span>
+        <span class="leader"></span><span class="value">${Game.maturity >= 24 ? 'max' : fmt(maturityCost())}</span></button>`;
 
     let d = '';
     for (let s = 0; s < SPECIES.length; s++) {
@@ -68,7 +68,7 @@ const Panel = (() => {
     if (ups[0]) ups[0].classList.toggle('dim', Game.gold < streamCost());
     if (ups[1]) ups[1].classList.toggle('dim', Game.gold < KELP_COST);
     if (ups[2]) ups[2].classList.toggle('dim', Game.gold < matingCost());
-    if (ups[3]) ups[3].classList.toggle('dim', Game.gold < maturityCost() || Game.maturity >= 8);
+    if (ups[3]) ups[3].classList.toggle('dim', Game.gold < maturityCost() || Game.maturity >= 24);
     const un = depthRows.querySelector('[data-unlock]');
     if (un) un.classList.toggle('dim', Game.gold < SPECIES[Game.unlocked].unlock);
   };
@@ -82,16 +82,16 @@ const Panel = (() => {
   });
 
   const UP_DESC = {
-    stream: 'firstF earns +1 gold per 5 seconds. stacks.',
-    kelp: 'satisfies hunger for 1 minute',
-    mating: '+5% chance at birth to mate once in life. stacks.',
-    maturity: 'reaches adulthood 10% sooner per level. caps at 80%.'
+    stream: () => 'firstF earns +1 gold per 5 seconds. stacks.',
+    kelp: () => 'satisfies hunger for 1 minute',
+    mating: () => 'spawn chance at birth +5%. now ' + Game.mating * 5 + '%.',
+    maturity: () => 'matures 5 seconds sooner. now ' + Game.maturity * 5 + 's sooner.'
   };
   const uptip = document.getElementById('uptip');
   document.getElementById('hud').addEventListener('mouseover', e => {
     const row = e.target.closest('[data-up], [data-unlock]');
     if (!row) return;
-    uptip.textContent = row.dataset.up ? UP_DESC[row.dataset.up] : 'unlock to buy';
+    uptip.textContent = row.dataset.up ? UP_DESC[row.dataset.up]() : 'unlock to buy';
     const r = row.getBoundingClientRect();
     uptip.style.left = 'auto';
     uptip.style.top = r.top + 'px';

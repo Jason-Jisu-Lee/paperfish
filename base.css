@@ -264,24 +264,26 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .tut{
   position:absolute; z-index:16;
-  width:280px;
+  width:300px;
   background:var(--paper);
-  box-shadow:0 0 0 1px rgba(28,27,24,.14), 0 4px 22px rgba(28,27,24,.08);
-  padding:16px 22px 13px;
+  border:1px solid rgba(28,27,24,.45);
+  box-shadow:0 6px 26px rgba(28,27,24,.14);
+  padding:18px 22px 14px;
   text-align:center;
 }
 .tut-text{
-  font-size:12.5px; letter-spacing:.08em; line-height:1.8;
-  color:rgba(28,27,24,.88);
+  font-size:14.5px; letter-spacing:.05em; line-height:1.75;
+  color:var(--ink);
 }
 .tut-ok{
-  margin-top:10px;
-  font-size:11px; letter-spacing:.3em; text-indent:.3em;
-  color:rgba(28,27,24,.65);
-  padding:4px 12px;
-  transition:color .3s ease;
+  margin-top:12px;
+  font-size:12.5px; letter-spacing:.28em; text-indent:.28em;
+  color:rgba(28,27,24,.78);
+  border-bottom:1px solid rgba(28,27,24,.4);
+  padding:3px 10px;
+  transition:color .3s ease, border-color .3s ease;
 }
-.tut-ok:hover{ color:var(--ink); }
+.tut-ok:hover{ color:var(--ink); border-color:var(--ink); }
 .fc-x{
   position:absolute; top:6px; right:9px;
   font-size:15px; line-height:1;

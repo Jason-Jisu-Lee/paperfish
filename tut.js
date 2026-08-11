@@ -6,7 +6,7 @@ const Tut = (() => {
     'fish passively generate income. click and hold the fish!',
     'clicking the fish also generates gold!'
   ];
-  let active = false, timer = 0, pending = false;
+  let active = false, timer = 0, pending = false, waitFirst = false;
 
   const place = () => {
     const f = Game.fish.find(x => !x.egg) || Game.fish[0];
@@ -43,6 +43,13 @@ const Tut = (() => {
   });
 
   const tick = mdt => {
+    if (waitFirst && !active) {
+      if (Game.fish.some(f => !f.egg && f.birth >= 1)) {
+        waitFirst = false;
+        show(0);
+      }
+      return;
+    }
     if (pending && !active && mdt > 0) {
       timer -= mdt;
       if (timer <= 0) {
@@ -54,7 +61,7 @@ const Tut = (() => {
 
   const start = () => {
     const t = Game.tut || 0;
-    if (t === 0) show(0);
+    if (t === 0) waitFirst = true;
     else if (t === 1) {
       pending = true;
       timer = 5;
