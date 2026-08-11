@@ -139,8 +139,7 @@ const Panel = (() => {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
     } else if (bf) {
-      const s = +bf.dataset.buy;
-      uptip.innerHTML = 'buys 1 ' + SPECIES[s].name + ' egg<br>Current: × ' + count(s);
+      uptip.textContent = SPECIES[+bf.dataset.buy].name + ' egg';
     } else {
       uptip.textContent = 'unlocks a new fish';
     }

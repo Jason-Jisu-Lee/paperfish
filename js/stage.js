@@ -272,7 +272,7 @@ const Stage = (() => {
       if (f.birth < 1) { f.birth += mdt / 2.3; continue; }
       if (f === held) {
         f.heldT = (f.heldT || 0) + mdt;
-        const calm = Math.min(f.heldT / 3, 1);
+        const calm = Math.min(f.heldT / 15, 1);
         f.tailPh += mdt * Math.PI * 2 * (2.3 - calm * 1.8);
         f.tailAmp += ((0.95 - calm * 0.83) - f.tailAmp) * Math.min(6 * mdt, 1);
         continue;

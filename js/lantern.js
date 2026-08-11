@@ -1,7 +1,7 @@
 const Lantern = (() => {
   const lanterns = [];
   const rand = (a, b) => a + Math.random() * (b - a);
-  let mode = 'idle', t = 0, queue = 0, spawnT = 0, collected = 0, nextT = 0, tNow = 0;
+  let mode = 'idle', queue = 0, spawnT = 0, collected = 0, nextT = 0, tNow = 0;
 
   const start = () => {
     lanterns.length = 0;
@@ -10,9 +10,16 @@ const Lantern = (() => {
       mode = 'recur';
       nextT = rand(30, 60);
     } else {
-      mode = 'wait';
-      t = 0;
+      mode = 'idle';
     }
+  };
+
+  const begin = () => {
+    if (mode === 'obj' || (Game.tuts && Game.tuts.lantern)) return;
+    mode = 'obj';
+    collected = 0;
+    queue = 3;
+    spawnT = 0;
   };
 
   const spawn = () => {
@@ -32,15 +39,6 @@ const Lantern = (() => {
   const update = mdt => {
     if (!Game.started || !mdt) return;
     tNow += mdt;
-    if (mode === 'wait') {
-      t += mdt;
-      if (t >= 12) {
-        mode = 'obj';
-        queue = 3;
-        spawnT = 0;
-        Obj.show('lantern', 'Collect gold from Paper Lanterns 0/3');
-      }
-    }
     if (mode === 'obj' && queue > 0) {
       spawnT -= mdt;
       if (spawnT <= 0) {
@@ -88,14 +86,10 @@ const Lantern = (() => {
           l.spent = true;
           if (mode === 'obj') {
             collected += 1;
-            Obj.update('Collect gold from Paper Lanterns ' + collected + '/3');
             if (collected >= 3) {
-              if (!Game.tuts) Game.tuts = {};
-              Game.tuts.lantern = 1;
-              saveGame();
-              Obj.complete();
               mode = 'recur';
               nextT = rand(40, 70);
+              Obj.event('lantern');
             }
           }
         }
@@ -160,5 +154,5 @@ const Lantern = (() => {
     ctx.globalAlpha = 1;
   };
 
-  return { start, update, draw, clickAt, hoverAt };
+  return { start, begin, update, draw, clickAt, hoverAt, get collected() { return collected; } };
 })();

@@ -44,10 +44,10 @@
 | start | 50 gold + 1 baby fish |
 | opening choice | bank the 50 or buy a second egg immediately |
 | first kelp due | ~65s (12/min income covers the 10g) |
-| click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
-| paper lanterns | early income. 12s into a fresh game, 3 lanterns drift in with the objective "Collect gold from Paper Lanterns 0/3" (top right, no pause). each lantern takes 3 taps at +5, dims per tap, bounces between edges until spent. objective completes with a green check flash. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
+| click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
+| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | top right card, no pause, persistent until met, green check flash on completion. chain so far: collect 3 paper lanterns, then buy your first fish |
+| objectives | quest tracker card top right: "objective" header, checkbox + text, progress bar with count on its own line. completion fills the pre-reserved checkbox, entry fades out, next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.

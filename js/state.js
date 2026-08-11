@@ -136,7 +136,7 @@ const buyFish = s => {
   const f = { s, egg: true, t: 0 };
   Game.fish.push(f);
   Stage.materialize(f);
-  Obj.boughtFish();
+  Obj.event('buyfish');
   saveGame();
   return true;
 };
@@ -156,6 +156,7 @@ const buyKelp = () => {
   Game.plants += 1;
   Game.kelpBought = (Game.kelpBought || 0) + 1;
   Stage.spawnPlant();
+  Obj.event('buykelp');
   saveGame();
   return true;
 };

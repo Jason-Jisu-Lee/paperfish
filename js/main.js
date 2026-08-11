@@ -53,6 +53,7 @@ const startGame = () => {
     } else {
       Panel.tick();
     }
+    Obj.tick();
     Detail.tick();
 
     saveT += mdt;

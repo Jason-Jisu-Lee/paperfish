@@ -118,13 +118,8 @@ const Ambience = (() => {
         ctx.translate(sp.vb[0], 0);
         ctx.scale(-1, 1);
       }
-      ctx.fillStyle = 'rgba(90,86,74,0.055)';
-      ctx.strokeStyle = 'rgba(90,86,74,0.05)';
-      ctx.lineWidth = sp.sw * 2;
-      for (const p of sp.p2d) {
-        ctx.fill(p);
-        ctx.stroke(p);
-      }
+      ctx.fillStyle = 'rgba(90,86,74,0.06)';
+      for (const p of sp.p2d) ctx.fill(p);
       ctx.restore();
     }
     ctx.fillStyle = 'rgba(28,27,24,1)';

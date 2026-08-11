@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=28" />
+    <link rel="stylesheet" href="base.css?v=29" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -107,8 +107,15 @@
     </div>
 
     <div class="objbox" id="objbox" hidden>
-      <span id="obj-text"></span>
-      <span class="obj-check" id="obj-check" hidden>✓</span>
+      <div class="obj-head">objective</div>
+      <div class="obj-row">
+        <span class="obj-mark" id="obj-mark"></span>
+        <span id="obj-text"></span>
+      </div>
+      <div class="obj-prog" id="obj-prog" hidden>
+        <span class="obj-bar"><span class="obj-fill" id="obj-fill"></span></span>
+        <span class="obj-count" id="obj-count"></span>
+      </div>
     </div>
 
     <div class="saybox" id="saybox"></div>
@@ -258,19 +265,19 @@
     </div>
 
     <script src="js/species.js?v=1"></script>
-    <script src="js/state.js?v=1"></script>
-    <script src="js/stage.js?v=1"></script>
-    <script src="js/ambience.js?v=1"></script>
-    <script src="js/panel.js?v=1"></script>
+    <script src="js/state.js?v=2"></script>
+    <script src="js/stage.js?v=2"></script>
+    <script src="js/ambience.js?v=2"></script>
+    <script src="js/panel.js?v=2"></script>
     <script src="js/pause.js?v=1"></script>
-    <script src="js/obj.js?v=1"></script>
-    <script src="js/lantern.js?v=1"></script>
+    <script src="js/obj.js?v=2"></script>
+    <script src="js/lantern.js?v=2"></script>
     <script src="js/say.js?v=1"></script>
-    <script src="js/detail.js?v=1"></script>
+    <script src="js/detail.js?v=2"></script>
     <script src="js/dev.js?v=1"></script>
     <script src="js/front.js?v=1"></script>
     <script src="js/sim.js?v=1"></script>
-    <script src="js/main.js?v=1"></script>
+    <script src="js/main.js?v=2"></script>
     <script src="js/corner.js?v=1"></script>
   </body>
 </html>
