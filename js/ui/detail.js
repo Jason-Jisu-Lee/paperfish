@@ -220,7 +220,7 @@ const Detail = (() => {
       tipName.textContent = 'Paper Lantern';
       tipStage.setAttribute('hidden', '');
       tip.style.left = mx + 'px';
-      tip.style.top = (my - 42) + 'px';
+      tip.style.top = (my + 26) + 'px';
       tip.removeAttribute('hidden');
     } else if (hover) {
       tip.classList.remove('lant');

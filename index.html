@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=31" />
+    <link rel="stylesheet" href="base.css?v=32" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -23,14 +23,14 @@
 
     <aside class="hud" id="hud" hidden>
       <div class="tabs">
-        <button class="tab on" id="tab-up">upgrades</button>
-        <button class="tab" id="tab-fish">fish</button>
+        <button class="tab on" id="tab-fish">fish</button>
+        <button class="tab" id="tab-up">upgrades</button>
       </div>
-      <div id="view-up">
-        <div class="ubgrid" id="up-grid"></div>
-      </div>
-      <div id="view-fish" hidden>
+      <div id="view-fish">
         <div class="ubgrid" id="fish-grid"></div>
+      </div>
+      <div id="view-up" hidden>
+        <div class="ubgrid" id="up-grid"></div>
       </div>
     </aside>
 
@@ -86,23 +86,32 @@
       </button>
     </nav>
 
-    <div class="panel" id="panel" hidden>
-      <div class="panel-label">settings</div>
-      <button class="row" id="row-sound">
-        <span>sound</span><span class="leader"></span
-        ><span class="value">on</span>
-      </button>
-      <button class="row" id="row-screen">
-        <span>screen</span><span class="leader"></span
-        ><span class="value">window</span>
-      </button>
-      <button class="row" id="row-front">
-        <span>menu</span><span class="leader"></span
-        ><span class="value">front</span>
-      </button>
-      <button class="row" id="row-reset">
-        <span>reset progress</span>
-      </button>
+    <div class="modal" id="setmodal" hidden>
+      <div class="modal-card">
+        <div class="modal-head">
+          <span>Settings</span>
+          <button class="modal-x" id="set-x">×</button>
+        </div>
+        <div class="set-row">
+          <span>Sound</span>
+          <button class="toggle" id="set-sound"><span class="tknob"></span></button>
+        </div>
+        <div class="set-row">
+          <span>Display</span>
+          <div class="seg" id="set-display">
+            <button data-d="win">Windowed</button>
+            <button data-d="full">Fullscreen</button>
+          </div>
+        </div>
+        <div class="set-row" id="set-menu-row" hidden>
+          <span>Quit</span>
+          <button class="btn small" id="set-menu">Main Menu</button>
+        </div>
+        <div class="set-row">
+          <span>Reset Progress</span>
+          <button class="btn danger small" id="front-reset">Reset</button>
+        </div>
+      </div>
     </div>
 
     <div class="modal" id="confirm" hidden>
@@ -138,36 +147,28 @@
       <button class="fc-x" id="fc-x">×</button>
       <div class="fc-name" id="fc-name"></div>
       <div class="row known" id="fc-hatch-row" hidden>
-        <span>hatches in</span><span class="leader"></span
-        ><span class="value" id="fc-hatch"></span>
+        <span>hatches in</span><span class="value" id="fc-hatch"></span>
       </div>
       <div class="row known" id="fc-age-row">
-        <span>age</span><span class="leader"></span
-        ><span class="value" id="fc-age"></span>
+        <span>age</span><span class="value" id="fc-age"></span>
       </div>
       <div class="row known" id="fc-min-row">
-        <span>per min</span><span class="leader"></span
-        ><span class="value" id="fc-min"></span>
+        <span>per min</span><span class="value" id="fc-min"></span>
       </div>
       <div class="row known" id="fc-freq-row">
-        <span>earns</span><span class="leader"></span
-        ><span class="value" id="fc-freq"></span>
+        <span>earns</span><span class="value" id="fc-freq"></span>
       </div>
       <div class="row known" id="fc-death-row" data-hint>
-        <span>death</span><span class="leader"></span
-        ><span class="value" id="fc-death"></span>
+        <span>death</span><span class="value" id="fc-death"></span>
       </div>
       <div class="row known" id="fc-fert-row" hidden>
-        <span>spawn chance</span><span class="leader"></span
-        ><span class="value" id="fc-fert"></span>
+        <span>spawn chance</span><span class="value" id="fc-fert"></span>
       </div>
       <div class="row known" id="fc-spawned-row" hidden>
-        <span>spawned</span><span class="leader"></span
-        ><span class="value" id="fc-spawned"></span>
+        <span>spawned</span><span class="value" id="fc-spawned"></span>
       </div>
       <div class="row known" id="fc-adult-row" hidden>
-        <span>adult at</span><span class="leader"></span
-        ><span class="value" id="fc-adult"></span>
+        <span>adult at</span><span class="value" id="fc-adult"></span>
       </div>
       <svg id="fc-graph" viewBox="0 0 250 130"></svg>
     </div>
@@ -190,22 +191,16 @@
     </div>
 
     <section class="front" id="front">
+      <canvas id="frontsea"></canvas>
       <nav class="corner front-corner">
-        <button class="icon" id="steam" aria-label="steam">
+        <button class="icon brand steam" id="steam" aria-label="steam">
           <svg viewBox="0 0 24 24">
-            <path d="M9.2 14.8 L14.6 9.4" />
-            <circle cx="12" cy="12" r="8.2" />
-            <circle class="knob" cx="9.2" cy="14.8" r="3.2" />
-            <circle class="knob" cx="16" cy="8" r="2.5" />
+            <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949-.26-.63-.75-1.121-1.377-1.383-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z" />
           </svg>
         </button>
-        <button class="icon" id="discord" aria-label="discord">
+        <button class="icon brand discord" id="discord" aria-label="discord">
           <svg viewBox="0 0 24 24">
-            <path
-              d="M6.9 7.1 Q8.6 6.2 10.4 6 L10.9 7 Q12 6.85 13.1 7 L13.6 6 Q15.4 6.2 17.1 7.1 Q19.4 10.6 18.9 14.8 Q17 16.4 14.8 17 L14.1 15.7 Q12 16.1 9.9 15.7 L9.2 17 Q7 16.4 5.1 14.8 Q4.6 10.6 6.9 7.1"
-            />
-            <circle class="note-head" cx="9.6" cy="11.3" r="1.2" />
-            <circle class="note-head" cx="14.4" cy="11.3" r="1.2" />
+            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z" />
           </svg>
         </button>
       </nav>
@@ -227,35 +222,14 @@
         </nav>
       </div>
 
-      <div class="modal" id="front-set" hidden>
-        <div class="modal-card">
-          <div class="modal-head">
-            <span>Settings</span>
-            <button class="modal-x" id="set-x">×</button>
-          </div>
-          <div class="set-row">
-            <span>Sound</span>
-            <button class="toggle" id="set-sound"><span class="tknob"></span></button>
-          </div>
-          <div class="set-row">
-            <span>Display</span>
-            <div class="seg" id="set-display">
-              <button data-d="win">Windowed</button>
-              <button data-d="full">Fullscreen</button>
-            </div>
-          </div>
-          <div class="set-row">
-            <span>Reset Progress</span>
-            <button class="btn danger small" id="front-reset">Reset</button>
-          </div>
+      <div class="fcredit">
+        <div class="f-seal" aria-hidden="true">
+          <svg viewBox="0 0 340 200">
+            <path d="M30,100 Q160,10 310,148" />
+            <path d="M30,100 Q160,190 310,52" />
+          </svg>
         </div>
-      </div>
-      <div class="vert">from the deep</div>
-      <div class="f-seal" aria-hidden="true">
-        <svg viewBox="0 0 340 200">
-          <path d="M30,100 Q160,10 310,148" />
-          <path d="M30,100 Q160,190 310,52" />
-        </svg>
+        <span>by 2ndIntelligentWorld</span>
       </div>
     </section>
 
@@ -289,17 +263,18 @@
     <script src="js/world/stage.js?v=1"></script>
     <script src="js/world/ambience.js?v=1"></script>
     <script src="js/audio/sfx.js?v=1"></script>
-    <script src="js/ui/panel.js?v=1"></script>
+    <script src="js/ui/panel.js?v=2"></script>
     <script src="js/ui/pause.js?v=1"></script>
     <script src="js/ui/confirm.js?v=1"></script>
     <script src="js/ui/obj.js?v=1"></script>
     <script src="js/world/lantern.js?v=1"></script>
     <script src="js/ui/say.js?v=1"></script>
-    <script src="js/ui/detail.js?v=1"></script>
+    <script src="js/ui/detail.js?v=2"></script>
     <script src="js/ui/dev.js?v=1"></script>
-    <script src="js/ui/front.js?v=1"></script>
+    <script src="js/ui/front.js?v=2"></script>
+    <script src="js/ui/frontfish.js?v=1"></script>
     <script src="js/core/sim.js?v=1"></script>
     <script src="js/core/main.js?v=1"></script>
-    <script src="js/ui/corner.js?v=1"></script>
+    <script src="js/ui/corner.js?v=2"></script>
   </body>
 </html>

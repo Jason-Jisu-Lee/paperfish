@@ -45,15 +45,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .icon .note-head{ fill:var(--ink); stroke:none; }
 .icon .knob{ fill:var(--paper); }
 
-.panel{
-  position:absolute; z-index:9;
-  top:calc(clamp(14px, 2.4vh, 26px) + 52px);
-  right:clamp(16px, 2.2vw, 30px);
-  width:min(230px, 74vw);
-  background:var(--paper);
-  padding:14px 16px 8px;
-  box-shadow:0 0 0 1px rgba(28,27,24,.08);
-}
 .panel-label{
   font-size:10px; letter-spacing:.42em; text-transform:uppercase;
   color:rgba(28,27,24,.76);
@@ -62,7 +53,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   margin-bottom:4px;
 }
 .row{
-  display:flex; align-items:baseline; gap:9px;
+  display:flex; align-items:baseline; justify-content:space-between; gap:9px;
   width:100%;
   font-size:12.5px; letter-spacing:.14em;
   color:rgba(28,27,24,.92);
@@ -70,11 +61,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   text-align:left;
   transition:color .35s ease, opacity .35s ease;
 }
-.row:hover{ color:var(--ink); }
 .row:focus{ outline:none; }
-.row:focus-visible{ outline:1px dotted rgba(28,27,24,.45); outline-offset:2px; }
-.row .leader{ flex:1; border-bottom:1px dotted rgba(28,27,24,.35); transform:translateY(-3px); min-width:14px; }
 .row .value{ letter-spacing:.16em; font-feature-settings:'tnum'; }
+.row > span:first-child{ color:rgba(28,27,24,.6); }
 .row.dim{ opacity:.35; cursor:default; }
 .row.dim:hover{ color:rgba(28,27,24,.92); }
 .row.known{ cursor:default; }
@@ -157,7 +146,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ubtn:focus{ outline:none; }
 .ubtn-name{ font-size:15px; letter-spacing:.04em; }
 .ubtn-cost{ font-size:13.5px; color:#7a5800; font-feature-settings:'tnum'; }
-.ubtn-lvl{ position:absolute; top:7px; right:10px; font-size:10.5px; opacity:.6; }
+.ubtn-lvl{ position:absolute; top:7px; right:10px; font-size:12px; opacity:.85; }
 .ubtn-seal{
   position:absolute; top:7px; left:8px;
   width:7px; height:7px; border-radius:2px;
@@ -178,6 +167,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .thumb .dot{ fill:rgba(28,27,24,.72); }
 .thumb.sil path{ fill:rgba(28,27,24,.14); stroke:rgba(28,27,24,.3); }
 .thumb.sil .dot{ fill:rgba(28,27,24,.3); }
+.ubtn .thumb{ width:auto; justify-content:center; }
+.ubtn .thumb svg{ width:54px; height:24px; }
+.ubtn-icon.full path{ stroke:rgba(28,27,24,.85); }
+.ubtn-icon.full .dot{ fill:rgba(28,27,24,.85); }
 .bar{ width:62px; height:9px; background:rgba(28,27,24,.8); align-self:center; }
 
 .zone{
@@ -335,13 +328,15 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   color:#2e2c26;
   margin:0 0 44px;
 }
-.menu{ display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:46px; }
+.menu{ display:flex; flex-direction:column; align-items:center; gap:18px; margin-top:46px; }
 .menu button{
   font-family:'Shippori Mincho',serif;
-  font-size:15px; letter-spacing:.42em; text-indent:.42em;
-  color:rgba(28,27,24,.76);
-  padding:4px 10px;
-  transition:color .4s ease;
+  font-weight:500;
+  font-size:clamp(17px, 1.7vw, 21px);
+  letter-spacing:.4em; text-indent:.4em;
+  color:rgba(28,27,24,.88);
+  padding:5px 12px;
+  transition:color .3s ease;
 }
 .menu button:hover{ color:var(--ink); }
 .menu button:focus{ outline:none; }
@@ -374,7 +369,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .set-row{
   display:flex; justify-content:space-between; align-items:center;
   font-size:14px;
-  padding:8px 0 18px;
+  padding:10px 0;
 }
 .toggle{
   position:relative;
@@ -425,22 +420,30 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   margin:4px 0 18px;
 }
 .confirm-btns{ display:flex; gap:10px; justify-content:center; }
-.vert{
-  position:absolute; right:6vw; top:50%;
-  transform:translateY(-50%);
-  writing-mode:vertical-rl;
-  font-family:'Shippori Mincho',serif;
-  font-size:12px; letter-spacing:.72em;
-  color:#4a463c; opacity:.75;
+.front-corner{ gap:12px; }
+.front-corner .icon.brand{
+  width:40px; height:40px;
+  border-radius:50%;
+  opacity:.92;
+  transition:opacity .25s ease, transform .25s ease;
 }
-.front-corner{ gap:10px; }
-.front-corner .icon{ width:40px; height:40px; opacity:.3; }
-.front-corner .icon:hover{ opacity:.65; }
-.front-corner .icon svg{ width:23px; height:23px; }
-.front-corner .icon path,
-.front-corner .icon circle{ stroke-width:1.5; }
+.front-corner .icon.brand:hover{ opacity:1; transform:translateY(-1px); }
+.icon.brand svg{ width:22px; height:22px; }
+.icon.brand path{ fill:#fff; stroke:none; }
+.icon.brand.steam{ background:#1b2838; }
+.icon.brand.discord{ background:#5865F2; }
+#frontsea{ position:absolute; inset:0; width:100%; height:100%; }
+.front-mid{ position:relative; z-index:1; }
+.fcredit{
+  position:absolute; right:6vw; bottom:7vh; z-index:1;
+  display:flex; align-items:center; gap:11px;
+}
+.fcredit span{
+  font-family:'Shippori Mincho',serif;
+  font-size:12.5px; letter-spacing:.08em;
+  color:rgba(28,27,24,.72);
+}
 .f-seal{
-  position:absolute; right:6vw; bottom:7vh;
   width:34px; height:34px;
   background:var(--seal); border-radius:3px;
   display:grid; place-items:center;
@@ -458,6 +461,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   white-space:nowrap;
 }
 #fishtip{ transform:translate(-50%, -100%); text-align:center; padding:10px 15px; }
+#fishtip.lant{ transform:translate(-50%, 0); }
 #fishtip.lant .tip-name{ font-family:'Sniglet',sans-serif; font-size:14px; letter-spacing:.05em; }
 .tip-head{ display:flex; align-items:center; justify-content:center; gap:9px; }
 .tip-fish svg{ width:30px; height:15px; display:block; overflow:visible; }

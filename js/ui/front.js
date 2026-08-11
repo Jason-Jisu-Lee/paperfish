@@ -1,6 +1,6 @@
 (() => {
   const front = document.getElementById('front');
-  const set = document.getElementById('front-set');
+  const set = document.getElementById('setmodal');
 
   const replayHero = () => {
     for (const p of front.querySelectorAll('.hero path, .pool')) {
@@ -21,6 +21,7 @@
   });
 
   document.getElementById('m-settings').addEventListener('click', () => {
+    document.getElementById('set-menu-row').setAttribute('hidden', '');
     set.removeAttribute('hidden');
   });
   document.getElementById('set-x').addEventListener('click', () => {

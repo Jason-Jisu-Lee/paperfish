@@ -67,7 +67,7 @@ const Panel = (() => {
       const sp = SPECIES[s];
       h += `<button class="ubtn" data-buy="${s}">
         <span class="ubtn-lvl">× ${count(s)}</span>
-        <span class="ubtn-name">${sp.name}</span>
+        <span class="ubtn-icon full">${thumb(s)}</span>
         <span class="ubtn-cost">${fmt(sp.cost)} g</span>
       </button>`;
     }
@@ -139,7 +139,7 @@ const Panel = (() => {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
     } else if (bf) {
-      uptip.textContent = SPECIES[+bf.dataset.buy].name + ' egg';
+      uptip.textContent = 'Buy ' + SPECIES[+bf.dataset.buy].name + ' Egg';
     } else {
       uptip.textContent = 'unlocks a new fish';
     }

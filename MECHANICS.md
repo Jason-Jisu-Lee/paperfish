@@ -45,7 +45,7 @@
 | opening choice | bank the 50 or buy a second egg immediately |
 | first kelp due | ~65s (12/min income covers the 20g, barely) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
-| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
+| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
 | objectives | quest tracker card top right, fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: red seal stamps the checkbox (bounce in), a red line strikes through the text, the card gives one soft pulse, a two-note chime plays, then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
 
@@ -85,12 +85,13 @@ Mating levels (5%/level), rolled once at birth.
   eggs, pops, swirls, held fish, resize). ambience.js bubbles, motes,
   silhouette. lantern.js paper lanterns.
 - js/ui: panel.js hud. detail.js tooltip and fish card. corner.js icons and
-  all settings wiring. front.js front page. pause.js pause and min-size.
-  obj.js objectives. say.js diver messages. confirm.js confirm dialog.
-  dev.js console.
+  all settings wiring. front.js front page. frontfish.js front ambience
+  fish. pause.js pause and min-size. obj.js objectives. say.js diver
+  messages. confirm.js confirm dialog. dev.js console.
 - js/audio: sfx.js WebAudio chimes, respects the sound setting.
 - assets/ fish svgs plus fish_grid_final.png (master reference copy).
-  demos/ visual reference sketches (02-ink.html, demo.html).
+  demos/ reference sketches (02-ink.html, demo.html) and option demos
+  (title.html).
 
 ## spawning
 - every adult runs 2-minute windows. at each window start it rolls the current
@@ -108,19 +109,26 @@ Mating levels (5%/level), rolled once at birth.
 - diver messages: bare whisper text, bottom center, fades in and out (~4.6s).
   one at a time, queued, 15s cooldown per identical line. coexists freely
   with the persistent objective box. first wired line: "Fish is hungry."
-- front settings is a standard modal: scrim, Settings title with x, then one
-  row per option: Sound toggle, Display segmented control (Windowed or
-  Fullscreen; Borderless joins in the Steam desktop build), Reset Progress
-  row with a small Reset button. reset (front and in-game) opens a separate
-  confirm dialog: "Reset all progress? This cannot be undone." with
-  Cancel / Reset. corner.js owns all settings state and rendering.
+- one settings modal everywhere (front menu and in-game gear): scrim,
+  Settings title with x, one row per option: Sound toggle, Display segmented
+  control (Windowed or Fullscreen; Borderless joins in the Steam desktop
+  build), Quit row with Main Menu button (in-game only), Reset Progress row.
+  reset opens a separate confirm dialog: "Reset all progress? This cannot be
+  undone." with Cancel / Reset. corner.js owns all settings state and
+  rendering. dotted-leader rows are banned everywhere; fish card rows are
+  muted label left, value right.
+- front page: menu buttons large serif; species fish drift across as faint
+  ink ambience (max 6, spawn every 2-5s, edge fade); official Steam and
+  Discord brand badges top right; seal + "by 2ndIntelligentWorld" bottom
+  right.
 - dev console is always visible (backtick hides it if needed).
-- hud sits on the LEFT. tabs: upgrades (default) and fish. all buttons are
-  soft cards in a single column, one per line: name over cost, level in the
-  corner, red seal mark until first purchase. the fish tab lists buy buttons
-  per unlocked species plus one unlock button showing the next fish's
-  silhouette over its price ("unlocks a new fish" on hover). no discover
-  section. objectives appear top right without pausing.
+- hud sits on the LEFT. tabs: fish (first, default) then upgrades. all
+  buttons are soft cards in a single column, one per line. upgrade cards:
+  name over cost, count in the corner, red seal mark until first purchase.
+  fish tab buy buttons show the species icon over cost (never the name),
+  count badge top right, hover says "Buy firstF Egg"; plus one unlock button
+  showing the next fish's silhouette over its price ("unlocks a new fish" on
+  hover). objectives appear top right without pausing.
 - upgrade hover tooltip: effect line, then "Current: total" on its own line.
 - fish hover tooltip: name, stage beneath. nothing else. eggs show "egg";
   click an egg to select it and see "hatches in" on its card. an egg with 5s
