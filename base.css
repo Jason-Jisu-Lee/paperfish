@@ -6,7 +6,7 @@ body{
     radial-gradient(140% 100% at 30% 20%, rgba(255,255,255,.55), transparent 60%),
     radial-gradient(90% 80% at 85% 90%, rgba(190,182,160,.22), transparent 55%),
     var(--paper);
-  font-family:'Sniglet',sans-serif;
+  font-family:'Zen Maru Gothic',sans-serif;
   color:var(--ink);
   user-select:none;
   -webkit-user-select:none;
@@ -339,9 +339,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .menu{ display:flex; flex-direction:column; align-items:center; gap:18px; margin-top:46px; }
 .menu button{
-  font-family:'Sniglet',sans-serif;
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-weight:500;
   font-size:clamp(16px, 1.55vw, 20px);
-  letter-spacing:.3em; text-indent:.3em;
+  letter-spacing:.34em; text-indent:.34em;
   color:rgba(28,27,24,.88);
   padding:5px 12px;
   transition:color .3s ease;
@@ -469,7 +470,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 #fishtip{ transform:translate(-50%, -100%); text-align:center; padding:10px 15px; }
 #fishtip.lant{ transform:translate(-50%, 0); }
-#fishtip.lant .tip-name{ font-family:'Sniglet',sans-serif; font-size:14px; letter-spacing:.05em; }
+#fishtip.lant .tip-name{ font-family:'Zen Maru Gothic',sans-serif; font-size:14px; letter-spacing:.05em; }
 .tip-head{ display:flex; align-items:center; justify-content:center; gap:9px; }
 .tip-fish svg{ width:30px; height:15px; display:block; overflow:visible; }
 .tip-fish path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:1.2; stroke-linecap:round; stroke-linejoin:round; }
@@ -507,7 +508,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .devred{ color:var(--seal) !important; }
 .tip-ltv{ display:block; font-size:11px; letter-spacing:.14em; margin-top:4px; font-feature-settings:'tnum'; }
 .g-t{
-  font-family:'Sniglet',sans-serif; font-size:8.5px; letter-spacing:.08em;
+  font-family:'Zen Maru Gothic',sans-serif; font-size:8.5px; letter-spacing:.08em;
   fill:rgba(28,27,24,.72);
   paint-order:stroke; stroke:var(--paper); stroke-width:2.5px; stroke-linejoin:round;
 }

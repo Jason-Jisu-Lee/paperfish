@@ -123,7 +123,7 @@ Mating levels (5%/level), rolled once at birth.
   muted label left, value right.
 - front page: title is lowercase serif "paperfish" with a small tilted red
   seal square after it (title demo pick 2). menu is play and settings only
-  (quit returns with the Steam build), Sniglet, large; official Steam and
+  (quit returns with the Steam build), Zen Maru Gothic, large; official Steam and
   Discord brand badges top right; seal + "by 2ndIntelligentWorld" bottom
   right. no fish ambience on the front for now.
 - dev console is always visible (backtick hides it if needed).
@@ -145,7 +145,8 @@ Mating levels (5%/level), rolled once at birth.
   fish icon, count, and +N / min per line.
 - money pops (earning, death) draw in the gold color.
 - bubbles are pure ambience now: very fast vents every 32-70s, not clickable.
-- ui font is Sniglet (front page stays Shippori Mincho).
+- ui font is Zen Maru Gothic everywhere (title stays Shippori Mincho
+  lowercase with the red seal mark).
 - death tutorial fires mid death animation, after the belly-up flip.
 - below 600x420 the game pauses: "Your screen is too small for the fish!",
   resumes when enlarged.
