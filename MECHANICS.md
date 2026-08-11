@@ -42,13 +42,13 @@
 ### start
 | fact | value |
 |------|-------|
-| start | 50 gold + 1 baby fish + 1 kelp floating |
-| opening choice | bank the 50 or buy a second egg immediately |
-| first kelp due | ~65s (12/min income covers the 20g, barely) |
+| start | 70 gold + 1 baby fish + 1 kelp floating |
+| opening spend | the chain uses all 70: egg 50 + kelp 20 |
+| early hunger | starting kelp feeds the first cycle, objective kelp the next, income carries it after |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
-| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a fish completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
+| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), the words get a standard line-through in the text color (every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Collect gold from Paper Lanterns 0/3, Buy a kelp, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
+| objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), the words get a standard line-through in the text color (every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.

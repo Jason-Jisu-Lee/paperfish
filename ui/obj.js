@@ -9,12 +9,12 @@ const Obj = (() => {
 
   const STEPS = [
     { id: 'buyfish', text: 'Buy a fish' },
+    { id: 'buykelp', text: 'Buy a kelp' },
     {
       id: 'lantern', text: 'Collect gold from Paper Lanterns',
       prog: () => [Lantern.collected, 3],
       onStart: () => Lantern.begin()
     },
-    { id: 'buykelp', text: 'Buy a kelp' },
     { id: 'income', text: 'Buy firstF Income upgrade' },
     {
       id: 'five', text: 'Have a total of 5 firstF',

@@ -18,7 +18,7 @@ const streamCost = () => 100 * 2 ** Game.stream;
 const matingCost = () => 100 * 2 ** Game.mating;
 const maturityCost = () => 150 * 2 ** Game.maturity;
 const KELP_COST = 20;
-const START_GOLD = 50;
+const START_GOLD = 70;
 const MAX_AGE = 10;
 const streamFor = s => s === 0 ? Game.stream : 0;
 const adultAtOf = s => {
