@@ -322,17 +322,72 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .menu button:hover{ color:var(--ink); }
 .menu button:focus{ outline:none; }
 .menu button:focus-visible{ outline:1px dotted rgba(28,27,24,.45); outline-offset:4px; }
-.front-set{
-  position:absolute; z-index:26;
-  left:50%; top:58%;
-  transform:translateX(-50%);
-  width:246px;
-  background:var(--paper);
-  border:1px solid rgba(28,27,24,.45);
-  box-shadow:0 6px 26px rgba(28,27,24,.14);
-  padding:14px 18px 8px;
+.modal{
+  position:fixed; inset:0; z-index:44;
+  background:rgba(28,27,24,.28);
+  display:grid; place-items:center;
 }
-.row .value.armed{ color:var(--seal); }
+.modal-card{
+  width:310px;
+  background:var(--paper);
+  border:1px solid rgba(28,27,24,.35);
+  border-radius:12px;
+  box-shadow:0 14px 44px rgba(28,27,24,.28);
+  padding:18px 22px 22px;
+}
+.modal-head{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:16.5px;
+  margin-bottom:14px;
+}
+.modal-x{
+  font-size:19px; line-height:1;
+  color:rgba(28,27,24,.5);
+  padding:2px 6px;
+  transition:color .2s ease;
+}
+.modal-x:hover{ color:var(--ink); }
+.set-row{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:14px;
+  padding:8px 0 18px;
+}
+.toggle{
+  position:relative;
+  width:42px; height:23px;
+  border-radius:12px;
+  background:rgba(28,27,24,.22);
+  transition:background .25s ease;
+}
+.toggle .tknob{
+  position:absolute; top:3px; left:3px;
+  width:17px; height:17px;
+  border-radius:50%;
+  background:var(--paper);
+  box-shadow:0 1px 3px rgba(28,27,24,.35);
+  transition:left .25s ease;
+}
+.toggle.on{ background:rgba(28,27,24,.75); }
+.toggle.on .tknob{ left:22px; }
+.btn{
+  padding:9px 18px;
+  border:1px solid rgba(28,27,24,.4);
+  border-radius:8px;
+  background:rgba(255,255,255,.55);
+  font-size:13.5px;
+  transition:all .2s ease;
+}
+.btn:hover{ border-color:rgba(28,27,24,.7); background:rgba(255,255,255,.8); }
+.btn.danger{ border-color:rgba(180,58,43,.55); color:var(--seal); }
+.btn.danger:hover{ background:rgba(180,58,43,.07); border-color:var(--seal); }
+.btn.wide{ width:100%; }
+.confirm-card{ width:290px; }
+.confirm-text{
+  font-size:14.5px; line-height:1.65;
+  text-align:center;
+  margin:4px 0 18px;
+}
+.confirm-btns{ display:flex; gap:10px; justify-content:center; }
 .vert{
   position:absolute; right:6vw; top:50%;
   transform:translateY(-50%);

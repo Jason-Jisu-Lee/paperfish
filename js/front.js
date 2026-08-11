@@ -1,8 +1,7 @@
 (() => {
   const front = document.getElementById('front');
   const set = document.getElementById('front-set');
-  const screenRow = document.getElementById('front-screen');
-  const screenValue = screenRow.querySelector('.value');
+  const screenToggle = document.getElementById('front-screen');
 
   const replayHero = () => {
     for (const p of front.querySelectorAll('.hero path, .pool')) {
@@ -18,49 +17,30 @@
     startGame();
   });
 
-  document.getElementById('m-settings').addEventListener('click', e => {
-    e.stopPropagation();
-    set.toggleAttribute('hidden');
-  });
-  document.addEventListener('click', e => {
-    if (!set.hasAttribute('hidden') && !set.contains(e.target) && e.target.id !== 'm-settings') {
-      set.setAttribute('hidden', '');
-    }
-  });
-
-  const armReset = (btn, fn) => {
-    let armed = false, timer = null;
-    const val = btn.querySelector('.value');
-    btn.addEventListener('click', () => {
-      if (!armed) {
-        armed = true;
-        val.textContent = 'click to confirm';
-        val.classList.add('armed');
-        timer = setTimeout(() => {
-          armed = false;
-          val.textContent = 'all progress';
-          val.classList.remove('armed');
-        }, 3000);
-      } else {
-        clearTimeout(timer);
-        fn();
-      }
-    });
-  };
-  armReset(document.getElementById('front-reset'), () => resetGame());
-  window.armReset = armReset;
-
   document.getElementById('m-quit').addEventListener('click', () => {
     window.close();
   });
 
-  screenRow.addEventListener('click', () => {
+  document.getElementById('m-settings').addEventListener('click', () => {
+    set.removeAttribute('hidden');
+  });
+  document.getElementById('set-x').addEventListener('click', () => {
+    set.setAttribute('hidden', '');
+  });
+  set.addEventListener('click', e => {
+    if (e.target === set) set.setAttribute('hidden', '');
+  });
+
+  screenToggle.addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     else document.documentElement.requestFullscreen().catch(() => {});
   });
-
   document.addEventListener('fullscreenchange', () => {
-    screenValue.textContent = document.fullscreenElement ? 'full' : 'window';
+    screenToggle.classList.toggle('on', !!document.fullscreenElement);
+  });
+
+  document.getElementById('front-reset').addEventListener('click', () => {
+    Confirm.open(() => resetGame());
   });
 
   window.goFront = () => {

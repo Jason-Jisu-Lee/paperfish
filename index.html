@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=29" />
+    <link rel="stylesheet" href="base.css?v=30" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -101,9 +101,18 @@
         ><span class="value">front</span>
       </button>
       <button class="row" id="row-reset">
-        <span>reset</span><span class="leader"></span
-        ><span class="value">all progress</span>
+        <span>reset progress</span>
       </button>
+    </div>
+
+    <div class="modal" id="confirm" hidden>
+      <div class="modal-card confirm-card">
+        <div class="confirm-text">Reset all progress?<br>This cannot be undone.</div>
+        <div class="confirm-btns">
+          <button class="btn" id="confirm-no">Cancel</button>
+          <button class="btn danger" id="confirm-yes">Reset</button>
+        </div>
+      </div>
     </div>
 
     <div class="objbox" id="objbox" hidden>
@@ -219,16 +228,18 @@
         </nav>
       </div>
 
-      <div class="front-set" id="front-set" hidden>
-        <div class="panel-label">settings</div>
-        <button class="row" id="front-screen">
-          <span>screen</span><span class="leader"></span
-          ><span class="value">window</span>
-        </button>
-        <button class="row" id="front-reset">
-          <span>reset</span><span class="leader"></span
-          ><span class="value">all progress</span>
-        </button>
+      <div class="modal" id="front-set" hidden>
+        <div class="modal-card">
+          <div class="modal-head">
+            <span>Settings</span>
+            <button class="modal-x" id="set-x">×</button>
+          </div>
+          <div class="set-row">
+            <span>Fullscreen</span>
+            <button class="toggle" id="front-screen"><span class="tknob"></span></button>
+          </div>
+          <button class="btn danger wide" id="front-reset">Reset Progress</button>
+        </div>
       </div>
       <div class="vert">from the deep</div>
       <div class="f-seal" aria-hidden="true">
@@ -239,7 +250,7 @@
       </div>
     </section>
 
-    <div class="dev" id="dev" hidden>
+    <div class="dev" id="dev">
       <div class="panel-label">dev</div>
       <div class="dev-row">
         <span class="dev-tag">speed</span>
@@ -270,14 +281,15 @@
     <script src="js/ambience.js?v=2"></script>
     <script src="js/panel.js?v=2"></script>
     <script src="js/pause.js?v=1"></script>
+    <script src="js/confirm.js?v=1"></script>
     <script src="js/obj.js?v=2"></script>
     <script src="js/lantern.js?v=2"></script>
     <script src="js/say.js?v=1"></script>
     <script src="js/detail.js?v=2"></script>
     <script src="js/dev.js?v=1"></script>
-    <script src="js/front.js?v=1"></script>
+    <script src="js/front.js?v=2"></script>
     <script src="js/sim.js?v=1"></script>
     <script src="js/main.js?v=2"></script>
-    <script src="js/corner.js?v=1"></script>
+    <script src="js/corner.js?v=2"></script>
   </body>
 </html>

@@ -49,7 +49,10 @@
     panel.setAttribute('hidden', '');
     goFront();
   });
-  armReset(document.getElementById('row-reset'), () => resetGame());
+  document.getElementById('row-reset').addEventListener('click', () => {
+    panel.setAttribute('hidden', '');
+    Confirm.open(() => resetGame());
+  });
   document.addEventListener('fullscreenchange', render);
   document.addEventListener('pausechange', render);
   document.addEventListener('click', e => {

@@ -103,6 +103,11 @@ Mating levels (5%/level), rolled once at birth.
 - diver messages: bare whisper text, bottom center, fades in and out (~4.6s).
   one at a time, queued, 15s cooldown per identical line. coexists freely
   with the persistent objective box. first wired line: "Fish is hungry."
+- front settings is a standard modal: scrim, Settings title with x, Fullscreen
+  toggle switch, Reset Progress button. reset (front and in-game) opens a
+  separate confirm dialog: "Reset all progress? This cannot be undone." with
+  Cancel / Reset.
+- dev console is always visible (backtick hides it if needed).
 - hud sits on the LEFT. tabs: upgrades (default) and fish. all buttons are
   soft cards in a single column, one per line: name over cost, level in the
   corner, red seal mark until first purchase. the fish tab lists buy buttons
