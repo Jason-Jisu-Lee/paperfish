@@ -78,21 +78,22 @@ Mating levels (5%/level), rolled once at birth.
   adult. seeking food overrides schooling.
 
 ## code map
-- js/data: species.js fish data.
-- js/core: state.js game state, save, purchases, formulas. sim.js per-frame
+- data/: species.js fish data.
+- core/: state.js game state, save, purchases, formulas. sim.js per-frame
   lifecycle economy: hunger, aging, income, spawning triggers, death.
   main.js startGame plus the loop and draw order.
-- js/world: stage.js canvas world (fish motion, courtship moves, plants,
+- world/: stage.js canvas world (fish motion, courtship moves, plants,
   eggs, pops, swirls, held fish, resize). ambience.js bubbles, motes,
   silhouette. lantern.js paper lanterns.
-- js/ui: panel.js hud. detail.js tooltip and fish card. corner.js icons and
+- ui/: panel.js hud. detail.js tooltip and fish card. corner.js icons and
   all settings wiring. front.js front page. pause.js pause and min-size.
   obj.js objectives. say.js diver messages. confirm.js confirm dialog.
   dev.js console.
-- js/audio: sfx.js WebAudio chimes, respects the sound setting.
-- assets/ fish svgs plus fish_grid_final.png (master reference copy).
-  demos/ reference sketches (02-ink.html, demo.html) and option demos
-  (title.html).
+- audio/: sfx.js WebAudio chimes, respects the sound setting.
+- fonts/: self-hosted woff2 + fonts.css + OFL licenses.
+- assets/: fish svgs plus fish_grid_final.png (master reference copy).
+  demos/: reference sketches only (02-ink.html, demo.html), local fonts.
+  option demos get deleted the moment their pick lands.
 
 ## spawning
 - every adult runs 2-minute windows. at each window start it rolls the current
