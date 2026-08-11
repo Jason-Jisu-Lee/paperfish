@@ -7,11 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Sniglet&display=swap"
       rel="stylesheet"
     />
     <style>
-      :root{ --paper:#f2efe6; --ink:#1c1b18; --gold:#7a5800; --seal:#b43a2b; }
+      :root{ --paper:#f2efe6; --ink:#1c1b18; --gold:#7a5800; }
       *{ margin:0; padding:0; box-sizing:border-box; }
       body{
         background:
@@ -24,151 +24,35 @@
       .sect{
         font-size:11px; letter-spacing:.42em; text-transform:uppercase;
         color:rgba(28,27,24,.6);
-        margin:64px 0 22px;
+        margin:0 0 22px;
         padding-bottom:8px;
         border-bottom:1px solid rgba(28,27,24,.16);
       }
-      .sect:first-child{ margin-top:0; }
-      .note{ font-size:12px; color:rgba(28,27,24,.55); margin-top:8px; }
-
-      .styles{ display:grid; grid-template-columns:repeat(auto-fill, minmax(330px, 1fr)); gap:26px; }
-      .scard{
-        background:rgba(255,255,255,.3);
-        box-shadow:0 0 0 1px rgba(28,27,24,.09);
-        padding:18px 20px 22px;
-      }
-      .slabel{
-        font-size:10px; letter-spacing:.3em; text-transform:uppercase;
-        color:var(--seal);
-        margin-bottom:16px;
-      }
-      .bgrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-      .ub{
-        position:relative;
-        display:flex; flex-direction:column; align-items:center; gap:3px;
-        padding:11px 8px 9px;
-        cursor:pointer;
-        text-align:center;
-        transition:all .25s ease;
-      }
-      .ub-name{ font-size:13px; letter-spacing:.06em; }
-      .ub-cost{ font-size:12px; color:var(--gold); font-feature-settings:'tnum'; }
-      .ub-lvl{ position:absolute; top:5px; right:8px; font-size:9px; opacity:.5; }
-      .ub.off{ opacity:.38; cursor:default; }
-      .ub-tip{
-        position:absolute; z-index:5; top:calc(100% + 6px); left:50%;
-        transform:translateX(-50%);
-        width:190px;
-        background:var(--paper);
-        box-shadow:0 0 0 1px rgba(28,27,24,.25), 0 5px 16px rgba(28,27,24,.12);
-        padding:8px 10px;
-        font-size:11px; line-height:1.6;
-        color:rgba(28,27,24,.85);
-        display:none;
-      }
-      .ub:hover .ub-tip{ display:block; }
-
-      .v1 .ub{ border:1px solid rgba(28,27,24,.5); }
-      .v1 .ub:hover{ border-color:var(--ink); background:rgba(255,255,255,.4); }
-
-      .v2 .ub{ background:rgba(255,255,255,.55); border-radius:11px; box-shadow:0 1px 4px rgba(28,27,24,.12); }
-      .v2 .ub:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(28,27,24,.16); }
-
-      .v3 .ub{ border:1.4px solid rgba(28,27,24,.55); border-radius:999px; padding:9px 8px 8px; }
-      .v3 .ub:hover{ border-color:var(--ink); background:rgba(255,255,255,.45); }
-
-      .v4 .ub{ background:var(--ink); border-radius:8px; }
-      .v4 .ub-name{ color:var(--paper); }
-      .v4 .ub-cost{ color:#d9b44a; }
-      .v4 .ub-lvl{ color:rgba(242,239,230,.6); }
-      .v4 .ub:hover{ background:#33312b; }
-      .v4 .ub.off{ opacity:.3; }
-
-      .v5 .ub{ background:rgba(28,27,24,.06); border-radius:4px; }
-      .v5 .ub:hover{ background:rgba(28,27,24,.11); }
-
-      .v6 .ub{ border:1.5px dashed rgba(28,27,24,.45); border-radius:9px; }
-      .v6 .ub:hover{ border-style:solid; border-color:rgba(28,27,24,.75); }
-
-      .v7 .ub{ border:1px solid rgba(28,27,24,.28); border-bottom:2px solid rgba(122,88,0,.55); border-radius:6px; background:rgba(255,255,255,.35); }
-      .v7 .ub:hover{ border-bottom-color:var(--gold); background:rgba(255,255,255,.6); }
-
-      .v8 .ub{ border:1px solid rgba(28,27,24,.4); border-radius:3px; }
-      .v8 .ub::before{
-        content:''; position:absolute; top:6px; left:7px;
-        width:6px; height:6px; border-radius:2px;
-        background:var(--seal); opacity:.8;
-      }
-      .v8 .ub.off::before{ background:rgba(28,27,24,.3); }
-      .v8 .ub:hover{ background:rgba(255,255,255,.42); }
-
-      .sims{ display:grid; grid-template-columns:repeat(auto-fill, minmax(500px, 1fr)); gap:30px; }
+      .sims{ display:grid; grid-template-columns:repeat(auto-fill, minmax(480px, 1fr)); gap:30px; }
       .stitle{ font-size:10.5px; letter-spacing:.34em; text-transform:uppercase; color:rgba(28,27,24,.85); margin-bottom:6px; }
       .sdesc{ font-size:12px; color:rgba(28,27,24,.6); margin-bottom:10px; }
       canvas{ display:block; width:100%; box-shadow:0 0 0 1px rgba(28,27,24,.12); cursor:pointer; }
     </style>
   </head>
   <body>
-    <div class="sect">i · upgrade button styles (hover any button for its description)</div>
-    <div class="styles" id="styles"></div>
-    <div class="note">each shows the coming layout: name over cost, centered, level at the corner, one dimmed as unaffordable.</div>
-
-    <div class="sect">ii · debris candidates (live, tap them)</div>
+    <div class="sect">debris candidates (live, tap them)</div>
     <div class="sims">
-      <div class="sim">
-        <div class="stitle">a · driftwood</div>
-        <div class="sdesc">a branch drifts through. tap up to three times to shake gold loose.</div>
-        <canvas id="cv-wood"></canvas>
-      </div>
-      <div class="sim">
-        <div class="stitle">b · paper lantern</div>
-        <div class="sdesc">a lost lantern floats across, still glowing. tap up to three times to spill its light.</div>
-        <canvas id="cv-lantern"></canvas>
-      </div>
-      <div class="sim">
-        <div class="stitle">c · clamshell</div>
-        <div class="sdesc">a shell sinks from above. one tap opens it: the pearl is yours.</div>
-        <canvas id="cv-clam"></canvas>
-      </div>
+      <div><div class="stitle">a · driftwood</div><div class="sdesc">a branch drifts through. tap up to three times to shake gold loose.</div><canvas id="cv-wood"></canvas></div>
+      <div><div class="stitle">b · paper lantern</div><div class="sdesc">a lost lantern floats across, still glowing. three taps spill its light.</div><canvas id="cv-lantern"></canvas></div>
+      <div><div class="stitle">c · clamshell</div><div class="sdesc">a shell sinks from above. one tap opens it: the pearl is yours.</div><canvas id="cv-clam"></canvas></div>
+      <div><div class="stitle">d · message bottle</div><div class="sdesc">a corked bottle drifts by. first tap pops the cork, second pulls the note.</div><canvas id="cv-bottle"></canvas></div>
+      <div><div class="stitle">e · paper boat</div><div class="sdesc">a capsized boat sinks slowly. one tap rights it: it spills its cargo and sails up.</div><canvas id="cv-boat"></canvas></div>
+      <div><div class="stitle">f · sunken jar</div><div class="sdesc">an old jar sinks. three taps crack it open in stages.</div><canvas id="cv-jar"></canvas></div>
+      <div><div class="stitle">g · net tangle</div><div class="sdesc">a knot of net with glints caught inside. each tap unravels a strand.</div><canvas id="cv-net"></canvas></div>
     </div>
 
     <script>
-      const STYLES = [
-        ['v1', 'hairline'],
-        ['v2', 'soft card'],
-        ['v3', 'pill'],
-        ['v4', 'ink block'],
-        ['v5', 'wash tile'],
-        ['v6', 'stitched'],
-        ['v7', 'gold trim'],
-        ['v8', 'seal mark']
-      ];
-      const BTNS = [
-        ['firstF Income', 30, '× 2', '+1 gold / 5s. Current: +2 / 5s', false],
-        ['Kelp', 10, '× 1', 'satisfies hunger for 1 minute', false],
-        ['Spawning', 100, '× 0', '+5% chance to spawn each 2 min. Current: 0%', false],
-        ['Growth', 150, '× 0', 'matures 5s sooner. Current: -0s', true]
-      ];
-      document.getElementById('styles').innerHTML = STYLES.map(([cls, label]) => `
-        <div class="scard ${cls}">
-          <div class="slabel">${label}</div>
-          <div class="bgrid">
-            ${BTNS.map(([n, c, lvl, d, off]) => `
-              <div class="ub${off ? ' off' : ''}">
-                <span class="ub-lvl">${lvl}</span>
-                <span class="ub-name">${n}</span>
-                <span class="ub-cost">${c} g</span>
-                ${off ? '' : `<span class="ub-tip">${d}</span>`}
-              </div>`).join('')}
-          </div>
-        </div>`).join('');
-
       const GOLD = 'rgba(122,88,0,';
       const INK = 'rgba(28,27,24,';
       const P1 = new Path2D('M310 100 Q180 10 30 148');
       const P2 = new Path2D('M310 100 Q180 190 30 52');
       const rand = (a, b) => a + Math.random() * (b - a);
-      const CW = 560, CH = 260;
+      const CW = 540, CH = 250;
 
       const makeSim = id => {
         const cv = document.getElementById(id);
@@ -183,15 +67,12 @@
           clicks.push({ x: (e.clientX - r.left) / r.width * CW, y: (e.clientY - r.top) / r.height * CH });
         });
         return {
-          ctx, pops, flecks, clicks,
+          ctx, clicks,
           pop(x, y, txt) { pops.push({ x, y, txt, t: 0 }); },
           burst(x, y, n, up) {
             for (let i = 0; i < n; i++) flecks.push({ x: x + rand(-5, 5), y, vx: rand(-16, 16), vy: up ? rand(-36, -14) : rand(6, 26), t: 0 });
           },
-          paper() {
-            ctx.fillStyle = '#f2efe6';
-            ctx.fillRect(0, 0, CW, CH);
-          },
+          paper() { ctx.fillStyle = '#f2efe6'; ctx.fillRect(0, 0, CW, CH); },
           fx(dt) {
             for (let i = flecks.length - 1; i >= 0; i--) {
               const p = flecks[i];
@@ -223,7 +104,7 @@
         x: rand(60, CW - 60), y: rand(50, CH - 40),
         dir: Math.random() < 0.5 ? -1 : 1,
         spd: rand(26, 55), tSpd: 0, chT: rand(1, 3),
-        ph: rand(0, 6), vph: rand(0, 6), len: 56
+        ph: rand(0, 6), vph: rand(0, 6), len: 54
       });
       const moveFish = (f, dt) => {
         f.ph += dt * (2 + f.spd * 0.03);
@@ -417,15 +298,7 @@
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(-8, -4); ctx.lineTo(-10.5, -7);
-            ctx.moveTo(-3, -6); ctx.lineTo(-4, -10.5);
-            ctx.moveTo(3, -6); ctx.lineTo(4, -10.5);
-            ctx.moveTo(8, -4); ctx.lineTo(10.5, -7);
-            ctx.lineWidth = 0.9;
-            ctx.stroke();
             ctx.restore();
-            ctx.lineWidth = 1.4;
             ctx.save();
             ctx.rotate(spread * 0.35);
             ctx.beginPath();
@@ -435,9 +308,326 @@
             ctx.stroke();
             ctx.restore();
             if (clam.done) {
-              ctx.fillStyle = GOLD + (0.8 * clam.fade) + ')';
+              ctx.fillStyle = GOLD + (0.8 * Math.max(clam.fade, 0)) + ')';
               ctx.beginPath();
               ctx.arc(0, -3 - clam.open * 9, 2.6, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+            ctx.globalAlpha = 1;
+          }
+          s.fx(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-bottle');
+        const fish = [makeFish(), makeFish()];
+        let bot = null, wait = 0.6;
+        sims.push(dt => {
+          s.paper();
+          if (!bot) {
+            wait -= dt;
+            if (wait <= 0) bot = { x: -30, y: rand(55, 110), taps: 0, jolt: 0, ph: rand(0, 6), corkT: 0, noteT: 0 };
+          } else {
+            bot.x += 17 * dt;
+            bot.ph += dt * 1.2;
+            bot.jolt = Math.max(bot.jolt - dt * 4, 0);
+            if (bot.corkT > 0) bot.corkT += dt;
+            if (bot.noteT > 0) bot.noteT += dt;
+            if (bot.x > CW + 40) { bot = null; wait = rand(3, 5.5); }
+          }
+          for (const c of s.clicks.splice(0)) {
+            if (bot && bot.taps < 2 && Math.abs(c.x - bot.x) < 26 && Math.abs(c.y - bot.y) < 20) {
+              bot.taps += 1;
+              bot.jolt = 1;
+              if (bot.taps === 1) {
+                bot.corkT = 0.001;
+                s.pop(bot.x, bot.y - 24, '+5');
+              } else {
+                bot.noteT = 0.001;
+                s.pop(bot.x, bot.y - 24, '+10');
+                s.burst(bot.x, bot.y - 6, 5, true);
+              }
+            }
+          }
+          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
+          if (bot) {
+            const ctx = s.ctx;
+            const tilt = Math.sin(bot.ph) * 0.12 - 0.18;
+            ctx.save();
+            ctx.translate(bot.x, bot.y + Math.sin(bot.ph * 1.3) * 3 + bot.jolt * 3);
+            ctx.rotate(tilt);
+            ctx.strokeStyle = INK + '0.75)';
+            ctx.fillStyle = 'rgba(255,255,255,.4)';
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(-16, -6);
+            ctx.lineTo(6, -6);
+            ctx.bezierCurveTo(10, -6, 12, -4.5, 15, -3.5);
+            ctx.lineTo(21, -3.5);
+            ctx.lineTo(21, 3.5);
+            ctx.lineTo(15, 3.5);
+            ctx.bezierCurveTo(12, 4.5, 10, 6, 6, 6);
+            ctx.lineTo(-16, 6);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            if (bot.taps === 0) {
+              ctx.fillStyle = 'rgba(163,120,60,.85)';
+              ctx.fillRect(20, -3, 5, 6);
+              ctx.strokeRect(20, -3, 5, 6);
+            }
+            if (bot.taps >= 1 && bot.noteT === 0) {
+              ctx.strokeStyle = INK + '0.65)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(-10, -3); ctx.lineTo(-2, -3);
+              ctx.moveTo(-10, 0); ctx.lineTo(-4, 0);
+              ctx.moveTo(-10, 3); ctx.lineTo(-3, 3);
+              ctx.stroke();
+            }
+            ctx.restore();
+            if (bot.corkT > 0 && bot.corkT < 0.8) {
+              const u = bot.corkT / 0.8;
+              ctx.globalAlpha = 1 - u;
+              ctx.fillStyle = 'rgba(163,120,60,.85)';
+              ctx.fillRect(bot.x + 24 + u * 26, bot.y - 8 - u * 34 + u * u * 40, 5, 6);
+              ctx.globalAlpha = 1;
+            }
+            if (bot.noteT > 0 && bot.noteT < 1.1) {
+              const u = bot.noteT / 1.1;
+              ctx.save();
+              ctx.translate(bot.x + 6, bot.y - 12 - u * 30);
+              ctx.rotate(Math.sin(u * 9) * 0.2);
+              ctx.globalAlpha = 1 - u;
+              ctx.fillStyle = 'rgba(255,253,246,.95)';
+              ctx.strokeStyle = INK + '0.7)';
+              ctx.lineWidth = 1;
+              ctx.fillRect(-6, -4, 12, 8);
+              ctx.strokeRect(-6, -4, 12, 8);
+              ctx.beginPath();
+              ctx.moveTo(-4, -1.5); ctx.lineTo(4, -1.5);
+              ctx.moveTo(-4, 1); ctx.lineTo(2, 1);
+              ctx.stroke();
+              ctx.restore();
+              ctx.globalAlpha = 1;
+            }
+          }
+          s.fx(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-boat');
+        const fish = [makeFish(), makeFish()];
+        let boat = null, wait = 0.6;
+        sims.push(dt => {
+          s.paper();
+          if (!boat) {
+            wait -= dt;
+            if (wait <= 0) boat = { x: rand(90, CW - 90), y: -18, flip: 0, done: false, fade: 1, ph: rand(0, 6) };
+          } else {
+            boat.ph += dt * 1.4;
+            if (!boat.done) {
+              boat.y += 13 * dt;
+              boat.x += Math.sin(boat.ph) * 10 * dt;
+            } else {
+              boat.flip = Math.min(boat.flip + dt * 2.4, 1);
+              boat.y -= 34 * dt * boat.flip;
+              boat.fade -= dt * 0.5;
+            }
+            if (boat.y > CH + 22 || boat.fade <= 0 || boat.y < -30) { boat = null; wait = rand(3, 5.5); }
+          }
+          for (const c of s.clicks.splice(0)) {
+            if (boat && !boat.done && Math.abs(c.x - boat.x) < 24 && Math.abs(c.y - boat.y) < 18) {
+              boat.done = true;
+              s.pop(boat.x, boat.y - 20, '+10');
+              s.burst(boat.x, boat.y + 4, 6, false);
+            }
+          }
+          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
+          if (boat) {
+            const ctx = s.ctx;
+            ctx.save();
+            ctx.translate(boat.x, boat.y);
+            ctx.globalAlpha = Math.max(boat.fade, 0);
+            ctx.scale(1, 1 - 2 * (1 - boat.flip) * (boat.done ? 1 : 1) * (boat.done ? (1 - boat.flip) : 1) || 1);
+            const up = boat.done ? boat.flip : 0;
+            ctx.scale(1, up * 2 - 1);
+            ctx.strokeStyle = INK + '0.8)';
+            ctx.fillStyle = 'rgba(255,253,246,.9)';
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(-18, 0);
+            ctx.lineTo(-8, 8);
+            ctx.lineTo(8, 8);
+            ctx.lineTo(18, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -12);
+            ctx.lineTo(9, -3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+            ctx.globalAlpha = 1;
+          }
+          s.fx(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-jar');
+        const fish = [makeFish(), makeFish()];
+        let jar = null, wait = 0.6;
+        sims.push(dt => {
+          s.paper();
+          if (!jar) {
+            wait -= dt;
+            if (wait <= 0) jar = { x: rand(90, CW - 90), y: -22, taps: 0, jolt: 0, burstT: 0, ph: rand(0, 6), shards: [] };
+          } else {
+            jar.ph += dt * 1.2;
+            jar.jolt = Math.max(jar.jolt - dt * 4, 0);
+            if (jar.taps < 3) {
+              jar.y += 11 * dt;
+              jar.x += Math.sin(jar.ph) * 8 * dt;
+            } else {
+              jar.burstT += dt;
+              for (const sh of jar.shards) {
+                sh.x += sh.vx * dt;
+                sh.y += sh.vy * dt;
+                sh.vy += 30 * dt;
+                sh.r += sh.vr * dt;
+              }
+            }
+            if (jar.y > CH + 26 || jar.burstT > 1.1) { jar = null; wait = rand(3, 5.5); }
+          }
+          for (const c of s.clicks.splice(0)) {
+            if (jar && jar.taps < 3 && Math.abs(c.x - jar.x) < 20 && Math.abs(c.y - jar.y) < 22) {
+              jar.taps += 1;
+              jar.jolt = 1;
+              if (jar.taps < 3) {
+                s.pop(jar.x, jar.y - 26, '+5');
+              } else {
+                s.pop(jar.x, jar.y - 26, '+15');
+                s.burst(jar.x, jar.y, 7, true);
+                for (let i = 0; i < 4; i++) jar.shards.push({ x: jar.x, y: jar.y, vx: rand(-40, 40), vy: rand(-50, -10), r: rand(0, 6), vr: rand(-3, 3) });
+              }
+            }
+          }
+          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
+          if (jar) {
+            const ctx = s.ctx;
+            if (jar.taps < 3) {
+              ctx.save();
+              ctx.translate(jar.x, jar.y + jar.jolt * 3);
+              ctx.strokeStyle = INK + '0.8)';
+              ctx.fillStyle = 'rgba(235,228,214,.85)';
+              ctx.lineWidth = 1.4;
+              ctx.beginPath();
+              ctx.moveTo(-6, -14);
+              ctx.bezierCurveTo(-13, -8, -13, 8, -7, 15);
+              ctx.lineTo(7, 15);
+              ctx.bezierCurveTo(13, 8, 13, -8, 6, -14);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+              ctx.strokeRect(-7, -17, 14, 3);
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = INK + '0.7)';
+              if (jar.taps >= 1) {
+                ctx.beginPath();
+                ctx.moveTo(-4, -8);
+                ctx.lineTo(1, -1);
+                ctx.lineTo(-2, 5);
+                ctx.stroke();
+              }
+              if (jar.taps >= 2) {
+                ctx.beginPath();
+                ctx.moveTo(6, -6);
+                ctx.lineTo(2, 2);
+                ctx.lineTo(6, 9);
+                ctx.moveTo(-8, 2);
+                ctx.lineTo(-4, 8);
+                ctx.stroke();
+              }
+              ctx.restore();
+            } else {
+              ctx.strokeStyle = INK + (0.7 * (1 - jar.burstT)) + ')';
+              ctx.lineWidth = 1.3;
+              for (const sh of jar.shards) {
+                ctx.save();
+                ctx.translate(sh.x, sh.y);
+                ctx.rotate(sh.r);
+                ctx.beginPath();
+                ctx.moveTo(-5, 2);
+                ctx.lineTo(0, -5);
+                ctx.lineTo(5, 2);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+              }
+            }
+          }
+          s.fx(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-net');
+        const fish = [makeFish(), makeFish()];
+        let net = null, wait = 0.6;
+        sims.push(dt => {
+          s.paper();
+          if (!net) {
+            wait -= dt;
+            if (wait <= 0) net = { x: CW + 40, y: rand(70, 150), taps: 0, jolt: 0, ph: rand(0, 6), fade: 1 };
+          } else {
+            net.x -= 13 * dt;
+            net.ph += dt * 0.9;
+            net.jolt = Math.max(net.jolt - dt * 4, 0);
+            if (net.taps >= 3) net.fade -= dt * 0.7;
+            if (net.x < -50 || net.fade <= 0) { net = null; wait = rand(3, 5.5); }
+          }
+          for (const c of s.clicks.splice(0)) {
+            if (net && net.taps < 3 && Math.abs(c.x - net.x) < 30 && Math.abs(c.y - net.y) < 26) {
+              net.taps += 1;
+              net.jolt = 1;
+              s.pop(net.x, net.y - 30, '+5');
+              s.burst(net.x + rand(-8, 8), net.y - 8, 2, true);
+            }
+          }
+          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
+          if (net) {
+            const ctx = s.ctx;
+            const y = net.y + Math.sin(net.ph) * 4 + net.jolt * 3;
+            ctx.save();
+            ctx.translate(net.x, y);
+            ctx.globalAlpha = Math.max(net.fade, 0);
+            ctx.strokeStyle = INK + '0.6)';
+            ctx.lineWidth = 1.1;
+            const strands = 4 - net.taps;
+            for (let i = 0; i < strands; i++) {
+              const o = (i - 1.5) * 7;
+              ctx.beginPath();
+              ctx.moveTo(-24, o - 4);
+              ctx.bezierCurveTo(-8, o + 8, 8, o - 9, 24, o + 3);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(o - 4, -22);
+              ctx.bezierCurveTo(o + 6, -8, o - 7, 8, o + 2, 22);
+              ctx.stroke();
+            }
+            const glints = 3 - net.taps;
+            ctx.fillStyle = GOLD + '0.8)';
+            for (let i = 0; i < glints; i++) {
+              const a = net.ph * 0.7 + i * 2.1;
+              ctx.beginPath();
+              ctx.arc(Math.cos(a) * 10, Math.sin(a * 1.3) * 9, 2, 0, Math.PI * 2);
               ctx.fill();
             }
             ctx.restore();
