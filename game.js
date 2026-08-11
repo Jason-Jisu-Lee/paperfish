@@ -34,7 +34,6 @@ const startGame = () => {
     if (dt > 0.06) dt = 0.06;
     const mdt = Pause.paused || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
-    Tut.tick();
 
     let hatched = false;
     let removed = false;

@@ -3,7 +3,6 @@ const Tut = (() => {
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-ok');
   const TEXTS = {
-    start: 'fish passively generate income.',
     death: "fish gives gold on death\n(don't worry, he went to fish heaven)",
     hungry: 'fish is hungry.'
   };
@@ -50,11 +49,5 @@ const Tut = (() => {
     }
   });
 
-  const tick = () => {
-    if (active || (Game.tuts && Game.tuts.start)) return;
-    const f = Game.fish.find(x => !x.egg && x.birth >= 1);
-    if (f) fire('start', { x: f.x, y: f.y });
-  };
-
-  return { tick, fire, get active() { return active; } };
+  return { fire, get active() { return active; } };
 })();

@@ -189,9 +189,14 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   position:absolute; z-index:12;
   top:calc(clamp(14px, 2.4vh, 26px) + 52px);
   right:clamp(16px, 2.2vw, 30px);
-  font-size:13.5px;
-  color:rgba(28,27,24,.85);
-  display:flex; align-items:center; gap:8px;
+  background:var(--paper);
+  border:1px solid rgba(28,27,24,.45);
+  box-shadow:0 6px 26px rgba(28,27,24,.14);
+  padding:14px 20px;
+  font-size:14.5px; letter-spacing:.05em;
+  color:var(--ink);
+  text-align:center;
+  display:flex; align-items:center; gap:9px;
   transition:color .4s ease, opacity .5s ease;
 }
 .objbox.done{ color:#3f7d44; }

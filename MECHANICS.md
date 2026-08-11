@@ -46,7 +46,7 @@
 | first kelp due | ~65s (12/min income covers the 10g) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
 | paper lanterns | early income. 12s into a fresh game, 3 lanterns drift in with the objective "Collect gold from Paper Lanterns 0/3" (top right, no pause). each lantern takes 3 taps at +5, dims per tap, bounces between edges until spent. objective completes with a green check flash. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
-| tutorials | freeze the game, small Okay box anchored to the subject. start: passive income, once first fish finishes drawing. hungry: first hunger, points at Kelp. death: first death |
+| tutorials | freeze the game, small Okay box anchored to the subject. hungry: first hunger, points at Kelp. death: first death. objectives (top right, no pause) reuse the same card style without the Okay |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
