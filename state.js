@@ -37,7 +37,7 @@ const fmtG = n => {
   if (n >= 1e5) return one(n / 1e3) + 'k';
   return n.toLocaleString('en-US');
 };
-const hatchTime = s => SPECIES[s].hatch || 60;
+const hatchTime = s => SPECIES[s].hatch ?? 60;
 
 const lifeOf = s => SPECIES[s].life || SPECIES[s].maxAge || MAX_AGE;
 
@@ -92,6 +92,7 @@ const saveGame = () => {
       mating: Game.mating,
       maturity: Game.maturity,
       plants: Game.plants,
+      kb: Game.kelpBought || 0,
       tuts: Game.tuts || {},
       unlocked: Game.unlocked,
       fish: Game.fish.map(f => ({
@@ -114,6 +115,7 @@ const loadGame = () => {
     Game.unlocked = Math.min(Math.max(d.unlocked || 1, 1), SPECIES.length);
     Game.mating = d.mating || 0;
     Game.maturity = d.maturity || 0;
+    Game.kelpBought = d.kb || 0;
     Game.tuts = typeof d.tut === 'number' ? (d.tut >= 1 ? { start: 1 } : {}) : d.tuts || {};
     Game.fish = (d.fish || [])
       .filter(f => f && f.s >= 0 && f.s < SPECIES.length)
@@ -151,6 +153,7 @@ const buyKelp = () => {
   if (Game.gold < KELP_COST) return false;
   Game.gold -= KELP_COST;
   Game.plants += 1;
+  Game.kelpBought = (Game.kelpBought || 0) + 1;
   Stage.spawnPlant();
   saveGame();
   return true;

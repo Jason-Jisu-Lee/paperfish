@@ -88,9 +88,16 @@ Mating levels (5%/level), rolled once at birth.
 - courtship: the pair drifts together, hovers overlapping for 4-5s, the egg
   appears between them, both scurry off. courting fish ignore clicks, kelp,
   and their spawn windows until done.
-- upgrade descriptions are uniform: "effect. Current: total".
+- hud tabs: upgrades (default, soft-card button grid: name over cost, level in
+  corner, red seal mark until first purchase) and fish (buy rows + discover).
+- upgrade hover tooltip: effect line, then "Current: total" on its own line.
+- fish hover tooltip: name, stage beneath. nothing else. eggs show "egg";
+  click an egg to select it and see "hatches in" on its card. an egg with 5s
+  or less left shows a pulsing "!".
+- gold rate (top left, tight spacing): hover lists income per species with a
+  fish icon, count, and +N / min per line.
 - money pops (earning, death) draw in the gold color.
-- bubbles are pure ambience now: fast, infrequent vents, not clickable.
+- bubbles are pure ambience now: very fast, infrequent vents, not clickable.
 - ui font is Sniglet (front page stays Shippori Mincho).
 - death tutorial fires mid death animation, after the belly-up flip.
 - below 600x420 the game pauses: "Your screen is too small for the fish!",

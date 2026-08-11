@@ -59,7 +59,7 @@ const Ambience = (() => {
           x: vent.x + rand(-12, 12),
           y: H + rand(6, 26),
           r: rand(1.6, 4.2),
-          vy: rand(75, 120),
+          vy: rand(150, 230),
           wamp: rand(3, 7),
           wf: rand(0.5, 1),
           ph: rand(0, Math.PI * 2),

@@ -3,17 +3,6 @@ const Detail = (() => {
   const tip = document.getElementById('fishtip');
   const tipName = document.getElementById('fishtip-name');
   const tipStage = document.getElementById('fishtip-stage');
-  const tipRate = document.getElementById('fishtip-rate');
-  const tipFish = document.getElementById('fishtip-fish');
-  let tipFishS = -1;
-
-  const portrait = s => {
-    const sp = SPECIES[s];
-    let inner = sp.paths.map(d => `<path d="${d}" vector-effect="non-scaling-stroke"/>`).join('');
-    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
-    if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
-    return `<svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg>`;
-  };
   const card = document.getElementById('fishcard');
   const elName = document.getElementById('fc-name');
   const elAge = document.getElementById('fc-age');
@@ -24,9 +13,12 @@ const Detail = (() => {
   const elFert = document.getElementById('fc-fert');
   const spawnedRow = document.getElementById('fc-spawned-row');
   const elSpawned = document.getElementById('fc-spawned');
+  const hatchRow = document.getElementById('fc-hatch-row');
+  const elHatch = document.getElementById('fc-hatch');
+  const fishRows = ['fc-age-row', 'fc-min-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+  let cardMode = null;
   const adultRow = document.getElementById('fc-adult-row');
   const elAdult = document.getElementById('fc-adult');
-  const tipLtv = document.getElementById('fishtip-ltv');
   const graph = document.getElementById('fc-graph');
   const GX0 = 34, GX1 = 240, GY0 = 106, GY1 = 12;
   let mx = null, my = null, hover = null, sel = null, selStream = -1, selMat = -1;
@@ -41,8 +33,9 @@ const Detail = (() => {
     if (!sel) return;
     const f = sel;
     Stage.release();
-    if ((f.heldT || 0) < 3) Stage.escape(f, 1);
+    if (!f.egg && (f.heldT || 0) < 3) Stage.escape(f, 1);
     sel = null;
+    cardMode = null;
   };
 
   const close = () => {
@@ -66,15 +59,17 @@ const Detail = (() => {
 
   canvas.addEventListener('click', e => {
     if (Tut.active) return;
-    if (hover && !hover.egg) {
+    if (hover) {
       if (hover === sel) return;
       releaseSel();
       sel = hover;
-      Stage.hold(hover);
-      buildGraph(hover);
+      if (!hover.egg) {
+        Stage.hold(hover);
+        buildGraph(hover);
+      }
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
-    } else if (!hover) {
+    } else {
       close();
     }
   });
@@ -218,16 +213,9 @@ const Detail = (() => {
     if (hover) {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
-      if (tipFishS !== hover.s) {
-        tipFish.innerHTML = portrait(hover.s);
-        tipFishS = hover.s;
-      }
       if (hover.egg) {
-        const total = sp.hatch || 60;
         tipStage.textContent = 'egg';
         tipStage.removeAttribute('hidden');
-        tipRate.textContent = Math.max(Math.ceil(total - (hover.t || 0)), 0) + ' / ' + total + ' sec';
-        tipLtv.setAttribute('hidden', '');
         tip.style.top = (hover.y - 26) + 'px';
       } else {
         if (sp.adultAt !== undefined) {
@@ -236,9 +224,6 @@ const Detail = (() => {
         } else {
           tipStage.setAttribute('hidden', '');
         }
-        tipRate.textContent = fmt(speciesGpm(hover.s, hover.age)) + ' / min';
-        tipLtv.textContent = 'ltv ' + fmt(ltvOf(hover.s));
-        tipLtv.removeAttribute('hidden');
         tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
       }
       tip.style.left = hover.x + 'px';
@@ -246,8 +231,32 @@ const Detail = (() => {
     } else {
       tip.setAttribute('hidden', '');
     }
+    if (sel && sel.egg) {
+      if (cardMode !== 'egg') {
+        cardMode = 'egg';
+        for (const r of fishRows) r.setAttribute('hidden', '');
+        fertRow.setAttribute('hidden', '');
+        spawnedRow.setAttribute('hidden', '');
+        adultRow.setAttribute('hidden', '');
+        hatchRow.removeAttribute('hidden');
+        graph.style.display = 'none';
+      }
+      const sp = SPECIES[sel.s];
+      elName.textContent = sp.name;
+      const total = sp.hatch ?? 60;
+      elHatch.textContent = Math.max(Math.ceil(total - (sel.t || 0)), 0) + ' / ' + total + ' sec';
+      return;
+    }
     if (sel) {
       const sp = SPECIES[sel.s];
+      if (cardMode !== 'fish') {
+        cardMode = 'fish';
+        for (const r of fishRows) r.removeAttribute('hidden');
+        hatchRow.setAttribute('hidden', '');
+        graph.style.display = '';
+        buildGraph(sel);
+        Stage.hold(sel);
+      }
       if (selStream !== streamFor(sel.s) || selMat !== Game.maturity) buildGraph(sel);
       const life = lifeOf(sel.s);
       const phs = speciesPhases(sel.s);

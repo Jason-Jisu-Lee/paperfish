@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=22" />
+    <link rel="stylesheet" href="base.css?v=23" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -18,21 +18,21 @@
     <div class="goldbox" id="goldbox" hidden>
       <div class="gold"><span id="gold-num">0</span><span class="g">g</span></div>
       <div class="micro goldrate" id="gold-rate">+0 / min</div>
+      <div class="goldsrc" id="goldsrc" hidden></div>
     </div>
 
     <aside class="hud" id="hud" hidden>
       <div class="tabs">
-        <button class="tab on" id="tab-shoal">school</button>
-        <button class="tab" id="tab-depths">discover</button>
+        <button class="tab on" id="tab-up">upgrades</button>
+        <button class="tab" id="tab-fish">fish</button>
       </div>
-      <div id="view-shoal">
-        <div class="micro sect">i · school</div>
+      <div id="view-up">
+        <div class="ubgrid" id="up-grid"></div>
+      </div>
+      <div id="view-fish" hidden>
+        <div class="micro sect">i · fish</div>
         <div id="shoal-rows"></div>
-        <div class="micro sect">ii · upgrades</div>
-        <div id="current-rows"></div>
-      </div>
-      <div id="view-depths" hidden>
-        <div class="micro sect">iii · discover</div>
+        <div class="micro sect">ii · discover</div>
         <div id="depth-rows"></div>
       </div>
     </aside>
@@ -106,32 +106,31 @@
     </div>
 
     <div class="tip" id="fishtip" hidden>
-      <span class="tip-head">
-        <span class="tip-fish" id="fishtip-fish"></span>
-        <span class="tip-name" id="fishtip-name"></span>
-      </span>
+      <span class="tip-name" id="fishtip-name"></span>
       <span class="tip-stage" id="fishtip-stage"></span>
-      <span class="tip-rate" id="fishtip-rate"></span>
-      <span class="tip-ltv devred" id="fishtip-ltv"></span>
     </div>
     <div class="tip" id="uptip" hidden></div>
 
     <div class="fishcard" id="fishcard" hidden>
       <button class="fc-x" id="fc-x">×</button>
       <div class="fc-name" id="fc-name"></div>
-      <div class="row known">
+      <div class="row known" id="fc-hatch-row" hidden>
+        <span>hatches in</span><span class="leader"></span
+        ><span class="value" id="fc-hatch"></span>
+      </div>
+      <div class="row known" id="fc-age-row">
         <span>age</span><span class="leader"></span
         ><span class="value" id="fc-age"></span>
       </div>
-      <div class="row known">
+      <div class="row known" id="fc-min-row">
         <span>per min</span><span class="leader"></span
         ><span class="value" id="fc-min"></span>
       </div>
-      <div class="row known">
+      <div class="row known" id="fc-freq-row">
         <span>earns</span><span class="leader"></span
         ><span class="value" id="fc-freq"></span>
       </div>
-      <div class="row known" data-hint>
+      <div class="row known" id="fc-death-row" data-hint>
         <span>death</span><span class="leader"></span
         ><span class="value" id="fc-death"></span>
       </div>
@@ -250,13 +249,13 @@
     </div>
 
     <script src="species.js?v=11"></script>
-    <script src="state.js?v=16"></script>
-    <script src="fish.js?v=26"></script>
-    <script src="ambience.js?v=6"></script>
-    <script src="panel.js?v=14"></script>
+    <script src="state.js?v=18"></script>
+    <script src="fish.js?v=28"></script>
+    <script src="ambience.js?v=7"></script>
+    <script src="panel.js?v=16"></script>
     <script src="pause.js?v=3"></script>
     <script src="tut.js?v=5"></script>
-    <script src="detail.js?v=19"></script>
+    <script src="detail.js?v=21"></script>
     <script src="dev.js?v=1"></script>
     <script src="front.js?v=4"></script>
     <script src="game.js?v=21"></script>

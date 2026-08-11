@@ -598,7 +598,7 @@ const Stage = (() => {
   };
 
   const drawEgg = f => {
-    const total = SPECIES[f.s].hatch || 60;
+    const total = SPECIES[f.s].hatch ?? 60;
     const p = Math.min((f.t || 0) / total, 1);
     const q = 1 + Math.sin(f.ph * 1.15) * 0.04;
     ctx.save();
@@ -614,6 +614,24 @@ const Stage = (() => {
     ctx.arc(0, 1.4, 1.1 + p * 1.3, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
+    if (total - (f.t || 0) <= 5) {
+      const pulse = 1 + Math.sin(tNow * 8) * 0.15;
+      ctx.save();
+      ctx.translate(f.x, f.y - 16);
+      ctx.scale(pulse, pulse);
+      ctx.strokeStyle = 'rgba(28,27,24,0.85)';
+      ctx.fillStyle = 'rgba(28,27,24,0.85)';
+      ctx.lineWidth = 1.7;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(0, -7);
+      ctx.lineTo(0, -1.2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 2.6, 1.05, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   };
 
   const drawPlant = p => {
