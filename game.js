@@ -16,6 +16,7 @@ const startGame = () => {
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant();
   Game.started = true;
   Panel.refresh();
+  Tut.start();
 };
 
 (() => {
@@ -31,8 +32,9 @@ const startGame = () => {
     let dt = raw;
     if (!(dt > 0)) dt = 0;
     if (dt > 0.06) dt = 0.06;
-    const mdt = Pause.paused ? 0 : dt;
+    const mdt = Pause.paused || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
+    Tut.tick(mdt);
 
     let hatched = false;
     let removed = false;
@@ -149,6 +151,7 @@ const startGame = () => {
     Ambience.drawBack(Stage.ctx);
     Stage.drawScene();
     Ambience.drawFront(Stage.ctx);
+    Detail.drawCombo(Stage.ctx);
 
     if (hatched || removed) {
       Panel.refresh();

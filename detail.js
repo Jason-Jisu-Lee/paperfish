@@ -51,8 +51,41 @@ const Detail = (() => {
   canvas.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
   let streak = 0, lastClick = -9999;
+  let holdTimer = null, justHeld = false, heldFish = null;
+
+  canvas.addEventListener('mousedown', e => {
+    if (e.button !== 0 || Tut.active) return;
+    clearTimeout(holdTimer);
+    const f = hover && !hover.egg ? hover : null;
+    if (!f) return;
+    holdTimer = setTimeout(() => {
+      justHeld = true;
+      heldFish = f;
+      if (sel) Stage.release();
+      sel = f;
+      Stage.hold(f);
+      buildGraph(f);
+      placeCard(f.x, f.y, f);
+      card.removeAttribute('hidden');
+    }, 400);
+  });
+
+  canvas.addEventListener('mouseup', e => {
+    if (e.button !== 0) return;
+    clearTimeout(holdTimer);
+    if (heldFish) {
+      Stage.release();
+      Stage.escape(heldFish, 1);
+      heldFish = null;
+    }
+  });
 
   canvas.addEventListener('click', e => {
+    if (Tut.active) return;
+    if (justHeld) {
+      justHeld = false;
+      return;
+    }
     if (hover && !hover.egg) {
       if (hover.hstate === 2) return;
       const now = performance.now();
@@ -60,27 +93,37 @@ const Detail = (() => {
       lastClick = now;
       const pay = Math.min(streak, 5);
       Game.gold += pay;
-      Stage.spawnPop(hover.x, hover.y - SPECIES[hover.s].len * 0.3 - 8, '+' + pay);
+      Stage.spawnPop(hover.x, hover.y - SPECIES[hover.s].len * 0.3 - 8, '+' + pay, true);
       Stage.escape(hover, pay);
       Panel.tick();
     } else if (!hover) {
+      streak = 0;
+      lastClick = -9999;
       close();
     }
   });
 
-  canvas.addEventListener('contextmenu', e => {
-    e.preventDefault();
-    if (hover && !hover.egg) {
-      if (sel) Stage.release();
-      sel = hover;
-      Stage.hold(sel);
-      buildGraph(sel);
-      placeCard(e.clientX, e.clientY, sel);
-      card.removeAttribute('hidden');
-    } else {
-      close();
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+  const drawCombo = ctx => {
+    if (mx === null || streak < 1) return;
+    const rem = 1 - (performance.now() - lastClick) / 1500;
+    if (rem <= 0) return;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(28,27,24,0.42)';
+    ctx.lineWidth = 1.3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.arc(mx, my, 12, -Math.PI / 2, -Math.PI / 2 + rem * Math.PI * 2);
+    ctx.stroke();
+    if (streak >= 2) {
+      ctx.font = '10px "Zen Maru Gothic", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(28,27,24,0.5)';
+      ctx.fillText('x' + Math.min(streak, 5), mx, my + 27);
     }
-  });
+    ctx.restore();
+  };
 
   const hitTest = () => {
     if (mx === null || !Game.started) return null;
@@ -275,5 +318,5 @@ const Detail = (() => {
     }
   };
 
-  return { tick };
+  return { tick, drawCombo };
 })();

@@ -44,8 +44,9 @@
 | start | 50 gold + 1 baby fish |
 | opening choice | bank the 50 or buy a second egg immediately |
 | first kelp due | ~65s (12/min income + clicks cover the 10g) |
-| left-click a fish | streak pay +1, +2 ... +5 cap (next click within 1.5s). fish bolts instantly (240-450 px/s), random direction and distance, more frantic each level, level 3+ jukes mid-flight, leaves a fading ink swirl. starving and dying fish pay nothing |
-| right-click a fish | opens the info card. left empty click closes it |
+| click a fish | streak pay +1, +2 ... +5 cap (next hit within 1.5s). click pops draw bigger and darker than passive pops. a miss (empty water) breaks the streak. combo ring drains around the cursor, x-multiplier shows from x2. fish bolts instantly (240-450 px/s), random direction and distance, more frantic each level, level 3+ jukes mid-flight, leaves a fading ink swirl. starving and dying fish pay nothing |
+| hold a fish (400ms) | catches it: fish struggles in place, info card opens. release lets it dart off, no gold. empty click closes the card |
+| tutorials | freeze the game with a small confirm tooltip. step 1 at first play, step 2 five seconds later. progress saved |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.

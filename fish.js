@@ -190,6 +190,11 @@ const Stage = (() => {
         continue;
       }
       if (f.birth < 1) { f.birth += mdt / 2.3; continue; }
+      if (f === held) {
+        f.tailPh += mdt * Math.PI * 2 * 2.3;
+        f.tailAmp += (0.95 - f.tailAmp) * Math.min(6 * mdt, 1);
+        continue;
+      }
       if (f.eating) {
         f.tailPh += mdt * Math.PI * 2 * 0.4;
         f.tailAmp += (0.1 - f.tailAmp) * Math.min(4 * mdt, 1);
@@ -543,8 +548,8 @@ const Stage = (() => {
   };
 
   const pops = [];
-  const spawnPop = (x, y, txt) => {
-    pops.push({ x, y, txt, t: 0 });
+  const spawnPop = (x, y, txt, big) => {
+    pops.push({ x, y, txt, t: 0, big });
   };
 
   const updatePops = mdt => {
@@ -559,11 +564,16 @@ const Stage = (() => {
 
   const drawPops = () => {
     if (!pops.length) return;
-    ctx.font = '11px "Zen Maru Gothic", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(28,27,24,1)';
     for (const p of pops) {
-      ctx.globalAlpha = 0.55 * (1 - p.t / 0.9);
+      if (p.big) {
+        ctx.font = '500 14px "Zen Maru Gothic", sans-serif';
+        ctx.globalAlpha = 0.85 * (1 - p.t / 0.9);
+      } else {
+        ctx.font = '11px "Zen Maru Gothic", sans-serif';
+        ctx.globalAlpha = 0.55 * (1 - p.t / 0.9);
+      }
       ctx.fillText(p.txt, p.x, p.y);
     }
     ctx.globalAlpha = 1;

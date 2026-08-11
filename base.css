@@ -262,6 +262,29 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .g-ht{ fill:var(--ink); font-size:11.5px; font-weight:500; stroke-width:3.5px; }
 #fc-graph{ pointer-events:auto; }
 
+.tut{
+  position:absolute; z-index:16;
+  left:50%; top:30%;
+  transform:translate(-50%, -50%);
+  background:var(--paper);
+  box-shadow:0 0 0 1px rgba(28,27,24,.14), 0 4px 22px rgba(28,27,24,.08);
+  padding:16px 22px 13px;
+  text-align:center;
+  max-width:300px;
+}
+.tut-text{
+  font-size:12.5px; letter-spacing:.08em; line-height:1.8;
+  color:rgba(28,27,24,.88);
+}
+.tut-ok{
+  margin-top:10px;
+  font-size:10px; letter-spacing:.4em; text-indent:.4em; text-transform:uppercase;
+  color:rgba(28,27,24,.6);
+  padding:4px 12px;
+  transition:color .3s ease;
+}
+.tut-ok:hover{ color:var(--ink); }
+
 .veil{
   position:absolute; inset:0; z-index:14;
   background:rgba(242,239,230,.62);

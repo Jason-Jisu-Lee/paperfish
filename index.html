@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=14" />
+    <link rel="stylesheet" href="base.css?v=15" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -135,6 +135,11 @@
       <svg id="fc-graph" viewBox="0 0 250 130"></svg>
     </div>
 
+    <div class="tut" id="tut" hidden>
+      <div class="tut-text" id="tut-text"></div>
+      <button class="tut-ok" id="tut-ok">ok</button>
+    </div>
+
     <div class="veil" id="veil" hidden>
       <div class="veil-mid">
         <svg viewBox="0 0 24 24">
@@ -203,7 +208,7 @@
         <div>mating: 0% base chance, rolled once at birth. +5% per Mating upgrade. adults only, once per life, pair passes within 130px (checked every 0.8s), 1 egg at meeting point.</div>
         <div>firstF: life 5 min. baby 1/5s, adult 2/5s, ltv 90. egg 50 instant. start 50g + 1 fish. hungry 60-70s, hungry 20s then starving 10s then death. kelp 10g, 2 bites, 2s eat, half recharge. MECHANICS.md has full detail.</div>
         <div>until fish 4: lots of fish, plants as food. from fish 5: predators eat prior fish. define prey-count threshold per predator at thirdF.</div>
-        <div>click chase: streak +1 to +5, 1.5s window. starving/dying pay 0. right-click = info.</div>
+        <div>click chase: streak +1 to +5, miss breaks it. hold 400ms = catch + info. tutorials freeze+confirm.</div>
         <div>no max fish count.</div>
       </div>
       <div class="devnote">
@@ -238,15 +243,16 @@
     </div>
 
     <script src="species.js?v=10"></script>
-    <script src="state.js?v=11"></script>
-    <script src="fish.js?v=20"></script>
+    <script src="state.js?v=12"></script>
+    <script src="fish.js?v=21"></script>
     <script src="ambience.js?v=4"></script>
     <script src="panel.js?v=8"></script>
     <script src="pause.js?v=2"></script>
-    <script src="detail.js?v=13"></script>
+    <script src="tut.js?v=1"></script>
+    <script src="detail.js?v=14"></script>
     <script src="dev.js?v=1"></script>
     <script src="front.js?v=3"></script>
-    <script src="game.js?v=13"></script>
+    <script src="game.js?v=14"></script>
     <script src="corner.js?v=2"></script>
   </body>
 </html>

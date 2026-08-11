@@ -89,6 +89,7 @@ const saveGame = () => {
       mating: Game.mating,
       maturity: Game.maturity,
       plants: Game.plants,
+      tut: Game.tut || 0,
       unlocked: Game.unlocked,
       fish: Game.fish.map(f => ({
         s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
@@ -110,6 +111,7 @@ const loadGame = () => {
     Game.unlocked = Math.min(Math.max(d.unlocked || 1, 1), SPECIES.length);
     Game.mating = d.mating || 0;
     Game.maturity = d.maturity || 0;
+    Game.tut = d.tut || 0;
     Game.fish = (d.fish || [])
       .filter(f => f && f.s >= 0 && f.s < SPECIES.length)
       .map(f => ({ s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, mated: !!f.m, canMate: !!f.c, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 }));
