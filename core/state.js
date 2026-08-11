@@ -164,7 +164,7 @@ const buyKelp = () => {
   Obj.event('buykelp');
   if (!Game.tuts.saykelp) {
     Game.tuts.saykelp = 1;
-    Say.say('This should feed the hungry fish.');
+    Say.say('This should feed the fish.');
   }
   saveGame();
   return true;

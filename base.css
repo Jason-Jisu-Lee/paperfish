@@ -114,17 +114,22 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .gs-n{ opacity:.75; }
 .gs-amt{ margin-left:auto; color:#7a5800; font-feature-settings:'tnum'; }
-.tabs{ display:flex; gap:20px; margin-bottom:8px; }
+.tabs{ display:flex; gap:8px; margin-bottom:10px; }
 .tab{
-  font-size:10px; letter-spacing:.42em; text-transform:uppercase;
-  color:var(--ink); opacity:.55;
-  padding:2px 0;
-  transition:opacity .35s ease;
+  font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink); opacity:.5;
+  padding:6px 13px;
+  border-radius:7px;
+  transition:opacity .25s ease, background .25s ease;
 }
-.tab:hover{ opacity:.72; }
-.tab.on{ opacity:.95; }
+.tab:hover{ opacity:.85; background:rgba(28,27,24,.05); }
+.tab.on{ opacity:1; background:rgba(28,27,24,.09); }
 .tab:focus{ outline:none; }
-.tab:focus-visible{ outline:1px dotted rgba(28,27,24,.45); outline-offset:3px; }
+.tab.pulse{ animation:tabpulse 1.1s ease-in-out infinite; }
+@keyframes tabpulse{
+  0%, 100%{ opacity:.5; color:var(--ink); }
+  50%{ opacity:1; color:var(--seal); }
+}
 .micro.sect{ margin:26px 0 6px; }
 .ubgrid{ display:grid; grid-template-columns:1fr; gap:11px; margin-top:14px; }
 .ubtn-icon{ display:flex; justify-content:center; }

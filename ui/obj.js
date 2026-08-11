@@ -1,6 +1,8 @@
 const Obj = (() => {
   const box = document.getElementById('objbox');
   const txt = document.getElementById('obj-text');
+  const tabUp = document.getElementById('tab-up');
+  const viewUp = document.getElementById('view-up');
   const prog = document.getElementById('obj-prog');
   const fill = document.getElementById('obj-fill');
   const count = document.getElementById('obj-count');
@@ -80,6 +82,7 @@ const Obj = (() => {
   };
 
   const tick = () => {
+    tabUp.classList.toggle('pulse', !!(Game.started && cur && !transitioning && cur.id === 'buykelp' && viewUp.hidden));
     if (!Game.started || !cur || transitioning) return;
     if (cur.prog) render();
     if (cur.auto && cur.auto()) completeCur();

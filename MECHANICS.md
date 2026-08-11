@@ -112,7 +112,7 @@ Mating levels (5%/level), rolled once at birth.
   (clamp 72px-160px up) and sized to the screen so itch.io embeds read it.
   fades in and out (~4.6s), one at a time, queued, 15s cooldown per line.
   wired lines: "Fish is hungry." (a fish turns hungry while no kelp is on
-  screen), "This should feed the hungry fish." (first kelp ever bought),
+  screen), "This should feed the fish." (first kelp ever bought),
   "I wonder how long it takes to hatch." (first egg ever bought).
 - one settings modal everywhere (front menu and in-game gear): scrim,
   Settings title with x, one row per option: Sound toggle, Display segmented
@@ -130,7 +130,10 @@ Mating levels (5%/level), rolled once at birth.
   Discord brand badges top right; seal + "by 2ndIntelligentWorld" bottom
   right. no fish ambience on the front for now.
 - dev console is always visible (backtick hides it if needed).
-- hud sits on the LEFT. tabs: fish (first, default) then upgrades. all
+- hud sits on the LEFT. tabs: fish (first, default) then upgrades, styled
+  as pill buttons (13px, hover feedback, filled when active). while the Buy
+  a kelp objective is active and the upgrades view is closed, the Upgrades
+  tab pulses toward seal red to point the player there. all
   buttons are soft cards in a single column, one per line. upgrade cards:
   name over cost, count in the corner, red seal mark until first purchase.
   fish tab buy buttons show the species icon over cost (never the name),
