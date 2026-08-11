@@ -84,6 +84,8 @@ Mating levels (5%/level), rolled once at birth.
   (the partner needs no spawn chance itself). egg laid at the spawner.
 - upgrade descriptions are uniform: "effect. Current: total".
 - money pops (earning, death, bubbles) draw in the gold color.
+- gold counter settles (soft scale, ink deepens) on single payouts of 50+.
+  never on the trickle.
 - death tutorial fires mid death animation, after the belly-up flip.
-- below 600x420 the game pauses under a "window too small" notice, resumes
-  when enlarged.
+- below 600x420 the game pauses: "Your screen is too small for the fish!",
+  resumes when enlarged.

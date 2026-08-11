@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;500&family=Kosugi+Maru&family=Quicksand:wght@400;500&family=Varela+Round&family=Mochiy+Pop+One&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@400;500&family=Kiwi+Maru:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;500&family=Kosugi+Maru&family=Hachi+Maru+Pop&family=Yomogi&family=Baloo+2:wght@400;500&family=Fredoka:wght@400;500&family=Comfortaa:wght@400;500&family=Nunito:wght@400;600&family=Sniglet&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -19,169 +19,473 @@
           var(--paper);
         font-family:'Zen Maru Gothic',sans-serif;
         color:var(--ink);
-        padding:46px 7vw 90px;
+        padding:44px 5vw 90px;
       }
       .sect{
         font-size:11px; letter-spacing:.42em; text-transform:uppercase;
         color:rgba(28,27,24,.6);
-        margin:60px 0 22px;
+        margin:64px 0 22px;
         padding-bottom:8px;
         border-bottom:1px solid rgba(28,27,24,.16);
       }
       .sect:first-child{ margin-top:0; }
       .hint{ font-size:12px; color:rgba(28,27,24,.55); margin-top:8px; letter-spacing:.06em; }
 
-      .gold{
-        font-weight:500;
-        font-size:44px;
-        letter-spacing:.06em;
-        font-feature-settings:'tnum';
-        color:var(--gold);
-        display:inline-block;
-        transform-origin:left center;
-      }
-      .gold .g{ font-size:20px; margin-left:8px; opacity:.9; }
-      .gold.pulse{ animation:settle .45s cubic-bezier(.3, 1.4, .4, 1); }
-      @keyframes settle{
-        0%{ transform:scale(1); color:var(--gold); }
-        25%{ transform:scale(1.07); color:#4e3800; }
-        100%{ transform:scale(1); color:var(--gold); }
-      }
-      .goldrate{ font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:rgba(122,88,0,.85); margin-top:4px; }
-
-      .fonts{ display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:26px; }
+      .fonts{ display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); gap:24px; }
       .fcard{
-        background:rgba(255,255,255,.32);
+        background:rgba(255,255,255,.34);
         box-shadow:0 0 0 1px rgba(28,27,24,.1);
         padding:20px 22px;
       }
-      .fname{
-        font-size:10px; letter-spacing:.34em; text-transform:uppercase;
+      .flabel{
+        font-family:'Zen Maru Gothic',sans-serif;
+        font-size:10px; letter-spacing:.3em; text-transform:uppercase;
         color:#b43a2b;
-        margin-bottom:14px;
+        margin-bottom:16px;
       }
-      .row{
-        display:flex; align-items:baseline; gap:9px;
-        font-size:13px; letter-spacing:.1em;
+      .fgold{ font-weight:500; font-size:30px; color:var(--gold); font-feature-settings:'tnum'; }
+      .fgold span{ font-size:14px; margin-left:6px; opacity:.9; }
+      .frate{ font-size:10px; letter-spacing:.34em; text-transform:uppercase; color:rgba(122,88,0,.85); margin-top:2px; }
+      .ftabs{ font-size:10px; letter-spacing:.38em; text-transform:uppercase; margin:16px 0 4px; }
+      .ftabs .on{ opacity:.95; } .ftabs .off{ opacity:.45; margin-left:14px; }
+      .fsect{ font-size:9.5px; letter-spacing:.38em; text-transform:uppercase; color:rgba(28,27,24,.6); margin:12px 0 2px; }
+      .frow{
+        display:flex; align-items:baseline; gap:8px;
+        font-size:13.5px; letter-spacing:.08em;
         color:rgba(28,27,24,.92);
-        padding:8px 0;
+        padding:7px 0;
       }
-      .serif{ font-family:'Shippori Mincho',serif; font-size:15px; letter-spacing:.05em; }
-      .tag{ font-size:10px; opacity:.7; }
+      .ftag{ font-size:10px; opacity:.7; }
       .leader{ flex:1; border-bottom:1px dotted rgba(28,27,24,.35); transform:translateY(-3px); }
-      .tipline{
-        font-size:12.5px; color:rgba(28,27,24,.8); letter-spacing:.06em;
-        margin-top:10px; line-height:1.7;
+      .ftip{
+        font-size:12px; color:rgba(28,27,24,.8); letter-spacing:.05em;
+        margin-top:12px; line-height:1.7;
+        border-top:1px solid rgba(28,27,24,.1); padding-top:10px;
       }
-      .goldmini{ font-weight:500; font-size:26px; color:var(--gold); font-feature-settings:'tnum'; margin-top:12px; }
-      .goldmini span{ font-size:13px; margin-left:5px; opacity:.9; }
 
-      canvas{ display:block; box-shadow:0 0 0 1px rgba(28,27,24,.1); }
+      .sims{ display:grid; grid-template-columns:repeat(auto-fill, minmax(500px, 1fr)); gap:30px; }
+      .sim{ }
+      .stitle{
+        font-size:10.5px; letter-spacing:.34em; text-transform:uppercase;
+        color:rgba(28,27,24,.85);
+        margin-bottom:6px;
+      }
+      .sdesc{ font-size:12px; color:rgba(28,27,24,.6); letter-spacing:.05em; margin-bottom:10px; }
+      canvas{ display:block; width:100%; box-shadow:0 0 0 1px rgba(28,27,24,.12); cursor:pointer; }
     </style>
   </head>
   <body>
-    <div class="sect">i · gold settle on big payouts</div>
-    <div>
-      <div class="gold" id="gold">1,247<span class="g">g</span></div>
-      <div class="goldrate">+62 / min</div>
-      <div class="hint">trickle ticks silently. every ~3s a big payout lands: one soft settle pulse, ink deepens for a beat. never on the per-second trickle.</div>
+    <div class="sect">i · font candidates (entire panel in the candidate font)</div>
+    <div class="fonts" id="fonts"></div>
+
+    <div class="sect">ii · early income mechanics (live, click them)</div>
+    <div class="sims">
+      <div class="sim">
+        <div class="stitle">a · bubbles (current)</div>
+        <div class="sdesc">vents release air. click a bubble to pop it for gold.</div>
+        <canvas id="cv-bubbles"></canvas>
+      </div>
+      <div class="sim">
+        <div class="stitle">b · paper coins</div>
+        <div class="sdesc">folded scraps flutter down from the surface. catch them before they sink away.</div>
+        <canvas id="cv-coins"></canvas>
+      </div>
+      <div class="sim">
+        <div class="stitle">c · current ripples</div>
+        <div class="sdesc">click the water. the ripple pays for every fish it touches. scales with the school.</div>
+        <canvas id="cv-ripples"></canvas>
+      </div>
+      <div class="sim">
+        <div class="stitle">d · driftwood</div>
+        <div class="sdesc">debris drifts through rarely. tap it up to three times to shake gold loose.</div>
+        <canvas id="cv-debris"></canvas>
+      </div>
+      <div class="sim">
+        <div class="stitle">e · feeding echo</div>
+        <div class="sdesc">automatic: every meal releases a little gold. active care pays back.</div>
+        <canvas id="cv-echo"></canvas>
+      </div>
     </div>
 
-    <div class="sect">ii · font candidates (in-game ui only, front page stays serif)</div>
-    <div class="fonts" id="fonts"></div>
-    <div class="hint">species names stay Shippori Mincho serif in all options. candidates apply to rows, numbers, tooltips, labels.</div>
-
-    <div class="sect">iii · birth ripple</div>
-    <canvas id="ripple" width="760" height="300"></canvas>
-    <div class="hint">on a spawn, one slow double ring spreads from the mother and fades. same language as bubble pops, larger and calmer.</div>
-
     <script>
-      const goldEl = document.getElementById('gold');
-      let gold = 1247;
-      const fmt = n => n.toLocaleString('en-US');
-      const render = () => { goldEl.innerHTML = fmt(gold) + '<span class="g">g</span>'; };
-      setInterval(() => { gold += 1; render(); }, 900);
-      setInterval(() => {
-        gold += 137;
-        render();
-        goldEl.classList.remove('pulse');
-        void goldEl.offsetWidth;
-        goldEl.classList.add('pulse');
-      }, 3100);
-
       const FONTS = [
         ['Zen Maru Gothic', 'zen maru gothic · current'],
+        ['Kiwi Maru', 'kiwi maru'],
         ['M PLUS Rounded 1c', 'm plus rounded 1c'],
         ['Kosugi Maru', 'kosugi maru'],
-        ['Quicksand', 'quicksand'],
-        ['Varela Round', 'varela round'],
-        ['Mochiy Pop One', 'mochiy pop one']
+        ['Hachi Maru Pop', 'hachi maru pop'],
+        ['Yomogi', 'yomogi'],
+        ['Baloo 2', 'baloo 2'],
+        ['Fredoka', 'fredoka'],
+        ['Comfortaa', 'comfortaa'],
+        ['Nunito', 'nunito'],
+        ['Sniglet', 'sniglet']
       ];
       document.getElementById('fonts').innerHTML = FONTS.map(([fam, label]) => `
         <div class="fcard" style="font-family:'${fam}',sans-serif">
-          <div class="fname" style="font-family:'Zen Maru Gothic',sans-serif">${label}</div>
-          <div class="row"><span class="serif">Kelp</span><span class="tag">food × 3</span><span class="leader"></span><span>10</span></div>
-          <div class="row"><span class="serif">Spawning</span><span class="tag">+5% × 2</span><span class="leader"></span><span>400</span></div>
-          <div class="tipline">+5% chance to spawn each 2 min. Current: 10%</div>
-          <div class="goldmini">1,247<span>g</span></div>
+          <div class="flabel">${label}</div>
+          <div class="fgold">1,247<span>g</span></div>
+          <div class="frate">+62 / min</div>
+          <div class="ftabs"><span class="on">school</span><span class="off">discover</span></div>
+          <div class="fsect">ii · upgrades</div>
+          <div class="frow"><span>firstF</span><span class="ftag">× 3</span><span class="leader"></span><span>50</span></div>
+          <div class="frow"><span>Kelp</span><span class="ftag">food × 2</span><span class="leader"></span><span>10</span></div>
+          <div class="frow"><span>Spawning</span><span class="ftag">+5% × 2</span><span class="leader"></span><span>400</span></div>
+          <div class="ftip">+5% chance to spawn each 2 min. Current: 10%</div>
         </div>`).join('');
 
-      const cv = document.getElementById('ripple');
-      const ctx = cv.getContext('2d');
+      const GOLD = 'rgba(122,88,0,';
+      const INK = 'rgba(28,27,24,';
       const P1 = new Path2D('M310 100 Q180 10 30 148');
       const P2 = new Path2D('M310 100 Q180 190 30 52');
-      let t0 = null;
-      const CYCLE = 3.2;
-      const draw = ts => {
-        requestAnimationFrame(draw);
-        if (!t0) t0 = ts;
-        const t = (ts - t0) / 1000;
-        const u = t % CYCLE;
-        ctx.clearRect(0, 0, 760, 300);
-        ctx.fillStyle = '#f2efe6';
-        ctx.fillRect(0, 0, 760, 300);
-        const fx = 340, fy = 150;
+      const rand = (a, b) => a + Math.random() * (b - a);
+
+      const makeSim = (id, W, H) => {
+        const cv = document.getElementById(id);
+        const dpr = window.devicePixelRatio || 1;
+        cv.width = W * dpr;
+        cv.height = H * dpr;
+        cv.style.height = 'auto';
+        const ctx = cv.getContext('2d');
+        ctx.setTransform(dpr * (cv.clientWidth ? 1 : 1), 0, 0, dpr, 0, 0);
+        const pops = [], flecks = [];
+        const spawnPop = (x, y, txt) => pops.push({ x, y, txt, t: 0 });
+        const burst = (x, y, n, up) => {
+          for (let i = 0; i < n; i++) flecks.push({ x: x + rand(-4, 4), y, vx: rand(-14, 14), vy: up ? rand(-34, -16) : rand(8, 26), t: 0 });
+        };
+        const paper = () => {
+          ctx.fillStyle = '#f2efe6';
+          ctx.fillRect(0, 0, W, H);
+          const g = ctx.createRadialGradient(W * 0.3, H * 0.2, 20, W * 0.3, H * 0.2, W * 0.8);
+          g.addColorStop(0, 'rgba(255,255,255,.4)');
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, W, H);
+        };
+        const fxDraw = dt => {
+          for (let i = flecks.length - 1; i >= 0; i--) {
+            const p = flecks[i];
+            p.t += dt;
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            p.vy += 26 * dt;
+            if (p.t > 0.8) { flecks.splice(i, 1); continue; }
+            ctx.globalAlpha = 0.75 * (1 - p.t / 0.8);
+            ctx.fillStyle = GOLD + '1)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          ctx.font = '500 13px "Zen Maru Gothic", sans-serif';
+          ctx.textAlign = 'center';
+          for (let i = pops.length - 1; i >= 0; i--) {
+            const p = pops[i];
+            p.t += dt;
+            if (p.t > 0.9) { pops.splice(i, 1); continue; }
+            ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
+            ctx.fillStyle = GOLD + '1)';
+            ctx.fillText(p.txt, p.x, p.y - p.t * 20);
+          }
+          ctx.globalAlpha = 1;
+        };
+        const clicks = [];
+        cv.addEventListener('click', e => {
+          const r = cv.getBoundingClientRect();
+          clicks.push({ x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H });
+        });
+        return { cv, ctx, W, H, pops, spawnPop, burst, paper, fxDraw, clicks };
+      };
+
+      const makeFish = (W, H, len) => ({
+        x: rand(60, W - 60), y: rand(50, H - 50),
+        dir: Math.random() < 0.5 ? -1 : 1,
+        spd: rand(26, 55), tSpd: 0, chT: rand(1, 3),
+        ph: rand(0, 6), vph: rand(0, 6), len: len || 58
+      });
+      const moveFish = (f, dt, W, H) => {
+        f.ph += dt * (2 + f.spd * 0.03);
+        f.vph += dt * 0.7;
+        f.chT -= dt;
+        if (f.chT <= 0) { f.chT = rand(1.5, 3.5); f.tSpd = rand(22, 62); }
+        f.spd += ((f.tSpd || f.spd) - f.spd) * Math.min(dt * 2, 1);
+        f.x += f.dir * f.spd * dt;
+        f.y += Math.sin(f.vph) * 9 * dt;
+        if (f.x < 46 && f.dir < 0) f.dir = 1;
+        if (f.x > W - 46 && f.dir > 0) f.dir = -1;
+        if (f.y < 36) f.y = 36;
+        if (f.y > H - 30) f.y = H - 30;
+      };
+      const drawFish = (ctx, f, alpha) => {
         ctx.save();
-        ctx.translate(fx, fy);
-        const sc = 76 / 340;
-        ctx.scale(sc, sc);
-        ctx.transform(1, Math.sin(t * 2.2) * 0.04, 0, 1, 0, 0);
+        ctx.translate(f.x, f.y);
+        const sc = f.len / 340;
+        ctx.scale(f.dir * sc, sc);
+        ctx.transform(1, Math.sin(f.ph) * 0.05, 0, 1, 0, 0);
         ctx.translate(-170, -100);
         ctx.lineWidth = 1.55 / sc;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(28,27,24,.92)';
+        ctx.strokeStyle = INK + (alpha || 0.92) + ')';
         ctx.stroke(P1);
         ctx.stroke(P2);
         ctx.restore();
-        if (u < 1.4) {
-          for (let k = 0; k < 2; k++) {
-            const q = (u - k * 0.18) / 1.2;
-            if (q < 0 || q > 1) continue;
-            ctx.globalAlpha = 0.32 * (1 - q);
-            ctx.strokeStyle = 'rgba(28,27,24,1)';
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.arc(fx, fy, 8 + q * (34 - k * 8), 0, Math.PI * 2);
-            ctx.stroke();
-          }
-          ctx.globalAlpha = 1;
-        }
-        if (u > 0.15 && u < 2.6) {
-          const eu = Math.min((u - 0.15) / 0.4, 1);
-          ctx.globalAlpha = eu;
-          ctx.strokeStyle = 'rgba(28,27,24,0.7)';
-          ctx.lineWidth = 1.55;
-          ctx.beginPath();
-          ctx.ellipse(fx + 26, fy + 10 + Math.sin(t * 2.6) * 2.2, 5.2, 6.6, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.fillStyle = 'rgba(28,27,24,0.6)';
-          ctx.beginPath();
-          ctx.arc(fx + 26, fy + 11.4 + Math.sin(t * 2.6) * 2.2, 1.2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        }
       };
-      requestAnimationFrame(draw);
+
+      const sims = [];
+      const CW = 560, CH = 270;
+
+      (() => {
+        const s = makeSim('cv-bubbles', CW, CH);
+        const fish = [makeFish(CW, CH), makeFish(CW, CH)];
+        const bubbles = [];
+        let vent = rand(1, 2.5);
+        sims.push(dt => {
+          s.paper();
+          vent -= dt;
+          if (vent <= 0) {
+            vent = rand(4, 6.5);
+            const bx = rand(60, CW - 60);
+            for (let i = 0; i < 6; i++) bubbles.push({ x: bx + rand(-12, 12), y: CH + 10 + i * rand(14, 26), r: rand(2.2, 4.6), ph: rand(0, 6), wf: rand(0.4, 0.8) });
+          }
+          for (const c of s.clicks.splice(0)) {
+            for (let i = bubbles.length - 1; i >= 0; i--) {
+              const b = bubbles[i];
+              if ((b.x - c.x) ** 2 + (b.y - c.y) ** 2 < 15 * 15) {
+                s.spawnPop(b.x, b.y - 10, '+10');
+                s.burst(b.x, b.y, 3, true);
+                bubbles.splice(i, 1);
+                break;
+              }
+            }
+          }
+          for (let i = bubbles.length - 1; i >= 0; i--) {
+            const b = bubbles[i];
+            b.ph += dt * b.wf * 6;
+            b.y -= 34 * dt;
+            b.x += Math.sin(b.ph) * 5 * dt;
+            if (b.y < 12) bubbles.splice(i, 1);
+          }
+          for (const f of fish) { moveFish(f, dt, CW, CH); drawFish(s.ctx, f); }
+          s.ctx.lineWidth = 1.2;
+          s.ctx.strokeStyle = INK + '0.55)';
+          for (const b of bubbles) {
+            s.ctx.beginPath();
+            s.ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+            s.ctx.stroke();
+          }
+          s.fxDraw(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-coins', CW, CH);
+        const fish = [makeFish(CW, CH), makeFish(CW, CH)];
+        const coins = [];
+        let next = 0.6;
+        sims.push(dt => {
+          s.paper();
+          next -= dt;
+          if (next <= 0) {
+            next = rand(1.8, 3);
+            coins.push({ x: rand(50, CW - 50), y: -12, ph: rand(0, 6), rot: rand(-0.3, 0.3), fade: 1 });
+          }
+          for (const c of s.clicks.splice(0)) {
+            for (let i = coins.length - 1; i >= 0; i--) {
+              const k = coins[i];
+              if (k.fade >= 1 && (k.x - c.x) ** 2 + (k.y - c.y) ** 2 < 17 * 17) {
+                s.spawnPop(k.x, k.y - 8, '+10');
+                s.burst(k.x, k.y, 4, true);
+                coins.splice(i, 1);
+                break;
+              }
+            }
+          }
+          for (let i = coins.length - 1; i >= 0; i--) {
+            const k = coins[i];
+            k.ph += dt * 2.1;
+            k.y += 21 * dt;
+            k.x += Math.sin(k.ph) * 26 * dt;
+            if (k.y > CH - 16) k.fade -= dt * 1.6;
+            if (k.fade <= 0) coins.splice(i, 1);
+          }
+          for (const f of fish) { moveFish(f, dt, CW, CH); drawFish(s.ctx, f); }
+          for (const k of coins) {
+            s.ctx.save();
+            s.ctx.translate(k.x, k.y);
+            s.ctx.rotate(k.rot + Math.sin(k.ph) * 0.35);
+            s.ctx.globalAlpha = Math.max(k.fade, 0);
+            s.ctx.fillStyle = 'rgba(255,253,246,.9)';
+            s.ctx.strokeStyle = INK + '0.75)';
+            s.ctx.lineWidth = 1.2;
+            s.ctx.beginPath();
+            s.ctx.moveTo(-7, 0); s.ctx.lineTo(0, -8); s.ctx.lineTo(7, 0); s.ctx.lineTo(0, 8);
+            s.ctx.closePath();
+            s.ctx.fill();
+            s.ctx.stroke();
+            s.ctx.beginPath();
+            s.ctx.moveTo(-7, 0); s.ctx.lineTo(7, 0);
+            s.ctx.lineWidth = 0.8;
+            s.ctx.stroke();
+            s.ctx.fillStyle = GOLD + '0.25)';
+            s.ctx.beginPath();
+            s.ctx.moveTo(-7, 0); s.ctx.lineTo(0, -8); s.ctx.lineTo(7, 0);
+            s.ctx.closePath();
+            s.ctx.fill();
+            s.ctx.restore();
+            s.ctx.globalAlpha = 1;
+          }
+          s.fxDraw(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-ripples', CW, CH);
+        const fish = [makeFish(CW, CH), makeFish(CW, CH), makeFish(CW, CH), makeFish(CW, CH, 46)];
+        const rings = [];
+        sims.push(dt => {
+          s.paper();
+          for (const c of s.clicks.splice(0)) rings.push({ x: c.x, y: c.y, r: 6, paid: new Set() });
+          for (let i = rings.length - 1; i >= 0; i--) {
+            const r = rings[i];
+            r.r += 150 * dt;
+            if (r.r > 190) { rings.splice(i, 1); continue; }
+            fish.forEach((f, fi) => {
+              if (r.paid.has(fi)) return;
+              const d = Math.hypot(f.x - r.x, f.y - r.y);
+              if (d <= r.r) {
+                r.paid.add(fi);
+                s.spawnPop(f.x, f.y - f.len * 0.28, '+2');
+                f.tSpd = 70;
+                f.chT = 1.2;
+              }
+            });
+          }
+          for (const f of fish) { moveFish(f, dt, CW, CH); drawFish(s.ctx, f); }
+          for (const r of rings) {
+            s.ctx.globalAlpha = 0.32 * (1 - r.r / 190);
+            s.ctx.strokeStyle = INK + '1)';
+            s.ctx.lineWidth = 1.2;
+            s.ctx.beginPath();
+            s.ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+            s.ctx.stroke();
+          }
+          s.ctx.globalAlpha = 1;
+          s.fxDraw(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-debris', CW, CH);
+        const fish = [makeFish(CW, CH), makeFish(CW, CH)];
+        let log = null, wait = 1;
+        const newLog = () => ({ x: -70, y: rand(46, 96), taps: 0, jolt: 0, ph: rand(0, 6) });
+        sims.push(dt => {
+          s.paper();
+          if (!log) {
+            wait -= dt;
+            if (wait <= 0) log = newLog();
+          } else {
+            log.x += 19 * dt;
+            log.ph += dt * 0.8;
+            log.jolt = Math.max(log.jolt - dt * 4, 0);
+            if (log.x > CW + 70) { log = null; wait = rand(3.5, 6); }
+          }
+          for (const c of s.clicks.splice(0)) {
+            if (log && log.taps < 3 && Math.abs(c.x - log.x) < 52 && Math.abs(c.y - log.y) < 26) {
+              log.taps += 1;
+              log.jolt = 1;
+              s.spawnPop(log.x, log.y - 20, '+5');
+              s.burst(log.x + rand(-18, 18), log.y + 6, 4, false);
+            }
+          }
+          for (const f of fish) { moveFish(f, dt, CW, CH); drawFish(s.ctx, f); }
+          if (log) {
+            const a = log.taps >= 3 ? 0.3 : 0.8;
+            s.ctx.save();
+            s.ctx.translate(log.x, log.y + Math.sin(log.ph) * 3 + log.jolt * 4);
+            s.ctx.rotate(-0.06);
+            s.ctx.strokeStyle = INK + a + ')';
+            s.ctx.lineWidth = 3.4;
+            s.ctx.lineCap = 'round';
+            s.ctx.beginPath();
+            s.ctx.moveTo(-46, 2);
+            s.ctx.bezierCurveTo(-18, -3, 16, 4, 46, -2);
+            s.ctx.stroke();
+            s.ctx.lineWidth = 2;
+            s.ctx.beginPath();
+            s.ctx.moveTo(-8, 0);
+            s.ctx.lineTo(8, -12);
+            s.ctx.moveTo(20, 1);
+            s.ctx.lineTo(31, 9);
+            s.ctx.stroke();
+            s.ctx.restore();
+          }
+          s.fxDraw(dt);
+        });
+      })();
+
+      (() => {
+        const s = makeSim('cv-echo', CW, CH);
+        const f = makeFish(CW, CH);
+        const kx = CW - 90;
+        let ky = CH - 80;
+        let state = 'roam', stT = rand(2, 3.5), kelpPh = 0, bite = 0;
+        sims.push(dt => {
+          s.paper();
+          kelpPh += dt * 0.6;
+          const khx = Math.sin(kelpPh) * 14;
+          if (state === 'roam') {
+            moveFish(f, dt, CW, CH);
+            stT -= dt;
+            if (stT <= 0) state = 'seek';
+          } else if (state === 'seek') {
+            const tx = kx + khx - 20, ty = ky - 26;
+            const dx = tx - f.x, dy = ty - f.y;
+            if (Math.abs(dx) > 8 && Math.sign(dx) !== f.dir) f.dir = Math.sign(dx);
+            f.ph += dt * 4;
+            f.x += Math.sign(dx) * Math.min(Math.abs(dx), 60 * dt) * (Math.abs(dx) > 4 ? 1 : 0);
+            f.y += Math.sign(dy) * Math.min(Math.abs(dy), 40 * dt);
+            if (Math.hypot(dx, dy) < 10) { state = 'eat'; bite = 1.3; }
+          } else {
+            f.ph += dt * 1.4;
+            f.x += Math.sin(kelpPh * 6) * 1.6 * dt * 30;
+            bite -= dt;
+            if (bite <= 0) {
+              s.spawnPop(f.x, f.y - 22, '+6');
+              s.burst(f.x, f.y - 6, 3, true);
+              state = 'roam';
+              stT = rand(3.5, 5);
+              f.tSpd = 55;
+            }
+          }
+          s.ctx.save();
+          s.ctx.translate(kx + khx, ky);
+          s.ctx.transform(1, 0, Math.sin(kelpPh * 1.3) * 0.16, 1, 0, 0);
+          s.ctx.strokeStyle = INK + (state === 'eat' ? '0.55)' : '0.42)');
+          s.ctx.lineWidth = 2.1;
+          s.ctx.lineCap = 'round';
+          s.ctx.beginPath();
+          s.ctx.moveTo(0, 6);
+          s.ctx.bezierCurveTo(3, -8, -4, -22, 1, -40);
+          s.ctx.moveTo(0, 6);
+          s.ctx.bezierCurveTo(-6, -4, -4, -16, -9, -25);
+          s.ctx.moveTo(0, 6);
+          s.ctx.bezierCurveTo(5, -3, 8, -12, 7, -21);
+          s.ctx.stroke();
+          s.ctx.restore();
+          drawFish(s.ctx, f);
+          s.fxDraw(dt);
+        });
+      })();
+
+      let last = 0;
+      const loop = ts => {
+        requestAnimationFrame(loop);
+        const dt = Math.min((ts - last) / 1000 || 0, 0.05);
+        last = ts;
+        for (const t of sims) t(dt);
+      };
+      requestAnimationFrame(loop);
     </script>
   </body>
 </html>

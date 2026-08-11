@@ -55,6 +55,7 @@ const startGame = () => {
         if (f.dying >= 2.8) {
           const pay = ltvOf(f.s) * 0.1;
           Game.gold += pay;
+          if (pay >= 50) Panel.pulse();
           Stage.spawnPop(f.x, f.y, '+' + fmtG(pay));
           Game.fish.splice(i, 1);
           removed = true;
