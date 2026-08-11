@@ -43,10 +43,10 @@
 |------|-------|
 | start | 50 gold + 1 baby fish |
 | opening choice | bank the 50 or buy a second egg immediately |
-| first kelp due | ~65s (12/min income + clicks cover the 10g) |
-| click a fish | streak pay +1, +2 ... +5 cap (next hit within 1.5s). click pops draw bigger and darker than passive pops. a miss (empty water) breaks the streak. combo ring drains around the cursor, x-multiplier shows from x2. fish bolts instantly (240-450 px/s), random direction and distance, more frantic each level, level 3+ jukes mid-flight, leaves a fading ink swirl. starving and dying fish pay nothing |
-| hold a fish (400ms) | catches it: fish struggles in place, info card opens, and it STAYS caught after mouse release. released (with a dart) by clicking empty water or the card's x. clicking a caught fish pays nothing |
-| tutorials | freeze the game with a small Okay tooltip anchored next to its subject (first fish for now). step 1 fires once the first fish finishes drawing on, step 2 five seconds later. progress saved |
+| first kelp due | ~65s (12/min income + bubble pops cover the 10g) |
+| click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
+| click a bubble | +10 gold, ink ring pop. placeholder active income |
+| tutorials | freeze the game, small Okay box anchored to the subject. start: passive income, once first fish finishes drawing. hungry: first hunger, points at Kelp. death: first death |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -61,6 +61,8 @@ Mating levels (5%/level), rolled once at birth.
 - kelp (10g) has 2 bites. a bite is claimed instantly within 70px, takes 2s to
   eat (hunger timer pauses), recharges half: next hunger 30-35s later.
 - two fish can eat one kelp at once, one bite each. claimed bites are gone.
+- detection: every fish senses all food on the map. reaction takes 0-3s after
+  food appears or hunger starts; starving fish react instantly.
 - hungry fish approaches kelp: slows near it, steers vertically, no wall flips.
 
 ## movement

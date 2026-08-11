@@ -16,7 +16,6 @@ const startGame = () => {
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant();
   Game.started = true;
   Panel.refresh();
-  Tut.start();
 };
 
 (() => {
@@ -34,7 +33,7 @@ const startGame = () => {
     if (dt > 0.06) dt = 0.06;
     const mdt = Pause.paused || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
-    Tut.tick(mdt);
+    Tut.tick();
 
     let hatched = false;
     let removed = false;
@@ -78,6 +77,7 @@ const startGame = () => {
             if (!f.hstate && f.age >= (f.hungerAt || 1)) {
               f.hstate = 1;
               f.hT = 0;
+              Tut.fire('hungry', document.querySelector('[data-up="kelp"]'));
             }
             if (f.hstate) {
               f.hT = (f.hT || 0) + sdt;
@@ -87,9 +87,11 @@ const startGame = () => {
               } else if (f.hstate === 2 && f.hT >= 10) {
                 f.hstate = 0;
                 f.dying = 0;
+                Tut.fire('death', { x: f.x, y: f.y });
                 continue;
               }
-              const p = Stage.nearestPlant(f.x, f.y);
+              const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
+              const p = aware ? Stage.nearestPlant(f.x, f.y) : null;
               if (p) {
                 const px = p.x + p.hx, pyy = p.y + p.hy;
                 if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
@@ -117,7 +119,10 @@ const startGame = () => {
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
           f.deathWait -= sdt;
-          if (f.deathWait <= 0) f.dying = 0;
+          if (f.deathWait <= 0) {
+            f.dying = 0;
+            Tut.fire('death', { x: f.x, y: f.y });
+          }
         }
       }
     }
@@ -151,7 +156,6 @@ const startGame = () => {
     Ambience.drawBack(Stage.ctx);
     Stage.drawScene();
     Ambience.drawFront(Stage.ctx);
-    Detail.drawCombo(Stage.ctx);
 
     if (hatched || removed) {
       Panel.refresh();

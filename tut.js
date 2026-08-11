@@ -2,31 +2,39 @@ const Tut = (() => {
   const box = document.getElementById('tut');
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-ok');
-  const steps = [
-    'fish passively generate income. click and hold the fish!',
-    'clicking the fish also generates gold!'
-  ];
-  let active = false, timer = 0, pending = false, waitFirst = false;
+  const TEXTS = {
+    start: 'fish passively generate income.',
+    death: "fish gives gold on death (don't worry, he went to fish heaven)",
+    hungry: 'fish is hungry.'
+  };
+  let active = false, pendingName = null;
 
-  const place = () => {
-    const f = Game.fish.find(x => !x.egg) || Game.fish[0];
-    const w = 280, h = 96, m = 12;
-    if (!f || f.x === undefined) {
-      box.style.left = Math.round((innerWidth - w) / 2) + 'px';
-      box.style.top = Math.round(innerHeight * 0.3) + 'px';
-      return;
-    }
-    const fr = SPECIES[f.s].len * 0.65;
-    let left = f.x + fr + 16;
-    if (left + w > innerWidth - m) left = f.x - fr - 16 - w;
-    box.style.left = Math.max(m, Math.min(left, innerWidth - w - m)) + 'px';
-    box.style.top = Math.max(m, Math.min(f.y - h / 2, innerHeight - h - m)) + 'px';
+  const placeAt = (x, y) => {
+    const w = 300, h = 100, m = 12;
+    box.style.left = Math.max(m, Math.min(x, innerWidth - w - m)) + 'px';
+    box.style.top = Math.max(m, Math.min(y, innerHeight - h - m)) + 'px';
   };
 
-  const show = i => {
-    if (i >= steps.length) return;
-    txt.textContent = steps[i];
-    place();
+  const placeAnchor = a => {
+    const w = 300, h = 100;
+    if (a && a.getBoundingClientRect) {
+      const r = a.getBoundingClientRect();
+      placeAt(r.left - w - 16, r.top + r.height / 2 - h / 2);
+    } else if (a && a.x !== undefined) {
+      const fr = 60;
+      let left = a.x + fr;
+      if (left + w > innerWidth - 12) left = a.x - fr - w;
+      placeAt(left, a.y - h / 2);
+    } else {
+      placeAt((innerWidth - w) / 2, innerHeight * 0.3);
+    }
+  };
+
+  const fire = (name, anchor) => {
+    if (active || !TEXTS[name] || (Game.tuts && Game.tuts[name])) return;
+    pendingName = name;
+    txt.textContent = TEXTS[name];
+    placeAnchor(anchor);
     box.removeAttribute('hidden');
     active = true;
   };
@@ -34,39 +42,19 @@ const Tut = (() => {
   btn.addEventListener('click', () => {
     box.setAttribute('hidden', '');
     active = false;
-    Game.tut = (Game.tut || 0) + 1;
-    saveGame();
-    if (Game.tut === 1) {
-      pending = true;
-      timer = 5;
+    if (pendingName) {
+      if (!Game.tuts) Game.tuts = {};
+      Game.tuts[pendingName] = 1;
+      pendingName = null;
+      saveGame();
     }
   });
 
-  const tick = mdt => {
-    if (waitFirst && !active) {
-      if (Game.fish.some(f => !f.egg && f.birth >= 1)) {
-        waitFirst = false;
-        show(0);
-      }
-      return;
-    }
-    if (pending && !active && mdt > 0) {
-      timer -= mdt;
-      if (timer <= 0) {
-        pending = false;
-        show(1);
-      }
-    }
+  const tick = () => {
+    if (active || (Game.tuts && Game.tuts.start)) return;
+    const f = Game.fish.find(x => !x.egg && x.birth >= 1);
+    if (f) fire('start', { x: f.x, y: f.y });
   };
 
-  const start = () => {
-    const t = Game.tut || 0;
-    if (t === 0) waitFirst = true;
-    else if (t === 1) {
-      pending = true;
-      timer = 5;
-    }
-  };
-
-  return { tick, start, get active() { return active; } };
+  return { tick, fire, get active() { return active; } };
 })();

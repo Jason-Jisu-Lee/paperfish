@@ -39,7 +39,7 @@ const Detail = (() => {
     if (!sel) return;
     const f = sel;
     Stage.release();
-    Stage.escape(f, 1);
+    if ((f.heldT || 0) < 3) Stage.escape(f, 1);
     sel = null;
   };
 
@@ -61,49 +61,24 @@ const Detail = (() => {
 
   canvas.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
-  let streak = 0, lastClick = -9999;
-  let holdTimer = null, justHeld = false, heldFish = null;
-
-  canvas.addEventListener('mousedown', e => {
-    if (e.button !== 0 || Tut.active) return;
-    clearTimeout(holdTimer);
-    const f = hover && !hover.egg && hover !== sel ? hover : null;
-    if (!f) return;
-    holdTimer = setTimeout(() => {
-      justHeld = true;
-      releaseSel();
-      sel = f;
-      Stage.hold(f);
-      buildGraph(f);
-      placeCard(f.x, f.y, f);
-      card.removeAttribute('hidden');
-    }, 400);
-  });
-
-  canvas.addEventListener('mouseup', e => {
-    if (e.button !== 0) return;
-    clearTimeout(holdTimer);
-  });
 
   canvas.addEventListener('click', e => {
     if (Tut.active) return;
-    if (justHeld) {
-      justHeld = false;
-      return;
-    }
     if (hover && !hover.egg) {
-      if (hover === sel || hover.hstate === 2) return;
-      const now = performance.now();
-      streak = now - lastClick <= 1500 ? streak + 1 : 1;
-      lastClick = now;
-      const pay = Math.min(streak, 5);
-      Game.gold += pay;
-      Stage.spawnPop(hover.x, hover.y - SPECIES[hover.s].len * 0.3 - 8, '+' + pay, true);
-      Stage.escape(hover, pay);
-      Panel.tick();
+      if (hover === sel) return;
+      releaseSel();
+      sel = hover;
+      Stage.hold(hover);
+      buildGraph(hover);
+      placeCard(hover.x, hover.y, hover);
+      card.removeAttribute('hidden');
     } else if (!hover) {
-      streak = 0;
-      lastClick = -9999;
+      if (Ambience.popAt(e.clientX, e.clientY)) {
+        Game.gold += 10;
+        Stage.spawnPop(e.clientX, e.clientY - 14, '+10', true);
+        Panel.tick();
+        return;
+      }
       close();
     }
   });
@@ -111,26 +86,6 @@ const Detail = (() => {
   document.getElementById('fc-x').addEventListener('click', close);
 
   canvas.addEventListener('contextmenu', e => e.preventDefault());
-
-  const drawCombo = ctx => {
-    if (mx === null || streak < 1) return;
-    const rem = 1 - (performance.now() - lastClick) / 1500;
-    if (rem <= 0) return;
-    ctx.save();
-    ctx.strokeStyle = 'rgba(28,27,24,0.42)';
-    ctx.lineWidth = 1.3;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.arc(mx, my, 12, -Math.PI / 2, -Math.PI / 2 + rem * Math.PI * 2);
-    ctx.stroke();
-    if (streak >= 2) {
-      ctx.font = '10px "Zen Maru Gothic", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(28,27,24,0.5)';
-      ctx.fillText('x' + Math.min(streak, 5), mx, my + 27);
-    }
-    ctx.restore();
-  };
 
   const hitTest = () => {
     if (mx === null || !Game.started) return null;
@@ -338,5 +293,5 @@ const Detail = (() => {
     }
   };
 
-  return { tick, drawCombo };
+  return { tick };
 })();

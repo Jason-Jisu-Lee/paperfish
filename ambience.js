@@ -2,6 +2,7 @@ const Ambience = (() => {
   const rand = (a, b) => a + Math.random() * (b - a);
   const bubbles = [];
   const motes = [];
+  const rings = [];
   let vent = null;
   let nextVent = rand(10, 24);
   let nextSil = rand(35, 80);
@@ -45,10 +46,30 @@ const Ambience = (() => {
     };
   };
 
+  const popAt = (x, y) => {
+    const { H } = Stage.size;
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i];
+      const r = Math.max(b.r * (1 + (1 - b.y / H) * 0.3), 8) + 7;
+      const dx = b.x - x, dy = b.y - y;
+      if (dx * dx + dy * dy <= r * r) {
+        rings.push({ x: b.x, y: b.y, t: 0 });
+        bubbles.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
+  };
+
   const update = mdt => {
     if (!seeded) seedMotes();
     if (!mdt) return;
     const { W, H } = Stage.size;
+
+    for (let i = rings.length - 1; i >= 0; i--) {
+      rings[i].t += mdt;
+      if (rings[i].t >= 0.5) rings.splice(i, 1);
+    }
 
     if (vent) {
       vent.t += mdt;
@@ -147,8 +168,15 @@ const Ambience = (() => {
       ctx.arc(b.x, b.y, b.r * grow, 0, Math.PI * 2);
       ctx.stroke();
     }
+    for (const r of rings) {
+      const u = r.t / 0.5;
+      ctx.globalAlpha = 0.4 * (1 - u);
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, 4 + u * 15, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.globalAlpha = 1;
   };
 
-  return { update, drawBack, drawFront };
+  return { update, drawBack, drawFront, popAt };
 })();

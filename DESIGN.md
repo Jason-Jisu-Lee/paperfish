@@ -21,8 +21,9 @@ loop first. MECHANICS.md holds exact numbers.
   gold, feed kelp on hunger cycles or fish starve and die, fish die of old
   age paying 10% lifetime value. Spawning sustains population once its
   chance upgrades are bought; no prestige gate.
-- Click chases for gold; hold catches a fish and opens its card.
-- Upgrades so far: firstF Income (per-tick), Gold Kelp (food), Spawning
+- Click selects and catches a fish (card opens, struggle calms while held).
+  Popping bubbles is the active income placeholder (+10).
+- Upgrades so far: firstF Income (per-tick), Kelp (food), Spawning
   (chance), Growth (faster adulthood).
 
 ## species ladder (plan)

@@ -148,7 +148,10 @@ const Stage = (() => {
   };
 
   let held = null;
-  const hold = f => { held = f; };
+  const hold = f => {
+    held = f;
+    f.heldT = 0;
+  };
   const release = () => { held = null; };
   const swirls = [];
 
@@ -191,8 +194,10 @@ const Stage = (() => {
       }
       if (f.birth < 1) { f.birth += mdt / 2.3; continue; }
       if (f === held) {
-        f.tailPh += mdt * Math.PI * 2 * 2.3;
-        f.tailAmp += (0.95 - f.tailAmp) * Math.min(6 * mdt, 1);
+        f.heldT = (f.heldT || 0) + mdt;
+        const calm = Math.min(f.heldT / 3, 1);
+        f.tailPh += mdt * Math.PI * 2 * (2.3 - calm * 1.8);
+        f.tailAmp += ((0.95 - calm * 0.83) - f.tailAmp) * Math.min(6 * mdt, 1);
         continue;
       }
       if (f.eating) {
@@ -247,8 +252,15 @@ const Stage = (() => {
         }
         f.vyT = rand(-1, 1) * (6 + f.spd * 0.16) * (Math.random() < 0.25 ? 1.8 : 1);
       }
+      if (f.hstate && plants.length) {
+        if (f.hstate === 2) f.dT = 0;
+        else if (f.dT === undefined) f.dT = Math.random() * 3;
+        else if (f.dT > 0) f.dT -= mdt;
+      } else {
+        f.dT = undefined;
+      }
       let seeking = false;
-      const target = f.hstate && !(f.fleeT > 0) ? nearestPlant(f.x, f.y) : null;
+      const target = f.hstate && f.dT !== undefined && f.dT <= 0 && !(f.fleeT > 0) ? nearestPlant(f.x, f.y) : null;
       if (target) {
         seeking = true;
         const px = Math.min(Math.max(target.x + target.hx, bounds.l + 20), bounds.r - 20);

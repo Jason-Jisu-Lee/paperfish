@@ -35,7 +35,7 @@ const Panel = (() => {
         <span class="fname">firstF Income</span><span class="tag">+1 / 5s</span><span class="fmult">× ${Game.stream}</span>
         <span class="leader"></span><span class="value">${fmt(streamCost())}</span></button>
       <button class="row" data-up="kelp">
-        <span class="fname">Gold Kelp</span><span class="tag">food</span><span class="fmult">× ${Game.plants}</span>
+        <span class="fname">Kelp</span><span class="tag">food</span><span class="fmult">× ${Game.plants}</span>
         <span class="leader"></span><span class="value">${fmt(KELP_COST)}</span></button>
       <button class="row" data-up="mating">
         <span class="fname">Spawning</span><span class="tag">+5%</span><span class="fmult">× ${Game.mating}</span>
