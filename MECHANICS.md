@@ -115,8 +115,10 @@ Mating levels (5%/level), rolled once at birth.
   "I wonder how long it takes to hatch." (first egg ever bought).
 - one settings modal everywhere (front menu and in-game gear): scrim,
   Settings title with x, one row per option: Sound toggle, Display segmented
-  control (Windowed or Fullscreen; Borderless joins in the Steam desktop
-  build), Quit row with Main Menu button (in-game only), Reset Progress row.
+  control (Windowed / Borderless / Fullscreen; in the browser borderless and
+  fullscreen both use the fullscreen api and the picked one stays
+  highlighted, the Steam build gives them real separate behavior), Quit row
+  with Main Menu button (in-game only), Reset Progress row.
   reset opens a separate confirm dialog: "Reset all progress? This cannot be
   undone." with Cancel / Reset. corner.js owns all settings state and
   rendering. dotted-leader rows are banned everywhere; fish card rows are
@@ -146,7 +148,10 @@ Mating levels (5%/level), rolled once at birth.
 - money pops (earning, death) draw in the gold color.
 - bubbles are pure ambience now: very fast vents every 32-70s, not clickable.
 - ui font is Zen Maru Gothic everywhere (title stays Shippori Mincho
-  lowercase with the red seal mark).
+  lowercase with the red seal mark). fonts are self-hosted in fonts/
+  (latin woff2 subsets + fonts.css + OFL license files, ~86KB total,
+  zero external requests). both fonts are SIL Open Font License:
+  bundling and commercial redistribution are permitted as-is.
 - death tutorial fires mid death animation, after the belly-up flip.
 - below 600x420 the game pauses: "Your screen is too small for the fish!",
   resumes when enlarged.

@@ -1,9 +1,10 @@
 (() => {
   const store = 'paperfish.settings';
-  const state = { sound: true };
+  const state = { sound: true, disp: 'win' };
   try {
     const saved = JSON.parse(localStorage.getItem(store));
     if (saved && typeof saved.sound === 'boolean') state.sound = saved.sound;
+    if (saved && ['win', 'less', 'full'].includes(saved.disp)) state.disp = saved.disp;
   } catch (e) {}
 
   const modal = document.getElementById('setmodal');
@@ -17,7 +18,7 @@
   const setDisplay = document.getElementById('set-display');
 
   const save = () => {
-    try { localStorage.setItem(store, JSON.stringify({ sound: state.sound })); } catch (e) {}
+    try { localStorage.setItem(store, JSON.stringify({ sound: state.sound, disp: state.disp })); } catch (e) {}
   };
 
   const render = () => {
@@ -26,7 +27,8 @@
     const full = !!document.fullscreenElement;
     glyphExpand.toggleAttribute('hidden', full);
     glyphContract.toggleAttribute('hidden', !full);
-    for (const b of setDisplay.children) b.classList.toggle('on', (b.dataset.d === 'full') === full);
+    const mode = full ? (state.disp === 'win' ? 'full' : state.disp) : 'win';
+    for (const b of setDisplay.children) b.classList.toggle('on', b.dataset.d === mode);
     glyphPause.toggleAttribute('hidden', Pause.paused);
     glyphPlay.toggleAttribute('hidden', !Pause.paused);
   };
@@ -52,8 +54,14 @@
   setDisplay.addEventListener('click', e => {
     const d = e.target.dataset.d;
     if (!d) return;
-    if (d === 'full' && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
-    else if (d === 'win' && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    state.disp = d;
+    save();
+    if (d === 'win') {
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    } else if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+    render();
   });
   document.addEventListener('fullscreenchange', render);
   document.addEventListener('pausechange', render);

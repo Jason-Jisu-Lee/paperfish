@@ -4,13 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="base.css?v=35" />
+    <link rel="stylesheet" href="fonts/fonts.css?v=1" />
+    <link rel="stylesheet" href="base.css?v=36" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -100,6 +95,7 @@
           <span>Display</span>
           <div class="seg" id="set-display">
             <button data-d="win">Windowed</button>
+            <button data-d="less">Borderless</button>
             <button data-d="full">Fullscreen</button>
           </div>
         </div>
@@ -272,6 +268,6 @@
     <script src="js/ui/front.js?v=3"></script>
     <script src="js/core/sim.js?v=2"></script>
     <script src="js/core/main.js?v=2"></script>
-    <script src="js/ui/corner.js?v=2"></script>
+    <script src="js/ui/corner.js?v=3"></script>
   </body>
 </html>

@@ -356,7 +356,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   display:grid; place-items:center;
 }
 .modal-card{
-  width:310px;
+  width:334px;
   background:var(--paper);
   border:1px solid rgba(28,27,24,.35);
   border-radius:12px;
@@ -416,8 +416,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   overflow:hidden;
 }
 .seg button{
-  padding:5px 12px;
-  font-size:12px; letter-spacing:.03em;
+  padding:5px 9px;
+  font-size:11.5px; letter-spacing:.02em;
   color:rgba(28,27,24,.6);
 }
 .seg button + button{ border-left:1px solid rgba(28,27,24,.25); }
