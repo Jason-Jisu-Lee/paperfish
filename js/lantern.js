@@ -1,23 +1,11 @@
 const Lantern = (() => {
-  const objbox = document.getElementById('objbox');
-  const objText = document.getElementById('obj-text');
-  const objCheck = document.getElementById('obj-check');
   const lanterns = [];
   const rand = (a, b) => a + Math.random() * (b - a);
-  let mode = 'idle', t = 0, queue = 0, spawnT = 0, collected = 0, flashT = 0, nextT = 0, tNow = 0;
-
-  const objShow = () => {
-    objText.textContent = 'Collect gold from Paper Lanterns ' + collected + '/3';
-    objbox.classList.remove('done');
-    objCheck.setAttribute('hidden', '');
-    objbox.removeAttribute('hidden');
-  };
+  let mode = 'idle', t = 0, queue = 0, spawnT = 0, collected = 0, nextT = 0, tNow = 0;
 
   const start = () => {
     lanterns.length = 0;
     collected = 0;
-    flashT = 0;
-    objbox.setAttribute('hidden', '');
     if (Game.tuts && Game.tuts.lantern) {
       mode = 'recur';
       nextT = rand(30, 60);
@@ -50,7 +38,7 @@ const Lantern = (() => {
         mode = 'obj';
         queue = 3;
         spawnT = 0;
-        objShow();
+        Obj.show('lantern', 'Collect gold from Paper Lanterns 0/3');
       }
     }
     if (mode === 'obj' && queue > 0) {
@@ -86,10 +74,6 @@ const Lantern = (() => {
         lanterns.splice(i, 1);
       }
     }
-    if (flashT > 0) {
-      flashT -= mdt;
-      if (flashT <= 0) objbox.setAttribute('hidden', '');
-    }
   };
 
   const clickAt = (x, y) => {
@@ -104,14 +88,12 @@ const Lantern = (() => {
           l.spent = true;
           if (mode === 'obj') {
             collected += 1;
-            objText.textContent = 'Collect gold from Paper Lanterns ' + collected + '/3';
+            Obj.update('Collect gold from Paper Lanterns ' + collected + '/3');
             if (collected >= 3) {
               if (!Game.tuts) Game.tuts = {};
               Game.tuts.lantern = 1;
               saveGame();
-              objbox.classList.add('done');
-              objCheck.removeAttribute('hidden');
-              flashT = 2.6;
+              Obj.complete();
               mode = 'recur';
               nextT = rand(40, 70);
             }

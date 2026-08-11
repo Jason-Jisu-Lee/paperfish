@@ -58,7 +58,6 @@ const Detail = (() => {
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
 
   canvas.addEventListener('click', e => {
-    if (Tut.active) return;
     if (Lantern.clickAt(e.clientX, e.clientY)) {
       Panel.tick();
       return;

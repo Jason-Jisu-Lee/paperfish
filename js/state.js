@@ -136,6 +136,7 @@ const buyFish = s => {
   const f = { s, egg: true, t: 0 };
   Game.fish.push(f);
   Stage.materialize(f);
+  Obj.boughtFish();
   saveGame();
   return true;
 };

@@ -1,42 +1,6 @@
-const startGame = () => {
-  if (Game.started) return;
-  const fresh = !loadGame();
-  if (fresh) {
-    Game.gold = START_GOLD;
-    Game.stream = 0;
-    Game.plants = 0;
-    Game.unlocked = 1;
-    Game.fish = [{ s: 0, egg: false, t: 0 }];
-  }
-  document.getElementById('hud').removeAttribute('hidden');
-  document.getElementById('corner').removeAttribute('hidden');
-  document.getElementById('goldbox').removeAttribute('hidden');
-  Stage.resize();
-  Stage.resetPlants();
-  Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
-  for (let i = 0; i < Game.plants; i++) Stage.spawnPlant();
-  Game.started = true;
-  Panel.refresh();
-  Lantern.start();
-};
-
-(() => {
-  let last = 0;
-  let saveT = 0;
-
-  const loop = ts => {
-    requestAnimationFrame(loop);
-    const raw = (ts - last) / 1000;
-    last = ts;
-    if (!Game.started) return;
-    let dt = raw;
-    if (!(dt > 0)) dt = 0;
-    if (dt > 0.06) dt = 0.06;
-    const mdt = Pause.paused || Tut.active ? 0 : dt;
-    const sdt = mdt * Game.speed;
-
-    let hatched = false;
-    let removed = false;
+const Sim = (() => {
+  const step = (sdt, mdt) => {
+    let refresh = false;
     let earned = 0;
     for (let i = Game.fish.length - 1; i >= 0; i--) {
       const f = Game.fish[i];
@@ -44,20 +8,16 @@ const startGame = () => {
         f.t += sdt;
         if (f.t >= hatchTime(f.s)) {
           Stage.hatch(f);
-          hatched = true;
+          refresh = true;
         }
       } else if (f.dying !== undefined) {
         f.dying += mdt;
-        if (f.dying >= 0.65 && !f.deathTut) {
-          f.deathTut = true;
-          Tut.fire('death', { x: f.x, y: f.y });
-        }
         if (f.dying >= 2.8) {
           const pay = ltvOf(f.s) * 0.1;
           Game.gold += pay;
           Stage.spawnPop(f.x, f.y, '+' + fmtG(pay));
           Game.fish.splice(i, 1);
-          removed = true;
+          refresh = true;
         }
       } else {
         const sp = SPECIES[f.s];
@@ -103,7 +63,7 @@ const startGame = () => {
                   const side = f.x < px ? -1 : 1;
                   f.dir = -side;
                   f.eating = { t: 2, x: px + side * 13, y: pyy };
-                  hatched = true;
+                  refresh = true;
                 }
               }
             }
@@ -147,7 +107,7 @@ const startGame = () => {
           egg.x = f.courtEgg.x;
           egg.y = f.courtEgg.y;
           delete f.courtEgg;
-          hatched = true;
+          refresh = true;
         }
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
@@ -157,34 +117,8 @@ const startGame = () => {
       }
     }
     Game.gold += earned;
-
-    Ambience.update(mdt);
-    Stage.update(mdt);
-    Lantern.update(mdt);
-    Stage.clear();
-    Ambience.drawBack(Stage.ctx);
-    Stage.drawScene();
-    Lantern.draw(Stage.ctx);
-    Ambience.drawFront(Stage.ctx);
-
-    if (hatched || removed) {
-      Panel.refresh();
-      saveGame();
-    } else {
-      Panel.tick();
-    }
-    Detail.tick();
-
-    saveT += mdt;
-    if (saveT >= 5) {
-      saveT = 0;
-      saveGame();
-    }
+    return refresh;
   };
-  requestAnimationFrame(ts => {
-    last = ts;
-    requestAnimationFrame(loop);
-  });
 
-  window.addEventListener('beforeunload', saveGame);
+  return { step };
 })();

@@ -13,7 +13,7 @@
 ### shop
 | item | cost | effect |
 |------|------|--------|
-| egg  | 50   | 1 firstF, instant hatch |
+| egg  | 50   | 1 firstF egg, hatches in 20s |
 | kelp | 10   | food, 2 bites |
 | firstF Income | 30 x2^n | firstF +1 gold per 5s tick, all stages (+30 ltv, +3 death) |
 | Spawning    | 100 x2^n | +5%/level chance to spawn each 2 min. retroactive, all adults. level 1+ adds "spawn chance" and "spawned x N" card rows |
@@ -46,7 +46,8 @@
 | first kelp due | ~65s (12/min income covers the 10g) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
 | paper lanterns | early income. 12s into a fresh game, 3 lanterns drift in with the objective "Collect gold from Paper Lanterns 0/3" (top right, no pause). each lantern takes 3 taps at +5, dims per tap, bounces between edges until spent. objective completes with a green check flash. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
-| tutorials | freeze the game, small Okay box anchored to the subject. hungry: first hunger, points at Kelp. death: first death. objectives (top right, no pause) reuse the same card style without the Okay |
+| tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
+| objectives | top right card, no pause, persistent until met, green check flash on completion. chain so far: collect 3 paper lanterns, then buy your first fish |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -74,6 +75,17 @@ Mating levels (5%/level), rolled once at birth.
   eased; hard vy cap. sprite never rotates.
 - schooling: same species drift toward local group height; babies trail nearest
   adult. seeking food overrides schooling.
+
+## code map (js/)
+- species.js data. state.js game state, save, purchases, formulas.
+- stage.js canvas world: fish motion, courtship moves, plants, eggs, pops,
+  swirls, held fish, resize. sim.js per-frame lifecycle economy: hunger,
+  aging, income, spawning triggers, death. main.js startGame plus the loop
+  and draw order.
+- panel.js hud. detail.js tooltip and fish card. corner.js icons and
+  settings. front.js front page. pause.js pause and min-size. dev.js console.
+- ambience.js bubbles, motes, silhouette. lantern.js paper lanterns.
+  obj.js objectives. say.js diver messages.
 
 ## spawning
 - every adult runs 2-minute windows. at each window start it rolls the current

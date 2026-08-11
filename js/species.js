@@ -1,6 +1,6 @@
 const SPECIES = [
   {
-    file: 'paperminnow', hatch: 0, name: 'firstF', vb: [340, 200], sw: 6.5, len: 74,
+    file: 'paperminnow', hatch: 20, name: 'firstF', vb: [340, 200], sw: 6.5, len: 74,
     gpm: 1, cost: 50, unlock: 0, life: 5, adultAt: 2.5, hunger: true, tick: 5, phases: [1, 2],
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
   },
