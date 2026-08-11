@@ -6,7 +6,7 @@ const startGame = () => {
     Game.stream = 0;
     Game.plants = 0;
     Game.unlocked = 1;
-    Game.fish = [];
+    Game.fish = [{ s: 0, egg: false, t: 0 }];
   }
   document.getElementById('hud').removeAttribute('hidden');
   document.getElementById('corner').removeAttribute('hidden');
