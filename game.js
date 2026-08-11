@@ -48,6 +48,10 @@ const startGame = () => {
         }
       } else if (f.dying !== undefined) {
         f.dying += mdt;
+        if (f.dying >= 0.65 && !f.deathTut) {
+          f.deathTut = true;
+          Tut.fire('death', { x: f.x, y: f.y });
+        }
         if (f.dying >= 2.8) {
           const pay = ltvOf(f.s) * 0.1;
           Game.gold += pay;
@@ -87,7 +91,6 @@ const startGame = () => {
               } else if (f.hstate === 2 && f.hT >= 10) {
                 f.hstate = 0;
                 f.dying = 0;
-                Tut.fire('death', { x: f.x, y: f.y });
                 continue;
               }
               const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
@@ -124,23 +127,22 @@ const startGame = () => {
           f.spawnWin += sdt;
           if (f.spawnAt !== null && f.spawnWin >= f.spawnAt) {
             f.spawnAt = null;
-            f.spawned = (f.spawned || 0) + 1;
-            const egg = { s: f.s, egg: true, t: 0 };
-            Game.fish.push(egg);
-            Stage.materialize(egg);
-            egg.x = f.x;
-            egg.y = f.y;
-            hatched = true;
+            if (Game.fish.some(o => o !== f && !o.egg && o.dying === undefined && o.birth >= 1)) {
+              f.spawned = (f.spawned || 0) + 1;
+              const egg = { s: f.s, egg: true, t: 0 };
+              Game.fish.push(egg);
+              Stage.materialize(egg);
+              egg.x = f.x;
+              egg.y = f.y;
+              hatched = true;
+            }
           }
           if (f.spawnWin >= 120) f.spawnWin = undefined;
         }
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
           f.deathWait -= sdt;
-          if (f.deathWait <= 0) {
-            f.dying = 0;
-            Tut.fire('death', { x: f.x, y: f.y });
-          }
+          if (f.deathWait <= 0) f.dying = 0;
         }
       }
     }

@@ -4,7 +4,7 @@ const Tut = (() => {
   const btn = document.getElementById('tut-ok');
   const TEXTS = {
     start: 'fish passively generate income.',
-    death: "fish gives gold on death (don't worry, he went to fish heaven)",
+    death: "fish gives gold on death\n(don't worry, he went to fish heaven)",
     hungry: 'fish is hungry.'
   };
   let active = false, pendingName = null;

@@ -576,14 +576,14 @@ const Stage = (() => {
   const drawPops = () => {
     if (!pops.length) return;
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(28,27,24,1)';
+    ctx.fillStyle = 'rgba(122,88,0,1)';
     for (const p of pops) {
       if (p.big) {
         ctx.font = '500 14px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.85 * (1 - p.t / 0.9);
+        ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
       } else {
-        ctx.font = '11px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.55 * (1 - p.t / 0.9);
+        ctx.font = '500 11px "Zen Maru Gothic", sans-serif';
+        ctx.globalAlpha = 0.65 * (1 - p.t / 0.9);
       }
       ctx.fillText(p.txt, p.x, p.y);
     }

@@ -80,5 +80,10 @@ Mating levels (5%/level), rolled once at birth.
   chance (5% per Spawning level, 0 base). success schedules one birth at a
   random moment inside that window. hard cap: one per window even at 100%.
 - retroactive: the chance is read live, so upgrades apply to all living adults
-  at their next window. solo birth, egg laid at the fish's position.
+  at their next window. birth requires at least one other living fish present
+  (the partner needs no spawn chance itself). egg laid at the spawner.
 - upgrade descriptions are uniform: "effect. Current: total".
+- money pops (earning, death, bubbles) draw in the gold color.
+- death tutorial fires mid death animation, after the belly-up flip.
+- below 600x420 the game pauses under a "window too small" notice, resumes
+  when enlarged.

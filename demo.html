@@ -3,134 +3,185 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>held fish indicator</title>
+    <title>paperfish demos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Zen+Maru+Gothic:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;500&family=Kosugi+Maru&family=Quicksand:wght@400;500&family=Varela+Round&family=Mochiy+Pop+One&display=swap"
       rel="stylesheet"
     />
     <style>
-      :root{ --paper:#f2efe6; --ink:#1c1b18; }
+      :root{ --paper:#f2efe6; --ink:#1c1b18; --gold:#7a5800; }
       *{ margin:0; padding:0; box-sizing:border-box; }
       body{
-        min-height:100vh;
         background:
           radial-gradient(140% 100% at 30% 20%, rgba(255,255,255,.55), transparent 60%),
           var(--paper);
         font-family:'Zen Maru Gothic',sans-serif;
         color:var(--ink);
-        display:grid; place-items:center;
+        padding:46px 7vw 90px;
       }
-      .wrap{ display:flex; gap:60px; padding:40px; flex-wrap:wrap; justify-content:center; }
-      .pane{ text-align:center; }
-      canvas{ display:block; }
-      .lbl{
-        font-size:10px; letter-spacing:.42em; text-transform:uppercase;
-        color:rgba(28,27,24,.68); margin-top:10px;
+      .sect{
+        font-size:11px; letter-spacing:.42em; text-transform:uppercase;
+        color:rgba(28,27,24,.6);
+        margin:60px 0 22px;
+        padding-bottom:8px;
+        border-bottom:1px solid rgba(28,27,24,.16);
       }
+      .sect:first-child{ margin-top:0; }
+      .hint{ font-size:12px; color:rgba(28,27,24,.55); margin-top:8px; letter-spacing:.06em; }
+
+      .gold{
+        font-weight:500;
+        font-size:44px;
+        letter-spacing:.06em;
+        font-feature-settings:'tnum';
+        color:var(--gold);
+        display:inline-block;
+        transform-origin:left center;
+      }
+      .gold .g{ font-size:20px; margin-left:8px; opacity:.9; }
+      .gold.pulse{ animation:settle .45s cubic-bezier(.3, 1.4, .4, 1); }
+      @keyframes settle{
+        0%{ transform:scale(1); color:var(--gold); }
+        25%{ transform:scale(1.07); color:#4e3800; }
+        100%{ transform:scale(1); color:var(--gold); }
+      }
+      .goldrate{ font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:rgba(122,88,0,.85); margin-top:4px; }
+
+      .fonts{ display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:26px; }
+      .fcard{
+        background:rgba(255,255,255,.32);
+        box-shadow:0 0 0 1px rgba(28,27,24,.1);
+        padding:20px 22px;
+      }
+      .fname{
+        font-size:10px; letter-spacing:.34em; text-transform:uppercase;
+        color:#b43a2b;
+        margin-bottom:14px;
+      }
+      .row{
+        display:flex; align-items:baseline; gap:9px;
+        font-size:13px; letter-spacing:.1em;
+        color:rgba(28,27,24,.92);
+        padding:8px 0;
+      }
+      .serif{ font-family:'Shippori Mincho',serif; font-size:15px; letter-spacing:.05em; }
+      .tag{ font-size:10px; opacity:.7; }
+      .leader{ flex:1; border-bottom:1px dotted rgba(28,27,24,.35); transform:translateY(-3px); }
+      .tipline{
+        font-size:12.5px; color:rgba(28,27,24,.8); letter-spacing:.06em;
+        margin-top:10px; line-height:1.7;
+      }
+      .goldmini{ font-weight:500; font-size:26px; color:var(--gold); font-feature-settings:'tnum'; margin-top:12px; }
+      .goldmini span{ font-size:13px; margin-left:5px; opacity:.9; }
+
+      canvas{ display:block; box-shadow:0 0 0 1px rgba(28,27,24,.1); }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="pane"><canvas id="c1" width="340" height="280"></canvas><div class="lbl">i · brackets</div></div>
-      <div class="pane"><canvas id="c2" width="340" height="280"></canvas><div class="lbl">ii · shadow</div></div>
-      <div class="pane"><canvas id="c3" width="340" height="280"></canvas><div class="lbl">iii · halo</div></div>
+    <div class="sect">i · gold settle on big payouts</div>
+    <div>
+      <div class="gold" id="gold">1,247<span class="g">g</span></div>
+      <div class="goldrate">+62 / min</div>
+      <div class="hint">trickle ticks silently. every ~3s a big payout lands: one soft settle pulse, ink deepens for a beat. never on the per-second trickle.</div>
     </div>
+
+    <div class="sect">ii · font candidates (in-game ui only, front page stays serif)</div>
+    <div class="fonts" id="fonts"></div>
+    <div class="hint">species names stay Shippori Mincho serif in all options. candidates apply to rows, numbers, tooltips, labels.</div>
+
+    <div class="sect">iii · birth ripple</div>
+    <canvas id="ripple" width="760" height="300"></canvas>
+    <div class="hint">on a spawn, one slow double ring spreads from the mother and fades. same language as bubble pops, larger and calmer.</div>
+
     <script>
+      const goldEl = document.getElementById('gold');
+      let gold = 1247;
+      const fmt = n => n.toLocaleString('en-US');
+      const render = () => { goldEl.innerHTML = fmt(gold) + '<span class="g">g</span>'; };
+      setInterval(() => { gold += 1; render(); }, 900);
+      setInterval(() => {
+        gold += 137;
+        render();
+        goldEl.classList.remove('pulse');
+        void goldEl.offsetWidth;
+        goldEl.classList.add('pulse');
+      }, 3100);
+
+      const FONTS = [
+        ['Zen Maru Gothic', 'zen maru gothic · current'],
+        ['M PLUS Rounded 1c', 'm plus rounded 1c'],
+        ['Kosugi Maru', 'kosugi maru'],
+        ['Quicksand', 'quicksand'],
+        ['Varela Round', 'varela round'],
+        ['Mochiy Pop One', 'mochiy pop one']
+      ];
+      document.getElementById('fonts').innerHTML = FONTS.map(([fam, label]) => `
+        <div class="fcard" style="font-family:'${fam}',sans-serif">
+          <div class="fname" style="font-family:'Zen Maru Gothic',sans-serif">${label}</div>
+          <div class="row"><span class="serif">Kelp</span><span class="tag">food × 3</span><span class="leader"></span><span>10</span></div>
+          <div class="row"><span class="serif">Spawning</span><span class="tag">+5% × 2</span><span class="leader"></span><span>400</span></div>
+          <div class="tipline">+5% chance to spawn each 2 min. Current: 10%</div>
+          <div class="goldmini">1,247<span>g</span></div>
+        </div>`).join('');
+
+      const cv = document.getElementById('ripple');
+      const ctx = cv.getContext('2d');
       const P1 = new Path2D('M310 100 Q180 10 30 148');
       const P2 = new Path2D('M310 100 Q180 190 30 52');
-      const LEN = 150, VW = 340, VH = 200;
-
-      const drawFish = (ctx, cx, cy, t, inkAlpha) => {
-        const sc = LEN / VW;
-        const amp = 0.95 * VH * 0.075;
-        const slices = 18, sw = VW / slices;
+      let t0 = null;
+      const CYCLE = 3.2;
+      const draw = ts => {
+        requestAnimationFrame(draw);
+        if (!t0) t0 = ts;
+        const t = (ts - t0) / 1000;
+        const u = t % CYCLE;
+        ctx.clearRect(0, 0, 760, 300);
+        ctx.fillStyle = '#f2efe6';
+        ctx.fillRect(0, 0, 760, 300);
+        const fx = 340, fy = 150;
         ctx.save();
-        ctx.translate(cx, cy);
+        ctx.translate(fx, fy);
+        const sc = 76 / 340;
         ctx.scale(sc, sc);
-        ctx.translate(-VW / 2, -VH / 2);
+        ctx.transform(1, Math.sin(t * 2.2) * 0.04, 0, 1, 0, 0);
+        ctx.translate(-170, -100);
         ctx.lineWidth = 1.55 / sc;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(28,27,24,' + inkAlpha + ')';
-        for (let i = 0; i < slices; i++) {
-          const x0 = i * sw;
-          const u = (x0 + sw / 2) / VW;
-          const env = Math.pow(1 - u, 1.5) * 0.9 + 0.06;
-          const dy = amp * env * Math.sin(t * 2 * Math.PI * 2.3 + u * 5.4);
-          ctx.save();
-          ctx.beginPath();
-          ctx.rect(x0 - 0.25, -VH * 0.6, sw + 0.5, VH * 2.2);
-          ctx.clip();
-          ctx.translate(0, dy);
-          ctx.stroke(P1);
-          ctx.stroke(P2);
-          ctx.restore();
+        ctx.strokeStyle = 'rgba(28,27,24,.92)';
+        ctx.stroke(P1);
+        ctx.stroke(P2);
+        ctx.restore();
+        if (u < 1.4) {
+          for (let k = 0; k < 2; k++) {
+            const q = (u - k * 0.18) / 1.2;
+            if (q < 0 || q > 1) continue;
+            ctx.globalAlpha = 0.32 * (1 - q);
+            ctx.strokeStyle = 'rgba(28,27,24,1)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(fx, fy, 8 + q * (34 - k * 8), 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
         }
-        ctx.restore();
+        if (u > 0.15 && u < 2.6) {
+          const eu = Math.min((u - 0.15) / 0.4, 1);
+          ctx.globalAlpha = eu;
+          ctx.strokeStyle = 'rgba(28,27,24,0.7)';
+          ctx.lineWidth = 1.55;
+          ctx.beginPath();
+          ctx.ellipse(fx + 26, fy + 10 + Math.sin(t * 2.6) * 2.2, 5.2, 6.6, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(28,27,24,0.6)';
+          ctx.beginPath();
+          ctx.arc(fx + 26, fy + 11.4 + Math.sin(t * 2.6) * 2.2, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
       };
-
-      const c1 = document.getElementById('c1').getContext('2d');
-      const c2 = document.getElementById('c2').getContext('2d');
-      const c3 = document.getElementById('c3').getContext('2d');
-      const CX = 170, CY = 130, R = LEN * 0.62;
-
-      const brackets = (ctx, t) => {
-        const b = R * (1 + Math.sin(t * 2.6) * 0.03);
-        const a = b * 0.72, k = 14;
-        ctx.strokeStyle = 'rgba(28,27,24,.55)';
-        ctx.lineWidth = 1.4;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(CX - a, CY - a + k); ctx.lineTo(CX - a, CY - a); ctx.lineTo(CX - a + k, CY - a);
-        ctx.moveTo(CX + a - k, CY - a); ctx.lineTo(CX + a, CY - a); ctx.lineTo(CX + a, CY - a + k);
-        ctx.moveTo(CX + a, CY + a - k); ctx.lineTo(CX + a, CY + a); ctx.lineTo(CX + a - k, CY + a);
-        ctx.moveTo(CX - a + k, CY + a); ctx.lineTo(CX - a, CY + a); ctx.lineTo(CX - a, CY + a - k);
-        ctx.stroke();
-      };
-
-      const shadow = ctx => {
-        const g = ctx.createRadialGradient(CX, CY + 52, 4, CX, CY + 52, LEN * 0.5);
-        g.addColorStop(0, 'rgba(28,27,24,.16)');
-        g.addColorStop(1, 'rgba(28,27,24,0)');
-        ctx.fillStyle = g;
-        ctx.save();
-        ctx.translate(CX, CY + 52);
-        ctx.scale(1, 0.22);
-        ctx.translate(-CX, -(CY + 52));
-        ctx.beginPath();
-        ctx.arc(CX, CY + 52, LEN * 0.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      };
-
-      const halo = (ctx, t) => {
-        ctx.strokeStyle = 'rgba(28,27,24,.5)';
-        ctx.lineWidth = 1.3;
-        ctx.setLineDash([2, 7]);
-        ctx.lineDashOffset = -t * 12;
-        ctx.beginPath();
-        ctx.arc(CX, CY, R, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      };
-
-      let start;
-      const loop = ts => {
-        requestAnimationFrame(loop);
-        if (!start) start = ts;
-        const t = (ts - start) / 1000;
-        c1.clearRect(0, 0, 340, 280);
-        brackets(c1, t);
-        drawFish(c1, CX, CY, t, 0.92);
-        c2.clearRect(0, 0, 340, 280);
-        shadow(c2);
-        drawFish(c2, CX, CY, t, 1);
-        c3.clearRect(0, 0, 340, 280);
-        halo(c3, t);
-        drawFish(c3, CX, CY, t, 0.92);
-      };
-      requestAnimationFrame(loop);
+      requestAnimationFrame(draw);
     </script>
   </body>
 </html>

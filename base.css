@@ -280,6 +280,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .tut-text{
   font-size:14.5px; letter-spacing:.05em; line-height:1.75;
   color:var(--ink);
+  white-space:pre-line;
 }
 .tut-ok{
   margin-top:12px;
@@ -298,6 +299,18 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transition:color .3s ease;
 }
 .fc-x:hover{ color:var(--ink); }
+
+.smallveil{
+  position:absolute; inset:0; z-index:60;
+  background:var(--paper);
+  display:grid; place-items:center;
+  text-align:center;
+}
+.sv-title{
+  font-family:'Shippori Mincho',serif;
+  font-size:17px; letter-spacing:.2em;
+  margin-bottom:10px;
+}
 
 .veil{
   position:absolute; inset:0; z-index:14;

@@ -16,5 +16,21 @@ const Pause = (() => {
     if (document.hidden) set(true);
   });
 
+  const sveil = document.getElementById('smallveil');
+  let sizePaused = false;
+  const checkSize = () => {
+    const small = innerWidth < 600 || innerHeight < 420;
+    sveil.toggleAttribute('hidden', !small);
+    if (small && !paused) {
+      sizePaused = true;
+      set(true);
+    } else if (!small && sizePaused) {
+      sizePaused = false;
+      set(false);
+    }
+  };
+  window.addEventListener('resize', checkSize);
+  checkSize();
+
   return { get paused() { return paused; }, set };
 })();
