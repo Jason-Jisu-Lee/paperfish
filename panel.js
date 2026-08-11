@@ -111,12 +111,5 @@ const Panel = (() => {
   tabShoal.addEventListener('click', () => setTab(false));
   tabDepths.addEventListener('click', () => setTab(true));
 
-  const goldWrap = goldNum.parentElement;
-  const pulse = () => {
-    goldWrap.classList.remove('pulse');
-    void goldWrap.offsetWidth;
-    goldWrap.classList.add('pulse');
-  };
-
-  return { refresh, tick, pulse };
+  return { refresh, tick };
 })();

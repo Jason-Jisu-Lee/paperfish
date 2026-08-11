@@ -75,12 +75,6 @@ const Detail = (() => {
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
     } else if (!hover) {
-      if (Ambience.popAt(e.clientX, e.clientY)) {
-        Game.gold += 10;
-        Stage.spawnPop(e.clientX, e.clientY - 14, '+10', true);
-        Panel.tick();
-        return;
-      }
       close();
     }
   });
@@ -93,7 +87,7 @@ const Detail = (() => {
     if (mx === null || !Game.started) return null;
     let best = null, bd = Infinity;
     for (const f of Game.fish) {
-      if (f.dying !== undefined) continue;
+      if (f.dying !== undefined || f.court) continue;
       let r;
       if (f.egg) {
         r = 15;

@@ -43,9 +43,9 @@
 |------|-------|
 | start | 50 gold + 1 baby fish |
 | opening choice | bank the 50 or buy a second egg immediately |
-| first kelp due | ~65s (12/min income + bubble pops cover the 10g) |
+| first kelp due | ~65s (12/min income covers the 10g) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~3s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (3s+) swims off quietly |
-| click a bubble | +10 gold, ink ring pop. placeholder active income |
+| early income | direction: driftwood-style tappable debris, mechanic being picked from demos. bubbles are ambience only |
 | tutorials | freeze the game, small Okay box anchored to the subject. start: passive income, once first fish finishes drawing. hungry: first hunger, points at Kelp. death: first death |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
@@ -80,12 +80,18 @@ Mating levels (5%/level), rolled once at birth.
   chance (5% per Spawning level, 0 base). success schedules one birth at a
   random moment inside that window. hard cap: one per window even at 100%.
 - retroactive: the chance is read live, so upgrades apply to all living adults
-  at their next window. birth requires at least one other living fish present
-  (the partner needs no spawn chance itself). egg laid at the spawner.
+  at their next window.
+- a scheduled birth waits until the spawner is not hungry and a partner is
+  free (any living fish, no spawn chance needed). hungry fish never start
+  conceiving; hunger arriving mid-courtship is fine, starving cannot happen
+  inside the ~5s ceremony.
+- courtship: the pair drifts together, hovers overlapping for 4-5s, the egg
+  appears between them, both scurry off. courting fish ignore clicks, kelp,
+  and their spawn windows until done.
 - upgrade descriptions are uniform: "effect. Current: total".
-- money pops (earning, death, bubbles) draw in the gold color.
-- gold counter settles (soft scale, ink deepens) on single payouts of 50+.
-  never on the trickle.
+- money pops (earning, death) draw in the gold color.
+- bubbles are pure ambience now: fast, infrequent vents, not clickable.
+- ui font is Sniglet (front page stays Shippori Mincho).
 - death tutorial fires mid death animation, after the belly-up flip.
 - below 600x420 the game pauses: "Your screen is too small for the fish!",
   resumes when enlarged.

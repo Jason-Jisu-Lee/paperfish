@@ -154,8 +154,85 @@ const Stage = (() => {
   const release = () => { held = null; };
   const swirls = [];
 
+  const pickMate = f => {
+    let best = null, bd = Infinity;
+    for (const o of Game.fish) {
+      if (o === f || o.egg || o.dying !== undefined || o.birth < 1 || o.eating || o.court || o === held) continue;
+      const d = (o.x - f.x) ** 2 + (o.y - f.y) ** 2;
+      if (d < bd) { bd = d; best = o; }
+    }
+    return best;
+  };
+
+  const court = (a, b) => {
+    a.court = { p: b, lead: true, phase: 0, t: 0 };
+    b.court = { p: a, lead: false };
+  };
+
+  const endCourt = (a, b, scurry) => {
+    delete a.court;
+    if (b) delete b.court;
+    if (scurry) {
+      escape(a, 1);
+      if (b) escape(b, 1);
+    }
+  };
+
+  const courtStep = (f, mdt) => {
+    const c = f.court, o = c.p;
+    if (!Game.fish.includes(o) || o.dying !== undefined || f.dying !== undefined) {
+      endCourt(f, o, false);
+      f.spawnAt = Math.min(f.spawnWin || 0, 119);
+      return;
+    }
+    f.tailPh += mdt * Math.PI * 2 * 0.55;
+    o.tailPh += mdt * Math.PI * 2 * 0.55;
+    f.tailAmp += (0.28 - f.tailAmp) * Math.min(3 * mdt, 1);
+    o.tailAmp += (0.28 - o.tailAmp) * Math.min(3 * mdt, 1);
+    if (c.phase === 0) {
+      const dx = o.x - f.x, dy = o.y - f.y;
+      const d = Math.hypot(dx, dy) || 1;
+      const sp = Math.min(Math.max(d * 0.8, 16), 52);
+      if (Math.abs(dx) > 8) {
+        f.dir = Math.sign(dx);
+        o.dir = -Math.sign(dx);
+      }
+      f.x += (dx / d) * sp * mdt * 0.5;
+      f.y += (dy / d) * sp * mdt * 0.5;
+      o.x -= (dx / d) * sp * mdt * 0.5;
+      o.y -= (dy / d) * sp * mdt * 0.5;
+      if (d < 26) {
+        c.phase = 1;
+        c.T = 4 + Math.random();
+        c.t = 0;
+        c.cx = (f.x + o.x) / 2;
+        c.cy = (f.y + o.y) / 2;
+        c.drift = rand(0, Math.PI * 2);
+      }
+    } else {
+      c.t += mdt;
+      c.cx += Math.sin(c.t * 0.5 + c.drift) * 7 * mdt;
+      c.cy += Math.cos(c.t * 0.4 + c.drift) * 5 * mdt;
+      c.cx = Math.min(Math.max(c.cx, bounds.l + 40), bounds.r - 40);
+      c.cy = Math.min(Math.max(c.cy, bounds.t + 34), bounds.b - 30);
+      const ox = Math.sin(c.t * 1.05) * 11;
+      const oy = Math.sin(c.t * 0.8 + 1.2) * 6;
+      f.x = c.cx + ox;
+      f.y = c.cy + oy;
+      o.x = c.cx - ox;
+      o.y = c.cy - oy * 0.7;
+      f.dir = ox >= 0 ? -1 : 1;
+      o.dir = -f.dir;
+      if (c.t >= c.T) {
+        f.courtEgg = { x: c.cx, y: c.cy };
+        f.courtDone = true;
+        endCourt(f, o, true);
+      }
+    }
+  };
+
   const escape = (f, level) => {
-    if (f.egg || f.eating || f.dying !== undefined || f.birth < 1) return;
+    if (f.egg || f.eating || f.dying !== undefined || f.birth < 1 || f.court) return;
     swirls.push({
       x: f.x, y: f.y, t: 0,
       rot: Math.random() * Math.PI * 2,
@@ -197,6 +274,10 @@ const Stage = (() => {
         const calm = Math.min(f.heldT / 3, 1);
         f.tailPh += mdt * Math.PI * 2 * (2.3 - calm * 1.8);
         f.tailAmp += ((0.95 - calm * 0.83) - f.tailAmp) * Math.min(6 * mdt, 1);
+        continue;
+      }
+      if (f.court) {
+        if (f.court.lead) courtStep(f, mdt);
         continue;
       }
       if (f.eating) {
@@ -579,10 +660,10 @@ const Stage = (() => {
     ctx.fillStyle = 'rgba(122,88,0,1)';
     for (const p of pops) {
       if (p.big) {
-        ctx.font = '500 14px "Zen Maru Gothic", sans-serif';
+        ctx.font = '14px "Sniglet", sans-serif';
         ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
       } else {
-        ctx.font = '500 11px "Zen Maru Gothic", sans-serif';
+        ctx.font = '11px "Sniglet", sans-serif';
         ctx.globalAlpha = 0.65 * (1 - p.t / 0.9);
       }
       ctx.fillText(p.txt, p.x, p.y);
@@ -625,7 +706,7 @@ const Stage = (() => {
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
+    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, pickMate, court, spawnPop, update, clear, drawScene, resize,
     get bounds() { return bounds; },
     get size() { return { W, H }; }
   };

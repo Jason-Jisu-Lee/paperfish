@@ -55,7 +55,6 @@ const startGame = () => {
         if (f.dying >= 2.8) {
           const pay = ltvOf(f.s) * 0.1;
           Game.gold += pay;
-          if (pay >= 50) Panel.pulse();
           Stage.spawnPop(f.x, f.y, '+' + fmtG(pay));
           Game.fish.splice(i, 1);
           removed = true;
@@ -94,7 +93,7 @@ const startGame = () => {
                 f.dying = 0;
                 continue;
               }
-              const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
+              const aware = (f.hstate === 2 || (f.dT !== undefined && f.dT <= 0)) && !f.court;
               const p = aware ? Stage.nearestPlant(f.x, f.y) : null;
               if (p) {
                 const px = p.x + p.hx, pyy = p.y + p.hy;
@@ -120,25 +119,35 @@ const startGame = () => {
           f.popT = 0.8;
           Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 8, '+' + n.toLocaleString('en-US'));
         }
-        if (f.adult && f.birth >= 1) {
+        if (f.adult && f.birth >= 1 && !f.court) {
           if (f.spawnWin === undefined) {
             f.spawnWin = 0;
             f.spawnAt = Math.random() < Game.mating * 0.05 ? Math.random() * 120 : null;
           }
           f.spawnWin += sdt;
-          if (f.spawnAt !== null && f.spawnWin >= f.spawnAt) {
-            f.spawnAt = null;
-            if (Game.fish.some(o => o !== f && !o.egg && o.dying === undefined && o.birth >= 1)) {
-              f.spawned = (f.spawned || 0) + 1;
-              const egg = { s: f.s, egg: true, t: 0 };
-              Game.fish.push(egg);
-              Stage.materialize(egg);
-              egg.x = f.x;
-              egg.y = f.y;
-              hatched = true;
+          if (f.spawnAt !== null) {
+            if (f.spawnWin > 119.9) f.spawnWin = 119.9;
+            if (f.spawnWin >= f.spawnAt && f.hstate === 0 && !f.eating) {
+              const mate = Stage.pickMate(f);
+              if (mate) {
+                Stage.court(f, mate);
+                f.spawnAt = null;
+              }
             }
+          } else if (f.spawnWin >= 120) {
+            f.spawnWin = undefined;
           }
-          if (f.spawnWin >= 120) f.spawnWin = undefined;
+        }
+        if (f.courtDone) {
+          delete f.courtDone;
+          f.spawned = (f.spawned || 0) + 1;
+          const egg = { s: f.s, egg: true, t: 0 };
+          Game.fish.push(egg);
+          Stage.materialize(egg);
+          egg.x = f.courtEgg.x;
+          egg.y = f.courtEgg.y;
+          delete f.courtEgg;
+          hatched = true;
         }
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;

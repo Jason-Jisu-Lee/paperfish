@@ -2,7 +2,6 @@ const Ambience = (() => {
   const rand = (a, b) => a + Math.random() * (b - a);
   const bubbles = [];
   const motes = [];
-  const rings = [];
   let vent = null;
   let nextVent = rand(10, 24);
   let nextSil = rand(35, 80);
@@ -26,8 +25,8 @@ const Ambience = (() => {
     vent = {
       x: rand(b.l + 40, b.r - 40),
       t: 0,
-      dur: rand(2, 4.2),
-      rate: rand(2.8, 5.5),
+      dur: rand(1.1, 2),
+      rate: rand(2.2, 3.6),
       acc: 0.8
     };
   };
@@ -46,30 +45,10 @@ const Ambience = (() => {
     };
   };
 
-  const popAt = (x, y) => {
-    const { H } = Stage.size;
-    for (let i = bubbles.length - 1; i >= 0; i--) {
-      const b = bubbles[i];
-      const r = Math.max(b.r * (1 + (1 - b.y / H) * 0.3), 8) + 7;
-      const dx = b.x - x, dy = b.y - y;
-      if (dx * dx + dy * dy <= r * r) {
-        rings.push({ x: b.x, y: b.y, t: 0 });
-        bubbles.splice(i, 1);
-        return true;
-      }
-    }
-    return false;
-  };
-
   const update = mdt => {
     if (!seeded) seedMotes();
     if (!mdt) return;
     const { W, H } = Stage.size;
-
-    for (let i = rings.length - 1; i >= 0; i--) {
-      rings[i].t += mdt;
-      if (rings[i].t >= 0.5) rings.splice(i, 1);
-    }
 
     if (vent) {
       vent.t += mdt;
@@ -77,20 +56,20 @@ const Ambience = (() => {
       while (vent.acc >= 1) {
         vent.acc -= 1;
         bubbles.push({
-          x: vent.x + rand(-14, 14),
-          y: H + rand(6, 30),
-          r: rand(1.6, 4.4),
-          vy: rand(26, 46),
-          wamp: rand(2, 6),
-          wf: rand(0.35, 0.8),
+          x: vent.x + rand(-12, 12),
+          y: H + rand(6, 26),
+          r: rand(1.6, 4.2),
+          vy: rand(75, 120),
+          wamp: rand(3, 7),
+          wf: rand(0.5, 1),
           ph: rand(0, Math.PI * 2),
-          a: rand(0.12, 0.2),
+          a: rand(0.1, 0.18),
           fade: 1
         });
       }
       if (vent.t >= vent.dur) {
         vent = null;
-        nextVent = rand(22, 55);
+        nextVent = rand(45, 95);
       }
     } else {
       nextVent -= mdt;
@@ -168,15 +147,8 @@ const Ambience = (() => {
       ctx.arc(b.x, b.y, b.r * grow, 0, Math.PI * 2);
       ctx.stroke();
     }
-    for (const r of rings) {
-      const u = r.t / 0.5;
-      ctx.globalAlpha = 0.4 * (1 - u);
-      ctx.beginPath();
-      ctx.arc(r.x, r.y, 4 + u * 15, 0, Math.PI * 2);
-      ctx.stroke();
-    }
     ctx.globalAlpha = 1;
   };
 
-  return { update, drawBack, drawFront, popAt };
+  return { update, drawBack, drawFront };
 })();
