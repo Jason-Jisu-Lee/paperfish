@@ -200,6 +200,23 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transition:color .4s ease, opacity .5s ease;
 }
 .objbox.done{ color:#3f7d44; }
+.saybox{
+  position:absolute; z-index:12;
+  left:50%; bottom:clamp(24px, 4.5vh, 44px);
+  transform:translateX(-50%);
+  font-size:15.5px; letter-spacing:.06em;
+  color:rgba(28,27,24,.8);
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+}
+.saybox.show{ animation:sayfade 4.6s ease forwards; }
+@keyframes sayfade{
+  0%{ opacity:0; }
+  10%{ opacity:1; }
+  80%{ opacity:1; }
+  100%{ opacity:0; }
+}
 .objbox.done .obj-check{ animation:objflash .5s ease 3; }
 .obj-check{ color:#3f7d44; font-size:15px; }
 @keyframes objflash{ 50%{ opacity:.15; } }

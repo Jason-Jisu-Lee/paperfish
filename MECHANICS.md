@@ -88,6 +88,9 @@ Mating levels (5%/level), rolled once at birth.
 - courtship: the pair drifts together, hovers overlapping for 4-5s, the egg
   appears between them, both scurry off. courting fish ignore clicks, kelp,
   and their spawn windows until done.
+- diver messages: bare whisper text, bottom center, fades in and out (~4.6s).
+  one at a time, queued, 15s cooldown per identical line. coexists freely
+  with the persistent objective box. first wired line: "Fish is hungry."
 - hud sits on the LEFT. tabs: upgrades (default) and fish. all buttons are
   soft cards in a single column, one per line: name over cost, level in the
   corner, red seal mark until first purchase. the fish tab lists buy buttons

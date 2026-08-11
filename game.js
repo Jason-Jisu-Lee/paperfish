@@ -81,6 +81,7 @@ const startGame = () => {
             if (!f.hstate && f.age >= (f.hungerAt || 1)) {
               f.hstate = 1;
               f.hT = 0;
+              Say.say('Fish is hungry.');
             }
             if (f.hstate) {
               f.hT = (f.hT || 0) + sdt;
