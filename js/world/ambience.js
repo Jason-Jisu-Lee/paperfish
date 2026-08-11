@@ -69,7 +69,7 @@ const Ambience = (() => {
       }
       if (vent.t >= vent.dur) {
         vent = null;
-        nextVent = rand(45, 95);
+        nextVent = rand(32, 70);
       }
     } else {
       nextVent -= mdt;

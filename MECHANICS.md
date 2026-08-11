@@ -47,7 +47,7 @@
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
 | paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | quest tracker card top right, fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: red seal stamps the checkbox (bounce in), a red line strikes through the text, the card gives one soft pulse, a two-note chime plays, then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
+| objectives | quest tracker card top right, fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion is green (industry standard): green stamp fills the checkbox (bounce in), a green line strikes through the text, the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -85,9 +85,9 @@ Mating levels (5%/level), rolled once at birth.
   eggs, pops, swirls, held fish, resize). ambience.js bubbles, motes,
   silhouette. lantern.js paper lanterns.
 - js/ui: panel.js hud. detail.js tooltip and fish card. corner.js icons and
-  all settings wiring. front.js front page. frontfish.js front ambience
-  fish. pause.js pause and min-size. obj.js objectives. say.js diver
-  messages. confirm.js confirm dialog. dev.js console.
+  all settings wiring. front.js front page. pause.js pause and min-size.
+  obj.js objectives. say.js diver messages. confirm.js confirm dialog.
+  dev.js console.
 - js/audio: sfx.js WebAudio chimes, respects the sound setting.
 - assets/ fish svgs plus fish_grid_final.png (master reference copy).
   demos/ reference sketches (02-ink.html, demo.html) and option demos
@@ -106,9 +106,12 @@ Mating levels (5%/level), rolled once at birth.
 - courtship: the pair drifts together, hovers overlapping for 4-5s, the egg
   appears between them, both scurry off. courting fish ignore clicks, kelp,
   and their spawn windows until done.
-- diver messages: bare whisper text, bottom center, fades in and out (~4.6s).
-  one at a time, queued, 15s cooldown per identical line. coexists freely
-  with the persistent objective box. first wired line: "Fish is hungry."
+- diver messages: bare whisper text, bottom center but raised
+  (clamp 72px-160px up) and sized to the screen so itch.io embeds read it.
+  fades in and out (~4.6s), one at a time, queued, 15s cooldown per line.
+  wired lines: "Fish is hungry." (a fish turns hungry while no kelp is on
+  screen), "This should feed the hungry fish." (first kelp ever bought),
+  "I wonder how long it takes to hatch." (first egg ever bought).
 - one settings modal everywhere (front menu and in-game gear): scrim,
   Settings title with x, one row per option: Sound toggle, Display segmented
   control (Windowed or Fullscreen; Borderless joins in the Steam desktop
@@ -117,10 +120,10 @@ Mating levels (5%/level), rolled once at birth.
   undone." with Cancel / Reset. corner.js owns all settings state and
   rendering. dotted-leader rows are banned everywhere; fish card rows are
   muted label left, value right.
-- front page: menu buttons large serif; species fish drift across as faint
-  ink ambience (max 6, spawn every 2-5s, edge fade); official Steam and
-  Discord brand badges top right; seal + "by 2ndIntelligentWorld" bottom
-  right.
+- front page: menu is play and settings only (quit returns with the Steam
+  build), large serif buttons; official Steam and Discord brand badges top
+  right; seal + "by 2ndIntelligentWorld" bottom right. no fish ambience on
+  the front for now.
 - dev console is always visible (backtick hides it if needed).
 - hud sits on the LEFT. tabs: fish (first, default) then upgrades. all
   buttons are soft cards in a single column, one per line. upgrade cards:
@@ -136,7 +139,7 @@ Mating levels (5%/level), rolled once at birth.
 - gold rate (top left, tight spacing): hover lists income per species with a
   fish icon, count, and +N / min per line.
 - money pops (earning, death) draw in the gold color.
-- bubbles are pure ambience now: very fast, infrequent vents, not clickable.
+- bubbles are pure ambience now: very fast vents every 32-70s, not clickable.
 - ui font is Sniglet (front page stays Shippori Mincho).
 - death tutorial fires mid death animation, after the belly-up flip.
 - below 600x420 the game pauses: "Your screen is too small for the fish!",

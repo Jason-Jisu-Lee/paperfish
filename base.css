@@ -207,11 +207,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 #obj-text{ position:relative; }
 .objbox.done{ animation:objpulse .5s ease; }
-.objbox.done .obj-mark{ border-color:var(--seal); }
+.objbox.done .obj-mark{ border-color:#3a8a4e; }
 .objbox.done .obj-mark::before{
   content:'';
   position:absolute; inset:-1.4px;
-  background:var(--seal);
+  background:#3a8a4e;
   border-radius:3px;
   animation:stamp .4s cubic-bezier(.34,1.56,.64,1) both;
 }
@@ -228,7 +228,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   content:'';
   position:absolute; left:-3px; top:52%;
   height:1.6px;
-  background:rgba(180,58,43,.8);
+  background:rgba(58,138,78,.85);
   animation:strike .32s ease-out .18s both;
 }
 @keyframes stamp{
@@ -271,10 +271,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .saybox{
   position:absolute; z-index:12;
-  left:50%; bottom:clamp(24px, 4.5vh, 44px);
+  left:50%; bottom:clamp(72px, 13vh, 160px);
   transform:translateX(-50%);
-  font-size:15.5px; letter-spacing:.06em;
-  color:rgba(28,27,24,.8);
+  font-size:clamp(16.5px, 1.65vw, 20px); letter-spacing:.06em;
+  color:rgba(28,27,24,.92);
   white-space:nowrap;
   opacity:0;
   pointer-events:none;
@@ -432,7 +432,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .icon.brand path{ fill:#fff; stroke:none; }
 .icon.brand.steam{ background:#1b2838; }
 .icon.brand.discord{ background:#5865F2; }
-#frontsea{ position:absolute; inset:0; width:100%; height:100%; }
 .front-mid{ position:relative; z-index:1; }
 .fcredit{
   position:absolute; right:6vw; bottom:7vh; z-index:1;

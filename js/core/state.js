@@ -137,6 +137,10 @@ const buyFish = s => {
   Game.fish.push(f);
   Stage.materialize(f);
   Obj.event('buyfish');
+  if (!Game.tuts.sayegg) {
+    Game.tuts.sayegg = 1;
+    Say.say('I wonder how long it takes to hatch.');
+  }
   saveGame();
   return true;
 };
@@ -157,6 +161,10 @@ const buyKelp = () => {
   Game.kelpBought = (Game.kelpBought || 0) + 1;
   Stage.spawnPlant();
   Obj.event('buykelp');
+  if (!Game.tuts.saykelp) {
+    Game.tuts.saykelp = 1;
+    Say.say('This should feed the hungry fish.');
+  }
   saveGame();
   return true;
 };

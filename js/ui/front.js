@@ -16,10 +16,6 @@
     startGame();
   });
 
-  document.getElementById('m-quit').addEventListener('click', () => {
-    window.close();
-  });
-
   document.getElementById('m-settings').addEventListener('click', () => {
     document.getElementById('set-menu-row').setAttribute('hidden', '');
     set.removeAttribute('hidden');
