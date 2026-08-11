@@ -5,16 +5,17 @@ const Obj = (() => {
   const fill = document.getElementById('obj-fill');
   const count = document.getElementById('obj-count');
 
-  const countFirstF = () => Game.fish.filter(f => f.s === 0 && f.dying === undefined).length;
+  const countFirstF = () => Game.fish.filter(f => f.s === 0 && !f.egg && f.dying === undefined).length;
 
   const STEPS = [
     { id: 'buyfish', text: 'Buy a fish' },
-    { id: 'buykelp', text: 'Buy a kelp' },
     {
       id: 'lantern', text: 'Collect gold from Paper Lanterns',
       prog: () => [Lantern.collected, 3],
       onStart: () => Lantern.begin()
     },
+    { id: 'buykelp', text: 'Buy a kelp' },
+    { id: 'income', text: 'Buy firstF Income upgrade' },
     {
       id: 'five', text: 'Have a total of 5 firstF',
       prog: () => [Math.min(countFirstF(), 5), 5],

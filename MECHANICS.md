@@ -14,6 +14,7 @@
 | item | cost | effect |
 |------|------|--------|
 | egg  | 50   | 1 firstF egg, hatches in 20s |
+| secondF egg | 1000 | first purchase unlocks the species (no separate unlock price) |
 | kelp | 20   | food, 2 bites |
 | firstF Income | 100 x2^n | firstF +1 gold per 5s tick, all stages (+30 ltv, +3 death) |
 | Spawning    | 100 x2^n | +5%/level chance to spawn each 2 min. retroactive, all adults. level 1+ adds "spawn chance" and "spawned x N" card rows |
@@ -41,13 +42,13 @@
 ### start
 | fact | value |
 |------|-------|
-| start | 50 gold + 1 baby fish |
+| start | 50 gold + 1 baby fish + 1 kelp floating |
 | opening choice | bank the 50 or buy a second egg immediately |
 | first kelp due | ~65s (12/min income covers the 20g, barely) |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
-| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
+| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a fish completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | quest tracker card top right, fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion is green (industry standard): green stamp fills the checkbox (bounce in), a green line strikes through the text, the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
+| objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), the words get a standard line-through in the text color (every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Collect gold from Paper Lanterns 0/3, Buy a kelp, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -120,18 +121,22 @@ Mating levels (5%/level), rolled once at birth.
   undone." with Cancel / Reset. corner.js owns all settings state and
   rendering. dotted-leader rows are banned everywhere; fish card rows are
   muted label left, value right.
-- front page: menu is play and settings only (quit returns with the Steam
-  build), large serif buttons; official Steam and Discord brand badges top
-  right; seal + "by 2ndIntelligentWorld" bottom right. no fish ambience on
-  the front for now.
+- front page: title is lowercase serif "paperfish" with a small tilted red
+  seal square after it (title demo pick 2). menu is play and settings only
+  (quit returns with the Steam build), Sniglet, large; official Steam and
+  Discord brand badges top right; seal + "by 2ndIntelligentWorld" bottom
+  right. no fish ambience on the front for now.
 - dev console is always visible (backtick hides it if needed).
 - hud sits on the LEFT. tabs: fish (first, default) then upgrades. all
   buttons are soft cards in a single column, one per line. upgrade cards:
   name over cost, count in the corner, red seal mark until first purchase.
   fish tab buy buttons show the species icon over cost (never the name),
-  count badge top right, hover says "Buy firstF Egg"; plus one unlock button
-  showing the next fish's silhouette over its price ("unlocks a new fish" on
-  hover). objectives appear top right without pausing.
+  count badge top right, hover says "Buy firstF Egg". beneath them: the NEXT
+  species as silhouette over its egg cost, hover "Buy secondF Egg", first
+  purchase unlocks it; then ONE locked card (padlock, no silhouette, no
+  cost) teasing the species after. everything past that is hidden. buying a
+  species reveals the next silhouette and shifts the lock down one.
+  objectives appear top right without pausing.
 - upgrade hover tooltip: effect line, then "Current: total" on its own line.
 - fish hover tooltip: name, stage beneath. nothing else. eggs show "egg";
   click an egg to select it and see "hatches in" on its card. an egg with 5s

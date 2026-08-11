@@ -150,6 +150,7 @@ const buyStream = () => {
   if (Game.gold < c) return false;
   Game.gold -= c;
   Game.stream += 1;
+  Obj.event('income');
   saveGame();
   return true;
 };
@@ -189,9 +190,12 @@ const buyMaturity = () => {
 
 const unlockNext = () => {
   const n = Game.unlocked;
-  if (n >= SPECIES.length || Game.gold < SPECIES[n].unlock) return false;
-  Game.gold -= SPECIES[n].unlock;
+  if (n >= SPECIES.length || Game.gold < SPECIES[n].cost) return false;
+  Game.gold -= SPECIES[n].cost;
   Game.unlocked += 1;
+  const f = { s: n, egg: true, t: 0 };
+  Game.fish.push(f);
+  Stage.materialize(f);
   saveGame();
   return true;
 };

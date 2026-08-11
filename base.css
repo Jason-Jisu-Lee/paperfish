@@ -154,6 +154,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .ubtn.off{ opacity:.4; cursor:default; }
 .ubtn.off:hover{ transform:none; box-shadow:0 1px 4px rgba(28,27,24,.12); }
+.ubtn.lock{ opacity:.42; cursor:default; }
+.ubtn.lock:hover{ transform:none; border-color:rgba(28,27,24,.35); box-shadow:0 1px 4px rgba(28,27,24,.12); }
+.ubtn-lock{ display:flex; justify-content:center; padding:3px 0; }
+.ubtn-lock svg{ width:19px; height:19px; }
+.ubtn-lock rect, .ubtn-lock path{ fill:none; stroke:rgba(28,27,24,.75); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 .fname{
   font-family:'Shippori Mincho',serif;
   font-size:14.5px; letter-spacing:.05em;
@@ -181,8 +186,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .objbox{
   position:absolute; z-index:12;
-  top:calc(clamp(14px, 2.4vh, 26px) + 52px);
-  right:clamp(16px, 2.2vw, 30px);
+  top:calc(clamp(14px, 2.4vh, 26px) + 66px);
+  right:clamp(26px, 2.8vw, 46px);
   width:250px;
   background:var(--paper);
   border:1px solid rgba(28,27,24,.45);
@@ -224,12 +229,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transform:rotate(40deg);
   animation:markin .2s ease .16s both;
 }
-.objbox.done #obj-text::after{
-  content:'';
-  position:absolute; left:-3px; top:52%;
-  height:1.6px;
-  background:rgba(58,138,78,.85);
-  animation:strike .32s ease-out .18s both;
+.objbox.done #obj-text{
+  text-decoration:line-through;
+  text-decoration-thickness:1.4px;
 }
 @keyframes stamp{
   from{ transform:scale(2.1); opacity:0; }
@@ -237,7 +239,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   to{ transform:scale(1); opacity:1; }
 }
 @keyframes markin{ from{ opacity:0; } to{ opacity:1; } }
-@keyframes strike{ from{ width:0; } to{ width:calc(100% + 6px); } }
 @keyframes objpulse{
   0%{ transform:scale(1); }
   35%{ transform:scale(1.03); }
@@ -322,18 +323,25 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .f-title{
   font-family:'Shippori Mincho',serif;
   font-weight:500;
-  font-size:clamp(26px, 3.2vw, 40px);
-  letter-spacing:.5em; text-indent:.5em;
-  text-transform:uppercase;
-  color:#2e2c26;
-  margin:0 0 44px;
+  font-size:clamp(36px, 4.4vw, 58px);
+  letter-spacing:.06em;
+  color:var(--ink);
+  text-shadow:0 0 1px rgba(28,27,24,.35);
+  margin:0 0 40px;
+}
+.f-title .tseal{
+  display:inline-block;
+  width:clamp(9px, .95vw, 13px); height:clamp(9px, .95vw, 13px);
+  background:var(--seal);
+  border-radius:2px;
+  margin-left:13px;
+  transform:translateY(-.55em) rotate(8deg);
 }
 .menu{ display:flex; flex-direction:column; align-items:center; gap:18px; margin-top:46px; }
 .menu button{
-  font-family:'Shippori Mincho',serif;
-  font-weight:500;
-  font-size:clamp(17px, 1.7vw, 21px);
-  letter-spacing:.4em; text-indent:.4em;
+  font-family:'Sniglet',sans-serif;
+  font-size:clamp(16px, 1.55vw, 20px);
+  letter-spacing:.3em; text-indent:.3em;
   color:rgba(28,27,24,.88);
   padding:5px 12px;
   transition:color .3s ease;

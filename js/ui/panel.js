@@ -75,8 +75,13 @@ const Panel = (() => {
       const s = Game.unlocked;
       h += `<button class="ubtn" data-unlock>
         <span class="ubtn-icon">${thumb(s, true)}</span>
-        <span class="ubtn-cost">${fmt(SPECIES[s].unlock)} g</span>
+        <span class="ubtn-cost">${fmt(SPECIES[s].cost)} g</span>
       </button>`;
+      if (s + 1 < SPECIES.length) {
+        h += `<button class="ubtn lock">
+          <span class="ubtn-lock"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5 V8 a3.5 3.5 0 0 1 7 0 V10.5"/></svg></span>
+        </button>`;
+      }
     }
     fishGrid.innerHTML = h;
     tick();
@@ -114,7 +119,7 @@ const Panel = (() => {
     for (const el of fishGrid.querySelectorAll('[data-buy]'))
       el.classList.toggle('off', Game.gold < SPECIES[+el.dataset.buy].cost);
     const un = fishGrid.querySelector('[data-unlock]');
-    if (un) un.classList.toggle('off', Game.gold < SPECIES[Game.unlocked].unlock);
+    if (un) un.classList.toggle('off', Game.gold < SPECIES[Game.unlocked].cost);
     if (!goldSrc.hidden) srcBuild();
   };
 
@@ -141,7 +146,7 @@ const Panel = (() => {
     } else if (bf) {
       uptip.textContent = 'Buy ' + SPECIES[+bf.dataset.buy].name + ' Egg';
     } else {
-      uptip.textContent = 'unlocks a new fish';
+      uptip.textContent = 'Buy ' + SPECIES[Game.unlocked].name + ' Egg';
     }
     const r = (ub || bf || un).getBoundingClientRect();
     uptip.style.right = 'auto';

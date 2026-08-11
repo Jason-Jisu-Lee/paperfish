@@ -4,7 +4,7 @@ const startGame = () => {
   if (fresh) {
     Game.gold = START_GOLD;
     Game.stream = 0;
-    Game.plants = 0;
+    Game.plants = 1;
     Game.unlocked = 1;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
   }
