@@ -217,12 +217,14 @@ const Detail = (() => {
     canvas.style.cursor = lantHover || hover ? 'pointer' : '';
     if (lantHover) {
       hover = null;
+      tip.classList.add('lant');
       tipName.textContent = 'Paper Lantern';
       tipStage.setAttribute('hidden', '');
       tip.style.left = mx + 'px';
       tip.style.top = (my - 42) + 'px';
       tip.removeAttribute('hidden');
     } else if (hover) {
+      tip.classList.remove('lant');
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
       if (hover.egg) {

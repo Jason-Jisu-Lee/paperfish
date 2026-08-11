@@ -81,7 +81,6 @@ const startGame = () => {
             if (!f.hstate && f.age >= (f.hungerAt || 1)) {
               f.hstate = 1;
               f.hT = 0;
-              Tut.fire('hungry', document.querySelector('[data-up="kelp"]'));
             }
             if (f.hstate) {
               f.hT = (f.hT || 0) + sdt;

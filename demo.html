@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Sniglet&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:ital,wght@0,400;0,500;1,400&family=Sniglet&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -19,632 +19,151 @@
           var(--paper);
         font-family:'Sniglet',sans-serif;
         color:var(--ink);
-        padding:44px 5vw 90px;
+        padding:44px 6vw 90px;
       }
       .sect{
         font-size:11px; letter-spacing:.42em; text-transform:uppercase;
         color:rgba(28,27,24,.6);
-        margin:0 0 22px;
+        margin:0 0 8px;
         padding-bottom:8px;
         border-bottom:1px solid rgba(28,27,24,.16);
       }
-      .sims{ display:grid; grid-template-columns:repeat(auto-fill, minmax(480px, 1fr)); gap:30px; }
-      .stitle{ font-size:10.5px; letter-spacing:.34em; text-transform:uppercase; color:rgba(28,27,24,.85); margin-bottom:6px; }
-      .sdesc{ font-size:12px; color:rgba(28,27,24,.6); margin-bottom:10px; }
-      canvas{ display:block; width:100%; box-shadow:0 0 0 1px rgba(28,27,24,.12); cursor:pointer; }
+      .note{ font-size:12.5px; color:rgba(28,27,24,.6); margin-bottom:26px; }
+      .lab{
+        font-size:10.5px; letter-spacing:.34em; text-transform:uppercase;
+        color:rgba(28,27,24,.85);
+        margin:34px 0 8px;
+      }
+      .pane{
+        position:relative;
+        height:300px;
+        background:#f2efe6;
+        box-shadow:0 0 0 1px rgba(28,27,24,.14);
+        overflow:hidden;
+      }
+      .fishy{
+        position:absolute; top:44%; left:-80px;
+        width:64px;
+        animation:swim 17s linear infinite;
+      }
+      .fishy svg{ width:100%; overflow:visible; }
+      .fishy path{ fill:none; stroke:rgba(28,27,24,.9); stroke-width:6.5; stroke-linecap:round; }
+      @keyframes swim{
+        0%{ left:-90px; transform:scaleX(1); }
+        49%{ left:calc(100% + 30px); transform:scaleX(1); }
+        50%{ left:calc(100% + 30px); transform:scaleX(-1); }
+        99%{ left:-90px; transform:scaleX(-1); }
+        100%{ left:-90px; transform:scaleX(1); }
+      }
+
+      .msg{
+        position:absolute;
+        left:50%;
+        transform:translateX(-50%);
+        opacity:0;
+        white-space:nowrap;
+        pointer-events:none;
+      }
+
+      .v1 .msg{
+        bottom:26px;
+        font-size:15.5px; letter-spacing:.06em;
+        color:rgba(28,27,24,.8);
+      }
+      .v1 .msg.show{ animation:fadehold 4.6s ease forwards; }
+      @keyframes fadehold{
+        0%{ opacity:0; }
+        10%{ opacity:1; }
+        80%{ opacity:1; }
+        100%{ opacity:0; }
+      }
+
+      .v2 .msg{
+        bottom:22px;
+        background:var(--paper);
+        border:1px solid rgba(28,27,24,.45);
+        box-shadow:0 6px 26px rgba(28,27,24,.14);
+        padding:12px 20px;
+        font-size:14.5px; letter-spacing:.05em;
+      }
+      .v2 .msg.show{ animation:slipup 4.6s ease forwards; }
+      @keyframes slipup{
+        0%{ opacity:0; transform:translateX(-50%) translateY(10px); }
+        12%{ opacity:1; transform:translateX(-50%) translateY(0); }
+        80%{ opacity:1; transform:translateX(-50%) translateY(0); }
+        100%{ opacity:0; transform:translateX(-50%) translateY(8px); }
+      }
+
+      .v3 .msg{
+        top:30px;
+        font-size:15px; letter-spacing:.07em;
+        color:rgba(28,27,24,.75);
+      }
+      .v3 .msg.show{ animation:drift 4.6s ease forwards; }
+      @keyframes drift{
+        0%{ opacity:0; transform:translateX(-50%) translateY(8px); }
+        14%{ opacity:1; }
+        78%{ opacity:1; }
+        100%{ opacity:0; transform:translateX(-50%) translateY(-14px); }
+      }
+
+      .v4 .msg{
+        bottom:26px;
+        font-family:'Shippori Mincho',serif;
+        font-style:italic;
+        font-size:15.5px; letter-spacing:.1em;
+        color:rgba(28,27,24,.72);
+      }
+      .v4 .msg.show{ animation:fadehold 4.6s ease forwards; }
+      .v4 .msg.show .inner{
+        display:inline-block;
+        overflow:hidden;
+        white-space:nowrap;
+        animation:writeon 1.1s steps(26) forwards;
+      }
+      @keyframes writeon{
+        0%{ max-width:0; }
+        100%{ max-width:340px; }
+      }
     </style>
   </head>
   <body>
-    <div class="sect">debris candidates (live, tap them)</div>
-    <div class="sims">
-      <div><div class="stitle">a · driftwood</div><div class="sdesc">a branch drifts through. tap up to three times to shake gold loose.</div><canvas id="cv-wood"></canvas></div>
-      <div><div class="stitle">b · paper lantern</div><div class="sdesc">a lost lantern floats across, still glowing. three taps spill its light.</div><canvas id="cv-lantern"></canvas></div>
-      <div><div class="stitle">c · clamshell</div><div class="sdesc">a shell sinks from above. one tap opens it: the pearl is yours.</div><canvas id="cv-clam"></canvas></div>
-      <div><div class="stitle">d · message bottle</div><div class="sdesc">a corked bottle drifts by. first tap pops the cork, second pulls the note.</div><canvas id="cv-bottle"></canvas></div>
-      <div><div class="stitle">e · paper boat</div><div class="sdesc">a capsized boat sinks slowly. one tap rights it: it spills its cargo and sails up.</div><canvas id="cv-boat"></canvas></div>
-      <div><div class="stitle">f · sunken jar</div><div class="sdesc">an old jar sinks. three taps crack it open in stages.</div><canvas id="cv-jar"></canvas></div>
-      <div><div class="stitle">g · net tangle</div><div class="sdesc">a knot of net with glints caught inside. each tap unravels a strand.</div><canvas id="cv-net"></canvas></div>
-    </div>
+    <div class="sect">player character messages (transitory thoughts from the diver)</div>
+    <div class="note">four styles, same three lines cycling. judge readability, placement, and how much presence the character should have.</div>
+
+    <div class="lab">a · whisper, bottom center. bare text, fades in and out</div>
+    <div class="pane v1"><div class="fishy"><svg viewBox="0 0 340 200"><path d="M30,100 Q160,10 310,148"/><path d="M30,100 Q160,190 310,52"/></svg></div><div class="msg"></div></div>
+
+    <div class="lab">b · paper slip, bottom center. tutorial-style card sliding up</div>
+    <div class="pane v2"><div class="fishy"><svg viewBox="0 0 340 200"><path d="M30,100 Q160,10 310,148"/><path d="M30,100 Q160,190 310,52"/></svg></div><div class="msg"></div></div>
+
+    <div class="lab">c · surface thought, top center. rises and dissolves like a bubble</div>
+    <div class="pane v3"><div class="fishy"><svg viewBox="0 0 340 200"><path d="M30,100 Q160,10 310,148"/><path d="M30,100 Q160,190 310,52"/></svg></div><div class="msg"></div></div>
+
+    <div class="lab">d · journal voice, bottom center. serif italic, writes itself on</div>
+    <div class="pane v4"><div class="fishy"><svg viewBox="0 0 340 200"><path d="M30,100 Q160,10 310,148"/><path d="M30,100 Q160,190 310,52"/></svg></div><div class="msg"></div></div>
 
     <script>
-      const GOLD = 'rgba(122,88,0,';
-      const INK = 'rgba(28,27,24,';
-      const P1 = new Path2D('M310 100 Q180 10 30 148');
-      const P2 = new Path2D('M310 100 Q180 190 30 52');
-      const rand = (a, b) => a + Math.random() * (b - a);
-      const CW = 540, CH = 250;
-
-      const makeSim = id => {
-        const cv = document.getElementById(id);
-        const dpr = window.devicePixelRatio || 1;
-        cv.width = CW * dpr;
-        cv.height = CH * dpr;
-        const ctx = cv.getContext('2d');
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        const pops = [], flecks = [], clicks = [];
-        cv.addEventListener('click', e => {
-          const r = cv.getBoundingClientRect();
-          clicks.push({ x: (e.clientX - r.left) / r.width * CW, y: (e.clientY - r.top) / r.height * CH });
-        });
-        return {
-          ctx, clicks,
-          pop(x, y, txt) { pops.push({ x, y, txt, t: 0 }); },
-          burst(x, y, n, up) {
-            for (let i = 0; i < n; i++) flecks.push({ x: x + rand(-5, 5), y, vx: rand(-16, 16), vy: up ? rand(-36, -14) : rand(6, 26), t: 0 });
-          },
-          paper() { ctx.fillStyle = '#f2efe6'; ctx.fillRect(0, 0, CW, CH); },
-          fx(dt) {
-            for (let i = flecks.length - 1; i >= 0; i--) {
-              const p = flecks[i];
-              p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 24 * dt;
-              if (p.t > 0.85) { flecks.splice(i, 1); continue; }
-              ctx.globalAlpha = 0.75 * (1 - p.t / 0.85);
-              ctx.fillStyle = GOLD + '1)';
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-            ctx.font = '13px "Sniglet", sans-serif';
-            ctx.textAlign = 'center';
-            for (let i = pops.length - 1; i >= 0; i--) {
-              const p = pops[i];
-              p.t += dt;
-              if (p.t > 0.9) { pops.splice(i, 1); continue; }
-              ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
-              ctx.fillStyle = GOLD + '1)';
-              ctx.fillText(p.txt, p.x, p.y - p.t * 20);
-            }
-            ctx.globalAlpha = 1;
-          }
-        };
+      const LINES = [
+        'Fish is hungry.',
+        'The lanterns found their way down again.',
+        'Quiet today. Even the bubbles are slow.'
+      ];
+      const panes = [...document.querySelectorAll('.pane')];
+      let idx = 0;
+      const cycle = () => {
+        const line = LINES[idx % LINES.length];
+        idx += 1;
+        for (const p of panes) {
+          const m = p.querySelector('.msg');
+          m.classList.remove('show');
+          void m.offsetWidth;
+          m.innerHTML = '<span class="inner">' + line + '</span>';
+          m.classList.add('show');
+        }
       };
-
-      const makeFish = () => ({
-        x: rand(60, CW - 60), y: rand(50, CH - 40),
-        dir: Math.random() < 0.5 ? -1 : 1,
-        spd: rand(26, 55), tSpd: 0, chT: rand(1, 3),
-        ph: rand(0, 6), vph: rand(0, 6), len: 54
-      });
-      const moveFish = (f, dt) => {
-        f.ph += dt * (2 + f.spd * 0.03);
-        f.vph += dt * 0.7;
-        f.chT -= dt;
-        if (f.chT <= 0) { f.chT = rand(1.5, 3.5); f.tSpd = rand(22, 60); }
-        f.spd += ((f.tSpd || f.spd) - f.spd) * Math.min(dt * 2, 1);
-        f.x += f.dir * f.spd * dt;
-        f.y += Math.sin(f.vph) * 9 * dt;
-        if (f.x < 46 && f.dir < 0) f.dir = 1;
-        if (f.x > CW - 46 && f.dir > 0) f.dir = -1;
-        if (f.y < 36) f.y = 36;
-        if (f.y > CH - 26) f.y = CH - 26;
-      };
-      const drawFish = (ctx, f) => {
-        ctx.save();
-        ctx.translate(f.x, f.y);
-        const sc = f.len / 340;
-        ctx.scale(f.dir * sc, sc);
-        ctx.transform(1, Math.sin(f.ph) * 0.05, 0, 1, 0, 0);
-        ctx.translate(-170, -100);
-        ctx.lineWidth = 1.55 / sc;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = INK + '0.92)';
-        ctx.stroke(P1);
-        ctx.stroke(P2);
-        ctx.restore();
-      };
-
-      const sims = [];
-
-      (() => {
-        const s = makeSim('cv-wood');
-        const fish = [makeFish(), makeFish()];
-        let log = null, wait = 0.8;
-        sims.push(dt => {
-          s.paper();
-          if (!log) {
-            wait -= dt;
-            if (wait <= 0) log = { x: -70, y: rand(46, 100), taps: 0, jolt: 0, ph: rand(0, 6) };
-          } else {
-            log.x += 19 * dt;
-            log.ph += dt * 0.8;
-            log.jolt = Math.max(log.jolt - dt * 4, 0);
-            if (log.x > CW + 70) { log = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (log && log.taps < 3 && Math.abs(c.x - log.x) < 52 && Math.abs(c.y - log.y) < 26) {
-              log.taps += 1;
-              log.jolt = 1;
-              s.pop(log.x, log.y - 20, '+5');
-              s.burst(log.x + rand(-18, 18), log.y + 6, 4, false);
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (log) {
-            const a = log.taps >= 3 ? 0.3 : 0.8;
-            const ctx = s.ctx;
-            ctx.save();
-            ctx.translate(log.x, log.y + Math.sin(log.ph) * 3 + log.jolt * 4);
-            ctx.rotate(-0.06);
-            ctx.strokeStyle = INK + a + ')';
-            ctx.lineWidth = 3.4;
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(-46, 2);
-            ctx.bezierCurveTo(-18, -3, 16, 4, 46, -2);
-            ctx.stroke();
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(-8, 0); ctx.lineTo(8, -12);
-            ctx.moveTo(20, 1); ctx.lineTo(31, 9);
-            ctx.stroke();
-            ctx.restore();
-          }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-lantern');
-        const fish = [makeFish(), makeFish()];
-        let lan = null, wait = 0.5;
-        sims.push(dt => {
-          s.paper();
-          if (!lan) {
-            wait -= dt;
-            if (wait <= 0) lan = { x: CW + 40, y: rand(50, 95), taps: 0, jolt: 0, ph: rand(0, 6) };
-          } else {
-            lan.x -= 16 * dt;
-            lan.ph += dt;
-            lan.jolt = Math.max(lan.jolt - dt * 4, 0);
-            if (lan.x < -40) { lan = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (lan && lan.taps < 3 && Math.abs(c.x - lan.x) < 24 && Math.abs(c.y - lan.y) < 30) {
-              lan.taps += 1;
-              lan.jolt = 1;
-              s.pop(lan.x, lan.y - 28, '+5');
-              s.burst(lan.x, lan.y + 8, 4, false);
-            }
-          }
-          if (lan) {
-            const ctx = s.ctx;
-            const lit = 1 - lan.taps / 3;
-            const y = lan.y + Math.sin(lan.ph * 1.4) * 4 + lan.jolt * 3;
-            if (lit > 0) {
-              const g = ctx.createRadialGradient(lan.x, y, 2, lan.x, y, 46);
-              g.addColorStop(0, 'rgba(190,150,40,' + 0.16 * lit + ')');
-              g.addColorStop(1, 'rgba(190,150,40,0)');
-              ctx.fillStyle = g;
-              ctx.beginPath();
-              ctx.arc(lan.x, y, 46, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.save();
-            ctx.translate(lan.x, y);
-            ctx.strokeStyle = INK + '0.8)';
-            ctx.fillStyle = 'rgba(255,251,240,' + (0.35 + 0.3 * lit) + ')';
-            ctx.lineWidth = 1.4;
-            ctx.beginPath();
-            ctx.moveTo(-9, -12);
-            ctx.bezierCurveTo(-13, -4, -13, 6, -9, 14);
-            ctx.lineTo(9, 14);
-            ctx.bezierCurveTo(13, 6, 13, -4, 9, -12);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(-11.6, -3); ctx.lineTo(11.6, -3);
-            ctx.moveTo(-11.9, 4); ctx.lineTo(11.9, 4);
-            ctx.stroke();
-            ctx.lineWidth = 1.4;
-            ctx.strokeRect(-5, -15, 10, 3);
-            ctx.strokeRect(-5, 14, 10, 3);
-            if (lit > 0) {
-              ctx.fillStyle = 'rgba(170,125,20,' + (0.5 * lit + 0.2) + ')';
-              ctx.beginPath();
-              ctx.ellipse(0, 1, 2.4, 3.4, 0, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.restore();
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-clam');
-        const fish = [makeFish(), makeFish()];
-        let clam = null, wait = 0.5;
-        sims.push(dt => {
-          s.paper();
-          if (!clam) {
-            wait -= dt;
-            if (wait <= 0) clam = { x: rand(80, CW - 80), y: -20, open: 0, done: false, fade: 1, ph: rand(0, 6) };
-          } else {
-            clam.ph += dt * 1.5;
-            if (!clam.done) {
-              clam.y += 14 * dt;
-              clam.x += Math.sin(clam.ph) * 12 * dt;
-            } else {
-              clam.open = Math.min(clam.open + dt * 3, 1);
-              clam.fade -= dt * 0.55;
-            }
-            if (clam.y > CH + 24 || clam.fade <= 0) { clam = null; wait = rand(3, 5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (clam && !clam.done && Math.abs(c.x - clam.x) < 20 && Math.abs(c.y - clam.y) < 18) {
-              clam.done = true;
-              s.pop(clam.x, clam.y - 18, '+15');
-              s.burst(clam.x, clam.y - 4, 6, true);
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (clam) {
-            const ctx = s.ctx;
-            ctx.save();
-            ctx.translate(clam.x, clam.y);
-            ctx.globalAlpha = Math.max(clam.fade, 0);
-            ctx.strokeStyle = INK + '0.8)';
-            ctx.fillStyle = 'rgba(255,252,244,.75)';
-            ctx.lineWidth = 1.4;
-            const spread = clam.open * 0.9;
-            ctx.save();
-            ctx.rotate(-spread);
-            ctx.beginPath();
-            ctx.arc(0, 0, 13, Math.PI, 0);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-            ctx.save();
-            ctx.rotate(spread * 0.35);
-            ctx.beginPath();
-            ctx.arc(0, 0, 13, 0, Math.PI);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-            if (clam.done) {
-              ctx.fillStyle = GOLD + (0.8 * Math.max(clam.fade, 0)) + ')';
-              ctx.beginPath();
-              ctx.arc(0, -3 - clam.open * 9, 2.6, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.restore();
-            ctx.globalAlpha = 1;
-          }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-bottle');
-        const fish = [makeFish(), makeFish()];
-        let bot = null, wait = 0.6;
-        sims.push(dt => {
-          s.paper();
-          if (!bot) {
-            wait -= dt;
-            if (wait <= 0) bot = { x: -30, y: rand(55, 110), taps: 0, jolt: 0, ph: rand(0, 6), corkT: 0, noteT: 0 };
-          } else {
-            bot.x += 17 * dt;
-            bot.ph += dt * 1.2;
-            bot.jolt = Math.max(bot.jolt - dt * 4, 0);
-            if (bot.corkT > 0) bot.corkT += dt;
-            if (bot.noteT > 0) bot.noteT += dt;
-            if (bot.x > CW + 40) { bot = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (bot && bot.taps < 2 && Math.abs(c.x - bot.x) < 26 && Math.abs(c.y - bot.y) < 20) {
-              bot.taps += 1;
-              bot.jolt = 1;
-              if (bot.taps === 1) {
-                bot.corkT = 0.001;
-                s.pop(bot.x, bot.y - 24, '+5');
-              } else {
-                bot.noteT = 0.001;
-                s.pop(bot.x, bot.y - 24, '+10');
-                s.burst(bot.x, bot.y - 6, 5, true);
-              }
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (bot) {
-            const ctx = s.ctx;
-            const tilt = Math.sin(bot.ph) * 0.12 - 0.18;
-            ctx.save();
-            ctx.translate(bot.x, bot.y + Math.sin(bot.ph * 1.3) * 3 + bot.jolt * 3);
-            ctx.rotate(tilt);
-            ctx.strokeStyle = INK + '0.75)';
-            ctx.fillStyle = 'rgba(255,255,255,.4)';
-            ctx.lineWidth = 1.3;
-            ctx.beginPath();
-            ctx.moveTo(-16, -6);
-            ctx.lineTo(6, -6);
-            ctx.bezierCurveTo(10, -6, 12, -4.5, 15, -3.5);
-            ctx.lineTo(21, -3.5);
-            ctx.lineTo(21, 3.5);
-            ctx.lineTo(15, 3.5);
-            ctx.bezierCurveTo(12, 4.5, 10, 6, 6, 6);
-            ctx.lineTo(-16, 6);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            if (bot.taps === 0) {
-              ctx.fillStyle = 'rgba(163,120,60,.85)';
-              ctx.fillRect(20, -3, 5, 6);
-              ctx.strokeRect(20, -3, 5, 6);
-            }
-            if (bot.taps >= 1 && bot.noteT === 0) {
-              ctx.strokeStyle = INK + '0.65)';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(-10, -3); ctx.lineTo(-2, -3);
-              ctx.moveTo(-10, 0); ctx.lineTo(-4, 0);
-              ctx.moveTo(-10, 3); ctx.lineTo(-3, 3);
-              ctx.stroke();
-            }
-            ctx.restore();
-            if (bot.corkT > 0 && bot.corkT < 0.8) {
-              const u = bot.corkT / 0.8;
-              ctx.globalAlpha = 1 - u;
-              ctx.fillStyle = 'rgba(163,120,60,.85)';
-              ctx.fillRect(bot.x + 24 + u * 26, bot.y - 8 - u * 34 + u * u * 40, 5, 6);
-              ctx.globalAlpha = 1;
-            }
-            if (bot.noteT > 0 && bot.noteT < 1.1) {
-              const u = bot.noteT / 1.1;
-              ctx.save();
-              ctx.translate(bot.x + 6, bot.y - 12 - u * 30);
-              ctx.rotate(Math.sin(u * 9) * 0.2);
-              ctx.globalAlpha = 1 - u;
-              ctx.fillStyle = 'rgba(255,253,246,.95)';
-              ctx.strokeStyle = INK + '0.7)';
-              ctx.lineWidth = 1;
-              ctx.fillRect(-6, -4, 12, 8);
-              ctx.strokeRect(-6, -4, 12, 8);
-              ctx.beginPath();
-              ctx.moveTo(-4, -1.5); ctx.lineTo(4, -1.5);
-              ctx.moveTo(-4, 1); ctx.lineTo(2, 1);
-              ctx.stroke();
-              ctx.restore();
-              ctx.globalAlpha = 1;
-            }
-          }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-boat');
-        const fish = [makeFish(), makeFish()];
-        let boat = null, wait = 0.6;
-        sims.push(dt => {
-          s.paper();
-          if (!boat) {
-            wait -= dt;
-            if (wait <= 0) boat = { x: rand(90, CW - 90), y: -18, flip: 0, done: false, fade: 1, ph: rand(0, 6) };
-          } else {
-            boat.ph += dt * 1.4;
-            if (!boat.done) {
-              boat.y += 13 * dt;
-              boat.x += Math.sin(boat.ph) * 10 * dt;
-            } else {
-              boat.flip = Math.min(boat.flip + dt * 2.4, 1);
-              boat.y -= 34 * dt * boat.flip;
-              boat.fade -= dt * 0.5;
-            }
-            if (boat.y > CH + 22 || boat.fade <= 0 || boat.y < -30) { boat = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (boat && !boat.done && Math.abs(c.x - boat.x) < 24 && Math.abs(c.y - boat.y) < 18) {
-              boat.done = true;
-              s.pop(boat.x, boat.y - 20, '+10');
-              s.burst(boat.x, boat.y + 4, 6, false);
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (boat) {
-            const ctx = s.ctx;
-            ctx.save();
-            ctx.translate(boat.x, boat.y);
-            ctx.globalAlpha = Math.max(boat.fade, 0);
-            ctx.scale(1, 1 - 2 * (1 - boat.flip) * (boat.done ? 1 : 1) * (boat.done ? (1 - boat.flip) : 1) || 1);
-            const up = boat.done ? boat.flip : 0;
-            ctx.scale(1, up * 2 - 1);
-            ctx.strokeStyle = INK + '0.8)';
-            ctx.fillStyle = 'rgba(255,253,246,.9)';
-            ctx.lineWidth = 1.3;
-            ctx.beginPath();
-            ctx.moveTo(-18, 0);
-            ctx.lineTo(-8, 8);
-            ctx.lineTo(8, 8);
-            ctx.lineTo(18, 0);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -12);
-            ctx.lineTo(9, -3);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-            ctx.globalAlpha = 1;
-          }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-jar');
-        const fish = [makeFish(), makeFish()];
-        let jar = null, wait = 0.6;
-        sims.push(dt => {
-          s.paper();
-          if (!jar) {
-            wait -= dt;
-            if (wait <= 0) jar = { x: rand(90, CW - 90), y: -22, taps: 0, jolt: 0, burstT: 0, ph: rand(0, 6), shards: [] };
-          } else {
-            jar.ph += dt * 1.2;
-            jar.jolt = Math.max(jar.jolt - dt * 4, 0);
-            if (jar.taps < 3) {
-              jar.y += 11 * dt;
-              jar.x += Math.sin(jar.ph) * 8 * dt;
-            } else {
-              jar.burstT += dt;
-              for (const sh of jar.shards) {
-                sh.x += sh.vx * dt;
-                sh.y += sh.vy * dt;
-                sh.vy += 30 * dt;
-                sh.r += sh.vr * dt;
-              }
-            }
-            if (jar.y > CH + 26 || jar.burstT > 1.1) { jar = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (jar && jar.taps < 3 && Math.abs(c.x - jar.x) < 20 && Math.abs(c.y - jar.y) < 22) {
-              jar.taps += 1;
-              jar.jolt = 1;
-              if (jar.taps < 3) {
-                s.pop(jar.x, jar.y - 26, '+5');
-              } else {
-                s.pop(jar.x, jar.y - 26, '+15');
-                s.burst(jar.x, jar.y, 7, true);
-                for (let i = 0; i < 4; i++) jar.shards.push({ x: jar.x, y: jar.y, vx: rand(-40, 40), vy: rand(-50, -10), r: rand(0, 6), vr: rand(-3, 3) });
-              }
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (jar) {
-            const ctx = s.ctx;
-            if (jar.taps < 3) {
-              ctx.save();
-              ctx.translate(jar.x, jar.y + jar.jolt * 3);
-              ctx.strokeStyle = INK + '0.8)';
-              ctx.fillStyle = 'rgba(235,228,214,.85)';
-              ctx.lineWidth = 1.4;
-              ctx.beginPath();
-              ctx.moveTo(-6, -14);
-              ctx.bezierCurveTo(-13, -8, -13, 8, -7, 15);
-              ctx.lineTo(7, 15);
-              ctx.bezierCurveTo(13, 8, 13, -8, 6, -14);
-              ctx.closePath();
-              ctx.fill();
-              ctx.stroke();
-              ctx.strokeRect(-7, -17, 14, 3);
-              ctx.lineWidth = 1;
-              ctx.strokeStyle = INK + '0.7)';
-              if (jar.taps >= 1) {
-                ctx.beginPath();
-                ctx.moveTo(-4, -8);
-                ctx.lineTo(1, -1);
-                ctx.lineTo(-2, 5);
-                ctx.stroke();
-              }
-              if (jar.taps >= 2) {
-                ctx.beginPath();
-                ctx.moveTo(6, -6);
-                ctx.lineTo(2, 2);
-                ctx.lineTo(6, 9);
-                ctx.moveTo(-8, 2);
-                ctx.lineTo(-4, 8);
-                ctx.stroke();
-              }
-              ctx.restore();
-            } else {
-              ctx.strokeStyle = INK + (0.7 * (1 - jar.burstT)) + ')';
-              ctx.lineWidth = 1.3;
-              for (const sh of jar.shards) {
-                ctx.save();
-                ctx.translate(sh.x, sh.y);
-                ctx.rotate(sh.r);
-                ctx.beginPath();
-                ctx.moveTo(-5, 2);
-                ctx.lineTo(0, -5);
-                ctx.lineTo(5, 2);
-                ctx.closePath();
-                ctx.stroke();
-                ctx.restore();
-              }
-            }
-          }
-          s.fx(dt);
-        });
-      })();
-
-      (() => {
-        const s = makeSim('cv-net');
-        const fish = [makeFish(), makeFish()];
-        let net = null, wait = 0.6;
-        sims.push(dt => {
-          s.paper();
-          if (!net) {
-            wait -= dt;
-            if (wait <= 0) net = { x: CW + 40, y: rand(70, 150), taps: 0, jolt: 0, ph: rand(0, 6), fade: 1 };
-          } else {
-            net.x -= 13 * dt;
-            net.ph += dt * 0.9;
-            net.jolt = Math.max(net.jolt - dt * 4, 0);
-            if (net.taps >= 3) net.fade -= dt * 0.7;
-            if (net.x < -50 || net.fade <= 0) { net = null; wait = rand(3, 5.5); }
-          }
-          for (const c of s.clicks.splice(0)) {
-            if (net && net.taps < 3 && Math.abs(c.x - net.x) < 30 && Math.abs(c.y - net.y) < 26) {
-              net.taps += 1;
-              net.jolt = 1;
-              s.pop(net.x, net.y - 30, '+5');
-              s.burst(net.x + rand(-8, 8), net.y - 8, 2, true);
-            }
-          }
-          for (const f of fish) { moveFish(f, dt); drawFish(s.ctx, f); }
-          if (net) {
-            const ctx = s.ctx;
-            const y = net.y + Math.sin(net.ph) * 4 + net.jolt * 3;
-            ctx.save();
-            ctx.translate(net.x, y);
-            ctx.globalAlpha = Math.max(net.fade, 0);
-            ctx.strokeStyle = INK + '0.6)';
-            ctx.lineWidth = 1.1;
-            const strands = 4 - net.taps;
-            for (let i = 0; i < strands; i++) {
-              const o = (i - 1.5) * 7;
-              ctx.beginPath();
-              ctx.moveTo(-24, o - 4);
-              ctx.bezierCurveTo(-8, o + 8, 8, o - 9, 24, o + 3);
-              ctx.stroke();
-              ctx.beginPath();
-              ctx.moveTo(o - 4, -22);
-              ctx.bezierCurveTo(o + 6, -8, o - 7, 8, o + 2, 22);
-              ctx.stroke();
-            }
-            const glints = 3 - net.taps;
-            ctx.fillStyle = GOLD + '0.8)';
-            for (let i = 0; i < glints; i++) {
-              const a = net.ph * 0.7 + i * 2.1;
-              ctx.beginPath();
-              ctx.arc(Math.cos(a) * 10, Math.sin(a * 1.3) * 9, 2, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.restore();
-            ctx.globalAlpha = 1;
-          }
-          s.fx(dt);
-        });
-      })();
-
-      let last = 0;
-      const loop = ts => {
-        requestAnimationFrame(loop);
-        const dt = Math.min((ts - last) / 1000 || 0, 0.05);
-        last = ts;
-        for (const t of sims) t(dt);
-      };
-      requestAnimationFrame(loop);
+      cycle();
+      setInterval(cycle, 5600);
     </script>
   </body>
 </html>

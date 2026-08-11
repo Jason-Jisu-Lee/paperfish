@@ -256,7 +256,17 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .menu button:hover{ color:var(--ink); }
 .menu button:focus{ outline:none; }
 .menu button:focus-visible{ outline:1px dotted rgba(28,27,24,.45); outline-offset:4px; }
-.front-set{ width:214px; margin-top:28px; }
+.front-set{
+  position:absolute; z-index:26;
+  left:50%; top:58%;
+  transform:translateX(-50%);
+  width:246px;
+  background:var(--paper);
+  border:1px solid rgba(28,27,24,.45);
+  box-shadow:0 6px 26px rgba(28,27,24,.14);
+  padding:14px 18px 8px;
+}
+.row .value.armed{ color:var(--seal); }
 .vert{
   position:absolute; right:6vw; top:50%;
   transform:translateY(-50%);
@@ -290,6 +300,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   white-space:nowrap;
 }
 #fishtip{ transform:translate(-50%, -100%); text-align:center; padding:10px 15px; }
+#fishtip.lant .tip-name{ font-family:'Sniglet',sans-serif; font-size:14px; letter-spacing:.05em; }
 .tip-head{ display:flex; align-items:center; justify-content:center; gap:9px; }
 .tip-fish svg{ width:30px; height:15px; display:block; overflow:visible; }
 .tip-fish path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:1.2; stroke-linecap:round; stroke-linejoin:round; }

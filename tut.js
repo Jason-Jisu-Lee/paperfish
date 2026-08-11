@@ -3,8 +3,7 @@ const Tut = (() => {
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-ok');
   const TEXTS = {
-    death: "fish gives gold on death\n(don't worry, he went to fish heaven)",
-    hungry: 'fish is hungry.'
+    death: "fish gives gold on death\n(don't worry, he went to fish heaven)"
   };
   let active = false, pendingName = null;
 
