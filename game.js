@@ -104,7 +104,7 @@ const startGame = () => {
             }
           }
         }
-        const r = (speciesGpm(f.s, f.age) + streamFor(f.s)) / 60 * sdt;
+        const r = speciesGpm(f.s, f.age) / 60 * sdt;
         earned += r;
         f.acc = (f.acc || 0) + r;
         f.popT = (f.popT || 0) - mdt;

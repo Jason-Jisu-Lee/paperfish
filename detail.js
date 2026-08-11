@@ -31,9 +31,16 @@ const Detail = (() => {
     return m + ':' + String(Math.floor((age % 1) * 60)).padStart(2, '0');
   };
 
-  const close = () => {
-    if (sel) Stage.release();
+  const releaseSel = () => {
+    if (!sel) return;
+    const f = sel;
+    Stage.release();
+    Stage.escape(f, 1);
     sel = null;
+  };
+
+  const close = () => {
+    releaseSel();
     card.setAttribute('hidden', '');
   };
 
@@ -56,12 +63,11 @@ const Detail = (() => {
   canvas.addEventListener('mousedown', e => {
     if (e.button !== 0 || Tut.active) return;
     clearTimeout(holdTimer);
-    const f = hover && !hover.egg ? hover : null;
+    const f = hover && !hover.egg && hover !== sel ? hover : null;
     if (!f) return;
     holdTimer = setTimeout(() => {
       justHeld = true;
-      heldFish = f;
-      if (sel) Stage.release();
+      releaseSel();
       sel = f;
       Stage.hold(f);
       buildGraph(f);
@@ -73,11 +79,6 @@ const Detail = (() => {
   canvas.addEventListener('mouseup', e => {
     if (e.button !== 0) return;
     clearTimeout(holdTimer);
-    if (heldFish) {
-      Stage.release();
-      Stage.escape(heldFish, 1);
-      heldFish = null;
-    }
   });
 
   canvas.addEventListener('click', e => {
@@ -87,7 +88,7 @@ const Detail = (() => {
       return;
     }
     if (hover && !hover.egg) {
-      if (hover.hstate === 2) return;
+      if (hover === sel || hover.hstate === 2) return;
       const now = performance.now();
       streak = now - lastClick <= 1500 ? streak + 1 : 1;
       lastClick = now;
@@ -102,6 +103,8 @@ const Detail = (() => {
       close();
     }
   });
+
+  document.getElementById('fc-x').addEventListener('click', close);
 
   canvas.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -150,15 +153,15 @@ const Detail = (() => {
     const phs = speciesPhases(f.s);
     const life = lifeOf(f.s);
     const st = streamFor(f.s);
-    const y0 = phs[0].gpm + st;
-    const ymax = phs[phs.length - 1].gpm + st;
+    const y0 = phaseVal(f.s, phs[0]);
+    const ymax = phaseVal(f.s, phs[phs.length - 1]);
     let pts = '';
     let t = 0;
     for (const p of phs) {
       const x0 = GX0 + (t / life) * (GX1 - GX0);
       t += p.dur;
       const x1 = GX0 + (t / life) * (GX1 - GX0);
-      const yy = py(p.gpm + st, ymax);
+      const yy = py(phaseVal(f.s, p), ymax);
       pts += `${x0},${yy} ${x1},${yy} `;
     }
     const aAt = adultAtOf(f.s);
@@ -193,7 +196,7 @@ const Detail = (() => {
     if (vx < GX0 - 6 || vx > GX1 + 6) { hg.setAttribute('hidden', ''); return; }
     const life = lifeOf(sel.s);
     const phs = speciesPhases(sel.s);
-    const ymax = phs[phs.length - 1].gpm + streamFor(sel.s);
+    const ymax = phaseVal(sel.s, phs[phs.length - 1]);
     const u = Math.min(Math.max((vx - GX0) / (GX1 - GX0), 0), 1);
     let age = Math.min(u * life, life - 0.0001);
     let ax = GX0 + u * (GX1 - GX0);
@@ -207,7 +210,7 @@ const Detail = (() => {
         break;
       }
     }
-    const v = speciesGpm(sel.s, age) + streamFor(sel.s);
+    const v = speciesGpm(sel.s, age);
     const ay = py(v, ymax);
     const line = document.getElementById('g-hline');
     line.setAttribute('x1', ax); line.setAttribute('x2', ax);
@@ -278,7 +281,7 @@ const Detail = (() => {
         } else {
           tipStage.setAttribute('hidden', '');
         }
-        tipRate.textContent = fmt(speciesGpm(hover.s, hover.age) + streamFor(hover.s)) + ' / min';
+        tipRate.textContent = fmt(speciesGpm(hover.s, hover.age)) + ' / min';
         tipLtv.textContent = 'ltv ' + fmt(ltvOf(hover.s));
         tipLtv.removeAttribute('hidden');
         tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
@@ -294,14 +297,14 @@ const Detail = (() => {
       const life = lifeOf(sel.s);
       const phs = speciesPhases(sel.s);
       const age = Math.min(sel.age || 0, life - 0.0001);
-      const gpm = speciesGpm(sel.s, age) + streamFor(sel.s);
+      const gpm = speciesGpm(sel.s, age);
       const p = phaseAt(sel.s, age);
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
       elMin.textContent = fmt(gpm);
-      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' / min' : fmt(p.amt) + ' / ' + p.tick + ' sec';
+      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' / min' : fmt(p.amt + streamFor(sel.s)) + ' / ' + p.tick + ' sec';
       elDeath.textContent = fmt(ltvOf(sel.s) * 0.1);
-      const ymax = phs[phs.length - 1].gpm + streamFor(sel.s);
+      const ymax = phaseVal(sel.s, phs[phs.length - 1]);
       const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
       const ay = py(gpm, ymax);
       const guide = document.getElementById('g-guide');

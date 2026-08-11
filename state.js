@@ -65,12 +65,14 @@ const phaseAt = (s, age) => {
   return ph[ph.length - 1];
 };
 
-const speciesGpm = (s, age) => phaseAt(s, age).gpm;
+const phaseVal = (s, p) => (p.amt + streamFor(s)) * 60 / p.tick;
+
+const speciesGpm = (s, age) => phaseVal(s, phaseAt(s, age));
 
 const ltvOf = s => {
   let sum = 0;
-  for (const p of speciesPhases(s)) sum += p.gpm * p.dur;
-  return sum + streamFor(s) * lifeOf(s);
+  for (const p of speciesPhases(s)) sum += phaseVal(s, p) * p.dur;
+  return sum;
 };
 
 const ratePerMin = () => {

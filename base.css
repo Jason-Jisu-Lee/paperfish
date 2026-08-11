@@ -264,13 +264,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .tut{
   position:absolute; z-index:16;
-  left:50%; top:30%;
-  transform:translate(-50%, -50%);
+  width:280px;
   background:var(--paper);
   box-shadow:0 0 0 1px rgba(28,27,24,.14), 0 4px 22px rgba(28,27,24,.08);
   padding:16px 22px 13px;
   text-align:center;
-  max-width:300px;
 }
 .tut-text{
   font-size:12.5px; letter-spacing:.08em; line-height:1.8;
@@ -278,12 +276,20 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .tut-ok{
   margin-top:10px;
-  font-size:10px; letter-spacing:.4em; text-indent:.4em; text-transform:uppercase;
-  color:rgba(28,27,24,.6);
+  font-size:11px; letter-spacing:.3em; text-indent:.3em;
+  color:rgba(28,27,24,.65);
   padding:4px 12px;
   transition:color .3s ease;
 }
 .tut-ok:hover{ color:var(--ink); }
+.fc-x{
+  position:absolute; top:6px; right:9px;
+  font-size:15px; line-height:1;
+  color:rgba(28,27,24,.45);
+  padding:4px;
+  transition:color .3s ease;
+}
+.fc-x:hover{ color:var(--ink); }
 
 .veil{
   position:absolute; inset:0; z-index:14;
@@ -296,27 +302,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .veil-mid{ display:grid; place-items:center; gap:16px; }
 .veil svg{ width:44px; height:44px; }
 .veil path{ fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; opacity:.8; }
-
-.devnotes{
-  position:absolute; z-index:40;
-  left:50%; transform:translateX(-50%);
-  bottom:12px;
-  display:flex; gap:10px; align-items:flex-end;
-}
-.devnote{
-  width:380px;
-  background:var(--paper);
-  box-shadow:0 0 0 1px rgba(180,58,43,.5);
-  padding:10px 13px;
-  font-size:10.5px; line-height:1.65;
-  color:rgba(28,27,24,.82);
-}
-.devnote:last-child{ width:220px; }
-.devnote-title{
-  font-size:9.5px; letter-spacing:.3em; text-transform:uppercase;
-  color:var(--seal);
-  margin-bottom:5px;
-}
 
 .dev{
   position:absolute; z-index:30;

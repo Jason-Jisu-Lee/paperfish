@@ -32,7 +32,7 @@ const Panel = (() => {
 
     currentRows.innerHTML = `
       <button class="row" data-up="stream">
-        <span class="fname">Fish Income</span><span class="tag">+1 / min</span><span class="fmult">× ${Game.stream}</span>
+        <span class="fname">firstF Income</span><span class="tag">+1 / 5s</span><span class="fmult">× ${Game.stream}</span>
         <span class="leader"></span><span class="value">${fmt(streamCost())}</span></button>
       <button class="row" data-up="kelp">
         <span class="fname">Gold Kelp</span><span class="tag">food</span><span class="fmult">× ${Game.plants}</span>
@@ -82,7 +82,7 @@ const Panel = (() => {
   });
 
   const UP_DESC = {
-    stream: 'firstF earns +1 gold per minute. stacks.',
+    stream: 'firstF earns +1 gold per 5 seconds. stacks.',
     kelp: 'satisfies hunger for 1 minute',
     mating: '+5% chance at birth to mate once in life. stacks.',
     maturity: 'reaches adulthood 10% sooner per level. caps at 80%.'
