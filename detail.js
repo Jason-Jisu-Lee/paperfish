@@ -22,6 +22,8 @@ const Detail = (() => {
   const elDeath = document.getElementById('fc-death');
   const fertRow = document.getElementById('fc-fert-row');
   const elFert = document.getElementById('fc-fert');
+  const spawnedRow = document.getElementById('fc-spawned-row');
+  const elSpawned = document.getElementById('fc-spawned');
   const adultRow = document.getElementById('fc-adult-row');
   const elAdult = document.getElementById('fc-adult');
   const tipLtv = document.getElementById('fishtip-ltv');
@@ -262,10 +264,13 @@ const Detail = (() => {
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
       elMin.textContent = fmt(gpm);
       if (Game.mating >= 1) {
-        elFert.textContent = sel.mated ? 'spent' : sel.canMate ? 'yes' : 'no';
+        elFert.textContent = Game.mating * 5 + '%';
+        elSpawned.textContent = '× ' + (sel.spawned || 0);
         fertRow.removeAttribute('hidden');
+        spawnedRow.removeAttribute('hidden');
       } else {
         fertRow.setAttribute('hidden', '');
+        spawnedRow.setAttribute('hidden', '');
       }
       const aAt = adultAtOf(sel.s);
       if (Game.maturity >= 1 && aAt !== undefined && !sel.adult) {

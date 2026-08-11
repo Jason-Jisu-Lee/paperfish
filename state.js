@@ -97,7 +97,7 @@ const saveGame = () => {
       fish: Game.fish.map(f => ({
         s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
         a: Math.round((f.age || 0) * 100) / 100,
-        m: f.mated ? 1 : 0, c: f.canMate ? 1 : 0,
+        sp: f.spawned || 0,
         h: f.hstate || 0, ha: Math.round((f.hungerAt || 0) * 100) / 100
       }))
     }));
@@ -117,7 +117,7 @@ const loadGame = () => {
     Game.tuts = typeof d.tut === 'number' ? (d.tut >= 1 ? { start: 1 } : {}) : d.tuts || {};
     Game.fish = (d.fish || [])
       .filter(f => f && f.s >= 0 && f.s < SPECIES.length)
-      .map(f => ({ s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, mated: !!f.m, canMate: !!f.c, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 }));
+      .map(f => ({ s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, spawned: f.sp || 0, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 }));
     return true;
   } catch (e) { return false; }
 };

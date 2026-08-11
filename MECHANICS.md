@@ -16,8 +16,8 @@
 | egg  | 50   | 1 firstF, instant hatch |
 | kelp | 10   | food, 2 bites |
 | firstF Income | 30 x2^n | firstF +1 gold per 5s tick, all stages (+30 ltv, +3 death) |
-| Spawning    | 100 x2^n | spawn chance at birth +5%/level. hover shows current total. level 1+ adds "fertile" row to the fish card (yes / no / spent) |
-| Growth      | 150 x2^n | matures 5s sooner/level, floor 20% of base (24 levels for firstF). hover shows total. level 1+ adds "adult at" row for babies |
+| Spawning    | 100 x2^n | +5%/level chance to spawn each 2 min. retroactive, all adults. level 1+ adds "spawn chance" and "spawned x N" card rows |
+| Growth      | 150 x2^n | matures 5s sooner/level, floor 20% of base (24 levels for firstF). level 1+ adds "adult at" row for babies |
 
 ### hunger sustain
 | fact | value |
@@ -76,5 +76,9 @@ Mating levels (5%/level), rolled once at birth.
   adult. seeking food overrides schooling.
 
 ## spawning
-- chance rolled once at birth: 5% per Spawning level, 0 base. no prestige gate.
-- adults only, once per life, pair within 130px (checked 0.8s), 1 egg at meet.
+- every adult runs 2-minute windows. at each window start it rolls the current
+  chance (5% per Spawning level, 0 base). success schedules one birth at a
+  random moment inside that window. hard cap: one per window even at 100%.
+- retroactive: the chance is read live, so upgrades apply to all living adults
+  at their next window. solo birth, egg laid at the fish's position.
+- upgrade descriptions are uniform: "effect. Current: total".

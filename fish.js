@@ -108,8 +108,7 @@ const Stage = (() => {
     f.egg = false;
     f.t = 0;
     f.age = 0;
-    f.mated = false;
-    f.canMate = Math.random() < Game.mating * 0.05;
+    f.spawned = 0;
     f.adult = !sp.adultAt;
     f.hstate = 0;
     if (sp.hunger) f.hungerAt = 1 + Math.random() / 6;

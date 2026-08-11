@@ -82,10 +82,10 @@ const Panel = (() => {
   });
 
   const UP_DESC = {
-    stream: () => 'firstF earns +1 gold per 5 seconds. stacks.',
+    stream: () => '+1 gold / 5s. Current: +' + Game.stream + ' / 5s',
     kelp: () => 'satisfies hunger for 1 minute',
-    mating: () => 'spawn chance at birth +5%. now ' + Game.mating * 5 + '%.',
-    maturity: () => 'matures 5 seconds sooner. now ' + Game.maturity * 5 + 's sooner.'
+    mating: () => '+5% chance to spawn each 2 min. Current: ' + Game.mating * 5 + '%',
+    maturity: () => 'matures 5s sooner. Current: -' + Game.maturity * 5 + 's'
   };
   const uptip = document.getElementById('uptip');
   document.getElementById('hud').addEventListener('mouseover', e => {

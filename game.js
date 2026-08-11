@@ -22,7 +22,6 @@ const startGame = () => {
 (() => {
   let last = 0;
   let saveT = 0;
-  let matT = 0;
 
   const loop = ts => {
     requestAnimationFrame(loop);
@@ -117,6 +116,24 @@ const startGame = () => {
           f.popT = 0.8;
           Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 8, '+' + n.toLocaleString('en-US'));
         }
+        if (f.adult && f.birth >= 1) {
+          if (f.spawnWin === undefined) {
+            f.spawnWin = 0;
+            f.spawnAt = Math.random() < Game.mating * 0.05 ? Math.random() * 120 : null;
+          }
+          f.spawnWin += sdt;
+          if (f.spawnAt !== null && f.spawnWin >= f.spawnAt) {
+            f.spawnAt = null;
+            f.spawned = (f.spawned || 0) + 1;
+            const egg = { s: f.s, egg: true, t: 0 };
+            Game.fish.push(egg);
+            Stage.materialize(egg);
+            egg.x = f.x;
+            egg.y = f.y;
+            hatched = true;
+          }
+          if (f.spawnWin >= 120) f.spawnWin = undefined;
+        }
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
           f.deathWait -= sdt;
@@ -128,28 +145,6 @@ const startGame = () => {
       }
     }
     Game.gold += earned;
-
-    matT += sdt;
-    if (matT >= 0.8) {
-      matT = 0;
-      const el = Game.fish.filter(f => !f.egg && f.dying === undefined && f.birth >= 1 && !f.mated && f.canMate && (f.age || 0) >= (adultAtOf(f.s) !== undefined ? adultAtOf(f.s) : lifeOf(f.s) * 0.35));
-      for (let a = 0; a < el.length; a++) {
-        for (let b = a + 1; b < el.length; b++) {
-          const A = el[a], B = el[b];
-          if (A.s !== B.s || A.mated || B.mated) continue;
-          const dx = A.x - B.x, dy = A.y - B.y;
-          if (dx * dx + dy * dy > 130 * 130) continue;
-          A.mated = true;
-          B.mated = true;
-          const egg = { s: A.s, egg: true, t: 0, mated: false };
-          Game.fish.push(egg);
-          Stage.materialize(egg);
-          egg.x = (A.x + B.x) / 2;
-          egg.y = (A.y + B.y) / 2;
-          hatched = true;
-        }
-      }
-    }
 
     Ambience.update(mdt);
     Stage.update(mdt);
