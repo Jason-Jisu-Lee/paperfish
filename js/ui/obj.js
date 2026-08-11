@@ -1,6 +1,5 @@
 const Obj = (() => {
   const box = document.getElementById('objbox');
-  const mark = document.getElementById('obj-mark');
   const txt = document.getElementById('obj-text');
   const prog = document.getElementById('obj-prog');
   const fill = document.getElementById('obj-fill');
@@ -44,8 +43,7 @@ const Obj = (() => {
       box.setAttribute('hidden', '');
       return;
     }
-    mark.classList.remove('done');
-    box.classList.remove('fade');
+    box.classList.remove('done', 'fade');
     render();
     box.removeAttribute('hidden');
     if (cur.onStart) cur.onStart();
@@ -57,7 +55,8 @@ const Obj = (() => {
     saveGame();
     transitioning = true;
     render();
-    mark.classList.add('done');
+    box.classList.add('done');
+    Sfx.objective();
     setTimeout(() => {
       box.classList.add('fade');
       setTimeout(() => {

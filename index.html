@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Sniglet&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="base.css?v=30" />
+    <link rel="stylesheet" href="base.css?v=31" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -116,9 +116,8 @@
     </div>
 
     <div class="objbox" id="objbox" hidden>
-      <div class="obj-head">objective</div>
       <div class="obj-row">
-        <span class="obj-mark" id="obj-mark"></span>
+        <span class="obj-mark"></span>
         <span id="obj-text"></span>
       </div>
       <div class="obj-prog" id="obj-prog" hidden>
@@ -235,10 +234,20 @@
             <button class="modal-x" id="set-x">×</button>
           </div>
           <div class="set-row">
-            <span>Fullscreen</span>
-            <button class="toggle" id="front-screen"><span class="tknob"></span></button>
+            <span>Sound</span>
+            <button class="toggle" id="set-sound"><span class="tknob"></span></button>
           </div>
-          <button class="btn danger wide" id="front-reset">Reset Progress</button>
+          <div class="set-row">
+            <span>Display</span>
+            <div class="seg" id="set-display">
+              <button data-d="win">Windowed</button>
+              <button data-d="full">Fullscreen</button>
+            </div>
+          </div>
+          <div class="set-row">
+            <span>Reset Progress</span>
+            <button class="btn danger small" id="front-reset">Reset</button>
+          </div>
         </div>
       </div>
       <div class="vert">from the deep</div>
@@ -275,21 +284,22 @@
       </div>
     </div>
 
-    <script src="js/species.js?v=1"></script>
-    <script src="js/state.js?v=3"></script>
-    <script src="js/stage.js?v=2"></script>
-    <script src="js/ambience.js?v=2"></script>
-    <script src="js/panel.js?v=2"></script>
-    <script src="js/pause.js?v=1"></script>
-    <script src="js/confirm.js?v=1"></script>
-    <script src="js/obj.js?v=2"></script>
-    <script src="js/lantern.js?v=2"></script>
-    <script src="js/say.js?v=1"></script>
-    <script src="js/detail.js?v=2"></script>
-    <script src="js/dev.js?v=1"></script>
-    <script src="js/front.js?v=2"></script>
-    <script src="js/sim.js?v=1"></script>
-    <script src="js/main.js?v=2"></script>
-    <script src="js/corner.js?v=2"></script>
+    <script src="js/data/species.js?v=1"></script>
+    <script src="js/core/state.js?v=1"></script>
+    <script src="js/world/stage.js?v=1"></script>
+    <script src="js/world/ambience.js?v=1"></script>
+    <script src="js/audio/sfx.js?v=1"></script>
+    <script src="js/ui/panel.js?v=1"></script>
+    <script src="js/ui/pause.js?v=1"></script>
+    <script src="js/ui/confirm.js?v=1"></script>
+    <script src="js/ui/obj.js?v=1"></script>
+    <script src="js/world/lantern.js?v=1"></script>
+    <script src="js/ui/say.js?v=1"></script>
+    <script src="js/ui/detail.js?v=1"></script>
+    <script src="js/ui/dev.js?v=1"></script>
+    <script src="js/ui/front.js?v=1"></script>
+    <script src="js/core/sim.js?v=1"></script>
+    <script src="js/core/main.js?v=1"></script>
+    <script src="js/ui/corner.js?v=1"></script>
   </body>
 </html>

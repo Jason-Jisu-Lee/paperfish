@@ -47,7 +47,7 @@
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
 | paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern" |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | quest tracker card top right: "objective" header, checkbox + text, progress bar with count on its own line. completion fills the pre-reserved checkbox, entry fades out, next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
+| objectives | quest tracker card top right, fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: red seal stamps the checkbox (bounce in), a red line strikes through the text, the card gives one soft pulse, a two-note chime plays, then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Have a total of 5 firstF |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -76,16 +76,21 @@ Mating levels (5%/level), rolled once at birth.
 - schooling: same species drift toward local group height; babies trail nearest
   adult. seeking food overrides schooling.
 
-## code map (js/)
-- species.js data. state.js game state, save, purchases, formulas.
-- stage.js canvas world: fish motion, courtship moves, plants, eggs, pops,
-  swirls, held fish, resize. sim.js per-frame lifecycle economy: hunger,
-  aging, income, spawning triggers, death. main.js startGame plus the loop
-  and draw order.
-- panel.js hud. detail.js tooltip and fish card. corner.js icons and
-  settings. front.js front page. pause.js pause and min-size. dev.js console.
-- ambience.js bubbles, motes, silhouette. lantern.js paper lanterns.
-  obj.js objectives. say.js diver messages.
+## code map
+- js/data: species.js fish data.
+- js/core: state.js game state, save, purchases, formulas. sim.js per-frame
+  lifecycle economy: hunger, aging, income, spawning triggers, death.
+  main.js startGame plus the loop and draw order.
+- js/world: stage.js canvas world (fish motion, courtship moves, plants,
+  eggs, pops, swirls, held fish, resize). ambience.js bubbles, motes,
+  silhouette. lantern.js paper lanterns.
+- js/ui: panel.js hud. detail.js tooltip and fish card. corner.js icons and
+  all settings wiring. front.js front page. pause.js pause and min-size.
+  obj.js objectives. say.js diver messages. confirm.js confirm dialog.
+  dev.js console.
+- js/audio: sfx.js WebAudio chimes, respects the sound setting.
+- assets/ fish svgs plus fish_grid_final.png (master reference copy).
+  demos/ visual reference sketches (02-ink.html, demo.html).
 
 ## spawning
 - every adult runs 2-minute windows. at each window start it rolls the current
@@ -103,18 +108,19 @@ Mating levels (5%/level), rolled once at birth.
 - diver messages: bare whisper text, bottom center, fades in and out (~4.6s).
   one at a time, queued, 15s cooldown per identical line. coexists freely
   with the persistent objective box. first wired line: "Fish is hungry."
-- front settings is a standard modal: scrim, Settings title with x, Fullscreen
-  toggle switch, Reset Progress button. reset (front and in-game) opens a
-  separate confirm dialog: "Reset all progress? This cannot be undone." with
-  Cancel / Reset.
+- front settings is a standard modal: scrim, Settings title with x, then one
+  row per option: Sound toggle, Display segmented control (Windowed or
+  Fullscreen; Borderless joins in the Steam desktop build), Reset Progress
+  row with a small Reset button. reset (front and in-game) opens a separate
+  confirm dialog: "Reset all progress? This cannot be undone." with
+  Cancel / Reset. corner.js owns all settings state and rendering.
 - dev console is always visible (backtick hides it if needed).
 - hud sits on the LEFT. tabs: upgrades (default) and fish. all buttons are
   soft cards in a single column, one per line: name over cost, level in the
   corner, red seal mark until first purchase. the fish tab lists buy buttons
   per unlocked species plus one unlock button showing the next fish's
   silhouette over its price ("unlocks a new fish" on hover). no discover
-  section. objectives appear top right without pausing; completion flashes a
-  green check.
+  section. objectives appear top right without pausing.
 - upgrade hover tooltip: effect line, then "Current: total" on its own line.
 - fish hover tooltip: name, stage beneath. nothing else. eggs show "egg";
   click an egg to select it and see "hatches in" on its card. an egg with 5s

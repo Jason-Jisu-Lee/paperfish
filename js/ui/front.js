@@ -1,7 +1,6 @@
 (() => {
   const front = document.getElementById('front');
   const set = document.getElementById('front-set');
-  const screenToggle = document.getElementById('front-screen');
 
   const replayHero = () => {
     for (const p of front.querySelectorAll('.hero path, .pool')) {
@@ -29,14 +28,6 @@
   });
   set.addEventListener('click', e => {
     if (e.target === set) set.setAttribute('hidden', '');
-  });
-
-  screenToggle.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    else document.documentElement.requestFullscreen().catch(() => {});
-  });
-  document.addEventListener('fullscreenchange', () => {
-    screenToggle.classList.toggle('on', !!document.fullscreenElement);
   });
 
   document.getElementById('front-reset').addEventListener('click', () => {
