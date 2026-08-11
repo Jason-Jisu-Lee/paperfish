@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>paperfish fish card demos</title>
+    <link rel="stylesheet" href="../fonts/fonts.css" />
+    <style>
+      :root{ --paper:#f2efe6; --ink:#1c1b18; --seal:#b43a2b; --gold:#7a5800; }
+      *{ margin:0; padding:0; box-sizing:border-box; }
+      body{
+        background:
+          radial-gradient(140% 100% at 30% 20%, rgba(255,255,255,.55), transparent 60%),
+          radial-gradient(90% 80% at 85% 90%, rgba(190,182,160,.22), transparent 55%),
+          var(--paper);
+        color:var(--ink);
+        font-family:'Zen Maru Gothic',sans-serif;
+      }
+      .note{
+        text-align:center;
+        font-size:13px;
+        color:rgba(28,27,24,.6);
+        padding:26px 0 4px;
+      }
+      section{
+        min-height:420px;
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        position:relative;
+        border-bottom:1px solid rgba(28,27,24,.12);
+        padding:40px 20px;
+      }
+      .num{
+        position:absolute; top:18px; left:26px;
+        font-size:12px; letter-spacing:.2em;
+        color:rgba(28,27,24,.5);
+      }
+      .num b{
+        display:inline-grid; place-items:center;
+        width:22px; height:22px;
+        border:1px solid rgba(28,27,24,.4);
+        border-radius:50%;
+        margin-right:8px;
+        font-weight:400;
+      }
+      .card{
+        position:relative;
+        width:312px;
+        background:var(--paper);
+        box-shadow:0 0 0 1px rgba(28,27,24,.09), 0 10px 30px rgba(28,27,24,.1);
+        padding:18px 20px 14px;
+      }
+      .x{
+        position:absolute; top:6px; right:9px;
+        font-size:15px;
+        color:rgba(28,27,24,.45);
+      }
+      .name{
+        font-family:'Shippori Mincho',serif;
+        font-size:17px; letter-spacing:.06em;
+        margin-bottom:6px;
+      }
+      svg.graph{ width:100%; display:block; margin-top:12px; }
+      .ax{ fill:none; stroke:rgba(28,27,24,.25); stroke-width:1; }
+      .ln{ fill:none; stroke:rgba(28,27,24,.85); stroke-width:1.6; stroke-linecap:round; }
+      .ev{ stroke:rgba(28,27,24,.3); stroke-width:1; stroke-dasharray:3 4; fill:none; }
+      .gt{ font-size:8.5px; letter-spacing:.08em; fill:rgba(28,27,24,.72); font-family:'Zen Maru Gothic',sans-serif; }
+
+      .v1 .row{
+        display:flex; justify-content:space-between; align-items:baseline; gap:9px;
+        font-size:12px; letter-spacing:.14em;
+        padding:7px 0;
+      }
+      .v1 .row span:first-child{ color:rgba(28,27,24,.6); }
+      .v1 .row .val{ letter-spacing:.16em; font-feature-settings:'tnum'; }
+
+      .v2 .name{ font-size:18.5px; }
+      .v2 .row{
+        display:flex; justify-content:space-between; align-items:baseline; gap:9px;
+        font-size:14px; letter-spacing:.02em;
+        padding:7.5px 0;
+      }
+      .v2 .row span:first-child{ color:rgba(28,27,24,.58); }
+      .v2 .row .val{ font-weight:500; color:rgba(28,27,24,.95); font-feature-settings:'tnum'; }
+
+      .v3 .grid{
+        display:grid; grid-template-columns:1fr 1fr; gap:13px 16px;
+        margin-top:10px;
+      }
+      .v3 .cell .lab{
+        font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+        color:rgba(28,27,24,.55);
+        margin-bottom:2px;
+      }
+      .v3 .cell .val{
+        font-size:16.5px; font-weight:500;
+        font-feature-settings:'tnum';
+      }
+
+      .v4 .row{
+        display:flex; justify-content:space-between; align-items:baseline; gap:9px;
+        font-size:14px; letter-spacing:.02em;
+        padding:8.5px 0;
+        border-bottom:1px solid rgba(28,27,24,.08);
+      }
+      .v4 .row:last-of-type{ border-bottom:none; }
+      .v4 .row span:first-child{ color:rgba(28,27,24,.6); }
+      .v4 .row .val{ font-weight:500; font-feature-settings:'tnum'; }
+      .v4 .row .val.money{ color:var(--gold); }
+    </style>
+  </head>
+  <body>
+    <div class="note">fish card styles. pick a number.</div>
+
+    <section>
+      <div class="num"><b>1</b>current</div>
+      <div class="card v1">
+        <span class="x">×</span>
+        <div class="name">firstF</div>
+        <div class="row"><span>age</span><span class="val">1:24</span></div>
+        <div class="row"><span>per min</span><span class="val">12</span></div>
+        <div class="row"><span>earns</span><span class="val">1 / 5 sec</span></div>
+        <div class="row"><span>death value</span><span class="val">9</span></div>
+        <svg class="graph" viewBox="0 0 250 130">
+          <path class="ax" d="M28 8 V112 H244" />
+          <path class="ev" d="M136 8 V112" />
+          <path class="ln" d="M28 84 H136 V56 H244" />
+          <text class="gt" x="12" y="87">12</text>
+          <text class="gt" x="12" y="59">24</text>
+          <text class="gt" x="26" y="124">0</text>
+          <text class="gt" x="222" y="124">5 min</text>
+          <text class="gt" x="70" y="78">baby</text>
+          <text class="gt" x="180" y="50">adult</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <div class="num"><b>2</b>bigger, tracking dropped</div>
+      <div class="card v2">
+        <span class="x">×</span>
+        <div class="name">firstF</div>
+        <div class="row"><span>age</span><span class="val">1:24</span></div>
+        <div class="row"><span>per min</span><span class="val">12</span></div>
+        <div class="row"><span>earns</span><span class="val">1 / 5 sec</span></div>
+        <div class="row"><span>death value</span><span class="val">9</span></div>
+        <svg class="graph" viewBox="0 0 250 130">
+          <path class="ax" d="M28 8 V112 H244" />
+          <path class="ev" d="M136 8 V112" />
+          <path class="ln" d="M28 84 H136 V56 H244" />
+          <text class="gt" x="12" y="87">12</text>
+          <text class="gt" x="12" y="59">24</text>
+          <text class="gt" x="26" y="124">0</text>
+          <text class="gt" x="222" y="124">5 min</text>
+          <text class="gt" x="70" y="78">baby</text>
+          <text class="gt" x="180" y="50">adult</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <div class="num"><b>3</b>stat grid, values lead</div>
+      <div class="card v3">
+        <span class="x">×</span>
+        <div class="name">firstF</div>
+        <div class="grid">
+          <div class="cell"><div class="lab">age</div><div class="val">1:24</div></div>
+          <div class="cell"><div class="lab">per min</div><div class="val">12</div></div>
+          <div class="cell"><div class="lab">earns</div><div class="val">1 / 5 sec</div></div>
+          <div class="cell"><div class="lab">death value</div><div class="val">9</div></div>
+        </div>
+        <svg class="graph" viewBox="0 0 250 130">
+          <path class="ax" d="M28 8 V112 H244" />
+          <path class="ev" d="M136 8 V112" />
+          <path class="ln" d="M28 84 H136 V56 H244" />
+          <text class="gt" x="12" y="87">12</text>
+          <text class="gt" x="12" y="59">24</text>
+          <text class="gt" x="26" y="124">0</text>
+          <text class="gt" x="222" y="124">5 min</text>
+          <text class="gt" x="70" y="78">baby</text>
+          <text class="gt" x="180" y="50">adult</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <div class="num"><b>4</b>ledger lines, gold money</div>
+      <div class="card v4">
+        <span class="x">×</span>
+        <div class="name">firstF</div>
+        <div class="row"><span>age</span><span class="val">1:24</span></div>
+        <div class="row"><span>per min</span><span class="val money">12</span></div>
+        <div class="row"><span>earns</span><span class="val money">1 / 5 sec</span></div>
+        <div class="row"><span>death value</span><span class="val money">9</span></div>
+        <svg class="graph" viewBox="0 0 250 130">
+          <path class="ax" d="M28 8 V112 H244" />
+          <path class="ev" d="M136 8 V112" />
+          <path class="ln" d="M28 84 H136 V56 H244" />
+          <text class="gt" x="12" y="87">12</text>
+          <text class="gt" x="12" y="59">24</text>
+          <text class="gt" x="26" y="124">0</text>
+          <text class="gt" x="222" y="124">5 min</text>
+          <text class="gt" x="180" y="50">adult</text>
+          <text class="gt" x="70" y="78">baby</text>
+        </svg>
+      </div>
+    </section>
+  </body>
+</html>
