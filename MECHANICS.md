@@ -123,7 +123,9 @@ Mating levels (5%/level), rolled once at birth.
   reset opens a separate confirm dialog: "Reset all progress? This cannot be
   undone." with Cancel / Reset. corner.js owns all settings state and
   rendering. dotted-leader rows are banned everywhere; fish card rows are
-  muted label left, value right.
+  14px two-column: muted label in a fixed 112px column, values flush left
+  at the shared second column, no letter tracking, values weight 500,
+  name 18.5px.
 - front page: title is lowercase serif "paperfish" with a small tilted red
   seal square after it (title demo pick 2). menu is play and settings only
   (quit returns with the Steam build), Zen Maru Gothic, large; official Steam and

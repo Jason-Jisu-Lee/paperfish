@@ -53,17 +53,16 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   margin-bottom:4px;
 }
 .row{
-  display:flex; align-items:baseline; justify-content:space-between; gap:9px;
+  display:grid; grid-template-columns:112px 1fr;
+  align-items:baseline; column-gap:12px;
   width:100%;
-  font-size:12.5px; letter-spacing:.14em;
+  font-size:14px; letter-spacing:.02em;
   color:rgba(28,27,24,.92);
-  padding:9px 0;
+  padding:7.5px 0;
   text-align:left;
-  transition:color .35s ease, opacity .35s ease;
 }
-.row:focus{ outline:none; }
-.row .value{ letter-spacing:.16em; font-feature-settings:'tnum'; }
-.row > span:first-child{ color:rgba(28,27,24,.6); }
+.row .value{ font-weight:500; color:rgba(28,27,24,.95); font-feature-settings:'tnum'; }
+.row > span:first-child{ color:rgba(28,27,24,.58); }
 .row.dim{ opacity:.35; cursor:default; }
 .row.dim:hover{ color:rgba(28,27,24,.92); }
 .row.known{ cursor:default; }
@@ -499,10 +498,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .fc-name{
   font-family:'Shippori Mincho',serif;
-  font-size:17px; letter-spacing:.06em;
-  margin-bottom:6px;
+  font-size:18.5px; letter-spacing:.06em;
+  margin-bottom:7px;
 }
-.fishcard .row{ padding:7px 0; font-size:12px; }
 #fc-graph{ width:100%; height:auto; display:block; margin-top:12px; }
 .g-axis{ fill:none; stroke:rgba(28,27,24,.25); stroke-width:1; }
 .g-line{ stroke:rgba(28,27,24,.85); stroke-width:1.6; stroke-linecap:round; }
