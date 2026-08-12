@@ -50,8 +50,10 @@ so +2 per tick after the first upgrade). gold never trickles between ticks.
 | opening spend | the chain uses all 70: egg 50 + kelp 20 |
 | early hunger | starting kelp feeds the first cycle, objective kelp the next, income carries it after |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
-| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes), each entering from a random side at a random height. each takes 3 taps at +5, dims per tap, bounces between edges until spent. 5s after the objective completes a bonus wave of 3 drifts through, then lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
+| paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes), each entering from a random side at a random height. each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
+| objective rewards | every objective pays +5 gold on completion (silent pre-completes included), shown as a "+5 g" line at the bottom of its box plus a +5 pop under the box |
+| learn objective | 10s of unpaused time after the lantern objective completes, the peaceful whisper plays and a second box appears under the first: "Learn about the fish by clicking on it". completes on opening any non-egg fish card. clicking a fish before it appears completes it silently |
 | objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), a line-through in the text color draws itself across the words left to right (~0.35s, every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
@@ -122,7 +124,9 @@ Mating levels (5%/level), rolled once at birth.
   enough kelp." (a fish turns hungry while no kelp is on screen),
   "This should feed the fish." (first kelp bought), "When will it hatch?"
   (first egg bought), "The fish got bigger!" (first baby matures to adult,
-  skipped for fish loaded from a save already past adult age).
+  skipped for fish loaded from a save already past adult age),
+  "It's peaceful here. I should learn about the fish." (10s of unpaused time
+  after the lantern objective completes, alongside the learn objective).
 - one settings modal everywhere (front menu and in-game gear): scrim,
   Settings title with x, one row per option: Sound toggle, Display segmented
   control (Windowed / Borderless / Fullscreen; in the browser borderless and

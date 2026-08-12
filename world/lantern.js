@@ -88,8 +88,6 @@ const Lantern = (() => {
             collected += 1;
             if (collected >= 3) {
               mode = 'recur';
-              queue = 3;
-              spawnT = 5;
               nextT = rand(40, 70);
               Obj.event('lantern');
             }

@@ -69,6 +69,7 @@ const Detail = (() => {
       if (!hover.egg) {
         Stage.hold(hover);
         buildGraph(hover);
+        Obj.event('learnfish');
       }
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');

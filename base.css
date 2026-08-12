@@ -218,7 +218,15 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   border-radius:3px;
   position:relative;
 }
-#obj-text{ position:relative; }
+.obj-text{ position:relative; }
+.objbox.obj2{ top:calc(clamp(14px, 2.4vh, 26px) + 66px + 106px); }
+.obj-reward{
+  margin-top:8px;
+  font-size:11.5px;
+  letter-spacing:.08em;
+  text-align:center;
+  color:rgba(122,88,0,.85);
+}
 .objbox.done{ animation:objpulse .5s ease; }
 .objbox.done .obj-mark{ border-color:#3a8a4e; }
 .objbox.done .obj-mark::before{
@@ -237,7 +245,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transform:rotate(40deg);
   animation:markin .2s ease .16s both;
 }
-.objbox.done #obj-text::after{
+.objbox.done .obj-text::after{
   content:attr(data-t);
   position:absolute; left:0; top:0; width:100%;
   text-decoration:line-through;

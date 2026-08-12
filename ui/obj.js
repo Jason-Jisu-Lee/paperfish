@@ -1,5 +1,6 @@
 const Obj = (() => {
   const box = document.getElementById('objbox');
+  const box2 = document.getElementById('objbox2');
   const txt = document.getElementById('obj-text');
   const tabUp = document.getElementById('tab-up');
   const viewUp = document.getElementById('view-up');
@@ -25,7 +26,13 @@ const Obj = (() => {
     }
   ];
 
-  let cur = null, transitioning = false;
+  let cur = null, transitioning = false, learnT = null, side = false;
+
+  const reward = b => {
+    Game.gold += 5;
+    const r = b.getBoundingClientRect();
+    Stage.spawnPop(r.left + r.width / 2, r.bottom + 16, '+5', true);
+  };
 
   const render = () => {
     if (!cur) return;
@@ -56,6 +63,8 @@ const Obj = (() => {
   const completeCur = () => {
     if (!cur || transitioning) return;
     Game.tuts[cur.id] = 1;
+    if (cur.id === 'lantern') learnT = 0;
+    reward(box);
     saveGame();
     transitioning = true;
     render();
@@ -72,25 +81,68 @@ const Obj = (() => {
     }, 1500);
   };
 
+  const showSide = () => {
+    side = true;
+    Say.say("It's peaceful here. I should learn about the fish.");
+    box2.classList.remove('done', 'fade');
+    box2.removeAttribute('hidden');
+  };
+
+  const completeSide = () => {
+    Game.tuts.learnfish = 1;
+    side = false;
+    reward(box2);
+    saveGame();
+    box2.classList.add('done');
+    Sfx.objective();
+    setTimeout(() => {
+      box2.classList.add('fade');
+      setTimeout(() => {
+        box2.setAttribute('hidden', '');
+        box2.classList.remove('done', 'fade');
+      }, 650);
+    }, 1500);
+  };
+
   const event = id => {
     if (Game.tuts[id]) return;
+    if (id === 'learnfish') {
+      if (side) return completeSide();
+      Game.tuts.learnfish = 1;
+      Game.gold += 5;
+      learnT = null;
+      saveGame();
+      return;
+    }
     if (cur && cur.id === id) {
       completeCur();
     } else {
       Game.tuts[id] = 1;
+      Game.gold += 5;
       saveGame();
     }
   };
 
-  const tick = () => {
+  const tick = mdt => {
     tabUp.classList.toggle('pulse', !!(Game.started && cur && !transitioning && cur.id === 'buykelp' && viewUp.hidden));
-    if (!Game.started || !cur || transitioning) return;
+    if (!Game.started) return;
+    if (learnT !== null && !side && !Game.tuts.learnfish) {
+      learnT += mdt || 0;
+      if (learnT >= 10) {
+        learnT = null;
+        showSide();
+      }
+    }
+    if (!cur || transitioning) return;
     if (cur.prog) render();
     if (cur.auto && cur.auto()) completeCur();
   };
 
   const start = () => {
     transitioning = false;
+    side = false;
+    box2.setAttribute('hidden', '');
+    learnT = Game.tuts.lantern && !Game.tuts.learnfish ? 0 : null;
     showNext();
   };
 
