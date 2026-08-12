@@ -10,6 +10,10 @@
 | death | 5:00      | 10% ltv | -      | +9          |
 | life  |           |        |         | **99**      |
 
+income is discrete: each fish generates once per 5s tick and pays its whole
+tick amount at once with a single pop (phase value + firstF Income levels,
+so +2 per tick after the first upgrade). gold never trickles between ticks.
+
 ### shop
 | item | cost | effect |
 |------|------|--------|
@@ -48,7 +52,7 @@
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
 | paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes). each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), the words get a standard line-through in the text color (every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
+| objectives | quest tracker card top right (breathing room from the corner), fixed width, everything centered: checkbox + text, progress bar with count beneath. no header. completion: green stamp fills the checkbox (bounce in), a line-through in the text color draws itself across the words left to right (~0.35s, every wrapped line), the card gives one soft pulse, a two-note chime plays instantly (audio context prewarmed on first pointerdown), then it fades and the next appears. nothing ever shifts. chain: Buy a fish, Buy a kelp, Collect gold from Paper Lanterns 0/3, Buy firstF Income upgrade, Have a total of 5 firstF (eggs do not count). already-satisfied steps clear instantly via saved flags |
 
 hunger timer starts at birth (eggs do not age). mating chance is 0 until
 Mating levels (5%/level), rolled once at birth.
@@ -63,9 +67,12 @@ Mating levels (5%/level), rolled once at birth.
 - kelp (20g) has 2 bites. a bite is claimed instantly within 70px, takes 2s to
   eat (hunger timer pauses), recharges half: next hunger 30-35s later.
 - two fish can eat one kelp at once, one bite each. claimed bites are gone.
-- detection: every fish senses all food on the map. reaction takes 0-3s after
-  food appears or hunger starts; starving fish react instantly.
-- hungry fish approaches kelp: slows near it, steers vertically, no wall flips.
+- detection: every fish senses all food on the map, no radius limit.
+  reaction takes 0-3s after food appears or hunger starts; starving fish
+  react instantly.
+- hungry fish approaches kelp: slows near it, steers vertically, no wall
+  flips. a STARVING fish sprints: dart-band speed (130-250 px/s), strong
+  vertical pull (cap 140), straight to the nearest kelp.
 
 ## movement
 - burst-coast: drag bleeds speed; below its cruise band the fish fires a short
@@ -122,10 +129,11 @@ Mating levels (5%/level), rolled once at birth.
   with Main Menu button (in-game only), Reset Progress row.
   reset opens a separate confirm dialog: "Reset all progress? This cannot be
   undone." with Cancel / Reset. corner.js owns all settings state and
-  rendering. dotted-leader rows are banned everywhere; fish card rows are
-  14px two-column: muted label in a fixed 112px column, values flush left
-  at the shared second column, no letter tracking, values weight 500,
-  name 18.5px.
+  rendering. dotted-leader rows are banned everywhere.
+- fish card (design pick 5, applies to eggs and every future species): name
+  18.5px, then the life graph, then stats as soft chip cards in a 2-column
+  grid, each chip a tiny uppercase label over a 15px value. no letter
+  tracking. death row keeps its hover hint.
 - front page: title is lowercase serif "paperfish" with a small tilted red
   seal square after it (title demo pick 2). menu is play and settings only
   (quit returns with the Steam build), Zen Maru Gothic, large; official Steam and

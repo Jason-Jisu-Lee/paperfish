@@ -30,6 +30,7 @@ const Obj = (() => {
   const render = () => {
     if (!cur) return;
     txt.textContent = cur.text;
+    txt.dataset.t = cur.text;
     if (cur.prog) {
       const [n, total] = cur.prog();
       fill.style.width = (n / total * 100) + '%';

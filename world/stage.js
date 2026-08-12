@@ -350,9 +350,14 @@ const Stage = (() => {
         const dz = Math.max(18, Math.abs(pyy - f.y) * 0.35);
         if (Math.abs(dx) > dz && Math.sign(dx) !== f.dir) f.dir = Math.sign(dx);
         f.kick = 0;
-        const desired = Math.min(Math.max(Math.abs(dx) * 1.5 + 12, 16), 85);
-        f.spd += (desired - f.spd) * Math.min(4 * mdt, 1);
-        f.vyT = Math.min(Math.max((pyy - f.y) * 0.4, -45), 45);
+        const urgent = f.hstate === 2;
+        const desired = urgent
+          ? Math.min(Math.max(Math.abs(dx) * 3 + 60, 130), 250)
+          : Math.min(Math.max(Math.abs(dx) * 1.5 + 12, 16), 85);
+        f.spd += (desired - f.spd) * Math.min((urgent ? 9 : 4) * mdt, 1);
+        f.vyT = urgent
+          ? Math.min(Math.max((pyy - f.y) * 1.2, -140), 140)
+          : Math.min(Math.max((pyy - f.y) * 0.4, -45), 45);
       } else {
         f.schoolT = (f.schoolT || 0) - mdt;
         if (f.schoolT <= 0) {
@@ -386,7 +391,7 @@ const Stage = (() => {
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 6;
       if (f.y > bounds.b - 26) f.vyT = -Math.abs(f.vyT) || -6;
-      const vcap = seeking ? 45 : f.spd * 0.28;
+      const vcap = seeking ? (f.hstate === 2 ? 140 : 45) : f.spd * 0.28;
       if (f.vyT > vcap) f.vyT = vcap;
       if (f.vyT < -vcap) f.vyT = -vcap;
       const dv = f.vyT - f.vy;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=38" />
+    <link rel="stylesheet" href="base.css?v=39" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -142,31 +142,33 @@
     <div class="fishcard" id="fishcard" hidden>
       <button class="fc-x" id="fc-x">×</button>
       <div class="fc-name" id="fc-name"></div>
-      <div class="row known" id="fc-hatch-row" hidden>
-        <span>hatches in</span><span class="value" id="fc-hatch"></span>
-      </div>
-      <div class="row known" id="fc-age-row">
-        <span>age</span><span class="value" id="fc-age"></span>
-      </div>
-      <div class="row known" id="fc-min-row">
-        <span>per min</span><span class="value" id="fc-min"></span>
-      </div>
-      <div class="row known" id="fc-freq-row">
-        <span>earns</span><span class="value" id="fc-freq"></span>
-      </div>
-      <div class="row known" id="fc-death-row" data-hint>
-        <span>death value</span><span class="value" id="fc-death"></span>
-      </div>
-      <div class="row known" id="fc-fert-row" hidden>
-        <span>spawn chance</span><span class="value" id="fc-fert"></span>
-      </div>
-      <div class="row known" id="fc-spawned-row" hidden>
-        <span>spawned</span><span class="value" id="fc-spawned"></span>
-      </div>
-      <div class="row known" id="fc-adult-row" hidden>
-        <span>adult at</span><span class="value" id="fc-adult"></span>
-      </div>
       <svg id="fc-graph" viewBox="0 0 250 130"></svg>
+      <div class="fc-stats">
+        <div class="stat" id="fc-hatch-row" hidden>
+          <span class="lab">hatches in</span><span class="value" id="fc-hatch"></span>
+        </div>
+        <div class="stat" id="fc-age-row">
+          <span class="lab">age</span><span class="value" id="fc-age"></span>
+        </div>
+        <div class="stat" id="fc-min-row">
+          <span class="lab">per min</span><span class="value" id="fc-min"></span>
+        </div>
+        <div class="stat" id="fc-freq-row">
+          <span class="lab">earns</span><span class="value" id="fc-freq"></span>
+        </div>
+        <div class="stat" id="fc-death-row" data-hint>
+          <span class="lab">death value</span><span class="value" id="fc-death"></span>
+        </div>
+        <div class="stat" id="fc-fert-row" hidden>
+          <span class="lab">spawn chance</span><span class="value" id="fc-fert"></span>
+        </div>
+        <div class="stat" id="fc-spawned-row" hidden>
+          <span class="lab">spawned</span><span class="value" id="fc-spawned"></span>
+        </div>
+        <div class="stat" id="fc-adult-row" hidden>
+          <span class="lab">adult at</span><span class="value" id="fc-adult"></span>
+        </div>
+      </div>
     </div>
 
     <div class="veil" id="veil" hidden>
@@ -254,19 +256,19 @@
 
     <script src="data/species.js?v=2"></script>
     <script src="core/state.js?v=5"></script>
-    <script src="world/stage.js?v=1"></script>
+    <script src="world/stage.js?v=2"></script>
     <script src="world/ambience.js?v=2"></script>
     <script src="audio/sfx.js?v=2"></script>
     <script src="ui/panel.js?v=3"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=4"></script>
+    <script src="ui/obj.js?v=5"></script>
     <script src="world/lantern.js?v=1"></script>
     <script src="ui/say.js?v=1"></script>
     <script src="ui/detail.js?v=2"></script>
     <script src="ui/dev.js?v=1"></script>
     <script src="ui/front.js?v=3"></script>
-    <script src="core/sim.js?v=2"></script>
+    <script src="core/sim.js?v=3"></script>
     <script src="core/main.js?v=2"></script>
     <script src="ui/corner.js?v=3"></script>
   </body>

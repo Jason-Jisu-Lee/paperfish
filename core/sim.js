@@ -69,15 +69,21 @@ const Sim = (() => {
             }
           }
         }
-        const r = speciesGpm(f.s, f.age) / 60 * sdt;
-        earned += r;
-        f.acc = (f.acc || 0) + r;
-        f.popT = (f.popT || 0) - mdt;
-        if (f.acc >= 1 && f.popT <= 0 && f.birth >= 1) {
-          const n = Math.floor(f.acc);
-          f.acc -= n;
-          f.popT = 0.8;
-          Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 8, '+' + n.toLocaleString('en-US'));
+        if (f.birth >= 1) {
+          f.tickT = (f.tickT || 0) + sdt;
+          const tick = sp.tick || 5;
+          let fired = 0;
+          while (f.tickT >= tick) {
+            f.tickT -= tick;
+            fired += 1;
+          }
+          if (fired) {
+            const amt = Math.round(speciesGpm(f.s, f.age) / 60 * tick) * fired;
+            if (amt > 0) {
+              earned += amt;
+              Stage.spawnPop(f.x, f.y - sp.len * 0.3 - 8, '+' + fmtG(amt));
+            }
+          }
         }
         if (f.adult && f.birth >= 1 && !f.court) {
           if (f.spawnWin === undefined) {
