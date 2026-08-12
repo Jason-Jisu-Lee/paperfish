@@ -117,10 +117,10 @@ const Stage = (() => {
     f.birth = 0;
   };
 
-  const spawnPlant = () => {
+  const spawnPlant = center => {
     plants.push({
-      x: rand(bounds.l + 60, bounds.r - 60),
-      y: rand(bounds.t + 40, bounds.b - 20),
+      x: center ? rand(0.42, 0.58) * (bounds.r - bounds.l) + bounds.l : rand(bounds.l + 60, bounds.r - 60),
+      y: center ? rand(0.42, 0.58) * (bounds.b - bounds.t) + bounds.t : rand(bounds.t + 40, bounds.b - 20),
       hx: 0, hy: 0,
       ph: rand(0, Math.PI * 2),
       dph: rand(0, Math.PI * 2),

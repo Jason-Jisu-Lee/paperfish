@@ -139,7 +139,7 @@ const buyFish = s => {
   Obj.event('buyfish');
   if (!Game.tuts.sayegg) {
     Game.tuts.sayegg = 1;
-    Say.say('I wonder how long it takes to hatch.');
+    Say.say('When will it hatch?');
   }
   saveGame();
   return true;

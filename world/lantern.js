@@ -39,15 +39,14 @@ const Lantern = (() => {
   const update = mdt => {
     if (!Game.started || !mdt) return;
     tNow += mdt;
-    if (mode === 'obj' && queue > 0) {
+    if (queue > 0) {
       spawnT -= mdt;
       if (spawnT <= 0) {
         spawn();
         queue -= 1;
         spawnT = 1.4;
       }
-    }
-    if (mode === 'recur' && lanterns.length === 0) {
+    } else if (mode === 'recur' && lanterns.length === 0) {
       nextT -= mdt;
       if (nextT <= 0) {
         spawn();
@@ -88,6 +87,8 @@ const Lantern = (() => {
             collected += 1;
             if (collected >= 3) {
               mode = 'recur';
+              queue = 3;
+              spawnT = 5;
               nextT = rand(40, 70);
               Obj.event('lantern');
             }
