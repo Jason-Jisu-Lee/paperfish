@@ -24,10 +24,11 @@ const Lantern = (() => {
 
   const spawn = () => {
     const b = Stage.bounds;
+    const fromLeft = Math.random() < 0.5;
     lanterns.push({
-      x: b.r + 30,
-      y: rand(b.t + 20, b.t + (b.b - b.t) * 0.35),
-      dir: -1,
+      x: fromLeft ? b.l - 30 : b.r + 30,
+      y: rand(b.t + 20, b.b - 40),
+      dir: fromLeft ? 1 : -1,
       taps: 0,
       jolt: 0,
       ph: rand(0, Math.PI * 2),
