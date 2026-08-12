@@ -2,42 +2,47 @@ const Obj = (() => {
   const box = document.getElementById('objbox');
   const box2 = document.getElementById('objbox2');
   const txt = document.getElementById('obj-text');
+  const rewardEl = document.getElementById('obj-reward');
+  const txt2 = document.getElementById('obj2-text');
   const tabUp = document.getElementById('tab-up');
   const viewUp = document.getElementById('view-up');
+  const foodTab = document.getElementById('cattab-food');
   const prog = document.getElementById('obj-prog');
   const fill = document.getElementById('obj-fill');
   const count = document.getElementById('obj-count');
 
-  const countFirstF = () => Game.fish.filter(f => f.s === 0 && !f.egg && f.dying === undefined).length;
+  const living = s => Game.fish.filter(f => f.s === s && !f.egg && f.dying === undefined).length;
 
-  const STEPS = [
-    { id: 'buyfish', text: 'Buy a fish' },
-    { id: 'buykelp', text: 'Buy a kelp' },
-    {
-      id: 'lantern', text: 'Collect gold from Paper Lanterns',
-      prog: () => [Lantern.collected, 3],
-      onStart: () => Lantern.begin()
-    },
-    { id: 'income', text: 'Buy firstF Income upgrade' },
-    {
-      id: 'five', text: 'Have a total of 5 firstF',
-      prog: () => [Math.min(countFirstF(), 5), 5],
-      auto: () => countFirstF() >= 5
+  const STEPS = OBJECTIVES.filter(o => !o.side).map(o => {
+    const s = { ...o };
+    if (o.id === 'lantern') {
+      s.prog = () => [Lantern.collected, o.target];
+      s.onStart = () => Lantern.begin();
+    } else if (o.sp !== undefined) {
+      s.prog = () => [Math.min(living(o.sp), o.target), o.target];
+      s.auto = () => living(o.sp) >= o.target;
     }
-  ];
+    return s;
+  });
+
+  const LEARN = OBJECTIVES.find(o => o.id === 'learnfish');
+  txt2.textContent = LEARN.text;
+  txt2.dataset.t = LEARN.text;
+  document.getElementById('obj2-reward').textContent = '+' + fmtG(LEARN.reward) + ' g';
 
   let cur = null, transitioning = false, learnT = null, side = false;
 
-  const reward = b => {
-    Game.gold += 5;
+  const reward = (b, amt) => {
+    Game.gold += amt;
     const r = b.getBoundingClientRect();
-    Stage.spawnPop(r.left + r.width / 2, r.bottom + 16, '+5', true);
+    Stage.spawnPop(r.left + r.width / 2, r.bottom + 16, '+' + fmtG(amt), true);
   };
 
   const render = () => {
     if (!cur) return;
     txt.textContent = cur.text;
     txt.dataset.t = cur.text;
+    rewardEl.textContent = '+' + fmtG(cur.reward) + ' g';
     if (cur.prog) {
       const [n, total] = cur.prog();
       fill.style.width = (n / total * 100) + '%';
@@ -64,7 +69,7 @@ const Obj = (() => {
     if (!cur || transitioning) return;
     Game.tuts[cur.id] = 1;
     if (cur.id === 'lantern') learnT = 0;
-    reward(box);
+    reward(box, cur.reward);
     saveGame();
     transitioning = true;
     render();
@@ -83,7 +88,7 @@ const Obj = (() => {
 
   const showSide = () => {
     side = true;
-    Say.say("It's peaceful here. I should learn about the fish.");
+    Say.say(WHISPER.peaceful);
     box2.classList.remove('done', 'fade');
     box2.removeAttribute('hidden');
   };
@@ -91,7 +96,7 @@ const Obj = (() => {
   const completeSide = () => {
     Game.tuts.learnfish = 1;
     side = false;
-    reward(box2);
+    reward(box2, LEARN.reward);
     saveGame();
     box2.classList.add('done');
     Sfx.objective();
@@ -109,7 +114,7 @@ const Obj = (() => {
     if (id === 'learnfish') {
       if (side) return completeSide();
       Game.tuts.learnfish = 1;
-      Game.gold += 5;
+      Game.gold += LEARN.reward;
       learnT = null;
       saveGame();
       return;
@@ -118,13 +123,16 @@ const Obj = (() => {
       completeCur();
     } else {
       Game.tuts[id] = 1;
-      Game.gold += 5;
+      const o = OBJECTIVES.find(x => x.id === id);
+      if (o) Game.gold += o.reward;
       saveGame();
     }
   };
 
   const tick = mdt => {
-    tabUp.classList.toggle('pulse', !!(Game.started && cur && !transitioning && cur.id === 'buykelp' && viewUp.hidden));
+    const kelpPulse = !!(Game.started && cur && !transitioning && cur.id === 'buykelp');
+    tabUp.classList.toggle('pulse', kelpPulse && viewUp.hidden);
+    foodTab.classList.toggle('pulse', kelpPulse && !viewUp.hidden && !foodTab.classList.contains('on'));
     if (!Game.started) return;
     if (learnT !== null && !side && !Game.tuts.learnfish) {
       learnT += mdt || 0;

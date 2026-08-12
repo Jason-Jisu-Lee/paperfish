@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=39" />
+    <link rel="stylesheet" href="base.css?v=40" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -25,6 +25,11 @@
         <div class="ubgrid" id="fish-grid"></div>
       </div>
       <div id="view-up" hidden>
+        <div class="cattabs">
+          <button class="cattab on" data-cat="income">income</button>
+          <button class="cattab" data-cat="food" id="cattab-food">food</button>
+          <button class="cattab" data-cat="life">life</button>
+        </div>
         <div class="ubgrid" id="up-grid"></div>
       </div>
     </aside>
@@ -129,15 +134,15 @@
         <span class="obj-bar"><span class="obj-fill" id="obj-fill"></span></span>
         <span class="obj-count" id="obj-count"></span>
       </div>
-      <div class="obj-reward">+5 g</div>
+      <div class="obj-reward" id="obj-reward"></div>
     </div>
 
     <div class="objbox obj2" id="objbox2" hidden>
       <div class="obj-row">
         <span class="obj-mark"></span>
-        <span class="obj-text" data-t="Learn about the fish by clicking on it">Learn about the fish by clicking on it</span>
+        <span class="obj-text" id="obj2-text"></span>
       </div>
-      <div class="obj-reward">+5 g</div>
+      <div class="obj-reward" id="obj2-reward"></div>
     </div>
 
     <div class="saybox" id="saybox"></div>
@@ -264,21 +269,22 @@
     </div>
 
     <script src="data/species.js?v=2"></script>
-    <script src="core/state.js?v=5"></script>
-    <script src="world/stage.js?v=2"></script>
+    <script src="data/content.js?v=1"></script>
+    <script src="core/state.js?v=6"></script>
+    <script src="world/stage.js?v=3"></script>
     <script src="world/ambience.js?v=2"></script>
-    <script src="audio/sfx.js?v=2"></script>
-    <script src="ui/panel.js?v=3"></script>
+    <script src="audio/sfx.js?v=3"></script>
+    <script src="ui/panel.js?v=4"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=5"></script>
-    <script src="world/lantern.js?v=1"></script>
+    <script src="ui/obj.js?v=6"></script>
+    <script src="world/lantern.js?v=2"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=2"></script>
+    <script src="ui/detail.js?v=3"></script>
     <script src="ui/dev.js?v=1"></script>
     <script src="ui/front.js?v=3"></script>
-    <script src="core/sim.js?v=3"></script>
-    <script src="core/main.js?v=2"></script>
+    <script src="core/sim.js?v=4"></script>
+    <script src="core/main.js?v=3"></script>
     <script src="ui/corner.js?v=3"></script>
   </body>
 </html>

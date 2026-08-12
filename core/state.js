@@ -3,6 +3,7 @@ const Game = {
   stream: 0,
   mating: 0,
   maturity: 0,
+  longevity: 0,
   plants: 0,
   unlocked: 1,
   tuts: {},
@@ -17,9 +18,11 @@ let skipSave = false;
 const streamCost = () => 100 * 2 ** Game.stream;
 const matingCost = () => 1500 * 2 ** Game.mating;
 const maturityCost = () => 3000 * 2 ** Game.maturity;
+const longevityCost = () => 5000 * 2 ** Game.longevity;
 const KELP_COST = 20;
 const START_GOLD = 70;
 const MAX_AGE = 10;
+const FIRSTF_CAP = 20;
 const streamFor = s => s === 0 ? Game.stream : 0;
 const adultAtOf = s => {
   const a = SPECIES[s].adultAt;
@@ -39,7 +42,7 @@ const fmtG = n => {
 };
 const hatchTime = s => SPECIES[s].hatch ?? 60;
 
-const lifeOf = s => SPECIES[s].life || SPECIES[s].maxAge || MAX_AGE;
+const lifeOf = s => (SPECIES[s].life || SPECIES[s].maxAge || MAX_AGE) + (s === 0 ? Game.longevity * 0.5 : 0);
 
 const speciesPhases = s => {
   const sp = SPECIES[s];
@@ -71,9 +74,13 @@ const phaseVal = (s, p) => (p.amt + streamFor(s)) * 60 / p.tick;
 const speciesGpm = (s, age) => phaseVal(s, phaseAt(s, age));
 
 const ltvOf = s => {
-  let sum = 0;
-  for (const p of speciesPhases(s)) sum += phaseVal(s, p) * p.dur;
-  return sum;
+  const ph = speciesPhases(s);
+  let sum = 0, dur = 0;
+  for (const p of ph) {
+    sum += phaseVal(s, p) * p.dur;
+    dur += p.dur;
+  }
+  return sum + Math.max(lifeOf(s) - dur, 0) * phaseVal(s, ph[ph.length - 1]);
 };
 
 const ratePerMin = () => {
@@ -91,6 +98,7 @@ const saveGame = () => {
       stream: Game.stream,
       mating: Game.mating,
       maturity: Game.maturity,
+      lng: Game.longevity,
       plants: Game.plants,
       kb: Game.kelpBought || 0,
       tuts: Game.tuts || {},
@@ -115,6 +123,7 @@ const loadGame = () => {
     Game.unlocked = Math.min(Math.max(d.unlocked || 1, 1), SPECIES.length);
     Game.mating = d.mating || 0;
     Game.maturity = d.maturity || 0;
+    Game.longevity = d.lng || 0;
     Game.kelpBought = d.kb || 0;
     Game.tuts = typeof d.tut === 'number' ? (d.tut >= 1 ? { start: 1 } : {}) : d.tuts || {};
     Game.fish = (d.fish || [])
@@ -132,6 +141,7 @@ const resetGame = () => {
 
 const buyFish = s => {
   if (s >= Game.unlocked || Game.gold < SPECIES[s].cost) return false;
+  if (s === 0 && Game.fish.filter(f => f.s === 0 && f.dying === undefined).length >= FIRSTF_CAP) return false;
   Game.gold -= SPECIES[s].cost;
   const f = { s, egg: true, t: 0 };
   Game.fish.push(f);
@@ -139,7 +149,7 @@ const buyFish = s => {
   Obj.event('buyfish');
   if (!Game.tuts.sayegg) {
     Game.tuts.sayegg = 1;
-    Say.say('When will it hatch?');
+    Say.say(WHISPER.egg);
   }
   saveGame();
   return true;
@@ -164,7 +174,7 @@ const buyKelp = () => {
   Obj.event('buykelp');
   if (!Game.tuts.saykelp) {
     Game.tuts.saykelp = 1;
-    Say.say('This should feed the fish.');
+    Say.say(WHISPER.kelp);
   }
   saveGame();
   return true;
@@ -184,6 +194,15 @@ const buyMaturity = () => {
   if (Game.gold < c || Game.maturity >= 24) return false;
   Game.gold -= c;
   Game.maturity += 1;
+  saveGame();
+  return true;
+};
+
+const buyLongevity = () => {
+  const c = longevityCost();
+  if (Game.gold < c) return false;
+  Game.gold -= c;
+  Game.longevity += 1;
   saveGame();
   return true;
 };

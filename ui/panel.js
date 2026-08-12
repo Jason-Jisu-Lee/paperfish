@@ -13,35 +13,44 @@ const Panel = (() => {
 
   const UPS = [
     {
-      key: 'stream', name: 'firstF Income',
+      key: 'stream', name: 'firstF Income', cat: 'income',
       cost: () => streamCost(), lvl: () => Game.stream, buy: () => buyStream(),
       neverBought: () => Game.stream === 0,
       desc: '+1 gold / 5s',
       cur: () => 'Current: +' + Game.stream + ' / 5s'
     },
     {
-      key: 'kelp', name: 'Kelp',
+      key: 'kelp', name: 'Kelp', cat: 'food',
       cost: () => KELP_COST, lvl: () => Game.plants, buy: () => buyKelp(),
       neverBought: () => (Game.kelpBought || 0) === 0,
       desc: 'satisfies hunger for 1 minute',
       cur: () => 'Current: × ' + Game.plants + ' floating'
     },
     {
-      key: 'mating', name: 'Spawning',
+      key: 'mating', name: 'Spawning', cat: 'life',
       cost: () => matingCost(), lvl: () => Game.mating, buy: () => buyMating(),
       neverBought: () => Game.mating === 0,
       desc: '+5% chance to spawn each 2 min',
       cur: () => 'Current: ' + Game.mating * 5 + '%'
     },
     {
-      key: 'maturity', name: 'Growth',
+      key: 'maturity', name: 'Growth', cat: 'life',
       cost: () => maturityCost(), lvl: () => Game.maturity, buy: () => buyMaturity(),
       maxed: () => Game.maturity >= 24,
       neverBought: () => Game.maturity === 0,
       desc: 'matures 5s sooner',
       cur: () => 'Current: -' + Game.maturity * 5 + 's'
+    },
+    {
+      key: 'longevity', name: 'Longevity', cat: 'life',
+      cost: () => longevityCost(), lvl: () => Game.longevity, buy: () => buyLongevity(),
+      neverBought: () => Game.longevity === 0,
+      desc: '+30s firstF life',
+      cur: () => 'Current: +' + Game.longevity * 30 + 's'
     }
   ];
+
+  let cat = 'income';
 
   const thumb = (s, sil) => {
     const sp = SPECIES[s];
@@ -53,8 +62,10 @@ const Panel = (() => {
 
   const count = s => Game.fish.reduce((n, f) => n + (f.s === s && !f.egg && f.dying === undefined ? 1 : 0), 0);
 
+  const capped = s => s === 0 && Game.fish.filter(f => f.s === 0 && f.dying === undefined).length >= FIRSTF_CAP;
+
   const refresh = () => {
-    upGrid.innerHTML = UPS.map(u => `
+    upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(u => `
       <button class="ubtn" data-key="${u.key}">
         ${u.neverBought() ? '<span class="ubtn-seal"></span>' : ''}
         <span class="ubtn-lvl">× ${u.lvl()}</span>
@@ -117,13 +128,20 @@ const Panel = (() => {
       el.classList.toggle('off', Game.gold < u.cost() || !!(u.maxed && u.maxed()));
     }
     for (const el of fishGrid.querySelectorAll('[data-buy]'))
-      el.classList.toggle('off', Game.gold < SPECIES[+el.dataset.buy].cost);
+      el.classList.toggle('off', Game.gold < SPECIES[+el.dataset.buy].cost || capped(+el.dataset.buy));
     const un = fishGrid.querySelector('[data-unlock]');
     if (un) un.classList.toggle('off', Game.gold < SPECIES[Game.unlocked].cost);
     if (!goldSrc.hidden) srcBuild();
   };
 
   document.getElementById('hud').addEventListener('click', e => {
+    const ct = e.target.closest('[data-cat]');
+    if (ct) {
+      cat = ct.dataset.cat;
+      for (const el of document.querySelectorAll('[data-cat]')) el.classList.toggle('on', el === ct);
+      refresh();
+      return;
+    }
     const ub = e.target.closest('[data-key]');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
@@ -144,7 +162,7 @@ const Panel = (() => {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
     } else if (bf) {
-      uptip.textContent = 'Buy ' + SPECIES[+bf.dataset.buy].name + ' Egg';
+      uptip.textContent = capped(+bf.dataset.buy) ? 'Max ' + FIRSTF_CAP + ' firstF' : 'Buy ' + SPECIES[+bf.dataset.buy].name + ' Egg';
     } else {
       uptip.textContent = 'Buy ' + SPECIES[Game.unlocked].name + ' Egg';
     }

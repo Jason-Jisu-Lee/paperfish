@@ -144,7 +144,7 @@ const Stage = (() => {
 
   const biteKelp = p => {
     p.bites -= 1;
-    if (p.bites <= 0) p.fade = 1;
+    if (p.bites <= 0) plants.splice(plants.indexOf(p), 1);
   };
 
   let held = null;

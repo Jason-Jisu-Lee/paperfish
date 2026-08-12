@@ -31,7 +31,14 @@ const Sfx = (() => {
     note(t + 0.11, 987.77, 0.55, 0.08);
   };
 
+  const eat = () => {
+    if (!on() || !ctx()) return;
+    const t = ac.currentTime;
+    note(t, 246.94, 0.06, 0.05);
+    note(t + 0.07, 196, 0.09, 0.04);
+  };
+
   window.addEventListener('pointerdown', () => ctx(), { once: true });
 
-  return { objective };
+  return { objective, eat };
 })();

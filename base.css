@@ -129,6 +129,14 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .tab.on{ opacity:1; background:rgba(28,27,24,.09); }
 .tab:focus{ outline:none; }
 .tab.pulse{ animation:tabpulse 1.1s ease-in-out infinite; }
+.cattabs{ display:flex; gap:6px; margin-bottom:10px; }
+.cattab{
+  font:inherit; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  background:none; border:1px solid rgba(28,27,24,.25); border-radius:999px;
+  padding:4px 11px; color:rgba(28,27,24,.6); cursor:pointer;
+}
+.cattab.on{ background:rgba(28,27,24,.08); color:var(--ink); border-color:rgba(28,27,24,.45); }
+.cattab.pulse{ animation:tabpulse 1.1s ease-in-out infinite; }
 @keyframes tabpulse{
   0%, 100%{ opacity:.5; color:var(--ink); }
   50%{ opacity:1; color:var(--seal); }

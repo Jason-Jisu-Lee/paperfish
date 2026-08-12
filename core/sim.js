@@ -27,7 +27,7 @@ const Sim = (() => {
         if (aAt !== undefined && !f.adult && f.age >= aAt) {
           if (!Game.tuts.sayadult && f.birth >= 1) {
             Game.tuts.sayadult = 1;
-            Say.say('The fish got bigger!');
+            Say.say(WHISPER.adult);
           }
           f.adult = true;
           f.birth = 0;
@@ -47,7 +47,7 @@ const Sim = (() => {
               f.hT = 0;
               if (!Game.plants && !Game.tuts.sayhungry) {
                 Game.tuts.sayhungry = 1;
-                Say.say("Fish is hungry! Let's make sure to have enough kelp.");
+                Say.say(WHISPER.hungry);
               }
             }
             if (f.hstate) {
@@ -66,6 +66,7 @@ const Sim = (() => {
                 const px = p.x + p.hx, pyy = p.y + p.hy;
                 if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
                   Stage.biteKelp(p);
+                  Sfx.eat();
                   if (p.bites <= 0) Game.plants -= 1;
                   const side = f.x < px ? -1 : 1;
                   f.dir = -side;

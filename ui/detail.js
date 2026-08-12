@@ -118,6 +118,7 @@ const Detail = (() => {
       const yy = py(phaseVal(f.s, p), ymax);
       pts += `${x0},${yy} ${x1},${yy} `;
     }
+    if (t < life) pts += `${GX1},${py(ymax, ymax)} `;
     const aAt = adultAtOf(f.s);
     let evo = '';
     if (aAt !== undefined) {
