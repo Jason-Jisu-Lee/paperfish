@@ -70,7 +70,7 @@ const Panel = (() => {
         ${u.neverBought() ? '<span class="ubtn-seal"></span>' : ''}
         <span class="ubtn-lvl">× ${u.lvl()}</span>
         <span class="ubtn-name">${u.name}</span>
-        <span class="ubtn-cost">${u.maxed && u.maxed() ? 'max' : fmt(u.cost()) + ' g'}</span>
+        <span class="ubtn-cost">${u.maxed && u.maxed() ? 'max' : fmt(u.cost()) + ' G'}</span>
       </button>`).join('');
 
     let h = '';
@@ -79,14 +79,14 @@ const Panel = (() => {
       h += `<button class="ubtn" data-buy="${s}">
         <span class="ubtn-lvl">× ${count(s)}</span>
         <span class="ubtn-icon full">${thumb(s)}</span>
-        <span class="ubtn-cost">${fmt(sp.cost)} g</span>
+        <span class="ubtn-cost">${fmt(sp.cost)} G</span>
       </button>`;
     }
     if (Game.unlocked < SPECIES.length) {
       const s = Game.unlocked;
       h += `<button class="ubtn" data-unlock>
         <span class="ubtn-icon">${thumb(s, true)}</span>
-        <span class="ubtn-cost">${fmt(SPECIES[s].cost)} g</span>
+        <span class="ubtn-cost">${fmt(SPECIES[s].cost)} G</span>
       </button>`;
       if (s + 1 < SPECIES.length) {
         h += `<button class="ubtn lock">

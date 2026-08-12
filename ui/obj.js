@@ -28,7 +28,7 @@ const Obj = (() => {
   const LEARN = OBJECTIVES.find(o => o.id === 'learnfish');
   txt2.textContent = LEARN.text;
   txt2.dataset.t = LEARN.text;
-  document.getElementById('obj2-reward').textContent = '+' + fmtG(LEARN.reward) + ' g';
+  document.getElementById('obj2-reward').textContent = '+' + fmtG(LEARN.reward) + ' G';
 
   let cur = null, transitioning = false, learnT = null, side = false;
 
@@ -42,7 +42,7 @@ const Obj = (() => {
     if (!cur) return;
     txt.textContent = cur.text;
     txt.dataset.t = cur.text;
-    rewardEl.textContent = '+' + fmtG(cur.reward) + ' g';
+    rewardEl.textContent = '+' + fmtG(cur.reward) + ' G';
     if (cur.prog) {
       const [n, total] = cur.prog();
       fill.style.width = (n / total * 100) + '%';
