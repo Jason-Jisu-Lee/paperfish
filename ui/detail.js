@@ -183,7 +183,7 @@ const Detail = (() => {
     txt2.setAttribute('x', tx);
     txt2.setAttribute('y', ty + 13);
     txt2.setAttribute('text-anchor', 'middle');
-    txt2.textContent = fmt(v) + ' / min';
+    txt2.textContent = fmt(v) + ' G / min';
     hg.removeAttribute('hidden');
   });
   graph.addEventListener('mouseleave', () => {
@@ -280,7 +280,7 @@ const Detail = (() => {
       const p = phaseAt(sel.s, age);
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
-      elMin.textContent = fmt(gpm);
+      elMin.textContent = fmt(gpm) + ' G';
       if (Game.mating >= 1) {
         elFert.textContent = Game.mating * 5 + '%';
         elSpawned.textContent = '× ' + (sel.spawned || 0);
@@ -297,8 +297,8 @@ const Detail = (() => {
       } else {
         adultRow.setAttribute('hidden', '');
       }
-      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' / min' : fmt(p.amt + streamFor(sel.s)) + ' / ' + p.tick + ' sec';
-      elDeath.textContent = fmt(ltvOf(sel.s) * 0.1);
+      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt + streamFor(sel.s)) + ' G / ' + p.tick + ' sec';
+      elDeath.textContent = fmt(ltvOf(sel.s) * 0.1) + ' G';
       const ymax = phaseVal(sel.s, phs[phs.length - 1]);
       const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
       const ay = py(gpm, ymax);

@@ -109,7 +109,7 @@ const Panel = (() => {
     }
     let h = '';
     for (const [s, g] of groups) {
-      h += `<div class="gs-row">${thumb(s)}<span class="gs-n">× ${g.n}</span><span class="gs-amt">+${fmt(g.sum)} / min</span></div>`;
+      h += `<div class="gs-row">${thumb(s)}<span class="gs-n">× ${g.n}</span><span class="gs-amt">+${fmt(g.sum)} G / min</span></div>`;
     }
     goldSrc.innerHTML = h || '<div class="gs-row"><span class="gs-n">no fish earning</span></div>';
   };
@@ -122,7 +122,7 @@ const Panel = (() => {
 
   const tick = () => {
     goldNum.textContent = fmt(Game.gold);
-    goldRate.textContent = '+' + fmt(ratePerMin()) + ' / min';
+    goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
     for (const el of upGrid.querySelectorAll('[data-key]')) {
       const u = UPS.find(x => x.key === el.dataset.key);
       el.classList.toggle('off', Game.gold < u.cost() || !!(u.maxed && u.maxed()));
