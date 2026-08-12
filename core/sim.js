@@ -25,6 +25,10 @@ const Sim = (() => {
         f.age = Math.min((f.age || 0) + sdt / 60, life);
         const aAt = adultAtOf(f.s);
         if (aAt !== undefined && !f.adult && f.age >= aAt) {
+          if (!Game.tuts.sayadult && f.birth >= 1) {
+            Game.tuts.sayadult = 1;
+            Say.say('The fish got bigger!');
+          }
           f.adult = true;
           f.birth = 0;
         }
@@ -41,7 +45,10 @@ const Sim = (() => {
             if (!f.hstate && f.age >= (f.hungerAt || 1)) {
               f.hstate = 1;
               f.hT = 0;
-              if (!Game.plants) Say.say('Fish is hungry.');
+              if (!Game.plants && !Game.tuts.sayhungry) {
+                Game.tuts.sayhungry = 1;
+                Say.say("Fish is hungry! Let's make sure to have enough kelp.");
+              }
             }
             if (f.hstate) {
               f.hT = (f.hT || 0) + sdt;

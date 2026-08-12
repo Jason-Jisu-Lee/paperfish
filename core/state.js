@@ -15,8 +15,8 @@ const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
 const streamCost = () => 100 * 2 ** Game.stream;
-const matingCost = () => 100 * 2 ** Game.mating;
-const maturityCost = () => 150 * 2 ** Game.maturity;
+const matingCost = () => 1500 * 2 ** Game.mating;
+const maturityCost = () => 3000 * 2 ** Game.maturity;
 const KELP_COST = 20;
 const START_GOLD = 70;
 const MAX_AGE = 10;

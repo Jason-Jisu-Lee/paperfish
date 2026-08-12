@@ -21,8 +21,8 @@ so +2 per tick after the first upgrade). gold never trickles between ticks.
 | secondF egg | 1000 | first purchase unlocks the species (no separate unlock price) |
 | kelp | 20   | food, 2 bites |
 | firstF Income | 100 x2^n | firstF +1 gold per 5s tick, all stages (+30 ltv, +3 death) |
-| Spawning    | 100 x2^n | +5%/level chance to spawn each 2 min. retroactive, all adults. level 1+ adds "spawn chance" and "spawned x N" card rows |
-| Growth      | 150 x2^n | matures 5s sooner/level, floor 20% of base (24 levels for firstF). level 1+ adds "adult at" row for babies |
+| Spawning    | 1500 x2^n | +5%/level chance to spawn each 2 min. retroactive, all adults. level 1+ adds "spawn chance" and "spawned x N" card rows |
+| Growth      | 3000 x2^n | matures 5s sooner/level, floor 20% of base (24 levels for firstF). level 1+ adds "adult at" row for babies |
 
 ### hunger sustain
 | fact | value |
@@ -46,7 +46,7 @@ so +2 per tick after the first upgrade). gold never trickles between ticks.
 ### start
 | fact | value |
 |------|-------|
-| start | 70 gold + 1 baby fish + 1 kelp floating |
+| start | 70 gold + 1 baby fish + 2 kelp floating (first one mid-water) |
 | opening spend | the chain uses all 70: egg 50 + kelp 20 |
 | early hunger | starting kelp feeds the first cycle, objective kelp the next, income carries it after |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
@@ -59,7 +59,7 @@ Mating levels (5%/level), rolled once at birth.
 
 ## maturity
 - adult at half of life. evolution: ink redraw flourish, 60% to 100% size.
-- Maturity upgrade: adult 10% sooner per level, cap 80% (8 levels, 150g doubling).
+- Growth upgrade: adult 5s sooner per level, floor 20% of base (3000g doubling).
 
 ## hunger
 - first hunger 60-70s after birth. hungry 20s (thought bubble) -> starving 10s
@@ -118,9 +118,11 @@ Mating levels (5%/level), rolled once at birth.
 - diver messages: bare whisper text, bottom center but raised
   (clamp 72px-160px up) and sized to the screen so itch.io embeds read it.
   fades in and out (~4.6s), one at a time, queued, 15s cooldown per line.
-  wired lines: "Fish is hungry." (a fish turns hungry while no kelp is on
-  screen), "This should feed the fish." (first kelp ever bought),
-  "When will it hatch?" (first egg ever bought).
+  wired lines, each fires once ever: "Fish is hungry! Let's make sure to have
+  enough kelp." (a fish turns hungry while no kelp is on screen),
+  "This should feed the fish." (first kelp bought), "When will it hatch?"
+  (first egg bought), "The fish got bigger!" (first baby matures to adult,
+  skipped for fish loaded from a save already past adult age).
 - one settings modal everywhere (front menu and in-game gear): scrim,
   Settings title with x, one row per option: Sound toggle, Display segmented
   control (Windowed / Borderless / Fullscreen; in the browser borderless and
