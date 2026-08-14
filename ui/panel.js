@@ -5,10 +5,7 @@ const Panel = (() => {
   const goldSrc = document.getElementById('goldsrc');
   const upGrid = document.getElementById('up-grid');
   const fishGrid = document.getElementById('fish-grid');
-  const viewUp = document.getElementById('view-up');
-  const viewFish = document.getElementById('view-fish');
-  const tabUp = document.getElementById('tab-up');
-  const tabFish = document.getElementById('tab-fish');
+  const railhead = document.getElementById('railhead');
   const uptip = document.getElementById('uptip');
 
   const UPS = [
@@ -50,7 +47,7 @@ const Panel = (() => {
     }
   ];
 
-  let cat = 'income';
+  let cat = 'fish';
 
   const thumb = (s, sil) => {
     const sp = SPECIES[s];
@@ -139,6 +136,9 @@ const Panel = (() => {
     if (ct) {
       cat = ct.dataset.cat;
       for (const el of document.querySelectorAll('[data-cat]')) el.classList.toggle('on', el === ct);
+      railhead.textContent = cat;
+      fishGrid.toggleAttribute('hidden', cat !== 'fish');
+      upGrid.toggleAttribute('hidden', cat === 'fish');
       refresh();
       return;
     }
@@ -175,15 +175,6 @@ const Panel = (() => {
   document.getElementById('hud').addEventListener('mouseout', e => {
     if (e.target.closest('[data-key], [data-buy], [data-unlock]')) uptip.setAttribute('hidden', '');
   });
-
-  const setTab = fish => {
-    viewUp.toggleAttribute('hidden', fish);
-    viewFish.toggleAttribute('hidden', !fish);
-    tabUp.classList.toggle('on', !fish);
-    tabFish.classList.toggle('on', fish);
-  };
-  tabUp.addEventListener('click', () => setTab(false));
-  tabFish.addEventListener('click', () => setTab(true));
 
   return { refresh, tick };
 })();

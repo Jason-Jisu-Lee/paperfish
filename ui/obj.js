@@ -4,9 +4,7 @@ const Obj = (() => {
   const txt = document.getElementById('obj-text');
   const rewardEl = document.getElementById('obj-reward');
   const txt2 = document.getElementById('obj2-text');
-  const tabUp = document.getElementById('tab-up');
-  const viewUp = document.getElementById('view-up');
-  const foodTab = document.getElementById('cattab-food');
+  const foodBtn = document.getElementById('rail-food');
   const prog = document.getElementById('obj-prog');
   const fill = document.getElementById('obj-fill');
   const count = document.getElementById('obj-count');
@@ -131,8 +129,7 @@ const Obj = (() => {
 
   const tick = mdt => {
     const kelpPulse = !!(Game.started && cur && !transitioning && cur.id === 'buykelp');
-    tabUp.classList.toggle('pulse', kelpPulse && viewUp.hidden);
-    foodTab.classList.toggle('pulse', kelpPulse && !viewUp.hidden && !foodTab.classList.contains('on'));
+    foodBtn.classList.toggle('pulse', kelpPulse && !foodBtn.classList.contains('on'));
     if (!Game.started) return;
     if (learnT !== null && !side && !Game.tuts.learnfish) {
       learnT += mdt || 0;

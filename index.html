@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=41" />
+    <link rel="stylesheet" href="base.css?v=42" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -17,20 +17,26 @@
     </div>
 
     <aside class="hud" id="hud" hidden>
-      <div class="tabs">
-        <button class="tab on" id="tab-fish">fish</button>
-        <button class="tab" id="tab-up">upgrades</button>
-      </div>
-      <div id="view-fish">
-        <div class="ubgrid" id="fish-grid"></div>
-      </div>
-      <div id="view-up" hidden>
-        <div class="cattabs">
-          <button class="cattab on" data-cat="income">income</button>
-          <button class="cattab" data-cat="food" id="cattab-food">food</button>
-          <button class="cattab" data-cat="life">life</button>
+      <div class="railwrap">
+        <nav class="rail">
+          <button class="rbtn on" data-cat="fish" aria-label="fish">
+            <svg viewBox="0 0 24 24"><path d="M3 12 Q12 4.5 21 14.5" /><path d="M3 12 Q12 19.5 21 9.5" /></svg>
+          </button>
+          <button class="rbtn" data-cat="income" aria-label="income">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5" /></svg>
+          </button>
+          <button class="rbtn" data-cat="food" id="rail-food" aria-label="food">
+            <svg viewBox="0 0 24 24"><path d="M12 21.5 C8.6 17.4 8.4 13.2 9.6 9.6 C10.3 7.1 11.3 4.9 12.8 2.9 C14.5 5.2 15.1 8 14.6 10.9 C14.1 14.2 13.9 17.9 12 21.5 Z" /><path d="M12.1 19 C11.7 15.4 11.9 11.6 12.6 5.8" /></svg>
+          </button>
+          <button class="rbtn" data-cat="life" aria-label="life">
+            <svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5" /><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z" /><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z" /></svg>
+          </button>
+        </nav>
+        <div class="railbody">
+          <div class="railhead" id="railhead">fish</div>
+          <div class="ubgrid" id="fish-grid"></div>
+          <div class="ubgrid" id="up-grid" hidden></div>
         </div>
-        <div class="ubgrid" id="up-grid"></div>
       </div>
     </aside>
 
@@ -274,10 +280,10 @@
     <script src="world/stage.js?v=3"></script>
     <script src="world/ambience.js?v=2"></script>
     <script src="audio/sfx.js?v=3"></script>
-    <script src="ui/panel.js?v=6"></script>
+    <script src="ui/panel.js?v=7"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=7"></script>
+    <script src="ui/obj.js?v=8"></script>
     <script src="world/lantern.js?v=2"></script>
     <script src="ui/say.js?v=1"></script>
     <script src="ui/detail.js?v=4"></script>

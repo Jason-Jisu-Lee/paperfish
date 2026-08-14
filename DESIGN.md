@@ -11,7 +11,9 @@ loop first. MECHANICS.md holds exact numbers.
   Fonts: Shippori Mincho (names, titles), Zen Maru Gothic (UI).
 - Fish are single-stroke ink drawings that draw themselves on when appearing
   (standard for every appearance). Sprites never rotate; mirror flips only.
-- Right HUD: gold, school (buy) and discover (unlock) tabs, dotted leaders.
+- Left HUD: gold, then the shop behind a vertical icon rail (fish, income,
+  food, life) in fine-line icons; the active category is red-outlined
+  (seal strokes on a faint red wash), one flat level, no nesting.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
   Steam and Discord marks, vertical caption, red seal.
