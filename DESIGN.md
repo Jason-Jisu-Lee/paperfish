@@ -15,6 +15,10 @@ loop first. MECHANICS.md holds exact numbers.
   food, life) in fine-line icons; the active category is red-outlined
   (seal strokes on a faint red wash), one flat level, no nesting.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
+- Fish card: enlarged-step income graph, values with G units, per-5s hover
+  readout under the dot, time tracking the x axis (replaces the end marker
+  at the edge), seal-red now-dot. Fish pop briefly with a soft chime on
+  evolving; no redraw-on.
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
   Steam and Discord marks, vertical caption, red seal.
 
