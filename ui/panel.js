@@ -5,7 +5,6 @@ const Panel = (() => {
   const goldSrc = document.getElementById('goldsrc');
   const upGrid = document.getElementById('up-grid');
   const fishGrid = document.getElementById('fish-grid');
-  const railhead = document.getElementById('railhead');
   const uptip = document.getElementById('uptip');
 
   const UPS = [
@@ -143,7 +142,6 @@ const Panel = (() => {
     if (ct) {
       cat = ct.dataset.cat;
       for (const el of document.querySelectorAll('[data-cat]')) el.classList.toggle('on', el === ct);
-      railhead.textContent = cat;
       fishGrid.toggleAttribute('hidden', cat !== 'fish');
       upGrid.toggleAttribute('hidden', cat === 'fish');
       refresh();
@@ -161,10 +159,22 @@ const Panel = (() => {
   });
 
   document.getElementById('hud').addEventListener('mouseover', e => {
+    const ct = e.target.closest('[data-cat]');
+    if (ct) {
+      uptip.textContent = ct.dataset.cat;
+      const r = ct.getBoundingClientRect();
+      uptip.style.right = 'auto';
+      uptip.style.top = (r.top + 4) + 'px';
+      uptip.style.left = (r.right + 12) + 'px';
+      uptip.classList.add('cap');
+      uptip.removeAttribute('hidden');
+      return;
+    }
     const ub = e.target.closest('[data-key]');
     const bf = e.target.closest('[data-buy]');
     const un = e.target.closest('[data-unlock]');
     if (!ub && !bf && !un) return;
+    uptip.classList.remove('cap');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
@@ -180,7 +190,7 @@ const Panel = (() => {
     uptip.removeAttribute('hidden');
   });
   document.getElementById('hud').addEventListener('mouseout', e => {
-    if (e.target.closest('[data-key], [data-buy], [data-unlock]')) uptip.setAttribute('hidden', '');
+    if (e.target.closest('[data-key], [data-buy], [data-unlock], [data-cat]')) uptip.setAttribute('hidden', '');
   });
 
   return { refresh, tick };
