@@ -28,7 +28,7 @@ const Obj = (() => {
   txt2.dataset.t = LEARN.text;
   document.getElementById('obj2-reward').textContent = '+' + fmtG(LEARN.reward) + ' G';
 
-  let cur = null, transitioning = false, learnT = null, side = false;
+  let cur = null, transitioning = false, learnT = null, sayT = null, side = false;
 
   const reward = (b, amt) => {
     Game.gold += amt;
@@ -86,7 +86,7 @@ const Obj = (() => {
 
   const showSide = () => {
     side = true;
-    Say.say(WHISPER.peaceful);
+    sayT = 0;
     box2.classList.remove('done', 'fade');
     box2.removeAttribute('hidden');
   };
@@ -94,6 +94,7 @@ const Obj = (() => {
   const completeSide = () => {
     Game.tuts.learnfish = 1;
     side = false;
+    sayT = null;
     reward(box2, LEARN.reward);
     saveGame();
     box2.classList.add('done');
@@ -138,6 +139,13 @@ const Obj = (() => {
         showSide();
       }
     }
+    if (sayT !== null) {
+      sayT += mdt || 0;
+      if (sayT >= 5) {
+        sayT = null;
+        Say.say(WHISPER.peaceful);
+      }
+    }
     if (!cur || transitioning) return;
     if (cur.prog) render();
     if (cur.auto && cur.auto()) completeCur();
@@ -146,6 +154,7 @@ const Obj = (() => {
   const start = () => {
     transitioning = false;
     side = false;
+    sayT = null;
     box2.setAttribute('hidden', '');
     learnT = Game.tuts.lantern && !Game.tuts.learnfish ? 0 : null;
     showNext();
