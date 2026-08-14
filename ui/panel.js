@@ -23,6 +23,13 @@ const Panel = (() => {
       desc: 'satisfies hunger for 1 minute',
       cur: () => 'Current: × ' + Game.plants + ' floating'
     },
+    ...FOODS.map(fd => ({
+      key: fd.key, name: fd.name, cat: 'food',
+      cost: () => fd.cost, lvl: () => Game.foods[fd.key] || 0, buy: () => buyFood(fd.key),
+      neverBought: () => !(Game.foods[fd.key] || 0),
+      desc: 'no effect yet',
+      cur: () => 'Current: × ' + (Game.foods[fd.key] || 0) + ' floating'
+    })),
     {
       key: 'mating', name: 'Spawning', cat: 'life',
       cost: () => matingCost(), lvl: () => Game.mating, buy: () => buyMating(),

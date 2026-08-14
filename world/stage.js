@@ -2,6 +2,7 @@ const Stage = (() => {
   const canvas = document.getElementById('sea');
   const ctx = canvas.getContext('2d');
   const plants = [];
+  const foods = [];
   const SLICES = 18;
   let W = 0, H = 0, bounds = { l: 60, r: 600, t: 80, b: 500 };
 
@@ -47,6 +48,7 @@ const Stage = (() => {
     };
     Game.fish.forEach(remap);
     plants.forEach(remap);
+    foods.forEach(remap);
   };
   window.addEventListener('resize', resize);
   resize();
@@ -129,7 +131,19 @@ const Stage = (() => {
     });
   };
 
-  const resetPlants = () => { plants.length = 0; };
+  const spawnFood = k => {
+    foods.push({
+      k,
+      x: rand(bounds.l + 60, bounds.r - 60),
+      y: rand(bounds.t + 40, bounds.b - 20),
+      hx: 0, hy: 0,
+      ph: rand(0, Math.PI * 2),
+      dph: rand(0, Math.PI * 2),
+      sc: rand(0.85, 1.2)
+    });
+  };
+
+  const resetPlants = () => { plants.length = 0; foods.length = 0; };
 
   const nearestPlant = (x, y) => {
     let best = null, bd = Infinity;
@@ -419,6 +433,12 @@ const Stage = (() => {
         if (p.fade <= 0) plants.splice(i, 1);
       }
     }
+    for (const fd of foods) {
+      fd.ph += mdt * 0.55;
+      fd.dph += mdt * 0.1;
+      fd.hx = Math.sin(fd.dph) * 22;
+      fd.hy = Math.sin(fd.dph * 1.6 + 1.1) * 10;
+    }
     for (let i = swirls.length - 1; i >= 0; i--) {
       swirls[i].t += mdt;
       if (swirls[i].t >= 0.9) swirls.splice(i, 1);
@@ -665,6 +685,51 @@ const Stage = (() => {
     ctx.restore();
   };
 
+  const drawFood = fd => {
+    ctx.save();
+    ctx.translate(fd.x + fd.hx, fd.y + fd.hy);
+    ctx.scale(fd.sc, fd.sc);
+    ctx.strokeStyle = 'rgba(28,27,24,0.42)';
+    ctx.fillStyle = 'rgba(28,27,24,0.3)';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    if (fd.k === 'algae') {
+      ctx.transform(1, 0, Math.sin(fd.ph) * 0.14, 1, 0, 0);
+      ctx.beginPath();
+      ctx.moveTo(0, 5);
+      ctx.bezierCurveTo(-5, -2, -3, -10, -7, -16);
+      ctx.moveTo(0, 5);
+      ctx.bezierCurveTo(1, -4, -2, -12, 2, -20);
+      ctx.moveTo(0, 5);
+      ctx.bezierCurveTo(5, -1, 6, -8, 9, -13);
+      ctx.stroke();
+    } else if (fd.k === 'plankton') {
+      for (let i = 0; i < 6; i++) {
+        const a = i * 1.047 + fd.ph * 0.3;
+        const r = 7 + Math.sin(fd.ph + i) * 3;
+        ctx.beginPath();
+        ctx.arc(Math.cos(a) * r, Math.sin(a) * r * 0.7, i % 2 ? 1.3 : 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else {
+      ctx.rotate(Math.sin(fd.ph) * 0.25);
+      ctx.beginPath();
+      ctx.moveTo(-7, 3);
+      ctx.quadraticCurveTo(0, -7, 8, -1);
+      ctx.stroke();
+      ctx.lineWidth = 1.3;
+      ctx.beginPath();
+      ctx.moveTo(-2, -2); ctx.lineTo(-4, 3);
+      ctx.moveTo(1, -3); ctx.lineTo(0, 3);
+      ctx.moveTo(4, -3); ctx.lineTo(4, 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(7.5, -2.5, 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  };
+
   const pops = [];
   const spawnPop = (x, y, txt, big) => {
     pops.push({ x, y, txt, t: 0, big });
@@ -725,6 +790,7 @@ const Stage = (() => {
 
   const drawScene = () => {
     for (const p of plants) drawPlant(p);
+    for (const fd of foods) drawFood(fd);
     for (const s of swirls) drawSwirl(s);
     for (const f of Game.fish) if (f.egg) drawEgg(f);
     for (const f of Game.fish) if (!f.egg) drawFish(f);
@@ -732,7 +798,7 @@ const Stage = (() => {
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, pickMate, court, spawnPop, update, clear, drawScene, resize,
+    ctx, materialize, hatch, spawnPlant, spawnFood, resetPlants, nearestPlant, biteKelp, hold, release, escape, pickMate, court, spawnPop, update, clear, drawScene, resize,
     get bounds() { return bounds; },
     get size() { return { W, H }; }
   };

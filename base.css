@@ -62,13 +62,13 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .stat .lab{
   display:block;
-  font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:rgba(28,27,24,.55);
   margin-bottom:1px;
 }
 .stat .value{
   display:block;
-  font-size:15px; font-weight:500;
+  font-size:17px; font-weight:500;
   font-feature-settings:'tnum';
 }
 
@@ -528,7 +528,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .fc-name{
   font-family:'Shippori Mincho',serif;
-  font-size:18.5px; letter-spacing:.06em;
+  font-size:22px; letter-spacing:.06em;
   margin-bottom:7px;
 }
 #fc-graph{ width:100%; height:auto; display:block; margin-top:10px; }

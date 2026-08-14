@@ -5,6 +5,7 @@ const Game = {
   maturity: 0,
   longevity: 0,
   plants: 0,
+  foods: {},
   unlocked: 1,
   tuts: {},
   fish: [],
@@ -100,6 +101,7 @@ const saveGame = () => {
       maturity: Game.maturity,
       lng: Game.longevity,
       plants: Game.plants,
+      fd: Game.foods,
       kb: Game.kelpBought || 0,
       tuts: Game.tuts || {},
       unlocked: Game.unlocked,
@@ -120,6 +122,7 @@ const loadGame = () => {
     Game.gold = d.gold || 0;
     Game.stream = d.stream || 0;
     Game.plants = d.plants || 0;
+    Game.foods = d.fd || {};
     Game.unlocked = Math.min(Math.max(d.unlocked || 1, 1), SPECIES.length);
     Game.mating = d.mating || 0;
     Game.maturity = d.maturity || 0;
@@ -176,6 +179,16 @@ const buyKelp = () => {
     Game.tuts.saykelp = 1;
     Say.say(WHISPER.kelp);
   }
+  saveGame();
+  return true;
+};
+
+const buyFood = key => {
+  const fd = FOODS.find(x => x.key === key);
+  if (!fd || Game.gold < fd.cost) return false;
+  Game.gold -= fd.cost;
+  Game.foods[key] = (Game.foods[key] || 0) + 1;
+  Stage.spawnFood(key);
   saveGame();
   return true;
 };

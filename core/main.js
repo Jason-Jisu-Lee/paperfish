@@ -15,6 +15,7 @@ const startGame = () => {
   Stage.resetPlants();
   Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
+  for (const fd of FOODS) for (let i = 0; i < (Game.foods[fd.key] || 0); i++) Stage.spawnFood(fd.key);
   Game.started = true;
   Panel.refresh();
   Lantern.start();

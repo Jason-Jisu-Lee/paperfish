@@ -9,6 +9,12 @@ const OBJECTIVES = [
   { id: 'fivesecond', text: 'Have 5 secondF', reward: 10000, target: 5, sp: 1 }
 ];
 
+const FOODS = [
+  { key: 'algae', name: 'Algae', cost: 30 },
+  { key: 'plankton', name: 'Plankton', cost: 50 },
+  { key: 'krill', name: 'Krill', cost: 80 }
+];
+
 const WHISPERS = [
   { id: 'egg', text: 'When will it hatch?' },
   { id: 'kelp', text: 'This should feed the fish.' },
