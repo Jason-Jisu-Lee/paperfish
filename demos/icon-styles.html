@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>rail icons · 5 styles</title>
+<link rel="stylesheet" href="../fonts/fonts.css" />
+<style>
+  :root{ --paper:#f2efe6; --ink:#1c1b18; --seal:#b43a2b; --gold:#7a5800; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    min-height:100vh; padding:34px 40px 60px;
+  }
+  h1{ font-family:'Shippori Mincho',serif; font-weight:500; font-size:26px; letter-spacing:.05em; margin-bottom:6px; }
+  .sub{ font-size:13px; color:rgba(28,27,24,.65); margin-bottom:30px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(420px, 1fr)); gap:38px; max-width:1560px; }
+  .opt{ display:flex; flex-direction:column; gap:12px; }
+  .cap{ display:flex; align-items:baseline; gap:10px; }
+  .num{
+    font-family:'Shippori Mincho',serif; color:#fff; background:var(--seal);
+    width:22px; height:22px; border-radius:4px; flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:13px;
+    transform:rotate(-2deg);
+  }
+  .cap b{ font-size:15px; letter-spacing:.04em; font-weight:500; }
+  .cap span{ font-size:12px; color:rgba(28,27,24,.6); }
+  .note{ font-size:12px; color:rgba(28,27,24,.65); line-height:1.5; min-height:34px; max-width:430px; }
+  .row{ display:flex; gap:18px; align-items:flex-start; }
+  .mock{
+    background:var(--paper); border:1px solid rgba(28,27,24,.3);
+    box-shadow:0 8px 30px rgba(28,27,24,.1);
+    width:240px; height:300px; padding:12px; overflow:hidden; flex:none;
+    display:flex; gap:10px;
+  }
+  .rail{ display:flex; flex-direction:column; gap:6px; flex:none; }
+  .rbtn{
+    width:38px; height:38px; border:1px solid rgba(28,27,24,.2); border-radius:9px;
+    background:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    color:var(--ink); --tile:var(--paper); padding:0;
+  }
+  .rbtn svg{ width:22px; height:22px; display:block; }
+  .rbtn .glyph{ opacity:.52; transition:opacity .15s; }
+  .rbtn:hover .glyph{ opacity:.8; }
+  .rbtn.on{ background:rgba(28,27,24,.08); border-color:rgba(28,27,24,.5); }
+  .rbtn.on .glyph{ opacity:1; }
+  .stamped .rbtn.on{ background:var(--seal); border-color:var(--seal); color:var(--paper); --tile:var(--seal); }
+  .stamped .rbtn.on .glyph{ opacity:1; }
+  .kan{ font-family:'Shippori Mincho','Yu Mincho','Hiragino Mincho ProN','MS Mincho',serif; font-size:20px; line-height:1; font-weight:500; }
+  .body{ flex:1; display:flex; flex-direction:column; min-height:0; }
+  .railhead{ font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(28,27,24,.55); padding:2px 2px 8px; }
+  .list{ display:flex; flex-direction:column; gap:8px; overflow:hidden; flex:1; }
+  .card{
+    background:#fff; border:1px solid rgba(28,27,24,.14); border-radius:10px;
+    padding:10px 8px 9px; text-align:center; flex:none;
+    box-shadow:0 2px 8px rgba(28,27,24,.05);
+  }
+  .card .nm{ font-size:12px; letter-spacing:.03em; }
+  .card .cost{ font-size:11px; color:var(--gold); margin-top:2px; }
+  .spec{ display:flex; flex-direction:column; gap:14px; padding-top:4px; }
+  .speclarge{ display:flex; gap:22px; }
+  .cell{ display:flex; flex-direction:column; align-items:center; gap:7px; color:var(--ink); --tile:var(--paper); }
+  .cell svg{ width:46px; height:46px; display:block; }
+  .cell .kan{ font-size:42px; }
+  .cell i{ font-style:normal; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:rgba(28,27,24,.5); }
+  .specsmall{ display:flex; gap:10px; align-items:center; color:var(--ink); --tile:var(--paper); }
+  .specsmall svg{ width:16px; height:16px; display:block; opacity:.85; }
+  .specsmall .kan{ font-size:15px; opacity:.85; }
+  .specsmall i{ font-style:normal; font-size:10px; letter-spacing:.12em; color:rgba(28,27,24,.45); margin-left:2px; }
+  .verdict{
+    margin-top:40px; max-width:780px; font-size:13px; line-height:1.7;
+    border-top:1px solid rgba(28,27,24,.2); padding-top:16px;
+  }
+  .verdict b{ color:var(--seal); font-weight:500; }
+</style>
+</head>
+<body>
+  <h1>rail icons <span style="color:var(--seal)">·</span> 5 styles</h1>
+  <div class="sub">four motifs everywhere: the logo fish · a mon coin for income · a kelp blade for food · a sprout for life. click the rails; bottom row is actual 16px size.</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="verdict" id="verdict">
+    read: <b>1 · brush</b> is the game's own hand, the title fish drawn small; it stays soft where line icons go cold.
+    <b>3 · stamp</b> is the most legible at rail size and its hanko-red active state is pure PaperFish branding.
+    <b>2 · fine line</b> is safe but generic, the one style any other game could ship.
+    <b>4 · kanji</b> is the boldest theme play and needs a 2&nbsp;KB font subset plus a learning tax for non-readers.
+    <b>5 · ink + wash</b> carries the title screen's dry-brush echo into UI, at the cost of some crispness at 16px.
+  </div>
+
+<script>
+  const S = (cls, inner) => `<svg class="glyph ${cls}" viewBox="0 0 24 24">${inner}</svg>`;
+  const L = `fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round`;
+
+  const line = w => ({
+    fish: S('', `<g style="${L};stroke-width:${w}">
+      <path d="M3,12 Q12,4.5 21,14.5"/><path d="M3,12 Q12,19.5 21,9.5"/></g>`),
+    income: S('', `<g style="${L};stroke-width:${w}">
+      <circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></g>`),
+    food: S('', `<g style="${L};stroke-width:${w}">
+      <path d="M12,21.5 C8.6,17.4 8.4,13.2 9.6,9.6 C10.3,7.1 11.3,4.9 12.8,2.9 C14.5,5.2 15.1,8 14.6,10.9 C14.1,14.2 13.9,17.9 12,21.5 Z"/>
+      <path d="M12.1,19 C11.7,15.4 11.9,11.6 12.6,5.8"/></g>`),
+    life: S('', `<g style="${L};stroke-width:${w}">
+      <path d="M12,21 C12,18 12,16 12,13.5"/>
+      <path d="M12,13.5 C6.5,13.5 5,9.5 4.8,6.2 C9.8,6.6 11.8,9.8 12,13.5 Z"/>
+      <path d="M12,13.5 C16.2,13.2 17.6,10.4 18,7.6 C14.2,8 12.3,10.4 12,13.5 Z"/></g>`)
+  });
+
+  const brush = () => ({
+    fish: S('', `<g style="${L}">
+      <path style="stroke-width:1.5" d="M3,12 Q12,4.5 21,14.5"/>
+      <path style="stroke-width:1.5" d="M3,12 Q12,19.5 21,9.5"/>
+      <path style="stroke-width:3.1" d="M6,10.4 Q12,6.3 16.6,11.4"/>
+      <path style="stroke-width:3.1" d="M6,13.6 Q12,17.7 16.6,12.6"/></g>`),
+    income: S('', `<g style="${L}">
+      <path style="stroke-width:1.5" d="M14.8,4.5 A8,8 0 1 1 9.2,4.5"/>
+      <path style="stroke-width:3" d="M5,9.2 A8,8 0 0 1 8.2,5.2"/>
+      <rect style="stroke-width:1.4;fill:none" x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></g>`),
+    food: S('', `<g style="${L}">
+      <path style="stroke-width:1.5" d="M12,21.5 C8.6,17.4 8.4,13.2 9.6,9.6 C10.3,7.1 11.3,4.9 12.8,2.9 C14.5,5.2 15.1,8 14.6,10.9 C14.1,14.2 13.9,17.9 12,21.5 Z"/>
+      <path style="stroke-width:2.2" d="M12,18.5 C11.7,15.2 11.9,11.6 12.5,7.2"/></g>`),
+    life: S('', `<g style="${L}">
+      <path style="stroke-width:1.5" d="M12,21 C12,18 12,16 12,13.5"/>
+      <path style="stroke-width:2.6" d="M12,19.6 C12,17.8 12,16.3 12,14.8"/>
+      <path style="stroke-width:1.5" d="M12,13.5 C6.5,13.5 5,9.5 4.8,6.2 C9.8,6.6 11.8,9.8 12,13.5 Z"/>
+      <path style="stroke-width:2.8" d="M10.6,12.4 C7.8,11.6 6.4,9.4 5.8,7.4"/>
+      <path style="stroke-width:1.5" d="M12,13.5 C16.2,13.2 17.6,10.4 18,7.6 C14.2,8 12.3,10.4 12,13.5 Z"/>
+      <path style="stroke-width:2.2" d="M13.4,12.2 C15.6,11.2 16.6,9.6 17.1,8.4"/></g>`)
+  });
+
+  const stamp = () => ({
+    fish: S('', `<path fill="currentColor" d="M3,12 C5.5,8 11,5.8 16.2,9.3 L20.8,6.2 C20.2,10.2 20.2,13.8 20.8,17.8 L16.2,14.7 C11,18.2 5.5,16 3,12 Z"/>
+      <circle fill="var(--tile)" cx="7.4" cy="10.9" r=".95"/>`),
+    income: S('', `<path fill="currentColor" fill-rule="evenodd" d="M12,4 A8,8 0 1 0 12,20 A8,8 0 1 0 12,4 Z M9.9,9.9 L14.1,9.9 L14.1,14.1 L9.9,14.1 Z"/>`),
+    food: S('', `<path fill="currentColor" d="M12,21.5 C8.6,17.4 8.4,13.2 9.6,9.6 C10.3,7.1 11.3,4.9 12.8,2.9 C14.5,5.2 15.1,8 14.6,10.9 C14.1,14.2 13.9,17.9 12,21.5 Z"/>
+      <path style="fill:none;stroke:var(--tile);stroke-width:1;stroke-linecap:round" d="M12.1,19 C11.7,15.4 11.9,11.6 12.6,6.2"/>`),
+    life: S('', `<g style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round"><path d="M12,21 C12,18 12,16 12,13.5"/></g>
+      <path fill="currentColor" d="M12,13.5 C6.5,13.5 5,9.5 4.8,6.2 C9.8,6.6 11.8,9.8 12,13.5 Z"/>
+      <path fill="currentColor" d="M12,13.5 C16.2,13.2 17.6,10.4 18,7.6 C14.2,8 12.3,10.4 12,13.5 Z"/>`)
+  });
+
+  const kanji = () => ({
+    fish: `<span class="glyph kan">魚</span>`,
+    income: `<span class="glyph kan">金</span>`,
+    food: `<span class="glyph kan">餌</span>`,
+    life: `<span class="glyph kan">寿</span>`
+  });
+
+  const wash = () => {
+    const E = `opacity:.3;${L};stroke-width:1.25`;
+    const M = `${L};stroke-width:1.8`;
+    const blade = `M12,21.5 C8.6,17.4 8.4,13.2 9.6,9.6 C10.3,7.1 11.3,4.9 12.8,2.9 C14.5,5.2 15.1,8 14.6,10.9 C14.1,14.2 13.9,17.9 12,21.5 Z`;
+    const leafL = `M12,13.5 C6.5,13.5 5,9.5 4.8,6.2 C9.8,6.6 11.8,9.8 12,13.5 Z`;
+    const leafR = `M12,13.5 C16.2,13.2 17.6,10.4 18,7.6 C14.2,8 12.3,10.4 12,13.5 Z`;
+    return {
+      fish: S('', `<g transform="translate(.8,.9)" style="${E}"><path d="M3,12 Q12,4.5 21,14.5"/><path d="M3,12 Q12,19.5 21,9.5"/></g>
+        <g style="${M}"><path d="M3,12 Q12,4.5 21,14.5"/><path d="M3,12 Q12,19.5 21,9.5"/></g>
+        <circle fill="var(--seal)" cx="7" cy="11.3" r="1"/>`),
+      income: S('', `<g transform="translate(.8,.9)" style="${E}"><circle cx="12" cy="12" r="8"/></g>
+        <g style="${M}"><circle cx="12" cy="12" r="8"/></g>
+        <rect fill="var(--seal)" x="10.3" y="10.3" width="3.4" height="3.4" rx=".4"/>`),
+      food: S('', `<g transform="translate(.8,.9)" style="${E}"><path d="${blade}"/></g>
+        <g style="${M}"><path d="${blade}"/><path style="stroke-width:1.3" d="M12.1,17.8 C11.8,14.6 12,11.2 12.6,7"/></g>
+        <circle fill="var(--seal)" cx="15.4" cy="11.6" r="1.05"/>`),
+      life: S('', `<g transform="translate(.8,.9)" style="${E}"><path d="${leafL}"/><path d="${leafR}"/></g>
+        <g style="${M}"><path d="M12,21 C12,18 12,16 12,13.5"/><path d="${leafL}"/><path d="${leafR}"/></g>
+        <circle fill="var(--seal)" cx="12" cy="20.6" r="1.05"/>`)
+    };
+  };
+
+  const STYLES = [
+    { n: 1, name: 'brush', tag: 'the title fish, drawn small', cls: '',
+      note: 'strokes swell in the middle and taper at the tips, the same two-arc fish as the logo. reads as a hand, not a font.',
+      icons: brush() },
+    { n: 2, name: 'fine line', tag: 'quiet, uniform stroke', cls: '',
+      note: 'one even 1.6px line throughout. the safe modern default; crisp, but nothing about it is PaperFish.',
+      icons: line(1.6) },
+    { n: 3, name: 'stamp', tag: 'solid ink, hanko active', cls: 'stamped',
+      note: 'solid silhouettes like seal impressions. the active category becomes a red hanko tile with a paper glyph.',
+      icons: stamp() },
+    { n: 4, name: 'kanji', tag: '魚 · 金 · 餌 · 寿', cls: 'stamped',
+      note: 'fish, gold, feed, longevity as characters, set in the title serif. boldest theme play; non-readers must learn four marks. needs a tiny font subset if picked.',
+      icons: kanji() },
+    { n: 5, name: 'ink + wash', tag: 'dry-brush echo, red accent', cls: '',
+      note: 'the title screen treatment: main stroke plus a faint offset second pass, one seal-red dot per icon.',
+      icons: wash() }
+  ];
+
+  const CATS = ['fish', 'income', 'food', 'life'];
+  const ITEMS = {
+    fish: [{ nm: 'firstF', cost: '50 G' }, { nm: 'secondF', cost: '1,000 G' }],
+    income: [{ nm: 'firstF Income', cost: '100 G' }],
+    food: [{ nm: 'Kelp', cost: '20 G' }],
+    life: [{ nm: 'Spawning', cost: '1,500 G' }, { nm: 'Growth', cost: '3,000 G' }]
+  };
+
+  const grid = document.getElementById('grid');
+  for (const st of STYLES) {
+    const opt = document.createElement('div');
+    opt.className = 'opt';
+    opt.innerHTML = `
+      <div class="cap"><span class="num">${st.n}</span><b>${st.name}</b><span>${st.tag}</span></div>
+      <div class="note">${st.note}</div>
+      <div class="row">
+        <div class="mock ${st.cls}">
+          <div class="rail">${CATS.map((c, i) =>
+            `<button class="rbtn${i === 0 ? ' on' : ''}" data-t="${c}" title="${c}">${st.icons[c]}</button>`).join('')}
+          </div>
+          <div class="body"><div class="railhead">fish</div><div class="list"></div></div>
+        </div>
+        <div class="spec ${st.cls}">
+          <div class="speclarge">${CATS.map(c =>
+            `<div class="cell">${st.icons[c]}<i>${c}</i></div>`).join('')}
+          </div>
+          <div class="specsmall">${CATS.map(c => st.icons[c]).join('')}<i>at 16px</i></div>
+        </div>
+      </div>`;
+    const list = opt.querySelector('.list');
+    const head = opt.querySelector('.railhead');
+    const btns = opt.querySelectorAll('.rbtn');
+    const show = t => {
+      btns.forEach(b => b.classList.toggle('on', b.dataset.t === t));
+      head.textContent = t;
+      list.innerHTML = ITEMS[t].map(it =>
+        `<div class="card"><div class="nm">${it.nm}</div><div class="cost">${it.cost}</div></div>`).join('');
+    };
+    btns.forEach(b => b.addEventListener('click', () => show(b.dataset.t)));
+    show('fish');
+    grid.appendChild(opt);
+  }
+</script>
+</body>
+</html>
