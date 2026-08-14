@@ -6,7 +6,6 @@ const Detail = (() => {
   const card = document.getElementById('fishcard');
   const elName = document.getElementById('fc-name');
   const elAge = document.getElementById('fc-age');
-  const elMin = document.getElementById('fc-min');
   const elFreq = document.getElementById('fc-freq');
   const elDeath = document.getElementById('fc-death');
   const fertRow = document.getElementById('fc-fert-row');
@@ -15,7 +14,7 @@ const Detail = (() => {
   const elSpawned = document.getElementById('fc-spawned');
   const hatchRow = document.getElementById('fc-hatch-row');
   const elHatch = document.getElementById('fc-hatch');
-  const fishRows = ['fc-age-row', 'fc-min-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+  const fishRows = ['fc-age-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
   let cardMode = null;
   const adultRow = document.getElementById('fc-adult-row');
   const elAdult = document.getElementById('fc-adult');
@@ -280,7 +279,6 @@ const Detail = (() => {
       const p = phaseAt(sel.s, age);
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
-      elMin.textContent = fmt(gpm) + ' G';
       if (Game.mating >= 1) {
         elFert.textContent = Game.mating * 5 + '%';
         elSpawned.textContent = '× ' + (sel.spawned || 0);

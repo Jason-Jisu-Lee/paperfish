@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>fish income graph · 4 styles</title>
+<link rel="stylesheet" href="../fonts/fonts.css" />
+<style>
+  :root{ --paper:#f2efe6; --ink:#1c1b18; --seal:#b43a2b; --gold:#7a5800; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Zen Maru Gothic',sans-serif;
+    min-height:100vh; padding:34px 40px 60px;
+  }
+  h1{ font-family:'Shippori Mincho',serif; font-weight:500; font-size:26px; letter-spacing:.05em; margin-bottom:6px; }
+  .sub{ font-size:13px; color:rgba(28,27,24,.65); margin-bottom:30px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:38px; max-width:1700px; }
+  .opt{ display:flex; flex-direction:column; gap:12px; }
+  .cap{ display:flex; align-items:baseline; gap:10px; }
+  .num{
+    font-family:'Shippori Mincho',serif; color:#fff; background:var(--seal);
+    width:22px; height:22px; border-radius:4px; flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:13px;
+    transform:rotate(-2deg);
+  }
+  .cap b{ font-size:15px; letter-spacing:.04em; font-weight:500; }
+  .cap span{ font-size:12px; color:rgba(28,27,24,.6); }
+  .note{ font-size:12px; color:rgba(28,27,24,.65); line-height:1.5; min-height:34px; max-width:400px; }
+  .fishcard{
+    width:344px;
+    background:var(--paper);
+    box-shadow:0 0 0 1px rgba(28,27,24,.09), 0 8px 30px rgba(28,27,24,.1);
+    padding:18px 20px 16px;
+  }
+  .fc-name{
+    font-family:'Shippori Mincho',serif;
+    font-size:18.5px; letter-spacing:.06em;
+    margin-bottom:7px;
+  }
+  svg{ width:100%; height:auto; display:block; margin-top:10px; }
+  .g-line{ stroke:rgba(28,27,24,.85); stroke-width:2; stroke-linecap:round; fill:none; }
+  .g-axis{ fill:none; stroke:rgba(28,27,24,.25); stroke-width:1; }
+  .g-grid{ stroke:rgba(28,27,24,.12); stroke-width:1; }
+  .g-evo{ stroke:rgba(28,27,24,.3); stroke-width:1; stroke-dasharray:3 4; }
+  .g-wash{ fill:rgba(28,27,24,.07); }
+  .g-block{ fill:rgba(28,27,24,.09); }
+  .g-top{ stroke:rgba(28,27,24,.75); stroke-width:2; }
+  .g-top.now{ stroke:var(--seal); }
+  .g-t{
+    font-family:'Zen Maru Gothic',sans-serif; font-size:10px; letter-spacing:.08em;
+    fill:rgba(28,27,24,.72);
+    paint-order:stroke; stroke:var(--paper); stroke-width:3px; stroke-linejoin:round;
+  }
+  .g-tv{ font-size:11px; font-weight:500; fill:var(--ink); }
+  .g-stage{ font-size:10px; letter-spacing:.16em; fill:rgba(28,27,24,.55); }
+  .g-now{ fill:var(--seal); }
+  .g-nguide{ stroke:rgba(180,58,43,.45); stroke-width:1; }
+  .g-hguide{ stroke:rgba(28,27,24,.4); stroke-width:1; stroke-dasharray:2 4; }
+  .g-hdot{ fill:rgba(28,27,24,.85); }
+  .g-ht{ fill:var(--ink); font-size:12px; font-weight:500; stroke-width:3.5px; }
+  .fc-stats{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
+  .stat{
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(28,27,24,.14);
+    box-shadow:0 1px 4px rgba(28,27,24,.1);
+    border-radius:9px;
+    padding:8px 12px;
+  }
+  .stat .lab{
+    display:block;
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:rgba(28,27,24,.55);
+    margin-bottom:1px;
+  }
+  .stat .value{ display:block; font-size:15px; font-weight:500; font-feature-settings:'tnum'; }
+  .verdict{
+    margin-top:40px; max-width:780px; font-size:13px; line-height:1.7;
+    border-top:1px solid rgba(28,27,24,.2); padding-top:16px;
+  }
+  .verdict b{ color:var(--seal); font-weight:500; }
+</style>
+</head>
+<body>
+  <h1>fish income graph <span style="color:var(--seal)">·</span> 4 styles</h1>
+  <div class="sub">firstF, income over its 5 minute life: 12 G / min as a baby, 24 G / min as an adult. red dot is the fish's age now (1:45); the gray probe is the hover readout, frozen mid-hover. per-min stat is gone, earns is renamed income.</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="verdict">
+    read: <b>2 · ink wash</b> is the recommendation: the filled area makes the income jump legible from across the room, and the wash is the game's own texture.
+    <b>1 · enlarged step</b> is the current chart done properly (bigger type, units on the axis, red now-marker); safest, least character.
+    <b>3 · phase blocks</b> tells the truth of the data (discrete life stages) and labels values inside the shapes; strongest at a glance, but it stops looking like a graph.
+    <b>4 · bare line</b> is the most sumi: no axes, values written directly on the strokes; beautiful, and it asks the player to read numbers off a floating line.
+  </div>
+
+<script>
+  const LIFE = 5, ADULT_AT = 2, VBABY = 12, VADULT = 24, AGE = 1.75, HOVER = 3.5;
+  const W = 300, H = 158;
+
+  const build = (o) => {
+    const { x0, x1, y0, y1 } = o;
+    const px = t => x0 + (t / LIFE) * (x1 - x0);
+    const py = v => y0 - (v / VADULT) * (y0 - y1);
+    const bx = px(ADULT_AT), yB = py(VBABY), yA = py(VADULT);
+    const nx = px(AGE), hx = px(HOVER);
+    const steps = `${x0},${yB} ${bx},${yB} ${bx},${yA} ${x1},${yA}`;
+    return { px, py, bx, yB, yA, nx, hx, steps, x0, x1, y0, y1 };
+  };
+
+  const now = (g, y) => `<line class="g-nguide" x1="${g.nx}" y1="${g.y0}" x2="${g.nx}" y2="${y}"/><circle class="g-now" r="3.4" cx="${g.nx}" cy="${y}"/>`;
+  const probe = (g, t, v, tl, vl) => {
+    const x = g.px(t), y = g.py(v);
+    return `<line class="g-hguide" x1="${x}" y1="${g.y0}" x2="${x}" y2="${y}"/>` +
+      `<circle class="g-hdot" r="2.8" cx="${x}" cy="${y}"/>` +
+      `<text class="g-t g-ht" x="${x}" y="${y - 24}" text-anchor="middle">${tl}</text>` +
+      `<text class="g-t g-ht" x="${x}" y="${y - 10}" text-anchor="middle">${vl}</text>`;
+  };
+  const PROBE = g => probe(g, 0.833, VBABY, '0:50', '12 G / min');
+
+  const STYLES = [
+    { n: 1, name: 'enlarged step', tag: 'the current chart, grown up',
+      note: 'same shape as today but taller, 10px type, units on every number, faint value gridlines, and the now-marker turns seal red.',
+      draw: () => {
+        const g = build({ x0: 40, x1: 292, y0: 128, y1: 26 });
+        return `
+          <line class="g-grid" x1="${g.x0}" y1="${g.yA}" x2="${g.x1}" y2="${g.yA}"/>
+          <line class="g-grid" x1="${g.x0}" y1="${g.yB}" x2="${g.x1}" y2="${g.yB}"/>
+          <path class="g-axis" d="M${g.x0} ${g.y1 - 4} V${g.y0} H${g.x1}"/>
+          <line class="g-evo" x1="${g.bx}" y1="${g.y1}" x2="${g.bx}" y2="${g.y0}"/>
+          <text class="g-t g-stage" x="${(g.x0 + g.bx) / 2}" y="${g.y1 - 6}" text-anchor="middle">baby</text>
+          <text class="g-t g-stage" x="${(g.bx + g.x1) / 2}" y="${g.y1 - 6}" text-anchor="middle">adult</text>
+          <polyline class="g-line" points="${g.steps}"/>
+          <text class="g-t" x="${g.x0 - 6}" y="${g.yA + 3}" text-anchor="end">24 G</text>
+          <text class="g-t" x="${g.x0 - 6}" y="${g.yB + 3}" text-anchor="end">12 G</text>
+          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          ${now(g, g.yB)} ${PROBE(g)}`;
+      } },
+    { n: 2, name: 'ink wash', tag: 'filled area under the steps',
+      note: 'the area under the income line is washed in pale ink, so the baby-to-adult jump reads as mass, not just a line. axis kept minimal.',
+      draw: () => {
+        const g = build({ x0: 40, x1: 292, y0: 128, y1: 26 });
+        return `
+          <path class="g-wash" d="M${g.x0},${g.y0} L${g.x0},${g.yB} L${g.bx},${g.yB} L${g.bx},${g.yA} L${g.x1},${g.yA} L${g.x1},${g.y0} Z"/>
+          <path class="g-axis" d="M${g.x0} ${g.y1 - 4} V${g.y0} H${g.x1}"/>
+          <line class="g-evo" x1="${g.bx}" y1="${g.y1}" x2="${g.bx}" y2="${g.y0}"/>
+          <text class="g-t g-stage" x="${(g.x0 + g.bx) / 2}" y="${g.y1 - 6}" text-anchor="middle">baby</text>
+          <text class="g-t g-stage" x="${(g.bx + g.x1) / 2}" y="${g.y1 - 6}" text-anchor="middle">adult</text>
+          <polyline class="g-line" points="${g.steps}"/>
+          <text class="g-t" x="${g.x0 - 6}" y="${g.yA + 3}" text-anchor="end">24 G</text>
+          <text class="g-t" x="${g.x0 - 6}" y="${g.yB + 3}" text-anchor="end">12 G</text>
+          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          ${now(g, g.yB)} ${PROBE(g)}`;
+      } },
+    { n: 3, name: 'phase blocks', tag: 'life stages as solid shapes',
+      note: 'each life stage is a block whose height is its income, values written inside. the stage the fish is in now gets the seal-red top edge.',
+      draw: () => {
+        const g = build({ x0: 14, x1: 292, y0: 128, y1: 26 });
+        return `
+          <rect class="g-block" x="${g.x0}" y="${g.yB}" width="${g.bx - g.x0 - 2}" height="${g.y0 - g.yB}"/>
+          <rect class="g-block" x="${g.bx + 2}" y="${g.yA}" width="${g.x1 - g.bx - 2}" height="${g.y0 - g.yA}"/>
+          <line class="g-top now" x1="${g.x0}" y1="${g.yB}" x2="${g.bx - 2}" y2="${g.yB}"/>
+          <line class="g-top" x1="${g.bx + 2}" y1="${g.yA}" x2="${g.x1}" y2="${g.yA}"/>
+          <text class="g-t g-stage" x="${g.x0 + 10}" y="${g.yB + 18}">baby</text>
+          <text class="g-t g-tv" x="${g.x0 + 10}" y="${g.yB + 33}">12 G / min</text>
+          <text class="g-t g-stage" x="${g.bx + 12}" y="${g.yA + 18}">adult</text>
+          <text class="g-t g-tv" x="${g.bx + 12}" y="${g.yA + 33}">24 G / min</text>
+          <line class="g-axis" x1="${g.x0}" y1="${g.y0}" x2="${g.x1}" y2="${g.y0}"/>
+          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          <circle class="g-now" r="3.4" cx="${g.nx}" cy="${g.yB}"/>
+          ${PROBE(g)}`;
+      } },
+    { n: 4, name: 'bare line', tag: 'no axes, values on the strokes',
+      note: 'nothing but the income line, its values written directly above each level, stage names beneath. the most sumi of the four.',
+      draw: () => {
+        const g = build({ x0: 16, x1: 290, y0: 120, y1: 34 });
+        return `
+          <polyline class="g-line" points="${g.steps}"/>
+          <text class="g-t g-tv" x="${(g.x0 + g.bx) / 2}" y="${g.yB - 9}" text-anchor="middle">12 G / min</text>
+          <text class="g-t g-tv" x="${g.bx + 12}" y="${g.yA - 9}">24 G / min</text>
+          <text class="g-t g-stage" x="${(g.x0 + g.bx) / 2}" y="${g.yB + 16}" text-anchor="middle">baby</text>
+          <text class="g-t g-stage" x="${(g.bx + g.x1) / 2}" y="${g.yA + 16}" text-anchor="middle">adult</text>
+          <text class="g-t" x="${g.x0}" y="${g.y0 + 16}">0</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 16}" text-anchor="end">5 min</text>
+          ${now(g, g.yB)} ${probe(g, 4.4, VADULT, '4:24', '24 G / min')}`;
+      } }
+  ];
+
+  const grid = document.getElementById('grid');
+  for (const st of STYLES) {
+    const opt = document.createElement('div');
+    opt.className = 'opt';
+    opt.innerHTML = `
+      <div class="cap"><span class="num">${st.n}</span><b>${st.name}</b><span>${st.tag}</span></div>
+      <div class="note">${st.note}</div>
+      <div class="fishcard">
+        <div class="fc-name">firstF</div>
+        <svg viewBox="0 0 ${W} ${H}">${st.draw()}</svg>
+        <div class="fc-stats">
+          <div class="stat"><span class="lab">age</span><span class="value">1:45</span></div>
+          <div class="stat"><span class="lab">income</span><span class="value">1 G / 5 sec</span></div>
+          <div class="stat"><span class="lab">death value</span><span class="value">9 G</span></div>
+        </div>
+      </div>`;
+    grid.appendChild(opt);
+  }
+</script>
+</body>
+</html>
