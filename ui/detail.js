@@ -19,7 +19,7 @@ const Detail = (() => {
   const adultRow = document.getElementById('fc-adult-row');
   const elAdult = document.getElementById('fc-adult');
   const graph = document.getElementById('fc-graph');
-  const GX0 = 34, GX1 = 240, GY0 = 106, GY1 = 12;
+  const GX0 = 48, GX1 = 292, GY0 = 136, GY1 = 28;
   let mx = null, my = null, hover = null, sel = null, selStream = -1, selMat = -1;
 
   const fmt = fmtG;
@@ -43,7 +43,7 @@ const Detail = (() => {
   };
 
   const placeCard = (x, y, f) => {
-    const w = 284, h = 350, m = 14;
+    const w = 344, h = 400, m = 14;
     const fr = SPECIES[f.s].len * 0.65;
     let left = f.x + fr + 18;
     if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
@@ -105,16 +105,17 @@ const Detail = (() => {
   const buildGraph = f => {
     const phs = speciesPhases(f.s);
     const life = lifeOf(f.s);
-    const st = streamFor(f.s);
     const y0 = phaseVal(f.s, phs[0]);
     const ymax = phaseVal(f.s, phs[phs.length - 1]);
     let pts = '';
     let t = 0;
+    const vals = new Set();
     for (const p of phs) {
       const x0 = GX0 + (t / life) * (GX1 - GX0);
       t += p.dur;
       const x1 = GX0 + (t / life) * (GX1 - GX0);
       const yy = py(phaseVal(f.s, p), ymax);
+      vals.add(phaseVal(f.s, p));
       pts += `${x0},${yy} ${x1},${yy} `;
     }
     if (t < life) pts += `${GX1},${py(ymax, ymax)} `;
@@ -124,20 +125,25 @@ const Detail = (() => {
       const ex = GX0 + (aAt / life) * (GX1 - GX0);
       evo =
         `<line class="g-evo" x1="${ex}" y1="${GY1}" x2="${ex}" y2="${GY0}"/>` +
-        `<text class="g-t" x="${(GX0 + ex) / 2}" y="${GY1 + 8}" text-anchor="middle">baby</text>` +
-        `<text class="g-t" x="${(ex + GX1) / 2}" y="${GY1 + 8}" text-anchor="middle">adult</text>`;
+        `<text class="g-t g-stage" x="${(GX0 + ex) / 2}" y="${GY1 - 6}" text-anchor="middle">baby</text>` +
+        `<text class="g-t g-stage" x="${(ex + GX1) / 2}" y="${GY1 - 6}" text-anchor="middle">adult</text>`;
+    }
+    let grid = '', ylab = '';
+    for (const v of vals) {
+      const yy = py(v, ymax);
+      grid += `<line class="g-grid" x1="${GX0}" y1="${yy}" x2="${GX1}" y2="${yy}"/>`;
+      ylab += `<text class="g-t" x="${GX0 - 6}" y="${yy + 4}" text-anchor="end">${fmt(v)} G</text>`;
     }
     graph.innerHTML =
+      grid +
       `<path class="g-axis" d="M${GX0} ${GY1 - 4} V${GY0} H${GX1}"/>` +
       evo +
       `<polyline class="g-line" fill="none" points="${pts}"/>` +
-      `<line class="g-guide" id="g-guide" x1="${GX0}" y1="${GY0}" x2="${GX0}" y2="${GY0}"/>` +
-      `<circle class="g-dot" id="g-dot" r="3" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
-      `<text class="g-t" x="${GX0 - 6}" y="${py(ymax, ymax) + 3}" text-anchor="end">${fmt(ymax)}</text>` +
-      `<text class="g-t" x="${GX0 - 6}" y="${py(y0, ymax) + 3}" text-anchor="end">${fmt(y0)}</text>` +
-      `<text class="g-t" x="${GX0}" y="${GY0 + 14}">0</text>` +
-      `<text class="g-t" x="${GX1}" y="${GY0 + 14}" text-anchor="end">${life} min</text>` +
-      `<g id="g-hover" hidden><line class="g-guide" id="g-hline"/><circle class="g-hdot" id="g-hdot" r="2.6"/><text class="g-t g-ht" id="g-htext"/><text class="g-t g-ht" id="g-htext2"/></g>`;
+      ylab +
+      `<line class="g-nguide" id="g-guide" x1="${GX0}" y1="${GY0}" x2="${GX0}" y2="${GY0}"/>` +
+      `<circle class="g-now" id="g-dot" r="3.4" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
+      `<text class="g-t" id="g-xend" x="${GX1}" y="${GY0 + 15}" text-anchor="end">${life} min</text>` +
+      `<g id="g-hover" hidden><line class="g-guide" id="g-hline"/><circle class="g-hdot" id="g-hdot" r="2.8"/><text class="g-t g-ht" id="g-htext" text-anchor="middle"/><text class="g-t g-ht" id="g-htime" text-anchor="middle"/></g>`;
     selStream = streamFor(f.s);
     selMat = Game.maturity;
   };
@@ -146,8 +152,13 @@ const Detail = (() => {
     const hg = document.getElementById('g-hover');
     if (!sel || !hg) return;
     const r = graph.getBoundingClientRect();
-    const vx = (e.clientX - r.left) / r.width * 250;
-    if (vx < GX0 - 6 || vx > GX1 + 6) { hg.setAttribute('hidden', ''); return; }
+    const vx = (e.clientX - r.left) / r.width * 300;
+    const xend = document.getElementById('g-xend');
+    if (vx < GX0 - 6 || vx > GX1 + 6) {
+      hg.setAttribute('hidden', '');
+      if (xend) xend.removeAttribute('hidden');
+      return;
+    }
     const life = lifeOf(sel.s);
     const phs = speciesPhases(sel.s);
     const ymax = phaseVal(sel.s, phs[phs.length - 1]);
@@ -171,23 +182,24 @@ const Detail = (() => {
     line.setAttribute('y1', GY0); line.setAttribute('y2', ay);
     const dot = document.getElementById('g-hdot');
     dot.setAttribute('cx', ax); dot.setAttribute('cy', ay);
-    const tx = Math.min(Math.max(ax, GX0 + 34), GX1 - 34);
-    const ty = Math.max(ay - 27, 12);
+    const p = phaseAt(sel.s, age);
     const txt = document.getElementById('g-htext');
-    txt.setAttribute('x', tx);
-    txt.setAttribute('y', ty);
-    txt.setAttribute('text-anchor', 'middle');
-    txt.textContent = ageFmt(age);
-    const txt2 = document.getElementById('g-htext2');
-    txt2.setAttribute('x', tx);
-    txt2.setAttribute('y', ty + 13);
-    txt2.setAttribute('text-anchor', 'middle');
-    txt2.textContent = fmt(v) + ' G / min';
+    txt.setAttribute('x', Math.min(Math.max(ax, GX0 + 44), GX1 - 44));
+    txt.setAttribute('y', ay + 17);
+    txt.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt + streamFor(sel.s)) + ' G / ' + p.tick + ' sec';
+    const tt = document.getElementById('g-htime');
+    const dispAge = (ax - GX0) / (GX1 - GX0) * life;
+    tt.setAttribute('x', Math.min(ax, GX1 - 14));
+    tt.setAttribute('y', GY0 + 15);
+    tt.textContent = ageFmt(Math.min(dispAge + 0.0001, life));
+    if (xend) xend.toggleAttribute('hidden', ax > GX1 - 46);
     hg.removeAttribute('hidden');
   });
   graph.addEventListener('mouseleave', () => {
     const hg = document.getElementById('g-hover');
     if (hg) hg.setAttribute('hidden', '');
+    const xend = document.getElementById('g-xend');
+    if (xend) xend.removeAttribute('hidden');
   });
 
   const uptip = document.getElementById('uptip');

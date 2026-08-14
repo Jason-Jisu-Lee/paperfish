@@ -521,7 +521,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .fishcard{
   position:absolute; z-index:6;
-  width:312px;
+  width:344px;
   background:var(--paper);
   box-shadow:0 0 0 1px rgba(28,27,24,.09);
   padding:18px 20px 14px;
@@ -533,19 +533,22 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 #fc-graph{ width:100%; height:auto; display:block; margin-top:10px; }
 .g-axis{ fill:none; stroke:rgba(28,27,24,.25); stroke-width:1; }
-.g-line{ stroke:rgba(28,27,24,.85); stroke-width:1.6; stroke-linecap:round; }
+.g-grid{ stroke:rgba(28,27,24,.12); stroke-width:1; }
+.g-line{ stroke:rgba(28,27,24,.85); stroke-width:2; stroke-linecap:round; }
 .g-guide{ stroke:rgba(28,27,24,.4); stroke-width:1; stroke-dasharray:2 4; }
-.g-dot{ fill:var(--ink); }
+.g-nguide{ stroke:rgba(180,58,43,.45); stroke-width:1; }
+.g-now{ fill:var(--seal); }
 .g-hdot{ fill:rgba(28,27,24,.85); }
 .g-evo{ stroke:rgba(28,27,24,.3); stroke-width:1; stroke-dasharray:3 4; }
 .devred{ color:var(--seal) !important; }
 .tip-ltv{ display:block; font-size:11px; letter-spacing:.14em; margin-top:4px; font-feature-settings:'tnum'; }
 .g-t{
-  font-family:'Zen Maru Gothic',sans-serif; font-size:8.5px; letter-spacing:.08em;
-  fill:rgba(28,27,24,.72);
-  paint-order:stroke; stroke:var(--paper); stroke-width:2.5px; stroke-linejoin:round;
+  font-family:'Zen Maru Gothic',sans-serif; font-size:11.5px; font-weight:500; letter-spacing:.04em;
+  fill:rgba(28,27,24,.85);
+  paint-order:stroke; stroke:var(--paper); stroke-width:3.5px; stroke-linejoin:round;
 }
-.g-ht{ fill:var(--ink); font-size:11.5px; font-weight:500; stroke-width:3.5px; }
+.g-stage{ font-size:11.5px; letter-spacing:.1em; fill:rgba(28,27,24,.75); }
+.g-ht{ fill:var(--ink); font-size:13px; stroke-width:4px; }
 #fc-graph{ pointer-events:auto; }
 
 .fc-x{

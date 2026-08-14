@@ -262,6 +262,7 @@ const Stage = (() => {
     if (!mdt) return;
     tNow += mdt;
     for (const f of Game.fish) {
+      if (f.pop) f.pop = Math.max(f.pop - mdt, 0);
       if (f.egg) { f.ph += mdt * 2.6; continue; }
       if (f.dying !== undefined) {
         f.y -= 9 * mdt;
@@ -451,7 +452,8 @@ const Stage = (() => {
       const u = Math.min(Math.max(((f.age || 0) - (aAt - 0.05)) / 0.1, 0), 1);
       grow = 0.6 + 0.4 * (u * u * (3 - 2 * u));
     }
-    const sc = (sp.len / sp.vb[0]) * f.depth * grow;
+    const popS = f.pop ? 1 + 0.3 * Math.sin(Math.PI * (1 - f.pop / 0.3)) : 1;
+    const sc = (sp.len / sp.vb[0]) * f.depth * grow * popS;
     const vbW = sp.vb[0], vbH = sp.vb[1];
     if (f === held) {
       const a = sp.len * 0.62 * 0.72 * (1 + Math.sin(tNow * 2.6) * 0.03);

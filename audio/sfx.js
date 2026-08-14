@@ -38,7 +38,15 @@ const Sfx = (() => {
     note(t + 0.07, 196, 0.09, 0.04);
   };
 
+  const evolve = () => {
+    if (!on() || !ctx()) return;
+    const t = ac.currentTime;
+    note(t, 392, 0.1, 0.05);
+    note(t + 0.08, 587.33, 0.14, 0.06);
+    note(t + 0.18, 783.99, 0.4, 0.05);
+  };
+
   window.addEventListener('pointerdown', () => ctx(), { once: true });
 
-  return { objective, eat };
+  return { objective, eat, evolve };
 })();

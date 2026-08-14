@@ -30,7 +30,8 @@ const Sim = (() => {
             Say.say(WHISPER.adult);
           }
           f.adult = true;
-          f.birth = 0;
+          f.pop = 0.3;
+          Sfx.evolve();
         }
         if (sp.hunger) {
           if (f.eating) {
