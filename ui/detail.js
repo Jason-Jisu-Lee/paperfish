@@ -43,7 +43,7 @@ const Detail = (() => {
   };
 
   const placeCard = (x, y, f) => {
-    const w = 344, h = 400, m = 14;
+    const w = 496, h = 410, m = 14;
     const fr = SPECIES[f.s].len * 0.65;
     let left = f.x + fr + 18;
     if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
