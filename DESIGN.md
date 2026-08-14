@@ -31,6 +31,8 @@ loop first. MECHANICS.md holds exact numbers.
   Popping bubbles is the active income placeholder (+10).
 - Upgrades so far: firstF Income (per-tick), Kelp (food), Spawning
   (chance), Growth (faster adulthood).
+- Placeholder foods: Algae, Plankton, Krill (FOODS in data/content.js).
+  Buyable, drift in the world, no gameplay effect yet; function TBD.
 
 ## species ladder (plan)
 - firstF fully designed first, then generalize. Until fish 4: many fish,
