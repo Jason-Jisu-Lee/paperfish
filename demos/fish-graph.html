@@ -48,17 +48,17 @@
   .g-top{ stroke:rgba(28,27,24,.75); stroke-width:2; }
   .g-top.now{ stroke:var(--seal); }
   .g-t{
-    font-family:'Zen Maru Gothic',sans-serif; font-size:10px; letter-spacing:.08em;
-    fill:rgba(28,27,24,.72);
-    paint-order:stroke; stroke:var(--paper); stroke-width:3px; stroke-linejoin:round;
+    font-family:'Zen Maru Gothic',sans-serif; font-size:11.5px; font-weight:500; letter-spacing:.04em;
+    fill:rgba(28,27,24,.85);
+    paint-order:stroke; stroke:var(--paper); stroke-width:3.5px; stroke-linejoin:round;
   }
-  .g-tv{ font-size:11px; font-weight:500; fill:var(--ink); }
-  .g-stage{ font-size:10px; letter-spacing:.16em; fill:rgba(28,27,24,.55); }
+  .g-tv{ font-size:12.5px; fill:var(--ink); }
+  .g-stage{ font-size:11.5px; letter-spacing:.1em; fill:rgba(28,27,24,.75); }
   .g-now{ fill:var(--seal); }
   .g-nguide{ stroke:rgba(180,58,43,.45); stroke-width:1; }
   .g-hguide{ stroke:rgba(28,27,24,.4); stroke-width:1; stroke-dasharray:2 4; }
   .g-hdot{ fill:rgba(28,27,24,.85); }
-  .g-ht{ fill:var(--ink); font-size:12px; font-weight:500; stroke-width:3.5px; }
+  .g-ht{ fill:var(--ink); font-size:13px; stroke-width:4px; }
   .fc-stats{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
   .stat{
     background:rgba(255,255,255,.5);
@@ -121,7 +121,7 @@
     { n: 1, name: 'enlarged step', tag: 'the current chart, grown up',
       note: 'same shape as today but taller, 10px type, units on every number, faint value gridlines, and the now-marker turns seal red.',
       draw: () => {
-        const g = build({ x0: 40, x1: 292, y0: 128, y1: 26 });
+        const g = build({ x0: 48, x1: 292, y0: 128, y1: 26 });
         return `
           <line class="g-grid" x1="${g.x0}" y1="${g.yA}" x2="${g.x1}" y2="${g.yA}"/>
           <line class="g-grid" x1="${g.x0}" y1="${g.yB}" x2="${g.x1}" y2="${g.yB}"/>
@@ -132,14 +132,13 @@
           <polyline class="g-line" points="${g.steps}"/>
           <text class="g-t" x="${g.x0 - 6}" y="${g.yA + 3}" text-anchor="end">24 G</text>
           <text class="g-t" x="${g.x0 - 6}" y="${g.yB + 3}" text-anchor="end">12 G</text>
-          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
-          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 15}" text-anchor="end">5 min</text>
           ${now(g, g.yB)} ${PROBE(g)}`;
       } },
     { n: 2, name: 'ink wash', tag: 'filled area under the steps',
       note: 'the area under the income line is washed in pale ink, so the baby-to-adult jump reads as mass, not just a line. axis kept minimal.',
       draw: () => {
-        const g = build({ x0: 40, x1: 292, y0: 128, y1: 26 });
+        const g = build({ x0: 48, x1: 292, y0: 128, y1: 26 });
         return `
           <path class="g-wash" d="M${g.x0},${g.y0} L${g.x0},${g.yB} L${g.bx},${g.yB} L${g.bx},${g.yA} L${g.x1},${g.yA} L${g.x1},${g.y0} Z"/>
           <path class="g-axis" d="M${g.x0} ${g.y1 - 4} V${g.y0} H${g.x1}"/>
@@ -149,8 +148,7 @@
           <polyline class="g-line" points="${g.steps}"/>
           <text class="g-t" x="${g.x0 - 6}" y="${g.yA + 3}" text-anchor="end">24 G</text>
           <text class="g-t" x="${g.x0 - 6}" y="${g.yB + 3}" text-anchor="end">12 G</text>
-          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
-          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 15}" text-anchor="end">5 min</text>
           ${now(g, g.yB)} ${PROBE(g)}`;
       } },
     { n: 3, name: 'phase blocks', tag: 'life stages as solid shapes',
@@ -167,8 +165,7 @@
           <text class="g-t g-stage" x="${g.bx + 12}" y="${g.yA + 18}">adult</text>
           <text class="g-t g-tv" x="${g.bx + 12}" y="${g.yA + 33}">24 G / min</text>
           <line class="g-axis" x1="${g.x0}" y1="${g.y0}" x2="${g.x1}" y2="${g.y0}"/>
-          <text class="g-t" x="${g.x0}" y="${g.y0 + 14}">0</text>
-          <text class="g-t" x="${g.x1}" y="${g.y0 + 14}" text-anchor="end">5 min</text>
+          <text class="g-t" x="${g.x1}" y="${g.y0 + 15}" text-anchor="end">5 min</text>
           <circle class="g-now" r="3.4" cx="${g.nx}" cy="${g.yB}"/>
           ${PROBE(g)}`;
       } },
@@ -182,7 +179,6 @@
           <text class="g-t g-tv" x="${g.bx + 12}" y="${g.yA - 9}">24 G / min</text>
           <text class="g-t g-stage" x="${(g.x0 + g.bx) / 2}" y="${g.yB + 16}" text-anchor="middle">baby</text>
           <text class="g-t g-stage" x="${(g.bx + g.x1) / 2}" y="${g.yA + 16}" text-anchor="middle">adult</text>
-          <text class="g-t" x="${g.x0}" y="${g.y0 + 16}">0</text>
           <text class="g-t" x="${g.x1}" y="${g.y0 + 16}" text-anchor="end">5 min</text>
           ${now(g, g.yB)} ${probe(g, 4.4, VADULT, '4:24', '24 G / min')}`;
       } }
