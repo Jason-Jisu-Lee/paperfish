@@ -19,7 +19,7 @@ MECHANICS.md holds exact numbers.
 - Fish card: enlarged-step income graph, y axis in G per 5s (unit caption
   "G / 5s" above the axis), per-5s hover readout under the dot, time
   tracking the x axis (replaces the end marker at the edge), seal-red
-  now-dot. Fish pop briefly with a soft chime on evolving; no redraw-on.
+  now-dot. Fish pop briefly on evolving; no redraw-on.
 - Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
   arrive with tiers 2-3. Same silhouette in shop icon and world egg.
@@ -32,8 +32,8 @@ MECHANICS.md holds exact numbers.
 ## core loop (soul prestige, tier era 2026-08-15)
 - Currencies: Gold (run) + Soul (prestige). Souls render in water blue
   (#3e546e family); gold stays #7a5800.
-- Run start: 1 firstF + 10 gold (+5 per Starting Gold prestige level).
-- Egg: 10 G, +5 G per purchase, cost resets each run. Hatch time is
+- Run start: 1 firstF + 5 gold (+5 per Starting Gold prestige level).
+- Egg: 5 G, +5 G per purchase (5, 10, 15...), cost resets each run. Hatch time is
   per tier: Tier 1 hatches in 5s, Tier 2 in 12s (tiers 3-6 placeholder
   20/30/45/60s). The species is rolled the moment
   the egg is purchased; Tier 1 = 100% firstF for now. Egg button: big
@@ -43,8 +43,8 @@ MECHANICS.md holds exact numbers.
   for now).
 - Fish: fixed income for every fish, no maturity income difference:
   1 G / 5s base + in-game Income levels + prestige Base Income levels.
-  Growth to adult is visual only (half of life), keeps its pop, chime,
-  and one-time "Fish got bigger" whisper. Adulthood doing nothing is BY
+  Growth to adult is visual only (half of life), keeps its pop and
+  one-time "Fish got bigger" whisper. Adulthood doing nothing is BY
   DESIGN (confirmed 2026-08-15).
 - Soul counter: the number is dead-center top screen, much larger than
   gold; SOUL sits to its right as a currency label that doesn't shift
@@ -155,6 +155,11 @@ prestige, souls, permanent:
   layered on top of soul prestige.
 - Trait picks at growth stages, floating plant upgrades, story layer,
   the unsettling turn, self-hosted fonts for Steam.
+
+## audio
+- All sound effects removed 2026-08-15 (audio/sfx.js deleted); sound
+  returns as a designed pass later. The Sound toggle in settings stays
+  wired to the flag for when it does.
 
 ## workflow
 - Claude maintains DESIGN.md and MECHANICS.md as decisions land, commits

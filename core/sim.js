@@ -37,7 +37,6 @@ const Sim = (() => {
           }
           f.adult = true;
           f.pop = 0.3;
-          Sfx.evolve();
         }
         if (f.eating) {
           f.eating.t -= sdt;
@@ -70,7 +69,6 @@ const Sim = (() => {
               const px = p.x + p.hx, pyy = p.y + p.hy;
               if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
                 Stage.biteKelp(p);
-                Sfx.eat();
                 if (p.bites <= 0) Game.plants -= 1;
                 const side = f.x < px ? -1 : 1;
                 f.dir = -side;

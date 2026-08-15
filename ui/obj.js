@@ -50,7 +50,6 @@ const Obj = (() => {
     transitioning = true;
     render();
     box.classList.add('done');
-    Sfx.objective();
     setTimeout(() => {
       box.classList.add('fade');
       setTimeout(() => {
