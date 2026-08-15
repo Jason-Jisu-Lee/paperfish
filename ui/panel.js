@@ -18,12 +18,6 @@ const Panel = (() => {
       cur: () => 'Current: ' + fmt(incomePer5s()) + ' G / 5s'
     },
     {
-      key: 'life', name: 'Lifespan', cat: 'life',
-      cost: lifeUpCost, lvl: () => Game.lifeUp, buy: buyLifeUp,
-      desc: '+5s lifespan for every fish',
-      cur: () => 'Current: ' + (10 + Game.lifeUp * 5) + 's'
-    },
-    {
       key: 'kelp', name: 'Kelp', cat: 'food',
       cost: () => KELP_COST, lvl: () => Game.plants, buy: buyKelp,
       desc: 'two bites, one bite satisfies hunger for 10s',

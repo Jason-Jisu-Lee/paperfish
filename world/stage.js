@@ -515,7 +515,7 @@ const Stage = (() => {
     const q = 1 + Math.sin(f.ph * 1.15) * 0.03;
     ctx.save();
     ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
-    ctx.scale(q * 0.8, (2 - q) * 0.8);
+    ctx.scale(q * 0.48, (2 - q) * 0.48);
     ctx.strokeStyle = 'rgba(28,27,24,0.85)';
     ctx.lineWidth = 2.4;
     ctx.lineCap = 'round';
@@ -524,7 +524,7 @@ const Stage = (() => {
     if (total - (f.t || 0) <= 5) {
       const pulse = 1 + Math.sin(tNow * 8) * 0.15;
       ctx.save();
-      ctx.translate(f.x, f.y - 34);
+      ctx.translate(f.x, f.y - 24);
       ctx.scale(pulse, pulse);
       ctx.strokeStyle = 'rgba(28,27,24,0.85)';
       ctx.fillStyle = 'rgba(28,27,24,0.85)';

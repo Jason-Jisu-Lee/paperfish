@@ -19,11 +19,16 @@ const Soul = (() => {
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++
     },
     {
+      key: 'pLife', cat: 'Basics', name: 'Tier 1 Lifespan',
+      desc: '+5s lifespan for Tier 1 fish',
+      lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++
+    },
+    {
       key: 'pKelp', cat: 'Basics', name: 'Starting Kelp',
       desc: 'start each run with +1 kelp',
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
       max: () => Game.pKelp >= PKELP_MAX,
-      gate: () => Game.tuts.lifeBought
+      gate: () => Game.pLife > 0
     },
     {
       key: 'soulUp', cat: 'Basics', name: 'Extra Soul',
@@ -70,6 +75,28 @@ const Soul = (() => {
     </button>`;
   };
 
+  const fiCard = s => {
+    const sp = SPECIES[s];
+    const known = s === 0;
+    let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
+    const w = Math.min(Math.round(30 * sp.vb[0] / sp.vb[1]), 96);
+    return `
+      <div class="fi-card${known ? '' : ' unknown'}">
+        <svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${w}px">${inner}</svg>
+        <span class="fi-name">${known ? sp.name : '?'}</span>
+      </div>`;
+  };
+
+  const fishIndex = () => {
+    let h = '<div class="p-cat">Fish Index</div>';
+    TIER_FISH.forEach((arr, i) => {
+      h += `<div class="fi-tier">Tier ${i + 1}</div><div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
+    });
+    return h;
+  };
+
   const renderShop = () => {
     bankEl.textContent = fmtG(Game.bank);
     let h = '', lastCat = null;
@@ -81,7 +108,7 @@ const Soul = (() => {
       }
       h += card(u);
     }
-    list.innerHTML = h + '</div>';
+    list.innerHTML = h + '</div>' + fishIndex();
   };
 
   const open = () => {
@@ -118,7 +145,6 @@ const Soul = (() => {
     Game.souls = 0;
     Game.eggsBought = 0;
     Game.incomeUp = 0;
-    Game.lifeUp = 0;
     Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();

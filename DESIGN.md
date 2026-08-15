@@ -50,8 +50,17 @@ MECHANICS.md holds exact numbers.
   gold; SOUL sits to its right as a currency label that doesn't shift
   the centering. Income graph removed from the
   fish card; the card shows age, income, death value.
-- Lifespan: shared per tier. Tier 1 base 10s, +5s per in-game Lifespan
-  level (run-only).
+- Lifespan: shared per tier. Tier 1 base 10s, +5s per Tier 1 Lifespan
+  PRESTIGE level (persists across runs; costs 2, 5, 10, 20 souls then
+  doubling). It only affects Tier 1 fish. The in-game life category is
+  gone; its rail icon is hidden until a life upgrade exists again.
+- World egg is 40% smaller than the shop icon (same art). Prestige exit
+  button reads "Start".
+- Fish Index: a section at the bottom of the prestige screen listing
+  every creature by tier; discovered fish in full ink with names,
+  undiscovered as grey silhouettes named "?". Only firstF counts as
+  discovered for now (real discovery tracking TBD; snail card waits on
+  its asset).
 - Hunger: every fish, first hunger 10s after birth, again 10s after each
   bite. A fish only becomes hungry if that moment lands before its death
   age, so base-life (10s) fish never hunger; the system wakes with the
@@ -89,11 +98,10 @@ MECHANICS.md holds exact numbers.
 - Card indicator language: red "dev" tag = not functional yet; grey
   "hidden" tag + dashed border = functional but not yet visible to
   players (reveal gate unmet), dev-only during playtests. Starting
-  Kelp is gated behind the first-ever purchase of the in-game Lifespan
-  upgrade (Game.tuts.lifeBought, persists across runs).
-- In-game upgrades: Income +1 G/5s (income icon), Lifespan +5s (life
-  icon, meant to be somewhat expensive), Kelp (food icon, revealed by
-  the tutorial). Rail icons for income/life are live from the start.
+  Kelp is gated behind the first Tier 1 Lifespan prestige level
+  (Game.pLife > 0).
+- In-game upgrades: Income +1 G/5s (income icon), Kelp (food icon,
+  revealed by the tutorial). Income icon is live from the start.
 - Whispers: "Soul collected" (first soulful death ever), "Fish got
   bigger" (first maturing ever). Objectives: none; format kept.
 - Clam pays its first pearl 3 min into a run, then every 60-80s
