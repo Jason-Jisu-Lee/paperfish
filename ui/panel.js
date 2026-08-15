@@ -132,6 +132,17 @@ const Panel = (() => {
       uptip.removeAttribute('hidden');
       return;
     }
+    const info = e.target.closest('[data-info]');
+    if (info) {
+      uptip.classList.remove('cap');
+      uptip.textContent = 'Egg tier details';
+      const r = info.getBoundingClientRect();
+      uptip.style.right = 'auto';
+      uptip.style.top = (r.top - 4) + 'px';
+      uptip.style.left = (r.right + 12) + 'px';
+      uptip.removeAttribute('hidden');
+      return;
+    }
     const ub = e.target.closest('[data-key]');
     const eb = e.target.closest('[data-egg]');
     if (!ub && !eb) return;
@@ -149,7 +160,7 @@ const Panel = (() => {
     uptip.removeAttribute('hidden');
   });
   document.getElementById('hud').addEventListener('mouseout', e => {
-    if (e.target.closest('[data-key], [data-egg], [data-cat]')) uptip.setAttribute('hidden', '');
+    if (e.target.closest('[data-key], [data-egg], [data-cat], [data-info]')) uptip.setAttribute('hidden', '');
   });
 
   return { refresh, tick };
