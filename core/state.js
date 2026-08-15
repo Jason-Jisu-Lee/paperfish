@@ -21,8 +21,7 @@ const Game = {
 const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
-const EGG_BASE = 5;
-const EGG_STEP = 5;
+const EGG_COSTS = [5, 7, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
 const TIER_HATCH = [8, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
@@ -31,7 +30,13 @@ const FIRSTF_CAP = 20;
 const TIER_FISH = [[0, 2], [1], [3, 5], [4, 6], [7, 10], [8, 9, 11]];
 
 const startGold = () => 5 + Game.pStartGold * 5;
-const eggCost = () => EGG_BASE + Game.eggsBought * EGG_STEP;
+const eggCost = () => {
+  const n = Game.eggsBought;
+  if (n < EGG_COSTS.length) return EGG_COSTS[n];
+  const raw = 300 * 1.3 ** (n - EGG_COSTS.length + 1);
+  const mag = 10 ** Math.floor(Math.log10(raw) - 1);
+  return Math.round(raw / mag) * mag;
+};
 const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
 const lifeOf = () => (10 + Game.pLife * 5) / 60;

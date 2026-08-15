@@ -87,7 +87,7 @@ const Sim = (() => {
           if (fired) {
             const amt = incomePer5s() * fired;
             earned += amt;
-            Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 8, '+' + fmtG(amt));
+            Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 10, '+' + fmtG(amt) + ' G');
           }
         }
         if (f.age >= life && f.birth >= 1) {

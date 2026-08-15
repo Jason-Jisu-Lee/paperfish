@@ -95,6 +95,13 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   white-space:nowrap;
   color:#7a5800;
 }
+.gold{ transform-origin:left center; }
+.gold.bump{ animation:goldbump .5s ease; }
+@keyframes goldbump{
+  0%{ transform:scale(1); }
+  22%{ transform:scale(1.08); color:#a37800; }
+  100%{ transform:scale(1); }
+}
 .gold .g{ font-size:26px; margin-left:8px; letter-spacing:.1em; font-weight:500; vertical-align:middle; }
 .goldrate{
   color:rgba(122,88,0,.85); margin-top:3px; font-size:12px;

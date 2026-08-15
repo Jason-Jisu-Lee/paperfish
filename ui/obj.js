@@ -13,7 +13,7 @@ const Obj = (() => {
   const reward = (b, amt) => {
     Game.gold += amt;
     const r = b.getBoundingClientRect();
-    Stage.spawnPop(r.left + r.width / 2, r.bottom + 16, '+' + fmtG(amt), 'big');
+    Stage.spawnPop(r.left + r.width / 2, r.bottom + 16, '+' + fmtG(amt) + ' G', 'big');
   };
 
   const render = () => {

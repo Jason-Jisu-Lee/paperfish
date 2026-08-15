@@ -55,7 +55,17 @@ const Panel = (() => {
     tick();
   };
 
+  const goldEl = document.querySelector('.gold');
+  let lastGold = -1;
+
   const tick = () => {
+    const g = Math.floor(Game.gold);
+    if (g > lastGold && lastGold >= 0) {
+      goldEl.classList.remove('bump');
+      void goldEl.offsetWidth;
+      goldEl.classList.add('bump');
+    }
+    lastGold = g;
     goldNum.textContent = fmt(Game.gold);
     goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
     const eb = fishGrid.querySelector('[data-egg]');

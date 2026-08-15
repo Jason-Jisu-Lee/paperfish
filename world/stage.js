@@ -577,9 +577,15 @@ const Stage = (() => {
     ctx.restore();
   };
 
+  const POPS = {
+    gold: { font: '500 17px "Zen Maru Gothic", sans-serif', fill: 'rgba(122,88,0,1)', a: 0.95, life: 1.5, rise: 15 },
+    big: { font: '500 19px "Zen Maru Gothic", sans-serif', fill: 'rgba(122,88,0,1)', a: 0.95, life: 1.6, rise: 14 },
+    soul: { font: '500 21px "Zen Maru Gothic", sans-serif', fill: 'rgba(62,84,110,1)', a: 0.95, life: 1.8, rise: 10 }
+  };
+
   const pops = [];
   const spawnPop = (x, y, txt, kind) => {
-    pops.push({ x, y, txt, t: 0, kind, life: kind === 'soul' ? 1.8 : 0.9 });
+    pops.push({ x, y, txt, t: 0, s: POPS[kind] || POPS.gold });
   };
 
   const updatePops = mdt => {
@@ -587,8 +593,8 @@ const Stage = (() => {
     for (let i = pops.length - 1; i >= 0; i--) {
       const p = pops[i];
       p.t += mdt;
-      p.y -= (p.kind === 'soul' ? 10 : 17) * mdt;
-      if (p.t >= p.life) pops.splice(i, 1);
+      p.y -= p.s.rise * mdt;
+      if (p.t >= p.s.life) pops.splice(i, 1);
     }
   };
 
@@ -596,19 +602,10 @@ const Stage = (() => {
     if (!pops.length) return;
     ctx.textAlign = 'center';
     for (const p of pops) {
-      if (p.kind === 'soul') {
-        ctx.fillStyle = 'rgba(62,84,110,1)';
-        ctx.font = '500 21px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.95 * Math.min(1, (p.life - p.t) / 0.6);
-      } else if (p.kind) {
-        ctx.fillStyle = 'rgba(122,88,0,1)';
-        ctx.font = '14px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.9 * (1 - p.t / p.life);
-      } else {
-        ctx.fillStyle = 'rgba(122,88,0,1)';
-        ctx.font = '11px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.65 * (1 - p.t / p.life);
-      }
+      const g = Math.min(p.t / 0.12, 1);
+      ctx.fillStyle = p.s.fill;
+      ctx.font = p.s.font;
+      ctx.globalAlpha = p.s.a * g * Math.min(1, (p.s.life - p.t) / 0.5);
       ctx.fillText(p.txt, p.x, p.y);
     }
     ctx.globalAlpha = 1;

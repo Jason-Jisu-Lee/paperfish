@@ -54,7 +54,7 @@ const Ocean = (() => {
       if (clam.pearl) {
         const v = Math.max(1, Math.round(ratePerMin() * 0.2));
         Game.gold += v;
-        Stage.spawnPop(xAt(clam.u), fy() - 36, '+' + fmtG(v), 'big');
+        Stage.spawnPop(xAt(clam.u), fy() - 36, '+' + fmtG(v) + ' G', 'big');
         clam.pearl = false;
         nextPearl = rand(60, 80);
       }

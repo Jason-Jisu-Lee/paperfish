@@ -35,7 +35,9 @@ MECHANICS.md holds exact numbers.
 - Currencies: Gold (run) + Soul (prestige). Souls render in water blue
   (#3e546e family); gold stays #7a5800.
 - Run start: 1 firstF + 5 gold (+5 per Starting Gold prestige level).
-- Egg: 5 G, +5 G per purchase (5, 10, 15...), cost resets each run. Hatch time is
+- Egg: hand-tuned cost curve 5, 7, 12, 20, 25, 30, 40, 50, 70, 90, 120,
+  150, 200, 250, 300, then x1.3 per purchase rounded to 2 significant
+  digits; cost resets each run. Hatch time is
   per tier: Tier 1 hatches in 8s, Tier 2 in 12s (tiers 3-6 placeholder
   20/30/45/60s). The species is rolled the moment
   the egg is purchased; Tier 1 = 100% firstF for now. Egg button: big
@@ -43,6 +45,9 @@ MECHANICS.md holds exact numbers.
   hover reads "Tier 1 Egg", and an "i" info dot top-left opens a popover
   listing each tier's possible fish with odds (Tier 1 / firstF 100% only
   for now).
+- Gold feedback: every income tick pops "+N G" above the fish (17px,
+  1.5s, near-full opacity) and the gold counter scales and warms for a
+  beat, so earning is unmissable.
 - Fish: fixed income for every fish, no maturity income difference:
   1 G / 5s base + in-game Income levels + prestige Base Income levels.
   Growth to adult is visual only (half of life), keeps its pop and
