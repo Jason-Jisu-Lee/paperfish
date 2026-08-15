@@ -59,9 +59,8 @@ const Soul = (() => {
     <button class="pcard${Game.bank < u.cost() ? ' off' : ''}" data-p="${u.key}">
       ${u.dev ? '<span class="devtag">dev</span>' : ''}
       ${u.lvl() > 0 ? `<span class="pc-lv">Lv ${u.lvl()}</span>` : ''}
-      <span class="pc-name">${u.name}</span>
+      <span class="pc-mid"><span class="pc-name">${u.name}</span><span class="pc-cost">${fmtG(u.cost())} Soul</span></span>
       <span class="pc-desc">${u.desc}</span>
-      <span class="pc-cost">${fmtG(u.cost())} Soul</span>
     </button>`;
 
   const renderShop = () => {
