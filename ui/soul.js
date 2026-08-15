@@ -21,7 +21,9 @@ const Soul = (() => {
     {
       key: 'pKelp', cat: 'Basics', name: 'Starting Kelp',
       desc: 'start each run with +1 kelp',
-      lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++
+      lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
+      max: () => Game.pKelp >= PKELP_MAX,
+      gate: () => Game.tuts.lifeBought
     },
     {
       key: 'soulUp', cat: 'Basics', name: 'Extra Soul',
@@ -55,13 +57,18 @@ const Soul = (() => {
     }
   ];
 
-  const card = u => `
-    <button class="pcard${Game.bank < u.cost() ? ' off' : ''}" data-p="${u.key}">
+  const card = u => {
+    const maxed = u.max && u.max();
+    const gated = u.gate && !u.gate();
+    return `
+    <button class="pcard${Game.bank < u.cost() || maxed ? ' off' : ''}${gated ? ' gated' : ''}" data-p="${u.key}">
       ${u.dev ? '<span class="devtag">dev</span>' : ''}
+      ${gated ? '<span class="hidtag">hidden</span>' : ''}
       ${u.lvl() > 0 ? `<span class="pc-lv">Lv ${u.lvl()}</span>` : ''}
-      <span class="pc-mid"><span class="pc-name">${u.name}</span><span class="pc-cost">${fmtG(u.cost())} Soul</span></span>
+      <span class="pc-mid"><span class="pc-name">${u.name}</span><span class="pc-cost">${maxed ? 'Max' : fmtG(u.cost()) + ' Soul'}</span></span>
       <span class="pc-desc">${u.desc}</span>
     </button>`;
+  };
 
   const renderShop = () => {
     bankEl.textContent = fmtG(Game.bank);
@@ -89,7 +96,7 @@ const Soul = (() => {
     const el = e.target.closest('[data-p]');
     if (!el) return;
     const u = PUPS.find(x => x.key === el.dataset.p);
-    if (!u || Game.bank < u.cost()) return;
+    if (!u || Game.bank < u.cost() || (u.max && u.max())) return;
     Game.bank -= u.cost();
     u.buy();
     renderShop();

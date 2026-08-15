@@ -36,11 +36,12 @@ const lifeOf = () => (10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => lifeOf() / 2;
 const hatchTime = () => TIER_HATCH[0];
 
-const soulUpCost = () => 10 * 2 ** Game.soulUp;
+const soulUpCost = () => 20 * 2 ** Game.soulUp;
 const startGoldCost = () => 2 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
-const pKelpCost = () => 15 * 2 ** Game.pKelp;
-const pTierCost = t => 5 * 2 ** Game.pTier[t - 2];
+const PKELP_MAX = 5;
+const pKelpCost = () => 5;
+const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
 
@@ -163,6 +164,7 @@ const buyLifeUp = () => {
   if (Game.gold < c) return false;
   Game.gold -= c;
   Game.lifeUp += 1;
+  Game.tuts.lifeBought = 1;
   saveGame();
   return true;
 };

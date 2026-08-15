@@ -737,6 +737,12 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   font-size:11px; letter-spacing:.08em; color:rgba(62,84,110,.9);
 }
 .pcard .devtag{ position:absolute; top:10px; left:11px; }
+.pcard.gated{ border-style:dashed; }
+.hidtag{
+  position:absolute; top:10px; left:11px;
+  font-size:9px; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(28,27,24,.45);
+}
 .pr-dive{
   position:fixed; left:50%; bottom:36px; transform:translateX(-50%);
   min-width:240px; padding:14px 38px;
