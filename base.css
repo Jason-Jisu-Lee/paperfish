@@ -856,5 +856,5 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .tut-text{ font-size:14px; letter-spacing:.03em; line-height:1.7; }
 #tut-next{ margin-top:10px; }
 
-.ubtn-icon.eggicon svg{ width:38px; height:48px; }
-.ubtn-icon.eggicon path{ fill:none; stroke:rgba(28,27,24,.85); stroke-width:2.6; stroke-linecap:round; }
+.ubtn-icon.eggicon svg{ width:38px; height:48px; overflow:visible; filter:drop-shadow(0 2px 2px rgba(28,27,24,.18)); }
+.ubtn-icon.eggicon path{ fill:#fdfaf1; stroke:rgba(28,27,24,.85); stroke-width:2.6; stroke-linecap:round; }

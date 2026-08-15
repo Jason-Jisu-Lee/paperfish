@@ -22,7 +22,9 @@ MECHANICS.md holds exact numbers.
   now-dot. Fish pop briefly on evolving; no redraw-on.
 - Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
-  arrive with tiers 2-3. Same silhouette in shop icon and world egg.
+  arrive with tiers 2-3. Same silhouette in shop icon and world egg; both render as a solid
+  shell (paper-white fill + soft shadow) so eggs read as objects against
+  the line-art world (eggvis option 1, picked 2026-08-15).
 - Ocean decor: sepia clam (pearl income), water blue bubbles. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
@@ -67,15 +69,16 @@ MECHANICS.md holds exact numbers.
   first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 10s
   (2s eating pause). Hungry or starving fish forfeit their souls when
   they die (mid-bite eaters don't); the fish card death row shows
-  "none, hungry" while it would forfeit. A held (selected) fish is
-  lifted out of time: age, hunger, and income pause while the card is
-  open.
+  "none, hungry" while it would forfeit. A held (selected) fish keeps
+  aging, hungering, and earning while the card is open (confirmed
+  2026-08-15); it just can't swim to food while held.
 - Hunger tutorial (first hunger EVER, flag in save): world freezes, box
   points at the fish: "Fish is hungry. Hungry fish do not generate soul
   when deceased" -> Next -> the food rail icon (hidden until now)
   appears flashing red: "Buy food for your fish" -> clicking the food
   icon ends the tutorial; the player buys kelp themselves.
-- Souls: each soulful death pays 1 + Extra Soul level, blue +N pop.
+- Souls: each soulful death pays 1 + Extra Soul level, shown as a big
+  blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
   Counter top middle, Collect Soul under it; collecting banks 1:1,
   freezes the world, opens the Prestige overlay; Dive Again resets the
   run (gold to startGold, egg cost, run upgrades, kelp all reset).

@@ -26,7 +26,6 @@ const Sim = (() => {
           refresh = true;
         }
       } else {
-        if (f === Stage.held) continue;
         const life = lifeOf();
         f.age = Math.min((f.age || 0) + sdt / 60, life);
         const aAt = adultAtOf();

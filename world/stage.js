@@ -516,12 +516,20 @@ const Stage = (() => {
     ctx.save();
     ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
     ctx.scale(q * 0.48, (2 - q) * 0.48);
+    ctx.fillStyle = 'rgba(253,250,241,1)';
+    ctx.shadowColor = 'rgba(28,27,24,0.22)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 3;
+    ctx.fill(EGGP);
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
     ctx.strokeStyle = 'rgba(28,27,24,0.85)';
     ctx.lineWidth = 2.4;
     ctx.lineCap = 'round';
     ctx.stroke(EGGP);
     ctx.restore();
-    if (total - (f.t || 0) <= 5) {
+    if (total - (f.t || 0) <= 2) {
       const pulse = 1 + Math.sin(tNow * 8) * 0.15;
       ctx.save();
       ctx.translate(f.x, f.y - 24);
@@ -566,7 +574,7 @@ const Stage = (() => {
 
   const pops = [];
   const spawnPop = (x, y, txt, kind) => {
-    pops.push({ x, y, txt, t: 0, kind });
+    pops.push({ x, y, txt, t: 0, kind, life: kind === 'soul' ? 1.8 : 0.9 });
   };
 
   const updatePops = mdt => {
@@ -574,8 +582,8 @@ const Stage = (() => {
     for (let i = pops.length - 1; i >= 0; i--) {
       const p = pops[i];
       p.t += mdt;
-      p.y -= 17 * mdt;
-      if (p.t >= 0.9) pops.splice(i, 1);
+      p.y -= (p.kind === 'soul' ? 10 : 17) * mdt;
+      if (p.t >= p.life) pops.splice(i, 1);
     }
   };
 
@@ -585,16 +593,16 @@ const Stage = (() => {
     for (const p of pops) {
       if (p.kind === 'soul') {
         ctx.fillStyle = 'rgba(62,84,110,1)';
-        ctx.font = '17px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.95 * (1 - p.t / 0.9);
+        ctx.font = '500 21px "Zen Maru Gothic", sans-serif';
+        ctx.globalAlpha = 0.95 * Math.min(1, (p.life - p.t) / 0.6);
       } else if (p.kind) {
         ctx.fillStyle = 'rgba(122,88,0,1)';
         ctx.font = '14px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
+        ctx.globalAlpha = 0.9 * (1 - p.t / p.life);
       } else {
         ctx.fillStyle = 'rgba(122,88,0,1)';
         ctx.font = '11px "Zen Maru Gothic", sans-serif';
-        ctx.globalAlpha = 0.65 * (1 - p.t / 0.9);
+        ctx.globalAlpha = 0.65 * (1 - p.t / p.life);
       }
       ctx.fillText(p.txt, p.x, p.y);
     }
@@ -612,7 +620,6 @@ const Stage = (() => {
 
   return {
     ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
-    get held() { return held; },
     get bounds() { return bounds; },
     get size() { return { W, H }; }
   };
