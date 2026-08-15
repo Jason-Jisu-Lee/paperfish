@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=55" />
+    <link rel="stylesheet" href="base.css?v=57" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -135,16 +135,15 @@
       </div>
     </div>
 
-    <div class="modal" id="prestige" hidden>
-      <div class="modal-card prestige-card">
-        <div class="modal-head">
-          <span>Prestige</span>
-        </div>
-        <div class="p-souls"><span id="p-bank">0</span><span class="soul-lab">SOUL</span></div>
-        <div class="p-list" id="p-list"></div>
-        <button class="btn" id="p-dive">Dive Again</button>
+    <section class="prestige" id="prestige" hidden>
+      <div class="pr-wisps"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="pr-inner">
+        <div class="pr-title">Prestige</div>
+        <div class="pr-souls"><span id="p-bank">0</span><span class="pr-lab">SOUL</span></div>
+        <div id="p-list"></div>
       </div>
-    </div>
+      <button class="pr-dive" id="p-dive">Dive Again</button>
+    </section>
 
     <div class="modal" id="egginfo-modal" hidden>
       <div class="modal-card egginfo-card">
@@ -297,7 +296,7 @@
 
     <script src="data/species.js?v=4"></script>
     <script src="data/content.js?v=6"></script>
-    <script src="core/state.js?v=11"></script>
+    <script src="core/state.js?v=12"></script>
     <script src="world/stage.js?v=10"></script>
     <script src="world/ambience.js?v=3"></script>
     <script src="world/ocean.js?v=5"></script>
@@ -307,7 +306,7 @@
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
     <script src="ui/obj.js?v=12"></script>
-    <script src="ui/soul.js?v=3"></script>
+    <script src="ui/soul.js?v=4"></script>
     <script src="ui/say.js?v=1"></script>
     <script src="ui/detail.js?v=12"></script>
     <script src="ui/dev.js?v=2"></script>

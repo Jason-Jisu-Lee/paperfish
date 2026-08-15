@@ -67,11 +67,18 @@ MECHANICS.md holds exact numbers.
   run (gold to startGold, egg cost, run upgrades, kelp all reset).
   The open shop persists in the save: refreshing mid-prestige returns
   to the shop, never back to the collected run.
-- Prestige shop: one scrollable list, categories divided by rule lines,
-  no per-category clicking. Live: Extra Soul (+1 soul), Starting Gold
-  (+5), Base Income (+1 G). Dev-tagged, purchasable but no effect yet:
-  Tier 2 Chance (+10%, +5% per later level), Tier 3 (+5%, +2.5%),
-  Tier 4 (+3%, +1.5%), Tier 5 (+1.5%, +0.75%), Tier 6 (+0.5%, +0.25%).
+- Prestige is a fullscreen animated screen (the reward heart of the
+  game): blue-washed paper takeover, PRESTIGE title, giant glowing
+  serif soul count, background soul wisps rising, staggered card
+  entrance on open, fixed Dive Again pill at the bottom. Upgrades are
+  hover-lift cards: name + cost always visible, one-line gamer-speak
+  description reveals on hover in a reserved slot (no reflow), level
+  shows as "Lv N" only when above 0 (never ×0). Scrollable, categories
+  with wide spacing: BASICS (Starting Gold +5, Base Income +1 G/5s,
+  Starting Kelp +1 kelp each run at 15·2^lvl souls, Extra Soul +1 at
+  10·2^lvl souls) then TIER 2-6 chance cards (dev-tagged, purchasable,
+  no effect yet: +10%/+5, +5%/+2.5, +3%/+1.5, +1.5%/+0.75,
+  +0.5%/+0.25).
 - In-game upgrades: Income +1 G/5s (income icon), Lifespan +5s (life
   icon, meant to be somewhat expensive), Kelp (food icon, revealed by
   the tutorial). Rail icons for income/life are live from the start.

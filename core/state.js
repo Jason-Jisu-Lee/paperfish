@@ -6,6 +6,7 @@ const Game = {
   soulUp: 0,
   pStartGold: 0,
   pIncome: 0,
+  pKelp: 0,
   pTier: [0, 0, 0, 0, 0],
   eggsBought: 0,
   incomeUp: 0,
@@ -35,9 +36,10 @@ const lifeOf = () => (10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => lifeOf() / 2;
 const hatchTime = () => HATCH_TIME;
 
-const soulUpCost = () => 2 * 2 ** Game.soulUp;
+const soulUpCost = () => 10 * 2 ** Game.soulUp;
 const startGoldCost = () => 2 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
+const pKelpCost = () => 15 * 2 ** Game.pKelp;
 const pTierCost = t => 5 * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
@@ -72,6 +74,7 @@ const saveGame = () => {
       su: Game.soulUp,
       psg: Game.pStartGold,
       pin: Game.pIncome,
+      pkl: Game.pKelp,
       pt: Game.pTier,
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
@@ -99,6 +102,7 @@ const loadGame = () => {
     Game.soulUp = d.su || 0;
     Game.pStartGold = d.psg || 0;
     Game.pIncome = d.pin || 0;
+    Game.pKelp = d.pkl || 0;
     Game.pTier = Array.isArray(d.pt) && d.pt.length === 5 ? d.pt : [0, 0, 0, 0, 0];
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;

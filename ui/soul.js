@@ -2,72 +2,88 @@ const Soul = (() => {
   const box = document.getElementById('soulbox');
   const num = document.getElementById('soul-num');
   const btn = document.getElementById('collect-soul');
-  const modal = document.getElementById('prestige');
+  const screen = document.getElementById('prestige');
   const bankEl = document.getElementById('p-bank');
   const list = document.getElementById('p-list');
   let shopOpen = false;
 
   const PUPS = [
     {
-      key: 'soulUp', cat: 'Soul', name: 'Extra Soul',
-      desc: '+1 soul from each fish',
+      key: 'startGold', cat: 'Basics', name: 'Starting Gold',
+      desc: '+5 starting gold',
+      lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++
+    },
+    {
+      key: 'pIncome', cat: 'Basics', name: 'Base Income',
+      desc: '+1 G / 5s to all fish',
+      lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++
+    },
+    {
+      key: 'pKelp', cat: 'Basics', name: 'Starting Kelp',
+      desc: 'start each run with +1 kelp',
+      lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++
+    },
+    {
+      key: 'soulUp', cat: 'Basics', name: 'Extra Soul',
+      desc: '+1 soul per fish death',
       lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++
     },
     {
       key: 't2', cat: 'Tier 2', name: 'Tier 2 Chance', dev: true,
-      desc: '+10% Tier 2 eggs, +5% per level after',
+      desc: '+10% Tier 2 eggs, then +5%',
       lvl: () => Game.pTier[0], cost: () => pTierCost(2), buy: () => Game.pTier[0]++
     },
     {
       key: 't3', cat: 'Tier 3', name: 'Tier 3 Chance', dev: true,
-      desc: '+5% Tier 3 eggs, +2.5% per level after',
+      desc: '+5% Tier 3 eggs, then +2.5%',
       lvl: () => Game.pTier[1], cost: () => pTierCost(3), buy: () => Game.pTier[1]++
     },
     {
       key: 't4', cat: 'Tier 4', name: 'Tier 4 Chance', dev: true,
-      desc: '+3% Tier 4 eggs, +1.5% per level after',
+      desc: '+3% Tier 4 eggs, then +1.5%',
       lvl: () => Game.pTier[2], cost: () => pTierCost(4), buy: () => Game.pTier[2]++
     },
     {
       key: 't5', cat: 'Tier 5', name: 'Tier 5 Chance', dev: true,
-      desc: '+1.5% Tier 5 eggs, +0.75% per level after',
+      desc: '+1.5% Tier 5 eggs, then +0.75%',
       lvl: () => Game.pTier[3], cost: () => pTierCost(5), buy: () => Game.pTier[3]++
     },
     {
       key: 't6', cat: 'Tier 6', name: 'Tier 6 Chance', dev: true,
-      desc: '+0.5% Tier 6 eggs, +0.25% per level after',
+      desc: '+0.5% Tier 6 eggs, then +0.25%',
       lvl: () => Game.pTier[4], cost: () => pTierCost(6), buy: () => Game.pTier[4]++
-    },
-    {
-      key: 'startGold', cat: 'Gold', name: 'Starting Gold',
-      desc: '+5 starting gold each run',
-      lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++
-    },
-    {
-      key: 'pIncome', cat: 'Income', name: 'Base Income',
-      desc: '+1 G base income for every fish',
-      lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++
     }
   ];
+
+  const card = u => `
+    <button class="pcard${Game.bank < u.cost() ? ' off' : ''}" data-p="${u.key}">
+      ${u.dev ? '<span class="devtag">dev</span>' : ''}
+      ${u.lvl() > 0 ? `<span class="pc-lv">Lv ${u.lvl()}</span>` : ''}
+      <span class="pc-name">${u.name}</span>
+      <span class="pc-desc">${u.desc}</span>
+      <span class="pc-cost">${fmtG(u.cost())} Soul</span>
+    </button>`;
 
   const renderShop = () => {
     bankEl.textContent = fmtG(Game.bank);
     let h = '', lastCat = null;
     for (const u of PUPS) {
       if (u.cat !== lastCat) {
-        if (lastCat) h += '<div class="p-line"></div>';
-        h += `<div class="p-cat">${u.cat}</div>`;
+        if (lastCat) h += '</div>';
+        h += `<div class="p-cat">${u.cat}</div><div class="p-grid">`;
         lastCat = u.cat;
       }
-      h += `
-        <button class="prow${Game.bank < u.cost() ? ' off' : ''}" data-p="${u.key}">
-          ${u.dev ? '<span class="devtag">dev</span>' : ''}
-          <span class="prow-main"><span class="prow-name">${u.name}</span><span class="prow-desc">${u.desc}</span></span>
-          <span class="prow-lvl">× ${u.lvl()}</span>
-          <span class="prow-cost">${fmtG(u.cost())} Soul</span>
-        </button>`;
+      h += card(u);
     }
-    list.innerHTML = h;
+    list.innerHTML = h + '</div>';
+  };
+
+  const open = () => {
+    shopOpen = true;
+    renderShop();
+    screen.classList.add('fresh');
+    screen.removeAttribute('hidden');
+    setTimeout(() => screen.classList.remove('fresh'), 900);
   };
 
   list.addEventListener('click', e => {
@@ -86,9 +102,7 @@ const Soul = (() => {
     Game.bank += Game.souls;
     Game.souls = 0;
     Game.shop = 1;
-    shopOpen = true;
-    renderShop();
-    modal.removeAttribute('hidden');
+    open();
     saveGame();
   });
 
@@ -99,13 +113,14 @@ const Soul = (() => {
     Game.eggsBought = 0;
     Game.incomeUp = 0;
     Game.lifeUp = 0;
-    Game.plants = 0;
+    Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();
     Game.fish.forEach(f => Stage.materialize(f, 0));
+    for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
     Ocean.start();
     Panel.refresh();
-    modal.setAttribute('hidden', '');
+    screen.setAttribute('hidden', '');
     shopOpen = false;
     saveGame();
   });
@@ -121,16 +136,12 @@ const Soul = (() => {
   };
 
   const resume = () => {
-    if (Game.shop && !shopOpen) {
-      shopOpen = true;
-      renderShop();
-      modal.removeAttribute('hidden');
-    }
+    if (Game.shop && !shopOpen) open();
   };
 
   const closeShop = () => {
     shopOpen = false;
-    modal.setAttribute('hidden', '');
+    screen.setAttribute('hidden', '');
   };
 
   return { tick, resume, closeShop, get shopOpen() { return shopOpen; } };
