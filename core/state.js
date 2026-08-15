@@ -23,7 +23,7 @@ let skipSave = false;
 
 const EGG_BASE = 10;
 const EGG_STEP = 5;
-const HATCH_TIME = 20;
+const TIER_HATCH = [5, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
@@ -34,7 +34,7 @@ const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
 const lifeOf = () => (10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => lifeOf() / 2;
-const hatchTime = () => HATCH_TIME;
+const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 10 * 2 ** Game.soulUp;
 const startGoldCost = () => 2 * 2 ** Game.pStartGold;

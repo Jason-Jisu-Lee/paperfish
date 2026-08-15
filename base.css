@@ -608,16 +608,23 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   text-align:center; z-index:40; pointer-events:none;
 }
 .soul{
+  position:relative; display:inline-block;
   font-family:'Shippori Mincho',serif; font-weight:500;
-  font-size:clamp(42px, 4vw, 56px); letter-spacing:.04em;
+  font-size:clamp(56px, 6vw, 80px); letter-spacing:.03em;
+  line-height:1.05;
   font-feature-settings:'tnum'; color:#3e546e; white-space:nowrap;
 }
 .soul-lab{
-  font-family:'Zen Maru Gothic',sans-serif; font-size:15px; font-weight:500;
-  letter-spacing:.22em; color:rgba(62,84,110,.75); margin-left:9px; vertical-align:middle;
+  position:absolute; left:100%; top:50%;
+  transform:translateY(-50%);
+  margin-left:13px;
+  font-family:'Zen Maru Gothic',sans-serif; font-size:16px; font-weight:500;
+  letter-spacing:.24em; color:rgba(62,84,110,.7);
+  white-space:nowrap;
 }
 .collect{
-  pointer-events:auto; position:relative; margin-top:4px;
+  pointer-events:auto; position:relative;
+  display:block; margin:6px auto 0;
   font-family:'Zen Maru Gothic',sans-serif; font-size:12.5px; letter-spacing:.12em;
   padding:6px 18px; border:1px solid rgba(62,84,110,.6); border-radius:999px;
   background:rgba(62,84,110,.06); color:#3e546e; cursor:pointer;
