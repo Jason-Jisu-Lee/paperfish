@@ -75,7 +75,7 @@ const Detail = (() => {
       if (f.dying !== undefined) continue;
       let r;
       if (f.egg) {
-        r = 15;
+        r = 24;
       } else {
         if (f.birth < 1) continue;
         r = SPECIES[f.s].len * 0.6;

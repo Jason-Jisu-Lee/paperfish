@@ -512,23 +512,19 @@ const Stage = (() => {
 
   const drawEgg = f => {
     const total = hatchTime();
-    const p = Math.min((f.t || 0) / total, 1);
-    const q = 1 + Math.sin(f.ph * 1.15) * 0.04;
+    const q = 1 + Math.sin(f.ph * 1.15) * 0.03;
     ctx.save();
     ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
-    ctx.scale(q * 0.28, (2 - q) * 0.28);
-    ctx.strokeStyle = 'rgba(28,27,24,0.7)';
-    ctx.lineWidth = 5.5;
+    ctx.scale(q * 0.8, (2 - q) * 0.8);
+    ctx.strokeStyle = 'rgba(28,27,24,0.85)';
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = 'round';
     ctx.stroke(EGGP);
-    ctx.fillStyle = 'rgba(28,27,24,0.6)';
-    ctx.beginPath();
-    ctx.arc(0, 5, 4 + p * 4.6, 0, Math.PI * 2);
-    ctx.fill();
     ctx.restore();
     if (total - (f.t || 0) <= 5) {
       const pulse = 1 + Math.sin(tNow * 8) * 0.15;
       ctx.save();
-      ctx.translate(f.x, f.y - 16);
+      ctx.translate(f.x, f.y - 34);
       ctx.scale(pulse, pulse);
       ctx.strokeStyle = 'rgba(28,27,24,0.85)';
       ctx.fillStyle = 'rgba(28,27,24,0.85)';
