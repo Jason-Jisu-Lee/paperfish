@@ -12,8 +12,6 @@ const Detail = (() => {
   const elHatch = document.getElementById('fc-hatch');
   const fishRows = ['fc-age-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
   let cardMode = null;
-  const graph = document.getElementById('fc-graph');
-  const GX0 = 48, GX1 = 292, GY0 = 136, GY1 = 28;
   let mx = null, my = null, hover = null, sel = null;
 
   const fmt = fmtG;
@@ -34,10 +32,11 @@ const Detail = (() => {
   const close = () => {
     releaseSel();
     card.setAttribute('hidden', '');
+    uptip.setAttribute('hidden', '');
   };
 
   const placeCard = (x, y, f) => {
-    const w = 496, h = 410, m = 14;
+    const w = 280, h = 240, m = 14;
     const fr = SPECIES[f.s].len * 0.65;
     let left = f.x + fr + 18;
     if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
@@ -51,14 +50,12 @@ const Detail = (() => {
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
 
   canvas.addEventListener('click', e => {
+    if (Tut.active) return;
     if (hover) {
       if (hover === sel) return;
       releaseSel();
       sel = hover;
-      if (!hover.egg) {
-        Stage.hold(hover);
-        buildGraph(hover);
-      }
+      if (!hover.egg) Stage.hold(hover);
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
     } else {
@@ -90,112 +87,12 @@ const Detail = (() => {
     return best;
   };
 
-  const py = (v, ymax) => GY0 - (v / ymax) * (GY0 - GY1);
-
-  const buildGraph = f => {
-    const phs = speciesPhases(f.s);
-    const life = lifeOf(f.s);
-    const y0 = phs[0].amt;
-    const ymax = phs[phs.length - 1].amt;
-    let pts = '';
-    let t = 0;
-    const vals = new Set();
-    for (const p of phs) {
-      const x0 = GX0 + (t / life) * (GX1 - GX0);
-      t += p.dur;
-      const x1 = GX0 + (t / life) * (GX1 - GX0);
-      const yy = py(p.amt, ymax);
-      vals.add(p.amt);
-      pts += `${x0},${yy} ${x1},${yy} `;
-    }
-    if (t < life) pts += `${GX1},${py(ymax, ymax)} `;
-    const aAt = adultAtOf(f.s);
-    let evo = '';
-    if (aAt !== undefined) {
-      const ex = GX0 + (aAt / life) * (GX1 - GX0);
-      evo =
-        `<line class="g-evo" x1="${ex}" y1="${GY1}" x2="${ex}" y2="${GY0}"/>` +
-        `<text class="g-t g-stage" x="${(GX0 + ex) / 2}" y="${GY1 - 6}" text-anchor="middle">baby</text>` +
-        `<text class="g-t g-stage" x="${(ex + GX1) / 2}" y="${GY1 - 6}" text-anchor="middle">adult</text>`;
-    }
-    let grid = '', ylab = '';
-    for (const v of vals) {
-      const yy = py(v, ymax);
-      grid += `<line class="g-grid" x1="${GX0}" y1="${yy}" x2="${GX1}" y2="${yy}"/>`;
-      ylab += `<text class="g-t" x="${GX0 - 6}" y="${yy + 4}" text-anchor="end">${fmt(v)} G</text>`;
-    }
-    graph.innerHTML =
-      grid +
-      `<path class="g-axis" d="M${GX0} ${GY1 - 4} V${GY0} H${GX1}"/>` +
-      evo +
-      `<polyline class="g-line" fill="none" points="${pts}"/>` +
-      ylab +
-      `<text class="g-t g-stage" x="${GX0 - 6}" y="${GY1 - 9}" text-anchor="end">G / 5s</text>` +
-      `<line class="g-nguide" id="g-guide" x1="${GX0}" y1="${GY0}" x2="${GX0}" y2="${GY0}"/>` +
-      `<circle class="g-now" id="g-dot" r="3.4" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
-      `<text class="g-t" id="g-xend" x="${GX1}" y="${GY0 + 15}" text-anchor="end">${life} min</text>` +
-      `<g id="g-hover" hidden><line class="g-guide" id="g-hline"/><circle class="g-hdot" id="g-hdot" r="2.8"/><text class="g-t g-ht" id="g-htext" text-anchor="middle"/><text class="g-t g-ht" id="g-htime" text-anchor="middle"/></g>`;
-  };
-
-  graph.addEventListener('mousemove', e => {
-    const hg = document.getElementById('g-hover');
-    if (!sel || !hg) return;
-    const r = graph.getBoundingClientRect();
-    const vx = (e.clientX - r.left) / r.width * 300;
-    const xend = document.getElementById('g-xend');
-    if (vx < GX0 - 6 || vx > GX1 + 6) {
-      hg.setAttribute('hidden', '');
-      if (xend) xend.removeAttribute('hidden');
-      return;
-    }
-    const life = lifeOf(sel.s);
-    const phs = speciesPhases(sel.s);
-    const ymax = phs[phs.length - 1].amt;
-    const u = Math.min(Math.max((vx - GX0) / (GX1 - GX0), 0), 1);
-    let age = Math.min(u * life, life - 0.0001);
-    let ax = GX0 + u * (GX1 - GX0);
-    let t = 0;
-    for (let i = 0; i < phs.length - 1; i++) {
-      t += phs[i].dur;
-      const bx = GX0 + (t / life) * (GX1 - GX0);
-      if (Math.abs(vx - bx) <= 7) {
-        ax = bx;
-        age = Math.min(t + 0.0001, life - 0.0001);
-        break;
-      }
-    }
-    const v = phaseAt(sel.s, age).amt;
-    const ay = py(v, ymax);
-    const line = document.getElementById('g-hline');
-    line.setAttribute('x1', ax); line.setAttribute('x2', ax);
-    line.setAttribute('y1', GY0); line.setAttribute('y2', ay);
-    const dot = document.getElementById('g-hdot');
-    dot.setAttribute('cx', ax); dot.setAttribute('cy', ay);
-    const p = phaseAt(sel.s, age);
-    const txt = document.getElementById('g-htext');
-    txt.setAttribute('x', Math.min(Math.max(ax, GX0 + 44), GX1 - 44));
-    txt.setAttribute('y', ay + 17);
-    txt.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt) + ' G / ' + p.tick + ' sec';
-    const tt = document.getElementById('g-htime');
-    const dispAge = (ax - GX0) / (GX1 - GX0) * life;
-    tt.setAttribute('x', Math.min(ax, GX1 - 14));
-    tt.setAttribute('y', GY0 + 15);
-    tt.textContent = ageFmt(Math.min(dispAge + 0.0001, life));
-    if (xend) xend.toggleAttribute('hidden', ax > GX1 - 46);
-    hg.removeAttribute('hidden');
-  });
-  graph.addEventListener('mouseleave', () => {
-    const hg = document.getElementById('g-hover');
-    if (hg) hg.setAttribute('hidden', '');
-    const xend = document.getElementById('g-xend');
-    if (xend) xend.removeAttribute('hidden');
-  });
-
   const uptip = document.getElementById('uptip');
   card.addEventListener('mouseover', e => {
     const row = e.target.closest('[data-hint]');
     if (!row) return;
-    uptip.textContent = 'soul granted on death';
+    uptip.classList.remove('cap');
+    uptip.textContent = 'soul granted on death, none while hungry';
     const r = row.getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.left = r.left + 'px';
@@ -224,12 +121,8 @@ const Detail = (() => {
         tipStage.removeAttribute('hidden');
         tip.style.top = (hover.y - 26) + 'px';
       } else {
-        if (sp.adultAt !== undefined) {
-          tipStage.textContent = hover.adult ? 'adult' : 'baby';
-          tipStage.removeAttribute('hidden');
-        } else {
-          tipStage.setAttribute('hidden', '');
-        }
+        tipStage.textContent = hover.adult ? 'adult' : 'baby';
+        tipStage.removeAttribute('hidden');
         tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
       }
       tip.style.left = hover.x + 'px';
@@ -242,46 +135,24 @@ const Detail = (() => {
         cardMode = 'egg';
         for (const r of fishRows) r.setAttribute('hidden', '');
         hatchRow.removeAttribute('hidden');
-        graph.style.display = 'none';
       }
-      const sp = SPECIES[sel.s];
-      elName.textContent = sp.name;
-      const total = sp.hatch ?? 60;
+      elName.textContent = SPECIES[sel.s].name;
+      const total = hatchTime();
       elHatch.textContent = Math.max(Math.ceil(total - (sel.t || 0)), 0) + ' / ' + total + ' sec';
       return;
     }
     if (sel) {
-      const sp = SPECIES[sel.s];
       if (cardMode !== 'fish') {
         cardMode = 'fish';
         for (const r of fishRows) r.removeAttribute('hidden');
         hatchRow.setAttribute('hidden', '');
-        graph.style.display = '';
-        buildGraph(sel);
         Stage.hold(sel);
       }
-      const life = lifeOf(sel.s);
-      const phs = speciesPhases(sel.s);
-      const age = Math.min(sel.age || 0, life - 0.0001);
-      const p = phaseAt(sel.s, age);
-      elName.textContent = sp.name;
+      const life = lifeOf();
+      elName.textContent = SPECIES[sel.s].name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
-      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt) + ' G / ' + p.tick + ' sec';
-      elDeath.textContent = '+' + soulYield() + ' Soul';
-      const ymax = phs[phs.length - 1].amt;
-      const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
-      const ay = py(p.amt, ymax);
-      const guide = document.getElementById('g-guide');
-      const dot = document.getElementById('g-dot');
-      if (guide) {
-        guide.setAttribute('x1', ax);
-        guide.setAttribute('x2', ax);
-        guide.setAttribute('y2', ay);
-      }
-      if (dot) {
-        dot.setAttribute('cx', ax);
-        dot.setAttribute('cy', ay);
-      }
+      elFreq.textContent = fmt(incomePer5s()) + ' G / ' + TICK + ' sec';
+      elDeath.textContent = sel.hstate >= 1 ? 'none, hungry' : '+' + soulYield() + ' Soul';
     }
   };
 

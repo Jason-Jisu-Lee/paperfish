@@ -35,10 +35,13 @@
     if (!Game.started) return;
     saveGame();
     Pause.set(false);
+    Tut.abort();
+    Soul.closeShop();
     Game.started = false;
     document.getElementById('hud').setAttribute('hidden', '');
     document.getElementById('corner').setAttribute('hidden', '');
     document.getElementById('goldbox').setAttribute('hidden', '');
+    document.getElementById('soulbox').setAttribute('hidden', '');
     front.removeAttribute('hidden');
     replayHero();
     requestAnimationFrame(() => front.classList.remove('gone'));

@@ -2,7 +2,7 @@ const startGame = () => {
   if (Game.started) return;
   const fresh = !loadGame();
   if (fresh) {
-    Game.gold = START_GOLD;
+    Game.gold = startGold();
     Game.fish = [{ s: 0, egg: false, t: 0 }];
   }
   document.getElementById('hud').removeAttribute('hidden');
@@ -16,6 +16,7 @@ const startGame = () => {
   Panel.refresh();
   Ocean.start();
   Obj.start();
+  Soul.resume();
 };
 
 (() => {
@@ -30,7 +31,7 @@ const startGame = () => {
     let dt = raw;
     if (!(dt > 0)) dt = 0;
     if (dt > 0.06) dt = 0.06;
-    const mdt = Pause.paused || Soul.shopOpen ? 0 : dt;
+    const mdt = Pause.paused || Soul.shopOpen || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
 
     const refresh = Sim.step(sdt, mdt);

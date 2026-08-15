@@ -96,23 +96,21 @@ const Stage = (() => {
     f.y = rand(bounds.t + 30, bounds.b - 30);
     f.ph = rand(0, Math.PI * 2);
     if (!f.egg) {
-      const sp = SPECIES[f.s];
       if (f.age === undefined) f.age = 0;
-      f.adult = !sp.adultAt || f.age >= adultAtOf(f.s);
-      if (sp.hunger && !f.hungerAt) f.hungerAt = f.age + 1 + Math.random() / 6;
+      f.adult = f.age >= adultAtOf();
+      if (!f.hungerAt) f.hungerAt = f.age + 10 / 60;
       initMotion(f);
       f.birth = idx === undefined ? 1 : -idx * 0.26;
     }
   };
 
   const hatch = f => {
-    const sp = SPECIES[f.s];
     f.egg = false;
     f.t = 0;
     f.age = 0;
-    f.adult = !sp.adultAt;
+    f.adult = false;
     f.hstate = 0;
-    if (sp.hunger) f.hungerAt = 1 + Math.random() / 6;
+    f.hungerAt = 10 / 60;
     initMotion(f);
     f.birth = 0;
   };
@@ -354,12 +352,9 @@ const Stage = (() => {
   const drawFish = f => {
     const sp = SPECIES[f.s];
     const born = f.birth >= 1;
-    let grow = 1;
-    const aAt = adultAtOf(f.s);
-    if (aAt !== undefined) {
-      const u = Math.min(Math.max(((f.age || 0) - (aAt - 0.05)) / 0.1, 0), 1);
-      grow = 0.6 + 0.4 * (u * u * (3 - 2 * u));
-    }
+    const aAt = adultAtOf();
+    const u = Math.min(Math.max(((f.age || 0) - (aAt - 0.01)) / 0.02, 0), 1);
+    const grow = 0.6 + 0.4 * (u * u * (3 - 2 * u));
     const popS = f.pop ? 1 + 0.3 * Math.sin(Math.PI * (1 - f.pop / 0.3)) : 1;
     const sc = (sp.len / sp.vb[0]) * f.depth * grow * popS;
     const vbW = sp.vb[0], vbH = sp.vb[1];
@@ -516,7 +511,7 @@ const Stage = (() => {
   const EGGP = new Path2D('M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24');
 
   const drawEgg = f => {
-    const total = SPECIES[f.s].hatch ?? 60;
+    const total = hatchTime();
     const p = Math.min((f.t || 0) / total, 1);
     const q = 1 + Math.sin(f.ph * 1.15) * 0.04;
     ctx.save();
@@ -594,15 +589,15 @@ const Stage = (() => {
     for (const p of pops) {
       if (p.kind === 'soul') {
         ctx.fillStyle = 'rgba(62,84,110,1)';
-        ctx.font = '17px "Sniglet", sans-serif';
+        ctx.font = '17px "Zen Maru Gothic", sans-serif';
         ctx.globalAlpha = 0.95 * (1 - p.t / 0.9);
       } else if (p.kind) {
         ctx.fillStyle = 'rgba(122,88,0,1)';
-        ctx.font = '14px "Sniglet", sans-serif';
+        ctx.font = '14px "Zen Maru Gothic", sans-serif';
         ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
       } else {
         ctx.fillStyle = 'rgba(122,88,0,1)';
-        ctx.font = '11px "Sniglet", sans-serif';
+        ctx.font = '11px "Zen Maru Gothic", sans-serif';
         ctx.globalAlpha = 0.65 * (1 - p.t / 0.9);
       }
       ctx.fillText(p.txt, p.x, p.y);
@@ -621,6 +616,7 @@ const Stage = (() => {
 
   return {
     ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
+    get held() { return held; },
     get bounds() { return bounds; },
     get size() { return { W, H }; }
   };

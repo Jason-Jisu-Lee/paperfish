@@ -52,7 +52,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   border-bottom:1px solid rgba(28,27,24,.18);
   margin-bottom:4px;
 }
-.fc-stats{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
+.fc-stats{ display:grid; grid-template-columns:1fr; gap:9px; margin-top:12px; }
 .stat{
   background:rgba(255,255,255,.5);
   border:1px solid rgba(28,27,24,.14);
@@ -525,7 +525,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .fishcard{
   position:absolute; z-index:6;
-  width:496px;
+  width:280px;
   background:var(--paper);
   box-shadow:0 0 0 1px rgba(28,27,24,.09);
   padding:18px 20px 14px;
@@ -535,25 +535,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   font-size:22px; letter-spacing:.06em;
   margin-bottom:7px;
 }
-#fc-graph{ width:100%; height:auto; display:block; margin-top:10px; }
-.g-axis{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:1; }
-.g-grid{ stroke:rgba(28,27,24,.12); stroke-width:1; }
-.g-line{ stroke:rgba(28,27,24,.85); stroke-width:2; stroke-linecap:round; }
-.g-guide{ stroke:rgba(28,27,24,.4); stroke-width:1; stroke-dasharray:2 4; }
-.g-nguide{ stroke:rgba(180,58,43,.45); stroke-width:1; }
-.g-now{ fill:var(--seal); }
-.g-hdot{ fill:rgba(28,27,24,.85); }
-.g-evo{ stroke:rgba(28,27,24,.3); stroke-width:1; stroke-dasharray:3 4; }
 .devred{ color:var(--seal) !important; }
-.tip-ltv{ display:block; font-size:11px; letter-spacing:.14em; margin-top:4px; font-feature-settings:'tnum'; }
-.g-t{
-  font-family:'Zen Maru Gothic',sans-serif; font-size:11.5px; font-weight:500; letter-spacing:.04em;
-  fill:rgba(28,27,24,.85);
-  paint-order:stroke; stroke:var(--paper); stroke-width:3.5px; stroke-linejoin:round;
-}
-.g-stage{ font-size:11.5px; letter-spacing:.1em; fill:rgba(28,27,24,.75); }
-.g-ht{ fill:var(--ink); font-size:13px; stroke-width:4px; }
-#fc-graph{ pointer-events:auto; }
 
 .fc-x{
   position:absolute; top:6px; right:9px;
@@ -565,7 +547,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fc-x:hover{ color:var(--ink); }
 
 .smallveil{
-  position:absolute; inset:0; z-index:60;
+  position:absolute; inset:0; z-index:80;
   background:var(--paper);
   display:grid; place-items:center;
   text-align:center;
@@ -639,11 +621,83 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .rbtn.dev{ opacity:.5; border-style:dashed; }
 .devtag{ position:absolute; top:6px; left:9px; font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--seal); }
 
-.prestige-card{ width:320px; text-align:center; }
-.p-souls{ font-size:26px; color:#3e546e; margin:12px 0 16px; font-feature-settings:'tnum'; }
-.pbuy{ width:100%; }
-.p-desc{ font-size:11px; opacity:.6; margin:6px 0 16px; letter-spacing:.06em; }
+.prestige-card{ width:360px; text-align:center; }
+.p-souls{ font-size:26px; color:#3e546e; margin:10px 0 12px; font-feature-settings:'tnum'; }
+.p-list{ max-height:56vh; overflow-y:auto; text-align:left; margin-bottom:14px; padding-right:4px; }
+.p-cat{
+  font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(28,27,24,.5); margin:10px 2px 6px;
+}
+.p-line{ border-top:1px solid rgba(28,27,24,.14); margin:12px 0 2px; }
+.prow{
+  position:relative; width:100%;
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; margin-bottom:6px;
+  background:rgba(255,255,255,.6);
+  border:1px solid rgba(28,27,24,.22); border-radius:9px;
+  text-align:left;
+  transition:border-color .2s ease, opacity .2s ease;
+}
+.prow:hover{ border-color:rgba(28,27,24,.5); }
+.prow.off{ opacity:.4; }
+.prow.off:hover{ border-color:rgba(28,27,24,.22); }
+.prow .devtag{ position:static; margin-right:2px; }
+.prow-main{ flex:1; min-width:0; }
+.prow-name{ display:block; font-size:14px; letter-spacing:.04em; }
+.prow-desc{ display:block; font-size:11px; opacity:.6; letter-spacing:.03em; margin-top:1px; }
+.prow-lvl{ font-size:12px; opacity:.85; white-space:nowrap; }
+.prow-cost{ font-size:12.5px; color:#3e546e; font-feature-settings:'tnum'; white-space:nowrap; }
 #p-dive{ width:100%; }
 
-.ubtn-icon.eggicon svg{ width:27px; height:34px; }
+.ubtn-info{
+  position:absolute; top:7px; left:9px;
+  width:16px; height:16px; border-radius:50%;
+  border:1px solid rgba(28,27,24,.45);
+  color:rgba(28,27,24,.65);
+  font-size:10.5px; font-style:italic; font-family:'Shippori Mincho',serif;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.ubtn-info:hover{ border-color:var(--seal); color:var(--seal); }
+.egginfo{
+  position:fixed; z-index:45;
+  background:var(--paper);
+  box-shadow:0 0 0 1px rgba(28,27,24,.18), 0 4px 14px rgba(28,27,24,.12);
+  padding:12px 15px;
+  min-width:170px;
+}
+.ei-tier{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(28,27,24,.55); margin-bottom:8px; }
+.ei-row{ display:flex; align-items:center; gap:9px; font-size:13.5px; }
+.ei-row .thumb svg{ width:34px; height:17px; overflow:visible; }
+.ei-row .thumb path{ fill:none; stroke:rgba(28,27,24,.7); stroke-width:1.2; vector-effect:non-scaling-stroke; stroke-linecap:round; }
+.ei-pct{ margin-left:auto; font-feature-settings:'tnum'; color:#7a5800; }
+
+.tutbox{
+  position:fixed; z-index:70;
+  transform:translate(-50%, -100%);
+  background:var(--paper);
+  box-shadow:0 0 0 1px rgba(28,27,24,.25), 0 6px 18px rgba(28,27,24,.14);
+  padding:14px 18px;
+  max-width:300px;
+  text-align:center;
+}
+.tutbox::after{
+  content:''; position:absolute; left:50%; bottom:-7px;
+  width:12px; height:12px; background:var(--paper);
+  transform:translateX(-50%) rotate(45deg);
+  box-shadow:1px 1px 0 0 rgba(28,27,24,.25);
+}
+.tutbox.side{
+  transform:translate(0, -50%);
+  text-align:left;
+}
+.tutbox.side::after{
+  left:-7px; bottom:auto; top:50%;
+  transform:translateY(-50%) rotate(45deg);
+  box-shadow:-1px 1px 0 0 rgba(28,27,24,.25);
+}
+.tut-text{ font-size:14px; letter-spacing:.03em; line-height:1.7; }
+#tut-next{ margin-top:10px; }
+
+.ubtn-icon.eggicon svg{ width:38px; height:48px; }
 .ubtn-icon.eggicon path{ fill:none; stroke:rgba(28,27,24,.7); stroke-width:2.4; stroke-linecap:round; }

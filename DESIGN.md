@@ -23,50 +23,82 @@ MECHANICS.md holds exact numbers.
 - Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
   arrive with tiers 2-3. Same silhouette in shop icon and world egg.
-- Ocean decor: sepia clam (pearl income), snail, water blue bubbles.
-  Seagrass and jellyfish removed in the pivot.
+- Ocean decor: sepia clam (pearl income), water blue bubbles. Seagrass and
+  jellyfish removed in the pivot; snail promoted to a Tier 2 creature
+  (needs a real SPECIES asset when Tier 2 lands).
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
   Steam and Discord marks, vertical caption, red seal.
 
-## core loop (soul prestige, implemented 2026-08-15)
+## core loop (soul prestige, tier era 2026-08-15)
 - Currencies: Gold (run) + Soul (prestige). Souls render in water blue
   (#3e546e family); gold stays #7a5800.
-- Run start: 1 firstF + 50 gold. The egg is the only live purchase
-  (Fish category): 50 G, +10 G per purchase, resets each run. 100%
-  firstF for now (probability table later).
-- firstF: 1 min life, adult at 0:30 (income 1 G/5s baby, 2 G/5s adult).
-  Hunger machinery stays but never fires inside a 1-min life.
-- Every fish death pays soulYield souls (1 + Extra Soul level), shown as
-  a blue +N pop, bigger than gold pops. Souls counter top middle with
-  Collect Soul button under it (dimmed at 0).
-- Collect Soul: banks amassed souls 1:1, freezes the world, opens the
-  Prestige overlay (souls of living fish forfeit). Prestige shop has one
-  upgrade: Extra Soul (+1 soul per death), cost 2 doubling per level
-  (placeholder curve). Dive Again starts a fresh run; bank, upgrade
-  levels, and first-time whisper flags persist.
-- Whispers (only two, both fire once EVER, flags in the persistent save):
-  "Soul collected" on the very first fish death, "Fish got bigger" on the
-  very first maturing.
-- Objectives: none; obj.js keeps the box format for the rework.
-- Upgrade catalog is visible for dev: dev-locked entries (dashed, faded,
-  red "dev" tag, cost —) fill the income/food/life grids, same dashed
-  treatment on their rail icons; only the fish icon is live. Players
-  can't buy dev-locked entries.
+- Run start: 1 firstF + 10 gold (+5 per Starting Gold prestige level).
+- Egg: 10 G, +5 G per purchase, cost resets each run. Hatch time is a
+  single constant (20s) for every tier. The species is rolled the moment
+  the egg is purchased; Tier 1 = 100% firstF for now. Egg button: big
+  wrapped-egg icon matching the world egg, no count badge, cost below,
+  hover reads "Tier 1 Egg", and an "i" info dot top-left opens a popover
+  listing each tier's possible fish with odds (Tier 1 / firstF 100% only
+  for now).
+- Fish: fixed income for every fish, no maturity income difference:
+  1 G / 5s base + in-game Income levels + prestige Base Income levels.
+  Growth to adult is visual only (half of life), keeps its pop, chime,
+  and one-time "Fish got bigger" whisper. Income graph removed from the
+  fish card; the card shows age, income, death value.
+- Lifespan: shared per tier. Tier 1 base 10s, +5s per in-game Lifespan
+  level (run-only).
+- Hunger: every fish, first hunger 10s after birth, again 10s after each
+  bite. A fish only becomes hungry if that moment lands before its death
+  age, so base-life (10s) fish never hunger; the system wakes with the
+  first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 10s
+  (2s eating pause). Hungry or starving fish forfeit their souls when
+  they die (mid-bite eaters don't); the fish card death row shows
+  "none, hungry" while it would forfeit. A held (selected) fish is
+  lifted out of time: age, hunger, and income pause while the card is
+  open.
+- Hunger tutorial (first hunger EVER, flag in save): world freezes, box
+  points at the fish: "Fish is hungry. Hungry fish do not generate soul
+  when deceased" -> Next -> the food rail icon (hidden until now)
+  appears flashing red: "Buy food for your fish" -> clicking the food
+  icon ends the tutorial; the player buys kelp themselves.
+- Souls: each soulful death pays 1 + Extra Soul level, blue +N pop.
+  Counter top middle, Collect Soul under it; collecting banks 1:1,
+  freezes the world, opens the Prestige overlay; Dive Again resets the
+  run (gold to startGold, egg cost, run upgrades, kelp all reset).
+  The open shop persists in the save: refreshing mid-prestige returns
+  to the shop, never back to the collected run.
+- Prestige shop: one scrollable list, categories divided by rule lines,
+  no per-category clicking. Live: Extra Soul (+1 soul), Starting Gold
+  (+5), Base Income (+1 G). Dev-tagged, purchasable but no effect yet:
+  Tier 2 Chance (+10%, +5% per later level), Tier 3 (+5%, +2.5%),
+  Tier 4 (+3%, +1.5%), Tier 5 (+1.5%, +0.75%), Tier 6 (+0.5%, +0.25%).
+- In-game upgrades: Income +1 G/5s (income icon), Lifespan +5s (life
+  icon, meant to be somewhat expensive), Kelp (food icon, revealed by
+  the tutorial). Rail icons for income/life are live from the start.
+- Whispers: "Soul collected" (first soulful death ever), "Fish got
+  bigger" (first maturing ever). Objectives: none; format kept.
 - Clam pays its first pearl 3 min into a run, then every 60-80s
-  (20% of current G/min). Snail and bubbles stay; lanterns, seagrass,
-  jellyfish, courtship/spawning, placeholder foods, stat upgrades all
-  removed.
-- Other species exist as assets only (SPECIES keeps art fields; firstF
-  holds the only gameplay data).
+  (20% of current G/min).
+- SPECIES entries are pure art assets; all gameplay numbers live in
+  core/state.js.
+
+## tier plan (demos/tiers.html, all numbers TBD)
+- Tier 1: firstF, Sardine. Tier 2: secondF, Snail. Tier 3: Cod, Trout.
+  Tier 4: Flounder, Mackerel. Tier 5: Pike, Seahorse. Tier 6: Ray,
+  Jellyfish, Anglerfish.
+- Bigger, fancier, rarer climbs tiers; per-tier income, lifespan, odds,
+  and exact membership all await the tier brainstorm.
+
+## placeholder dials (picked by Claude, awaiting spec)
+- Extra Soul 2·2^lvl, Starting Gold 2·2^lvl, Base Income 3·2^lvl,
+  Tier Chance 5·2^lvl souls; in-game Income 25·2^lvl, Lifespan 40·2^lvl
+  gold; hatch 20s; hungry window 20s -> starving 10s -> death.
 
 ## to decide (soul era)
-- egg probability table per species; how prestige upgrades shift the odds.
-- Extra Soul cost curve (current 2/4/8/16 is a placeholder).
-- second in-game purchase to reveal (kelp?) and the reveal mechanism.
-- objectives rework to teach the loop; whisper additions.
-- collect flow polish: confirm dialog? fish dissolve animation on run end?
-- soul yield scaling by species / age (flat for now).
-- pearl value in the new economy (still 20% G/min?).
+- per-tier income / lifespan / odds; egg roll implementation.
+- all cost curves above; pearl value in the new economy.
+- snail asset + behavior as a Tier 2 creature.
+- objectives rework; collect-flow polish (confirm? dissolve animation?).
 
 ## upgrade catalog (full list on paper, revealed progressively)
 in-game, gold, this run only:

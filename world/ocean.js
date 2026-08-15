@@ -3,7 +3,7 @@ const Ocean = (() => {
   const INK = a => `rgba(28,27,24,${a})`;
   const CLAM = a => `rgba(96,50,42,${a})`;
   const puffs = [];
-  let clam = null, snail = null;
+  let clam = null;
   let nextPearl = 0, tNow = 0;
 
   const fy = () => Stage.size.H * 0.93;
@@ -18,7 +18,6 @@ const Ocean = (() => {
 
   const start = () => {
     clam = { u: rand(0.38, 0.52), open: 0, opening: true, phase: rand(2, 5), pearl: false };
-    snail = { u: rand(0.78, 0.88), dir: -1, hideT: 0 };
     nextPearl = 180;
     puffs.length = 0;
   };
@@ -26,7 +25,6 @@ const Ocean = (() => {
   const update = mdt => {
     if (!Game.started || !clam || !mdt) return;
     tNow += mdt;
-    const b = Stage.bounds;
 
     clam.phase -= mdt;
     if (clam.phase <= 0) { clam.opening = !clam.opening; clam.phase = clam.opening ? rand(3, 6) : rand(2, 4); }
@@ -36,13 +34,6 @@ const Ocean = (() => {
       nextPearl -= mdt;
       if (nextPearl <= 0) clam.pearl = true;
       if (clam.opening && Math.random() < mdt * 0.12) puff(xAt(clam.u) + 4, fy() - 18, 1);
-    }
-
-    if (snail.hideT > 0) snail.hideT -= mdt;
-    else {
-      snail.u += snail.dir * 4 / (b.r - b.l) * mdt;
-      if (snail.u > 0.9) snail.dir = -1;
-      if (snail.u < 0.08) snail.dir = 1;
     }
 
     for (let i = puffs.length - 1; i >= 0; i--) {
@@ -56,7 +47,6 @@ const Ocean = (() => {
   };
 
   const hitClam = (x, y) => Math.abs(x - xAt(clam.u)) < 28 && Math.abs(y - (fy() - 4)) < 26;
-  const hitSnail = (x, y) => Math.abs(x - xAt(snail.u)) < 17 && Math.abs(y - (fy() - 4)) < 16;
 
   const clickAt = (x, y) => {
     if (!Game.started || !clam) return false;
@@ -73,15 +63,10 @@ const Ocean = (() => {
       puff(xAt(clam.u) + 4, fy() - 16, 3);
       return true;
     }
-    if (hitSnail(x, y)) {
-      snail.hideT = 2.2;
-      puff(xAt(snail.u), fy() - 12, 1);
-      return true;
-    }
     return false;
   };
 
-  const hoverAt = (x, y) => !!(Game.started && clam && (hitClam(x, y) || hitSnail(x, y)));
+  const hoverAt = (x, y) => !!(Game.started && clam && hitClam(x, y));
 
   const draw = ctx => {
     if (!Game.started || !clam) return;
@@ -140,33 +125,6 @@ const Ocean = (() => {
     ctx.quadraticCurveTo(22, -11, 34, -3);
     ctx.stroke();
     ctx.restore();
-
-    const sx = xAt(snail.u), sy = F + 2, sd = snail.dir, out = snail.hideT <= 0;
-    ctx.strokeStyle = INK(0.55);
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    for (let i = 0; i <= 20; i++) {
-      const q = i / 20, ang = q * Math.PI * 2.3;
-      const r = 7.5 * (1 - q * 0.8);
-      const px = sx + Math.cos(ang) * r, py = sy - 9 + Math.sin(ang) * r;
-      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-    }
-    ctx.stroke();
-    if (out) {
-      const hx = sx + sd * 12;
-      ctx.strokeStyle = INK(0.45);
-      ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(sx - sd * 8, sy + 1);
-      ctx.quadraticCurveTo(sx + sd * 6, sy + 3, hx, sy - 1);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(hx, sy - 2);
-      ctx.lineTo(hx + sd * 3, sy - 8);
-      ctx.moveTo(hx - sd * 2, sy - 2);
-      ctx.lineTo(hx, sy - 8);
-      ctx.stroke();
-    }
 
     ctx.lineWidth = 1.1;
     for (const p of puffs) {

@@ -6,14 +6,28 @@ const Panel = (() => {
   const upGrid = document.getElementById('up-grid');
   const fishGrid = document.getElementById('fish-grid');
   const uptip = document.getElementById('uptip');
+  const egginfo = document.getElementById('egginfo');
+  const railFood = document.getElementById('rail-food');
 
   const UPS = [
-    { key: 'kelp', name: 'Kelp', cat: 'food', dev: true, desc: 'satisfies hunger for 1 minute' },
-    { key: 'income', name: 'Income', cat: 'income', dev: true, desc: 'more gold per tick' },
-    { key: 'tick', name: 'Tick Speed', cat: 'income', dev: true, desc: 'faster income ticks' },
-    { key: 'spawning', name: 'Spawning', cat: 'life', dev: true, desc: 'chance to spawn eggs' },
-    { key: 'growth', name: 'Growth', cat: 'life', dev: true, desc: 'matures sooner' },
-    { key: 'longevity', name: 'Longevity', cat: 'life', dev: true, desc: 'longer life' }
+    {
+      key: 'income', name: 'Income', cat: 'income',
+      cost: incomeUpCost, lvl: () => Game.incomeUp, buy: buyIncomeUp,
+      desc: '+1 G / 5s for every fish',
+      cur: () => 'Current: ' + fmt(incomePer5s()) + ' G / 5s'
+    },
+    {
+      key: 'life', name: 'Lifespan', cat: 'life',
+      cost: lifeUpCost, lvl: () => Game.lifeUp, buy: buyLifeUp,
+      desc: '+5s lifespan for every fish',
+      cur: () => 'Current: ' + (10 + Game.lifeUp * 5) + 's'
+    },
+    {
+      key: 'kelp', name: 'Kelp', cat: 'food',
+      cost: () => KELP_COST, lvl: () => Game.plants, buy: buyKelp,
+      desc: 'two bites, one bite satisfies hunger for 10s',
+      cur: () => 'Current: × ' + Game.plants + ' floating'
+    }
   ];
 
   let cat = 'fish';
@@ -29,16 +43,17 @@ const Panel = (() => {
   const living = () => Game.fish.filter(f => f.dying === undefined).length;
 
   const refresh = () => {
+    railFood.toggleAttribute('hidden', !Game.tuts.hungryTut && !Tut.revealed);
     upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(u => `
-      <button class="ubtn devlock" data-key="${u.key}">
-        <span class="devtag">dev</span>
+      <button class="ubtn" data-key="${u.key}">
+        <span class="ubtn-lvl">× ${u.lvl()}</span>
         <span class="ubtn-name">${u.name}</span>
-        <span class="ubtn-cost">—</span>
+        <span class="ubtn-cost">${fmt(u.cost())} G</span>
       </button>`).join('');
 
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
-        <span class="ubtn-lvl">× ${living()}</span>
+        <span class="ubtn-info" data-info>i</span>
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
       </button>`;
@@ -50,17 +65,17 @@ const Panel = (() => {
     goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
     const eb = fishGrid.querySelector('[data-egg]');
     if (eb) eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP);
+    for (const el of upGrid.querySelectorAll('[data-key]')) {
+      const u = UPS.find(x => x.key === el.dataset.key);
+      el.classList.toggle('off', Game.gold < u.cost());
+    }
   };
 
   const srcBuild = () => {
-    let n = 0, sum = 0;
-    for (const f of Game.fish) {
-      if (f.egg || f.dying !== undefined) continue;
-      n += 1;
-      sum += speciesGpm(f.s, f.age);
-    }
+    let n = 0;
+    for (const f of Game.fish) if (!f.egg && f.dying === undefined) n += 1;
     goldSrc.innerHTML = n
-      ? `<div class="gs-row">${thumb(0)}<span class="gs-n">× ${n}</span><span class="gs-amt">+${fmt(sum)} G / min</span></div>`
+      ? `<div class="gs-row">${thumb(0)}<span class="gs-n">× ${n}</span><span class="gs-amt">+${fmt(ratePerMin())} G / min</span></div>`
       : '<div class="gs-row"><span class="gs-n">no fish earning</span></div>';
   };
 
@@ -77,11 +92,36 @@ const Panel = (() => {
     for (const rb of document.querySelectorAll('.rail [data-cat]')) rb.classList.toggle('on', rb === b);
     fishGrid.toggleAttribute('hidden', cat !== 'fish');
     upGrid.toggleAttribute('hidden', cat === 'fish');
+    if (cat === 'food') Tut.foodOpened();
     refresh();
   });
 
+  const hideInfo = () => egginfo.setAttribute('hidden', '');
+
   fishGrid.addEventListener('click', e => {
+    if (e.target.closest('[data-info]')) {
+      if (!egginfo.hasAttribute('hidden')) return hideInfo();
+      egginfo.innerHTML =
+        `<div class="ei-tier">Tier 1</div>` +
+        `<div class="ei-row">${thumb(0)}<span class="ei-name">${SPECIES[0].name}</span><span class="ei-pct">100%</span></div>`;
+      const r = fishGrid.querySelector('[data-egg]').getBoundingClientRect();
+      egginfo.style.left = (r.right + 14) + 'px';
+      egginfo.style.top = r.top + 'px';
+      egginfo.removeAttribute('hidden');
+      return;
+    }
     if (e.target.closest('[data-egg]') && buyEgg()) refresh();
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#egginfo') && !e.target.closest('[data-info]')) hideInfo();
+  });
+
+  upGrid.addEventListener('click', e => {
+    const el = e.target.closest('[data-key]');
+    if (!el) return;
+    const u = UPS.find(x => x.key === el.dataset.key);
+    if (u && u.buy()) refresh();
   });
 
   document.getElementById('hud').addEventListener('mouseover', e => {
@@ -102,9 +142,9 @@ const Panel = (() => {
     uptip.classList.remove('cap');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
-      uptip.innerHTML = u.desc + '<br>not yet available to players';
+      uptip.innerHTML = u.desc + '<br>' + u.cur();
     } else {
-      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' firstF' : 'Buy firstF Egg';
+      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' fish' : 'Tier 1 Egg';
     }
     const r = (ub || eb).getBoundingClientRect();
     uptip.style.right = 'auto';
