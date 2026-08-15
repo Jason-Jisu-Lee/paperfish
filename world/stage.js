@@ -512,9 +512,14 @@ const Stage = (() => {
 
   const drawEgg = f => {
     const total = hatchTime();
+    const soon = total - (f.t || 0) <= 2;
     const q = 1 + Math.sin(f.ph * 1.15) * 0.03;
     ctx.save();
     ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
+    if (soon) {
+      ctx.translate(Math.sin(tNow * 34) * 1.5, 0);
+      ctx.rotate(Math.sin(tNow * 27) * 0.05);
+    }
     ctx.scale(q * 0.48, (2 - q) * 0.48);
     ctx.fillStyle = 'rgba(253,250,241,1)';
     ctx.shadowColor = 'rgba(28,27,24,0.22)';
@@ -529,7 +534,7 @@ const Stage = (() => {
     ctx.lineCap = 'round';
     ctx.stroke(EGGP);
     ctx.restore();
-    if (total - (f.t || 0) <= 2) {
+    if (soon) {
       const pulse = 1 + Math.sin(tNow * 8) * 0.15;
       ctx.save();
       ctx.translate(f.x, f.y - 24);
