@@ -95,8 +95,8 @@ const Detail = (() => {
   const buildGraph = f => {
     const phs = speciesPhases(f.s);
     const life = lifeOf(f.s);
-    const y0 = phaseVal(f.s, phs[0]);
-    const ymax = phaseVal(f.s, phs[phs.length - 1]);
+    const y0 = phs[0].amt;
+    const ymax = phs[phs.length - 1].amt;
     let pts = '';
     let t = 0;
     const vals = new Set();
@@ -104,8 +104,8 @@ const Detail = (() => {
       const x0 = GX0 + (t / life) * (GX1 - GX0);
       t += p.dur;
       const x1 = GX0 + (t / life) * (GX1 - GX0);
-      const yy = py(phaseVal(f.s, p), ymax);
-      vals.add(phaseVal(f.s, p));
+      const yy = py(p.amt, ymax);
+      vals.add(p.amt);
       pts += `${x0},${yy} ${x1},${yy} `;
     }
     if (t < life) pts += `${GX1},${py(ymax, ymax)} `;
@@ -130,6 +130,7 @@ const Detail = (() => {
       evo +
       `<polyline class="g-line" fill="none" points="${pts}"/>` +
       ylab +
+      `<text class="g-t g-stage" x="${GX0 - 6}" y="${GY1 - 9}" text-anchor="end">G / 5s</text>` +
       `<line class="g-nguide" id="g-guide" x1="${GX0}" y1="${GY0}" x2="${GX0}" y2="${GY0}"/>` +
       `<circle class="g-now" id="g-dot" r="3.4" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
       `<text class="g-t" id="g-xend" x="${GX1}" y="${GY0 + 15}" text-anchor="end">${life} min</text>` +
@@ -149,7 +150,7 @@ const Detail = (() => {
     }
     const life = lifeOf(sel.s);
     const phs = speciesPhases(sel.s);
-    const ymax = phaseVal(sel.s, phs[phs.length - 1]);
+    const ymax = phs[phs.length - 1].amt;
     const u = Math.min(Math.max((vx - GX0) / (GX1 - GX0), 0), 1);
     let age = Math.min(u * life, life - 0.0001);
     let ax = GX0 + u * (GX1 - GX0);
@@ -163,7 +164,7 @@ const Detail = (() => {
         break;
       }
     }
-    const v = speciesGpm(sel.s, age);
+    const v = phaseAt(sel.s, age).amt;
     const ay = py(v, ymax);
     const line = document.getElementById('g-hline');
     line.setAttribute('x1', ax); line.setAttribute('x2', ax);
@@ -262,15 +263,14 @@ const Detail = (() => {
       const life = lifeOf(sel.s);
       const phs = speciesPhases(sel.s);
       const age = Math.min(sel.age || 0, life - 0.0001);
-      const gpm = speciesGpm(sel.s, age);
       const p = phaseAt(sel.s, age);
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
       elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt) + ' G / ' + p.tick + ' sec';
       elDeath.textContent = '+' + soulYield() + ' Soul';
-      const ymax = phaseVal(sel.s, phs[phs.length - 1]);
+      const ymax = phs[phs.length - 1].amt;
       const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
-      const ay = py(gpm, ymax);
+      const ay = py(p.amt, ymax);
       const guide = document.getElementById('g-guide');
       const dot = document.getElementById('g-dot');
       if (guide) {

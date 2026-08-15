@@ -513,21 +513,21 @@ const Stage = (() => {
     ctx.restore();
   };
 
+  const EGGP = new Path2D('M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24');
+
   const drawEgg = f => {
     const total = SPECIES[f.s].hatch ?? 60;
     const p = Math.min((f.t || 0) / total, 1);
     const q = 1 + Math.sin(f.ph * 1.15) * 0.04;
     ctx.save();
     ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
-    ctx.scale(q, 2 - q);
+    ctx.scale(q * 0.28, (2 - q) * 0.28);
     ctx.strokeStyle = 'rgba(28,27,24,0.7)';
-    ctx.lineWidth = 1.55;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 5.2, 6.6, 0, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.lineWidth = 5.5;
+    ctx.stroke(EGGP);
     ctx.fillStyle = 'rgba(28,27,24,0.6)';
     ctx.beginPath();
-    ctx.arc(0, 1.4, 1.1 + p * 1.3, 0, Math.PI * 2);
+    ctx.arc(0, 5, 4 + p * 4.6, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
     if (total - (f.t || 0) <= 5) {

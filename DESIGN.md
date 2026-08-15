@@ -16,10 +16,13 @@ MECHANICS.md holds exact numbers.
   (seal strokes on a faint red wash), one flat level, no nesting.
   Rail icons stay even while their categories are empty.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
-- Fish card: enlarged-step income graph, values with G units, per-5s hover
-  readout under the dot, time tracking the x axis (replaces the end marker
-  at the edge), seal-red now-dot. Fish pop briefly with a soft chime on
-  evolving; no redraw-on.
+- Fish card: enlarged-step income graph, y axis in G per 5s (unit caption
+  "G / 5s" above the axis), per-5s hover readout under the dot, time
+  tracking the x axis (replaces the end marker at the edge), seal-red
+  now-dot. Fish pop briefly with a soft chime on evolving; no redraw-on.
+- Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
+  tier 1 art (clean band-less egg) until tiers exist; bands + red knot
+  arrive with tiers 2-3. Same silhouette in shop icon and world egg.
 - Ocean decor: sepia clam (pearl income), snail, water blue bubbles.
   Seagrass and jellyfish removed in the pivot.
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,

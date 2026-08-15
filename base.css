@@ -647,4 +647,3 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .ubtn-icon.eggicon svg{ width:27px; height:34px; }
 .ubtn-icon.eggicon path{ fill:none; stroke:rgba(28,27,24,.7); stroke-width:2.4; stroke-linecap:round; }
-.eggicon .edot{ fill:rgba(28,27,24,.55); }
