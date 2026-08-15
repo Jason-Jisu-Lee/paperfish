@@ -9,47 +9,11 @@ const Panel = (() => {
 
   const UPS = [
     {
-      key: 'stream', name: 'firstF Income', cat: 'income',
-      cost: () => streamCost(), lvl: () => Game.stream, buy: () => buyStream(),
-      neverBought: () => Game.stream === 0,
-      desc: '+1 gold / 5s',
-      cur: () => 'Current: +' + Game.stream + ' / 5s'
-    },
-    {
       key: 'kelp', name: 'Kelp', cat: 'food',
       cost: () => KELP_COST, lvl: () => Game.plants, buy: () => buyKelp(),
       neverBought: () => (Game.kelpBought || 0) === 0,
       desc: 'satisfies hunger for 1 minute',
       cur: () => 'Current: × ' + Game.plants + ' floating'
-    },
-    ...FOODS.map(fd => ({
-      key: fd.key, name: fd.name, cat: 'food',
-      cost: () => fd.cost, lvl: () => Game.foods[fd.key] || 0, buy: () => buyFood(fd.key),
-      neverBought: () => !(Game.foods[fd.key] || 0),
-      desc: 'no effect yet',
-      cur: () => 'Current: × ' + (Game.foods[fd.key] || 0) + ' floating'
-    })),
-    {
-      key: 'mating', name: 'Spawning', cat: 'life',
-      cost: () => matingCost(), lvl: () => Game.mating, buy: () => buyMating(),
-      neverBought: () => Game.mating === 0,
-      desc: '+5% chance to spawn each 2 min',
-      cur: () => 'Current: ' + Game.mating * 5 + '%'
-    },
-    {
-      key: 'maturity', name: 'Growth', cat: 'life',
-      cost: () => maturityCost(), lvl: () => Game.maturity, buy: () => buyMaturity(),
-      maxed: () => Game.maturity >= 24,
-      neverBought: () => Game.maturity === 0,
-      desc: 'matures 5s sooner',
-      cur: () => 'Current: -' + Game.maturity * 5 + 's'
-    },
-    {
-      key: 'longevity', name: 'Longevity', cat: 'life',
-      cost: () => longevityCost(), lvl: () => Game.longevity, buy: () => buyLongevity(),
-      neverBought: () => Game.longevity === 0,
-      desc: '+30s firstF life',
-      cur: () => 'Current: +' + Game.longevity * 30 + 's'
     }
   ];
 

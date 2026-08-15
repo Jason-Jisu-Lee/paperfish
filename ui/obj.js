@@ -5,7 +5,6 @@ const Obj = (() => {
   const rewardEl = document.getElementById('obj-reward');
   const txt2 = document.getElementById('obj2-text');
   const foodBtn = document.getElementById('rail-food');
-  const incomeBtn = document.getElementById('rail-income');
   const prog = document.getElementById('obj-prog');
   const fill = document.getElementById('obj-fill');
   const count = document.getElementById('obj-count');
@@ -132,8 +131,6 @@ const Obj = (() => {
   const tick = mdt => {
     const kelpPulse = !!(Game.started && cur && !transitioning && cur.id === 'buykelp');
     foodBtn.classList.toggle('pulse', kelpPulse && !foodBtn.classList.contains('on'));
-    const incPulse = !!(Game.started && cur && !transitioning && cur.id === 'income');
-    incomeBtn.classList.toggle('pulse', incPulse && !incomeBtn.classList.contains('on'));
     if (!Game.started) return;
     if (learnT !== null && !side && !Game.tuts.learnfish) {
       learnT += mdt || 0;

@@ -3,8 +3,8 @@
 Idle/incremental for itch.io then Steam. Single-screen deep sea, descending
 zones, no bottom. Player is the diver. Opens lighthearted, turns unsettling
 later. Active play is rewarded; the game pauses when hidden and never
-progresses unattended. Focus right now: the first hour of gameplay, firstF
-loop first. MECHANICS.md holds exact numbers.
+progresses unattended. Focus right now: the soul-prestige core loop.
+MECHANICS.md holds exact numbers.
 
 ## visual language
 - Warm paper field, sumi ink strokes, hanko seal red as the only accent.
@@ -14,25 +14,64 @@ loop first. MECHANICS.md holds exact numbers.
 - Left HUD: gold, then the shop behind a vertical icon rail (fish, income,
   food, life) in fine-line icons; the active category is red-outlined
   (seal strokes on a faint red wash), one flat level, no nesting.
+  Rail icons stay even while their categories are empty.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
 - Fish card: enlarged-step income graph, values with G units, per-5s hover
   readout under the dot, time tracking the x axis (replaces the end marker
   at the edge), seal-red now-dot. Fish pop briefly with a soft chime on
   evolving; no redraw-on.
+- Ocean decor: sepia clam (pearl income), snail, water blue bubbles.
+  Seagrass and jellyfish removed in the pivot.
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
   Steam and Discord marks, vertical caption, red seal.
 
-## core loop (firstF era)
-- Buy eggs, fish earn passively by age stage, click-chase fish for streak
-  gold, feed kelp on hunger cycles or fish starve and die, fish die of old
-  age paying 10% lifetime value. Spawning sustains population once its
-  chance upgrades are bought; no prestige gate.
-- Click selects and catches a fish (card opens, struggle calms while held).
-  Popping bubbles is the active income placeholder (+10).
-- Upgrades so far: firstF Income (per-tick), Kelp (food), Spawning
-  (chance), Growth (faster adulthood).
-- Placeholder foods: Algae, Plankton, Krill (FOODS in data/content.js).
-  Buyable, drift in the world, no gameplay effect yet; function TBD.
+## core loop (soul prestige pivot, 2026-08-15)
+- The run: buy eggs, fish earn gold by age stage, hunger as today. Early
+  runs are gold-starved; fish starving to death is expected and is the
+  engine, not a failure state.
+- The egg is the only starter purchase (Fish category). An egg hatches by
+  a probability table; at start 100% firstF. Egg cost climbs with each
+  purchase during a run.
+- Every fish death leaves a soul. Amassed Souls counter sits at the top
+  of the screen with a Collect Soul button right under it. Collecting
+  transfers the amassed number 1:1 into the prestige shop and ends the
+  run; souls of still-living fish are forfeit. First run ends in minutes
+  with ~2 souls.
+- Gold upgrades are temporary, this run only. Soul upgrades are permanent
+  and hold most progression.
+- The full upgrade catalog exists on paper (below) and reveals
+  progressively in the UI.
+- Clam pays its first pearl 3 minutes into a run, then every 60-80s
+  (20% of current G/min).
+
+## to decide (soul era)
+- currency names: leading pairs Gold + Ink vs Gold + Soul (chat 2026-08-15).
+- egg cost curve: start price, growth per purchase, resets each run?
+- egg probability table per species; how prestige upgrades shift the odds.
+- soul yield: flat 1 per death, or scaled by species / age at death?
+- collect flow: always available or gated? confirm dialog? what the run-end
+  moment looks like (fish dissolve? fade to prestige shop?).
+- what survives a reset: species unlocks, stats, objectives, whispers?
+- prestige shop: entry point (post-collect screen? front menu?), layout.
+- reveal order for in-game purchases (kelp second?) and the objectives
+  rework to teach the new loop.
+- pearl value in the new economy (still 20% G/min?).
+
+## upgrade catalog (full list on paper, revealed progressively)
+in-game, gold, this run only:
+- egg (the only starter purchase)
+- kelp, then better foods (hunger management)
+- income per tick, tick speed
+- spawning chance, growth speed, longevity
+- egg discount, active-click income
+prestige, souls, permanent:
+- egg probability shifts (unlock and weight secondF+)
+- starting gold, starting kelp
+- soul yield per death
+- income multipliers, slower hunger
+- clam: earlier first pearl, richer pearls
+- keep-on-reset perks (e.g. first egg free)
+- reveal gates that open more in-game upgrade slots
 
 ## species ladder (plan)
 - firstF fully designed first, then generalize. Until fish 4: many fish,
@@ -43,7 +82,7 @@ loop first. MECHANICS.md holds exact numbers.
 
 ## later (direction held, not yet built)
 - Zone descent via lump-sum gear, per-zone currency with conversion,
-  prestige resetting to zone 1.
+  layered on top of soul prestige.
 - Trait picks at growth stages, floating plant upgrades, story layer,
   the unsettling turn, self-hosted fonts for Steam.
 

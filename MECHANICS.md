@@ -1,5 +1,11 @@
 # MECHANICS (current, firstF)
 
+NOTE 2026-08-15: soul-prestige pivot in progress (premise and open questions
+in DESIGN.md). Stat upgrades (income, spawning, growth, longevity) and
+placeholder foods are removed from the shop; only egg + kelp are buyable.
+Upgrade sections below describe dormant plumbing kept for the new catalog
+and will be rewritten as the loop lands.
+
 ## economy chart
 
 ### income (per firstF)
@@ -181,15 +187,13 @@ Mating levels (5%/level), rolled once at birth.
 - bubbles are pure ambience now: very fast vents every 19-42s, not clickable.
   water blue-grey strokes at 20-32% alpha; 25% of vents fire two streams at once.
 - ocean decor (world/ocean.js), ink line work behind the fish, click toys:
-  five seagrass clusters of 7-10 blades scattered over a ground band from
-  82% screen height to the bottom edge, deeper clusters longer and darker
-  (ripple + bubble on click), a snail crawling the sand (hides 2.2s), a
-  clam in faint warm sepia that idly opens and closes (snaps shut, spits
-  bubbles), an occasional jellyfish drifting across, every 45-100s
-  (pulses and darts up). only the clam pays: every 60-100s it opens wide
-  holding a blush pearl with a soft seal glow; clicking collects 20% of
-  current G/min (rounded, min 1). x positions are fractions of swim
-  bounds so resizes keep them placed.
+  a snail crawling the sand (hides 2.2s) and a clam in faint warm sepia
+  that idly opens and closes (snaps shut, spits bubbles). seagrass and
+  jellyfish removed in the pivot. only the clam pays: first pearl 3 min
+  into a run, then every 60-80s it opens wide holding a blush pearl with
+  a soft seal glow; clicking collects 20% of current G/min (rounded,
+  min 1). x positions are fractions of swim bounds so resizes keep them
+  placed.
 - ui font is Zen Maru Gothic everywhere (title stays Shippori Mincho
   lowercase with the red seal mark). fonts are self-hosted in fonts/
   (latin woff2 subsets + fonts.css + OFL license files, ~86KB total,
