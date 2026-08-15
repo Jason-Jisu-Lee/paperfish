@@ -2,7 +2,6 @@ const Stage = (() => {
   const canvas = document.getElementById('sea');
   const ctx = canvas.getContext('2d');
   const plants = [];
-  const foods = [];
   const SLICES = 18;
   let W = 0, H = 0, bounds = { l: 60, r: 600, t: 80, b: 500 };
 
@@ -48,7 +47,6 @@ const Stage = (() => {
     };
     Game.fish.forEach(remap);
     plants.forEach(remap);
-    foods.forEach(remap);
   };
   window.addEventListener('resize', resize);
   resize();
@@ -112,7 +110,6 @@ const Stage = (() => {
     f.egg = false;
     f.t = 0;
     f.age = 0;
-    f.spawned = 0;
     f.adult = !sp.adultAt;
     f.hstate = 0;
     if (sp.hunger) f.hungerAt = 1 + Math.random() / 6;
@@ -132,19 +129,7 @@ const Stage = (() => {
     });
   };
 
-  const spawnFood = k => {
-    foods.push({
-      k,
-      x: rand(bounds.l + 60, bounds.r - 60),
-      y: rand(bounds.t + 40, bounds.b - 20),
-      hx: 0, hy: 0,
-      ph: rand(0, Math.PI * 2),
-      dph: rand(0, Math.PI * 2),
-      sc: rand(0.85, 1.2)
-    });
-  };
-
-  const resetPlants = () => { plants.length = 0; foods.length = 0; };
+  const resetPlants = () => { plants.length = 0; };
 
   const nearestPlant = (x, y) => {
     let best = null, bd = Infinity;
@@ -169,85 +154,8 @@ const Stage = (() => {
   };
   const release = () => { held = null; };
 
-  const pickMate = f => {
-    let best = null, bd = Infinity;
-    for (const o of Game.fish) {
-      if (o === f || o.egg || o.dying !== undefined || o.birth < 1 || o.eating || o.court || o === held) continue;
-      const d = (o.x - f.x) ** 2 + (o.y - f.y) ** 2;
-      if (d < bd) { bd = d; best = o; }
-    }
-    return best;
-  };
-
-  const court = (a, b) => {
-    a.court = { p: b, lead: true, phase: 0, t: 0 };
-    b.court = { p: a, lead: false };
-  };
-
-  const endCourt = (a, b, scurry) => {
-    delete a.court;
-    if (b) delete b.court;
-    if (scurry) {
-      escape(a, 1);
-      if (b) escape(b, 1);
-    }
-  };
-
-  const courtStep = (f, mdt) => {
-    const c = f.court, o = c.p;
-    if (!Game.fish.includes(o) || o.dying !== undefined || f.dying !== undefined) {
-      endCourt(f, o, false);
-      f.spawnAt = Math.min(f.spawnWin || 0, 119);
-      return;
-    }
-    f.tailPh += mdt * Math.PI * 2 * 0.55;
-    o.tailPh += mdt * Math.PI * 2 * 0.55;
-    f.tailAmp += (0.28 - f.tailAmp) * Math.min(3 * mdt, 1);
-    o.tailAmp += (0.28 - o.tailAmp) * Math.min(3 * mdt, 1);
-    if (c.phase === 0) {
-      const dx = o.x - f.x, dy = o.y - f.y;
-      const d = Math.hypot(dx, dy) || 1;
-      const sp = Math.min(Math.max(d * 0.8, 16), 52);
-      if (Math.abs(dx) > 8) {
-        f.dir = Math.sign(dx);
-        o.dir = -Math.sign(dx);
-      }
-      f.x += (dx / d) * sp * mdt * 0.5;
-      f.y += (dy / d) * sp * mdt * 0.5;
-      o.x -= (dx / d) * sp * mdt * 0.5;
-      o.y -= (dy / d) * sp * mdt * 0.5;
-      if (d < 26) {
-        c.phase = 1;
-        c.T = 4 + Math.random();
-        c.t = 0;
-        c.cx = (f.x + o.x) / 2;
-        c.cy = (f.y + o.y) / 2;
-        c.drift = rand(0, Math.PI * 2);
-      }
-    } else {
-      c.t += mdt;
-      c.cx += Math.sin(c.t * 0.5 + c.drift) * 7 * mdt;
-      c.cy += Math.cos(c.t * 0.4 + c.drift) * 5 * mdt;
-      c.cx = Math.min(Math.max(c.cx, bounds.l + 40), bounds.r - 40);
-      c.cy = Math.min(Math.max(c.cy, bounds.t + 34), bounds.b - 30);
-      const ox = Math.sin(c.t * 1.05) * 11;
-      const oy = Math.sin(c.t * 0.8 + 1.2) * 6;
-      f.x = c.cx + ox;
-      f.y = c.cy + oy;
-      o.x = c.cx - ox;
-      o.y = c.cy - oy * 0.7;
-      f.dir = ox >= 0 ? -1 : 1;
-      o.dir = -f.dir;
-      if (c.t >= c.T) {
-        f.courtEgg = { x: c.cx, y: c.cy };
-        f.courtDone = true;
-        endCourt(f, o, true);
-      }
-    }
-  };
-
   const escape = (f, level) => {
-    if (f.egg || f.eating || f.dying !== undefined || f.birth < 1 || f.court) return;
+    if (f.egg || f.eating || f.dying !== undefined || f.birth < 1) return;
     f.dir = Math.random() < 0.5 ? -1 : 1;
     f.spd = Math.min(240 + level * 32 + Math.random() * 150, 450);
     f.kick = 0.15 + Math.random() * 0.25;
@@ -284,10 +192,6 @@ const Stage = (() => {
         const calm = Math.min(f.heldT / 15, 1);
         f.tailPh += mdt * Math.PI * 2 * (2.3 - calm * 1.8);
         f.tailAmp += ((0.95 - calm * 0.83) - f.tailAmp) * Math.min(6 * mdt, 1);
-        continue;
-      }
-      if (f.court) {
-        if (f.court.lead) courtStep(f, mdt);
         continue;
       }
       if (f.eating) {
@@ -426,12 +330,6 @@ const Stage = (() => {
         p.fade -= mdt / 1.6;
         if (p.fade <= 0) plants.splice(i, 1);
       }
-    }
-    for (const fd of foods) {
-      fd.ph += mdt * 0.55;
-      fd.dph += mdt * 0.1;
-      fd.hx = Math.sin(fd.dph) * 22;
-      fd.hy = Math.sin(fd.dph * 1.6 + 1.1) * 10;
     }
     updatePops(mdt);
   };
@@ -675,54 +573,9 @@ const Stage = (() => {
     ctx.restore();
   };
 
-  const drawFood = fd => {
-    ctx.save();
-    ctx.translate(fd.x + fd.hx, fd.y + fd.hy);
-    ctx.scale(fd.sc, fd.sc);
-    ctx.strokeStyle = 'rgba(28,27,24,0.42)';
-    ctx.fillStyle = 'rgba(28,27,24,0.3)';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    if (fd.k === 'algae') {
-      ctx.transform(1, 0, Math.sin(fd.ph) * 0.14, 1, 0, 0);
-      ctx.beginPath();
-      ctx.moveTo(0, 5);
-      ctx.bezierCurveTo(-5, -2, -3, -10, -7, -16);
-      ctx.moveTo(0, 5);
-      ctx.bezierCurveTo(1, -4, -2, -12, 2, -20);
-      ctx.moveTo(0, 5);
-      ctx.bezierCurveTo(5, -1, 6, -8, 9, -13);
-      ctx.stroke();
-    } else if (fd.k === 'plankton') {
-      for (let i = 0; i < 6; i++) {
-        const a = i * 1.047 + fd.ph * 0.3;
-        const r = 7 + Math.sin(fd.ph + i) * 3;
-        ctx.beginPath();
-        ctx.arc(Math.cos(a) * r, Math.sin(a) * r * 0.7, i % 2 ? 1.3 : 1.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    } else {
-      ctx.rotate(Math.sin(fd.ph) * 0.25);
-      ctx.beginPath();
-      ctx.moveTo(-7, 3);
-      ctx.quadraticCurveTo(0, -7, 8, -1);
-      ctx.stroke();
-      ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(-2, -2); ctx.lineTo(-4, 3);
-      ctx.moveTo(1, -3); ctx.lineTo(0, 3);
-      ctx.moveTo(4, -3); ctx.lineTo(4, 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(7.5, -2.5, 1.1, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-  };
-
   const pops = [];
-  const spawnPop = (x, y, txt, big) => {
-    pops.push({ x, y, txt, t: 0, big });
+  const spawnPop = (x, y, txt, kind) => {
+    pops.push({ x, y, txt, t: 0, kind });
   };
 
   const updatePops = mdt => {
@@ -738,12 +591,17 @@ const Stage = (() => {
   const drawPops = () => {
     if (!pops.length) return;
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(122,88,0,1)';
     for (const p of pops) {
-      if (p.big) {
+      if (p.kind === 'soul') {
+        ctx.fillStyle = 'rgba(62,84,110,1)';
+        ctx.font = '17px "Sniglet", sans-serif';
+        ctx.globalAlpha = 0.95 * (1 - p.t / 0.9);
+      } else if (p.kind) {
+        ctx.fillStyle = 'rgba(122,88,0,1)';
         ctx.font = '14px "Sniglet", sans-serif';
         ctx.globalAlpha = 0.9 * (1 - p.t / 0.9);
       } else {
+        ctx.fillStyle = 'rgba(122,88,0,1)';
         ctx.font = '11px "Sniglet", sans-serif';
         ctx.globalAlpha = 0.65 * (1 - p.t / 0.9);
       }
@@ -756,14 +614,13 @@ const Stage = (() => {
 
   const drawScene = () => {
     for (const p of plants) drawPlant(p);
-    for (const fd of foods) drawFood(fd);
     for (const f of Game.fish) if (f.egg) drawEgg(f);
     for (const f of Game.fish) if (!f.egg) drawFish(f);
     drawPops();
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, spawnFood, resetPlants, nearestPlant, biteKelp, hold, release, escape, pickMate, court, spawnPop, update, clear, drawScene, resize,
+    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
     get bounds() { return bounds; },
     get size() { return { W, H }; }
   };

@@ -25,36 +25,44 @@ MECHANICS.md holds exact numbers.
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
   Steam and Discord marks, vertical caption, red seal.
 
-## core loop (soul prestige pivot, 2026-08-15)
-- The run: buy eggs, fish earn gold by age stage, hunger as today. Early
-  runs are gold-starved; fish starving to death is expected and is the
-  engine, not a failure state.
-- The egg is the only starter purchase (Fish category). An egg hatches by
-  a probability table; at start 100% firstF. Egg cost climbs with each
-  purchase during a run.
-- Every fish death leaves a soul. Amassed Souls counter sits at the top
-  of the screen with a Collect Soul button right under it. Collecting
-  transfers the amassed number 1:1 into the prestige shop and ends the
-  run; souls of still-living fish are forfeit. First run ends in minutes
-  with ~2 souls.
-- Gold upgrades are temporary, this run only. Soul upgrades are permanent
-  and hold most progression.
-- The full upgrade catalog exists on paper (below) and reveals
-  progressively in the UI.
-- Clam pays its first pearl 3 minutes into a run, then every 60-80s
-  (20% of current G/min).
+## core loop (soul prestige, implemented 2026-08-15)
+- Currencies: Gold (run) + Soul (prestige). Souls render in water blue
+  (#3e546e family); gold stays #7a5800.
+- Run start: 1 firstF + 50 gold. The egg is the only live purchase
+  (Fish category): 50 G, +10 G per purchase, resets each run. 100%
+  firstF for now (probability table later).
+- firstF: 1 min life, adult at 0:30 (income 1 G/5s baby, 2 G/5s adult).
+  Hunger machinery stays but never fires inside a 1-min life.
+- Every fish death pays soulYield souls (1 + Extra Soul level), shown as
+  a blue +N pop, bigger than gold pops. Souls counter top middle with
+  Collect Soul button under it (dimmed at 0).
+- Collect Soul: banks amassed souls 1:1, freezes the world, opens the
+  Prestige overlay (souls of living fish forfeit). Prestige shop has one
+  upgrade: Extra Soul (+1 soul per death), cost 2 doubling per level
+  (placeholder curve). Dive Again starts a fresh run; bank, upgrade
+  levels, and first-time whisper flags persist.
+- Whispers (only two, both fire once EVER, flags in the persistent save):
+  "Soul collected" on the very first fish death, "Fish got bigger" on the
+  very first maturing.
+- Objectives: none; obj.js keeps the box format for the rework.
+- Upgrade catalog is visible for dev: dev-locked entries (dashed, faded,
+  red "dev" tag, cost —) fill the income/food/life grids, same dashed
+  treatment on their rail icons; only the fish icon is live. Players
+  can't buy dev-locked entries.
+- Clam pays its first pearl 3 min into a run, then every 60-80s
+  (20% of current G/min). Snail and bubbles stay; lanterns, seagrass,
+  jellyfish, courtship/spawning, placeholder foods, stat upgrades all
+  removed.
+- Other species exist as assets only (SPECIES keeps art fields; firstF
+  holds the only gameplay data).
 
 ## to decide (soul era)
-- currency names: leading pairs Gold + Ink vs Gold + Soul (chat 2026-08-15).
-- egg cost curve: start price, growth per purchase, resets each run?
 - egg probability table per species; how prestige upgrades shift the odds.
-- soul yield: flat 1 per death, or scaled by species / age at death?
-- collect flow: always available or gated? confirm dialog? what the run-end
-  moment looks like (fish dissolve? fade to prestige shop?).
-- what survives a reset: species unlocks, stats, objectives, whispers?
-- prestige shop: entry point (post-collect screen? front menu?), layout.
-- reveal order for in-game purchases (kelp second?) and the objectives
-  rework to teach the new loop.
+- Extra Soul cost curve (current 2/4/8/16 is a placeholder).
+- second in-game purchase to reveal (kelp?) and the reveal mechanism.
+- objectives rework to teach the loop; whisper additions.
+- collect flow polish: confirm dialog? fish dissolve animation on run end?
+- soul yield scaling by species / age (flat for now).
 - pearl value in the new economy (still 20% G/min?).
 
 ## upgrade catalog (full list on paper, revealed progressively)

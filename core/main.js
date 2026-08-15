@@ -3,9 +3,6 @@ const startGame = () => {
   const fresh = !loadGame();
   if (fresh) {
     Game.gold = START_GOLD;
-    Game.stream = 0;
-    Game.plants = 2;
-    Game.unlocked = 1;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
   }
   document.getElementById('hud').removeAttribute('hidden');
@@ -15,10 +12,8 @@ const startGame = () => {
   Stage.resetPlants();
   Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
-  for (const fd of FOODS) for (let i = 0; i < (Game.foods[fd.key] || 0); i++) Stage.spawnFood(fd.key);
   Game.started = true;
   Panel.refresh();
-  Lantern.start();
   Ocean.start();
   Obj.start();
 };
@@ -35,20 +30,18 @@ const startGame = () => {
     let dt = raw;
     if (!(dt > 0)) dt = 0;
     if (dt > 0.06) dt = 0.06;
-    const mdt = Pause.paused ? 0 : dt;
+    const mdt = Pause.paused || Soul.shopOpen ? 0 : dt;
     const sdt = mdt * Game.speed;
 
     const refresh = Sim.step(sdt, mdt);
 
     Ambience.update(mdt);
     Stage.update(mdt);
-    Lantern.update(mdt);
     Ocean.update(mdt);
     Stage.clear();
     Ambience.drawBack(Stage.ctx);
     Ocean.draw(Stage.ctx);
     Stage.drawScene();
-    Lantern.draw(Stage.ctx);
     Ambience.drawFront(Stage.ctx);
 
     if (refresh) {
@@ -57,7 +50,8 @@ const startGame = () => {
     } else {
       Panel.tick();
     }
-    Obj.tick(mdt);
+    Obj.tick();
+    Soul.tick();
     Detail.tick();
 
     saveT += mdt;

@@ -8,77 +8,60 @@ const Panel = (() => {
   const uptip = document.getElementById('uptip');
 
   const UPS = [
-    {
-      key: 'kelp', name: 'Kelp', cat: 'food',
-      cost: () => KELP_COST, lvl: () => Game.plants, buy: () => buyKelp(),
-      neverBought: () => (Game.kelpBought || 0) === 0,
-      desc: 'satisfies hunger for 1 minute',
-      cur: () => 'Current: × ' + Game.plants + ' floating'
-    }
+    { key: 'kelp', name: 'Kelp', cat: 'food', dev: true, desc: 'satisfies hunger for 1 minute' },
+    { key: 'income', name: 'Income', cat: 'income', dev: true, desc: 'more gold per tick' },
+    { key: 'tick', name: 'Tick Speed', cat: 'income', dev: true, desc: 'faster income ticks' },
+    { key: 'spawning', name: 'Spawning', cat: 'life', dev: true, desc: 'chance to spawn eggs' },
+    { key: 'growth', name: 'Growth', cat: 'life', dev: true, desc: 'matures sooner' },
+    { key: 'longevity', name: 'Longevity', cat: 'life', dev: true, desc: 'longer life' }
   ];
 
   let cat = 'fish';
 
-  const thumb = (s, sil) => {
+  const thumb = s => {
     const sp = SPECIES[s];
     let inner = sp.paths.map(d => `<path d="${d}" vector-effect="non-scaling-stroke"/>`).join('');
     if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
-    return `<span class="thumb${sil ? ' sil' : ''}"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>`;
+    return `<span class="thumb"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>`;
   };
 
-  const count = s => Game.fish.reduce((n, f) => n + (f.s === s && !f.egg && f.dying === undefined ? 1 : 0), 0);
-
-  const capped = s => s === 0 && Game.fish.filter(f => f.s === 0 && f.dying === undefined).length >= FIRSTF_CAP;
+  const living = () => Game.fish.filter(f => f.dying === undefined).length;
 
   const refresh = () => {
     upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(u => `
-      <button class="ubtn" data-key="${u.key}">
-        ${u.neverBought() ? '<span class="ubtn-seal"></span>' : ''}
-        <span class="ubtn-lvl">× ${u.lvl()}</span>
+      <button class="ubtn devlock" data-key="${u.key}">
+        <span class="devtag">dev</span>
         <span class="ubtn-name">${u.name}</span>
-        <span class="ubtn-cost">${u.maxed && u.maxed() ? 'max' : fmt(u.cost()) + ' G'}</span>
+        <span class="ubtn-cost">—</span>
       </button>`).join('');
 
-    let h = '';
-    for (let s = 0; s < Game.unlocked; s++) {
-      const sp = SPECIES[s];
-      h += `<button class="ubtn" data-buy="${s}">
-        <span class="ubtn-lvl">× ${count(s)}</span>
-        <span class="ubtn-icon full">${thumb(s)}</span>
-        <span class="ubtn-cost">${fmt(sp.cost)} G</span>
+    fishGrid.innerHTML = `
+      <button class="ubtn" data-egg>
+        <span class="ubtn-lvl">× ${living()}</span>
+        <span class="ubtn-icon full">${thumb(0)}</span>
+        <span class="ubtn-cost">${fmt(eggCost())} G</span>
       </button>`;
-    }
-    if (Game.unlocked < SPECIES.length) {
-      const s = Game.unlocked;
-      h += `<button class="ubtn" data-unlock>
-        <span class="ubtn-icon">${thumb(s, true)}</span>
-        <span class="ubtn-cost">${fmt(SPECIES[s].cost)} G</span>
-      </button>`;
-      if (s + 1 < SPECIES.length) {
-        h += `<button class="ubtn lock">
-          <span class="ubtn-lock"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5 V8 a3.5 3.5 0 0 1 7 0 V10.5"/></svg></span>
-        </button>`;
-      }
-    }
-    fishGrid.innerHTML = h;
     tick();
   };
 
+  const tick = () => {
+    goldNum.textContent = fmt(Game.gold);
+    goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
+    const eb = fishGrid.querySelector('[data-egg]');
+    if (eb) eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP);
+  };
+
   const srcBuild = () => {
-    const groups = new Map();
+    let n = 0, sum = 0;
     for (const f of Game.fish) {
       if (f.egg || f.dying !== undefined) continue;
-      const g = groups.get(f.s) || { n: 0, sum: 0 };
-      g.n += 1;
-      g.sum += speciesGpm(f.s, f.age);
-      groups.set(f.s, g);
+      n += 1;
+      sum += speciesGpm(f.s, f.age);
     }
-    let h = '';
-    for (const [s, g] of groups) {
-      h += `<div class="gs-row">${thumb(s)}<span class="gs-n">× ${g.n}</span><span class="gs-amt">+${fmt(g.sum)} G / min</span></div>`;
-    }
-    goldSrc.innerHTML = h || '<div class="gs-row"><span class="gs-n">no fish earning</span></div>';
+    goldSrc.innerHTML = n
+      ? `<div class="gs-row">${thumb(0)}<span class="gs-n">× ${n}</span><span class="gs-amt">+${fmt(sum)} G / min</span></div>`
+      : '<div class="gs-row"><span class="gs-n">no fish earning</span></div>';
   };
 
   goldRate.addEventListener('mouseenter', () => {
@@ -87,39 +70,18 @@ const Panel = (() => {
   });
   goldRate.addEventListener('mouseleave', () => goldSrc.setAttribute('hidden', ''));
 
-  const tick = () => {
-    goldNum.textContent = fmt(Game.gold);
-    goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
-    for (const el of upGrid.querySelectorAll('[data-key]')) {
-      const u = UPS.find(x => x.key === el.dataset.key);
-      el.classList.toggle('off', Game.gold < u.cost() || !!(u.maxed && u.maxed()));
-    }
-    for (const el of fishGrid.querySelectorAll('[data-buy]'))
-      el.classList.toggle('off', Game.gold < SPECIES[+el.dataset.buy].cost || capped(+el.dataset.buy));
-    const un = fishGrid.querySelector('[data-unlock]');
-    if (un) un.classList.toggle('off', Game.gold < SPECIES[Game.unlocked].cost);
-    if (!goldSrc.hidden) srcBuild();
-  };
+  document.querySelector('.rail').addEventListener('click', e => {
+    const b = e.target.closest('[data-cat]');
+    if (!b) return;
+    cat = b.dataset.cat;
+    for (const rb of document.querySelectorAll('.rail [data-cat]')) rb.classList.toggle('on', rb === b);
+    fishGrid.toggleAttribute('hidden', cat !== 'fish');
+    upGrid.toggleAttribute('hidden', cat === 'fish');
+    refresh();
+  });
 
-  document.getElementById('hud').addEventListener('click', e => {
-    const ct = e.target.closest('[data-cat]');
-    if (ct) {
-      cat = ct.dataset.cat;
-      for (const el of document.querySelectorAll('[data-cat]')) el.classList.toggle('on', el === ct);
-      fishGrid.toggleAttribute('hidden', cat !== 'fish');
-      upGrid.toggleAttribute('hidden', cat === 'fish');
-      refresh();
-      return;
-    }
-    const ub = e.target.closest('[data-key]');
-    if (ub) {
-      const u = UPS.find(x => x.key === ub.dataset.key);
-      if (u.buy()) refresh();
-      return;
-    }
-    const buy = e.target.closest('[data-buy]');
-    if (buy && buyFish(+buy.dataset.buy)) refresh();
-    if (e.target.closest('[data-unlock]') && unlockNext()) refresh();
+  fishGrid.addEventListener('click', e => {
+    if (e.target.closest('[data-egg]') && buyEgg()) refresh();
   });
 
   document.getElementById('hud').addEventListener('mouseover', e => {
@@ -135,26 +97,23 @@ const Panel = (() => {
       return;
     }
     const ub = e.target.closest('[data-key]');
-    const bf = e.target.closest('[data-buy]');
-    const un = e.target.closest('[data-unlock]');
-    if (!ub && !bf && !un) return;
+    const eb = e.target.closest('[data-egg]');
+    if (!ub && !eb) return;
     uptip.classList.remove('cap');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
-      uptip.innerHTML = u.desc + '<br>' + u.cur();
-    } else if (bf) {
-      uptip.textContent = capped(+bf.dataset.buy) ? 'Max ' + FIRSTF_CAP + ' firstF' : 'Buy ' + SPECIES[+bf.dataset.buy].name + ' Egg';
+      uptip.innerHTML = u.desc + '<br>not yet available to players';
     } else {
-      uptip.textContent = 'Buy ' + SPECIES[Game.unlocked].name + ' Egg';
+      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' firstF' : 'Buy firstF Egg';
     }
-    const r = (ub || bf || un).getBoundingClientRect();
+    const r = (ub || eb).getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.top = r.top + 'px';
     uptip.style.left = (r.right + 14) + 'px';
     uptip.removeAttribute('hidden');
   });
   document.getElementById('hud').addEventListener('mouseout', e => {
-    if (e.target.closest('[data-key], [data-buy], [data-unlock], [data-cat]')) uptip.setAttribute('hidden', '');
+    if (e.target.closest('[data-key], [data-egg], [data-cat]')) uptip.setAttribute('hidden', '');
   });
 
   return { refresh, tick };

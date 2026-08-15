@@ -21,6 +21,7 @@
       Panel.refresh();
       saveGame();
     }
+    if (b.dataset.act === 'soul') Game.souls += 1;
     if (b.dataset.act === 'reset') resetGame();
   });
 })();

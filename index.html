@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=47" />
+    <link rel="stylesheet" href="base.css?v=48" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -16,19 +16,24 @@
       <div class="goldsrc" id="goldsrc" hidden></div>
     </div>
 
+    <div class="soulbox" id="soulbox" hidden>
+      <div class="soul"><span id="soul-num">0</span><span class="soul-lab">SOUL</span></div>
+      <button class="collect" id="collect-soul">Collect Soul</button>
+    </div>
+
     <aside class="hud" id="hud" hidden>
       <div class="railwrap">
         <nav class="rail">
           <button class="rbtn on" data-cat="fish" aria-label="fish">
             <svg viewBox="0 0 24 24"><path d="M3 12 Q12 4.5 21 14.5" /><path d="M3 12 Q12 19.5 21 9.5" /></svg>
           </button>
-          <button class="rbtn" data-cat="income" id="rail-income" aria-label="income">
+          <button class="rbtn dev" data-cat="income" aria-label="income">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5" /></svg>
           </button>
-          <button class="rbtn" data-cat="food" id="rail-food" aria-label="food">
+          <button class="rbtn dev" data-cat="food" aria-label="food">
             <svg viewBox="0 0 24 24"><path d="M12 21.5 C8.6 17.4 8.4 13.2 9.6 9.6 C10.3 7.1 11.3 4.9 12.8 2.9 C14.5 5.2 15.1 8 14.6 10.9 C14.1 14.2 13.9 17.9 12 21.5 Z" /><path d="M12.1 19 C11.7 15.4 11.9 11.6 12.6 5.8" /></svg>
           </button>
-          <button class="rbtn" data-cat="life" aria-label="life">
+          <button class="rbtn dev" data-cat="life" aria-label="life">
             <svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5" /><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z" /><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z" /></svg>
           </button>
         </nav>
@@ -130,6 +135,22 @@
       </div>
     </div>
 
+    <div class="modal" id="prestige" hidden>
+      <div class="modal-card prestige-card">
+        <div class="modal-head">
+          <span>Prestige</span>
+        </div>
+        <div class="p-souls"><span id="p-bank">0</span><span class="soul-lab">SOUL</span></div>
+        <button class="ubtn pbuy" id="p-soulup">
+          <span class="ubtn-lvl" id="p-soulup-lvl">× 0</span>
+          <span class="ubtn-name">Extra Soul</span>
+          <span class="ubtn-cost" id="p-soulup-cost"></span>
+        </button>
+        <div class="p-desc">collect 1 additional soul from each fish</div>
+        <button class="btn" id="p-dive">Dive Again</button>
+      </div>
+    </div>
+
     <div class="objbox" id="objbox" hidden>
       <div class="obj-row">
         <span class="obj-mark"></span>
@@ -174,15 +195,6 @@
         </div>
         <div class="stat" id="fc-death-row" data-hint>
           <span class="lab">death value</span><span class="value" id="fc-death"></span>
-        </div>
-        <div class="stat" id="fc-fert-row" hidden>
-          <span class="lab">spawn chance</span><span class="value" id="fc-fert"></span>
-        </div>
-        <div class="stat" id="fc-spawned-row" hidden>
-          <span class="lab">spawned</span><span class="value" id="fc-spawned"></span>
-        </div>
-        <div class="stat" id="fc-adult-row" hidden>
-          <span class="lab">adult at</span><span class="value" id="fc-adult"></span>
         </div>
       </div>
     </div>
@@ -265,29 +277,33 @@
         <button data-act="hatch">hatch</button>
       </div>
       <div class="dev-row">
+        <span class="dev-tag">soul</span>
+        <button data-act="soul">+1</button>
+      </div>
+      <div class="dev-row">
         <span class="dev-tag">save</span>
         <button data-act="reset">reset</button>
       </div>
     </div>
 
-    <script src="data/species.js?v=2"></script>
-    <script src="data/content.js?v=5"></script>
-    <script src="core/state.js?v=8"></script>
-    <script src="world/stage.js?v=6"></script>
+    <script src="data/species.js?v=3"></script>
+    <script src="data/content.js?v=6"></script>
+    <script src="core/state.js?v=9"></script>
+    <script src="world/stage.js?v=7"></script>
     <script src="world/ambience.js?v=3"></script>
-    <script src="world/ocean.js?v=3"></script>
+    <script src="world/ocean.js?v=4"></script>
     <script src="audio/sfx.js?v=4"></script>
-    <script src="ui/panel.js?v=10"></script>
+    <script src="ui/panel.js?v=11"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=11"></script>
-    <script src="world/lantern.js?v=2"></script>
+    <script src="ui/obj.js?v=12"></script>
+    <script src="ui/soul.js?v=1"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=8"></script>
-    <script src="ui/dev.js?v=1"></script>
+    <script src="ui/detail.js?v=9"></script>
+    <script src="ui/dev.js?v=2"></script>
     <script src="ui/front.js?v=3"></script>
-    <script src="core/sim.js?v=5"></script>
-    <script src="core/main.js?v=5"></script>
+    <script src="core/sim.js?v=6"></script>
+    <script src="core/main.js?v=7"></script>
     <script src="ui/corner.js?v=3"></script>
   </body>
 </html>

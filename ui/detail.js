@@ -8,19 +8,13 @@ const Detail = (() => {
   const elAge = document.getElementById('fc-age');
   const elFreq = document.getElementById('fc-freq');
   const elDeath = document.getElementById('fc-death');
-  const fertRow = document.getElementById('fc-fert-row');
-  const elFert = document.getElementById('fc-fert');
-  const spawnedRow = document.getElementById('fc-spawned-row');
-  const elSpawned = document.getElementById('fc-spawned');
   const hatchRow = document.getElementById('fc-hatch-row');
   const elHatch = document.getElementById('fc-hatch');
   const fishRows = ['fc-age-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
   let cardMode = null;
-  const adultRow = document.getElementById('fc-adult-row');
-  const elAdult = document.getElementById('fc-adult');
   const graph = document.getElementById('fc-graph');
   const GX0 = 48, GX1 = 292, GY0 = 136, GY1 = 28;
-  let mx = null, my = null, hover = null, sel = null, selStream = -1, selMat = -1;
+  let mx = null, my = null, hover = null, sel = null;
 
   const fmt = fmtG;
   const ageFmt = age => {
@@ -57,10 +51,6 @@ const Detail = (() => {
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
 
   canvas.addEventListener('click', e => {
-    if (Lantern.clickAt(e.clientX, e.clientY)) {
-      Panel.tick();
-      return;
-    }
     if (hover) {
       if (hover === sel) return;
       releaseSel();
@@ -68,7 +58,6 @@ const Detail = (() => {
       if (!hover.egg) {
         Stage.hold(hover);
         buildGraph(hover);
-        Obj.event('learnfish');
       }
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
@@ -86,7 +75,7 @@ const Detail = (() => {
     if (mx === null || !Game.started) return null;
     let best = null, bd = Infinity;
     for (const f of Game.fish) {
-      if (f.dying !== undefined || f.court) continue;
+      if (f.dying !== undefined) continue;
       let r;
       if (f.egg) {
         r = 15;
@@ -145,8 +134,6 @@ const Detail = (() => {
       `<circle class="g-now" id="g-dot" r="3.4" cx="${GX0}" cy="${py(y0, ymax)}"/>` +
       `<text class="g-t" id="g-xend" x="${GX1}" y="${GY0 + 15}" text-anchor="end">${life} min</text>` +
       `<g id="g-hover" hidden><line class="g-guide" id="g-hline"/><circle class="g-hdot" id="g-hdot" r="2.8"/><text class="g-t g-ht" id="g-htext" text-anchor="middle"/><text class="g-t g-ht" id="g-htime" text-anchor="middle"/></g>`;
-    selStream = streamFor(f.s);
-    selMat = Game.maturity;
   };
 
   graph.addEventListener('mousemove', e => {
@@ -187,7 +174,7 @@ const Detail = (() => {
     const txt = document.getElementById('g-htext');
     txt.setAttribute('x', Math.min(Math.max(ax, GX0 + 44), GX1 - 44));
     txt.setAttribute('y', ay + 17);
-    txt.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt + streamFor(sel.s)) + ' G / ' + p.tick + ' sec';
+    txt.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt) + ' G / ' + p.tick + ' sec';
     const tt = document.getElementById('g-htime');
     const dispAge = (ax - GX0) / (GX1 - GX0) * life;
     tt.setAttribute('x', Math.min(ax, GX1 - 14));
@@ -207,7 +194,7 @@ const Detail = (() => {
   card.addEventListener('mouseover', e => {
     const row = e.target.closest('[data-hint]');
     if (!row) return;
-    uptip.textContent = '10% lifetime value';
+    uptip.textContent = 'soul granted on death';
     const r = row.getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.left = r.left + 'px';
@@ -226,18 +213,9 @@ const Detail = (() => {
     }
     if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
     hover = hitTest();
-    const lantHover = mx !== null && Lantern.hoverAt(mx, my);
-    canvas.style.cursor = lantHover || hover || (mx !== null && Ocean.hoverAt(mx, my)) ? 'pointer' : '';
-    if (lantHover) {
-      hover = null;
-      tip.classList.add('lant');
-      tipName.textContent = 'Paper Lantern';
-      tipStage.setAttribute('hidden', '');
-      tip.style.left = mx + 'px';
-      tip.style.top = (my + 26) + 'px';
-      tip.removeAttribute('hidden');
-    } else if (hover) {
-      tip.classList.remove('lant');
+    const oceanHover = mx !== null && Ocean.hoverAt(mx, my);
+    canvas.style.cursor = hover || oceanHover ? 'pointer' : '';
+    if (hover) {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
       if (hover.egg) {
@@ -262,9 +240,6 @@ const Detail = (() => {
       if (cardMode !== 'egg') {
         cardMode = 'egg';
         for (const r of fishRows) r.setAttribute('hidden', '');
-        fertRow.setAttribute('hidden', '');
-        spawnedRow.setAttribute('hidden', '');
-        adultRow.setAttribute('hidden', '');
         hatchRow.removeAttribute('hidden');
         graph.style.display = 'none';
       }
@@ -284,7 +259,6 @@ const Detail = (() => {
         buildGraph(sel);
         Stage.hold(sel);
       }
-      if (selStream !== streamFor(sel.s) || selMat !== Game.maturity) buildGraph(sel);
       const life = lifeOf(sel.s);
       const phs = speciesPhases(sel.s);
       const age = Math.min(sel.age || 0, life - 0.0001);
@@ -292,24 +266,8 @@ const Detail = (() => {
       const p = phaseAt(sel.s, age);
       elName.textContent = sp.name;
       elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
-      if (Game.mating >= 1) {
-        elFert.textContent = Game.mating * 5 + '%';
-        elSpawned.textContent = '× ' + (sel.spawned || 0);
-        fertRow.removeAttribute('hidden');
-        spawnedRow.removeAttribute('hidden');
-      } else {
-        fertRow.setAttribute('hidden', '');
-        spawnedRow.setAttribute('hidden', '');
-      }
-      const aAt = adultAtOf(sel.s);
-      if (Game.maturity >= 1 && aAt !== undefined && !sel.adult) {
-        elAdult.textContent = ageFmt(aAt);
-        adultRow.removeAttribute('hidden');
-      } else {
-        adultRow.setAttribute('hidden', '');
-      }
-      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt + streamFor(sel.s)) + ' G / ' + p.tick + ' sec';
-      elDeath.textContent = fmt(ltvOf(sel.s) * 0.1) + ' G';
+      elFreq.textContent = p.tick === 60 ? fmt(p.amt) + ' G / min' : fmt(p.amt) + ' G / ' + p.tick + ' sec';
+      elDeath.textContent = '+' + soulYield() + ' Soul';
       const ymax = phaseVal(sel.s, phs[phs.length - 1]);
       const ax = GX0 + (Math.min(sel.age || 0, life) / life) * (GX1 - GX0);
       const ay = py(gpm, ymax);
