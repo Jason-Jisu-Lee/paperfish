@@ -7,7 +7,9 @@ const Ocean = (() => {
   let nextJelly = 0, nextPearl = 0, tNow = 0;
 
   const fy = () => Stage.size.H * 0.93;
+  const gy = d => { const H = Stage.size.H; return H * 0.82 + d * (H - 14 - H * 0.82); };
   const xAt = u => { const b = Stage.bounds; return b.l + u * (b.r - b.l); };
+  const CLAM = a => `rgba(96,50,42,${a})`;
 
   const puff = (x, y, n) => {
     for (let i = 0; i < n; i++) puffs.push({
@@ -18,8 +20,28 @@ const Ocean = (() => {
 
   const start = () => {
     grass.length = 0;
-    grass.push({ u: rand(0.16, 0.28), imp: 0, seed: rand(0, 7) });
-    grass.push({ u: rand(0.6, 0.74), imp: 0, seed: rand(0, 7) });
+    const spots = [
+      [rand(0.13, 0.2), 0.1], [rand(0.26, 0.34), 0.9], [rand(0.55, 0.62), 0.5],
+      [rand(0.68, 0.76), 1], [rand(0.84, 0.9), 0.25]
+    ];
+    for (const [u, d] of spots) {
+      const n = 7 + Math.floor(rand(0, 4));
+      const blades = [];
+      let top = 0;
+      for (let i = 0; i < n; i++) {
+        const hgt = (46 + rand(0, 26)) * (0.75 + d * 0.45);
+        top = Math.max(top, hgt);
+        blades.push({
+          off: (i - (n - 1) / 2) * 6 + rand(-2.5, 2.5),
+          hgt,
+          ph: rand(0, 7),
+          a: 0.28 + d * 0.12 + rand(0, 0.08),
+          k: 0.6 + rand(0, 0.5)
+        });
+      }
+      grass.push({ u, d, imp: 0, seed: rand(0, 7), blades, top });
+    }
+    grass.sort((a, b) => a.d - b.d);
     clam = { u: rand(0.38, 0.52), open: 0, opening: true, phase: rand(2, 5), pearl: false };
     snail = { u: rand(0.78, 0.88), dir: -1, hideT: 0 };
     jelly = null;
@@ -94,7 +116,7 @@ const Ocean = (() => {
   const hitJelly = (x, y) => jelly && Math.abs(x - jelly.x) < 26 && Math.abs(y - jelly.y) < 28;
   const hitClam = (x, y) => Math.abs(x - xAt(clam.u)) < 28 && Math.abs(y - (fy() - 4)) < 26;
   const hitSnail = (x, y) => Math.abs(x - xAt(snail.u)) < 17 && Math.abs(y - (fy() - 4)) < 16;
-  const hitGrass = (x, y) => grass.find(g => Math.abs(x - xAt(g.u)) < 22 && y > fy() - 70 && y < fy() + 12);
+  const hitGrass = (x, y) => grass.find(g => Math.abs(x - xAt(g.u)) < 30 && y > gy(g.d) - g.top - 10 && y < gy(g.d) + 10);
 
   const clickAt = (x, y) => {
     if (!Game.started || !clam) return false;
@@ -125,7 +147,7 @@ const Ocean = (() => {
     const g = hitGrass(x, y);
     if (g) {
       g.imp = 26;
-      puff(xAt(g.u), fy() - 52, 1);
+      puff(xAt(g.u), gy(g.d) - g.top * 0.7, 1);
       return true;
     }
     return false;
@@ -140,22 +162,20 @@ const Ocean = (() => {
     ctx.lineCap = 'round';
 
     for (const g of grass) {
-      const x = xAt(g.u);
-      ctx.strokeStyle = INK(0.12);
+      const x = xAt(g.u), yb = gy(g.d);
+      ctx.strokeStyle = INK(0.08 + g.d * 0.05);
       ctx.lineWidth = 1.1;
       ctx.beginPath();
-      ctx.moveTo(x - 26, F + 6);
-      ctx.quadraticCurveTo(x, F + 10, x + 26, F + 6);
+      ctx.moveTo(x - 32, yb);
+      ctx.quadraticCurveTo(x, yb + 5, x + 32, yb);
       ctx.stroke();
-      for (let i = 0; i < 4; i++) {
-        const bx = x + (i - 1.5) * 9;
-        const hgt = 40 + (i % 2) * 16;
-        const sway = Math.sin(tNow * 0.7 + g.seed + i * 1.1) * 7 + g.imp * (0.7 + i * 0.15);
-        ctx.strokeStyle = INK(0.34 + i * 0.05);
-        ctx.lineWidth = 1.5;
+      ctx.lineWidth = 1.2 + g.d * 0.5;
+      for (const bl of g.blades) {
+        const sway = Math.sin(tNow * 0.7 + g.seed + bl.ph) * (5 + g.d * 3) + g.imp * bl.k;
+        ctx.strokeStyle = INK(bl.a);
         ctx.beginPath();
-        ctx.moveTo(bx, F + 6);
-        ctx.quadraticCurveTo(bx + sway * 0.4, F + 6 - hgt * 0.55, bx + sway, F + 6 - hgt);
+        ctx.moveTo(x + bl.off, yb + 2);
+        ctx.quadraticCurveTo(x + bl.off + sway * 0.4, yb - bl.hgt * 0.55, x + bl.off + sway, yb - bl.hgt);
         ctx.stroke();
       }
     }
@@ -169,20 +189,33 @@ const Ocean = (() => {
     ctx.stroke();
     if (clam.pearl && clam.open > 0.3) {
       const py = cy - 8 + Math.sin(tNow * 2) * 0.8;
-      ctx.fillStyle = 'rgba(255,251,240,0.95)';
-      ctx.strokeStyle = INK(0.55);
+      const g = ctx.createRadialGradient(cx + 2, py, 1, cx + 2, py, 15);
+      g.addColorStop(0, 'rgba(180,58,43,0.16)');
+      g.addColorStop(1, 'rgba(180,58,43,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx + 2, py, 15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(233,182,166,0.95)';
+      ctx.strokeStyle = 'rgba(180,58,43,0.75)';
       ctx.lineWidth = 1.1;
       ctx.beginPath();
-      ctx.arc(cx + 2, py, 3.2, 0, Math.PI * 2);
+      ctx.arc(cx + 2, py, 3.4, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
+      ctx.fillStyle = 'rgba(255,251,240,0.9)';
+      ctx.beginPath();
+      ctx.arc(cx + 1, py - 1.2, 1, 0, Math.PI * 2);
+      ctx.fill();
     }
-    ctx.strokeStyle = INK(0.6);
+    ctx.fillStyle = 'rgba(180,58,43,0.05)';
+    ctx.strokeStyle = CLAM(0.6);
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.moveTo(cx - 20, cy);
     ctx.quadraticCurveTo(cx, cy + 14, cx + 20, cy);
     ctx.quadraticCurveTo(cx + 12, cy - 12, cx - 20, cy);
+    ctx.fill();
     ctx.stroke();
     ctx.save();
     ctx.translate(cx - 20, cy);
@@ -191,7 +224,7 @@ const Ocean = (() => {
     ctx.moveTo(0, 0);
     ctx.quadraticCurveTo(28, -20, 40, 0);
     ctx.stroke();
-    ctx.strokeStyle = INK(0.28);
+    ctx.strokeStyle = CLAM(0.28);
     ctx.lineWidth = 1.1;
     ctx.beginPath();
     ctx.moveTo(12, -6);

@@ -21,7 +21,7 @@ const matingCost = () => 1500 * 2 ** Game.mating;
 const maturityCost = () => 3000 * 2 ** Game.maturity;
 const longevityCost = () => 5000 * 2 ** Game.longevity;
 const KELP_COST = 20;
-const START_GOLD = 70;
+const START_GOLD = 50;
 const MAX_AGE = 10;
 const FIRSTF_CAP = 20;
 const streamFor = s => s === 0 ? Game.stream : 0;

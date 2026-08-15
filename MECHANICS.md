@@ -51,13 +51,13 @@ objective when the upgrades view is open on another category.
 ### start
 | fact | value |
 |------|-------|
-| start | 70 gold + 1 baby fish + 2 kelp floating (first one mid-water) |
-| opening spend | the chain uses all 70: egg 50 + kelp 20 |
+| start | 50 gold + 1 baby fish + 2 kelp floating (first one mid-water) |
+| opening spend | egg 50 empties the wallet; the +20 from Buy a fish funds the kelp |
 | early hunger | starting kelp feeds the first cycle, objective kelp the next, income carries it after |
 | click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart), a calm release (15s+) swims off quietly |
 | paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes), each entering from a random side at a random height. each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
-| objective rewards | every objective pays gold on completion (silent pre-completes included), shown as a "+N G" line at the bottom of its box plus a pop under the box. amounts live in data/content.js: +5 through income, five pays 50, twenty pays 1,000, fivesecond pays 10,000 |
+| objective rewards | every objective pays gold on completion (silent pre-completes included), shown as a "+N G" line at the bottom of its box plus a pop under the box. amounts live in data/content.js: buyfish and buykelp pay 20, then +5 through income, five pays 50, twenty pays 1,000, fivesecond pays 10,000 |
 | currency unit label | gold shows as capital G everywhere (counter, costs, rewards). counter G is 26px, full opacity, vertically centered against the number |
 | learn objective | 10s of unpaused time after the lantern objective completes, the peaceful whisper plays and a second box appears under the first: "Learn about the fish by clicking on it". completes on opening any non-egg fish card. clicking a fish before it appears completes it silently |
 | objective list | data/content.js OBJECTIVES, chronological, is the single source of truth for objective text, order, rewards, targets. behaviors attach by id in obj.js. after five: "Have the maximum of 20 firstF" then "Have 5 secondF" |
@@ -181,13 +181,15 @@ Mating levels (5%/level), rolled once at birth.
 - bubbles are pure ambience now: very fast vents every 19-42s, not clickable.
   water blue-grey strokes at 20-32% alpha; 25% of vents fire two streams at once.
 - ocean decor (world/ocean.js), ink line work behind the fish, click toys:
-  two seagrass tufts (ripple + bubble), a snail crawling the sand
-  (hides 2.2s), a clam that idly opens and closes (snaps shut, spits
+  five seagrass clusters of 7-10 blades scattered over a ground band from
+  82% screen height to the bottom edge, deeper clusters longer and darker
+  (ripple + bubble on click), a snail crawling the sand (hides 2.2s), a
+  clam in faint warm sepia that idly opens and closes (snaps shut, spits
   bubbles), an occasional jellyfish drifting across, every 45-100s
-  (pulses and darts up). only the clam pays: every 60-100s it opens
-  wide holding a pearl; clicking collects 20% of current G/min (rounded,
-  min 1). floor decor sits at 93% screen height, below the fish band;
-  x positions are fractions of swim bounds so resizes keep them placed.
+  (pulses and darts up). only the clam pays: every 60-100s it opens wide
+  holding a blush pearl with a soft seal glow; clicking collects 20% of
+  current G/min (rounded, min 1). x positions are fractions of swim
+  bounds so resizes keep them placed.
 - ui font is Zen Maru Gothic everywhere (title stays Shippori Mincho
   lowercase with the red seal mark). fonts are self-hosted in fonts/
   (latin woff2 subsets + fonts.css + OFL license files, ~86KB total,

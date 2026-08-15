@@ -1,6 +1,6 @@
 const OBJECTIVES = [
-  { id: 'buyfish', text: 'Buy a fish', reward: 5 },
-  { id: 'buykelp', text: 'Buy a kelp', reward: 5 },
+  { id: 'buyfish', text: 'Buy a fish', reward: 20 },
+  { id: 'buykelp', text: 'Buy a kelp', reward: 20 },
   { id: 'lantern', text: 'Collect gold from Paper Lanterns', reward: 5, target: 3 },
   { id: 'learnfish', text: 'Learn about the fish by clicking on it', reward: 5, side: true },
   { id: 'income', text: 'Buy firstF Income upgrade', reward: 5 },
