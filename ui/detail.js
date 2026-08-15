@@ -73,6 +73,7 @@ const Detail = (() => {
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
     } else {
+      if (Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
       close();
     }
   });
@@ -226,7 +227,7 @@ const Detail = (() => {
     if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
     hover = hitTest();
     const lantHover = mx !== null && Lantern.hoverAt(mx, my);
-    canvas.style.cursor = lantHover || hover ? 'pointer' : '';
+    canvas.style.cursor = lantHover || hover || (mx !== null && Ocean.hoverAt(mx, my)) ? 'pointer' : '';
     if (lantHover) {
       hover = null;
       tip.classList.add('lant');

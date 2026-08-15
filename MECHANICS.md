@@ -54,7 +54,7 @@ objective when the upgrades view is open on another category.
 | start | 70 gold + 1 baby fish + 2 kelp floating (first one mid-water) |
 | opening spend | the chain uses all 70: egg 50 + kelp 20 |
 | early hunger | starting kelp feeds the first cycle, objective kelp the next, income carries it after |
-| click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart + swirl), a calm release (15s+) swims off quietly |
+| click a fish | selects and catches it: fish struggles in place, card opens. struggle calms over ~15s, tail settling. release by clicking empty water or the card x: an early release panics (dart), a calm release (15s+) swims off quietly |
 | paper lanterns | early income. 3 lanterns drift in when their objective starts (after Buy a kelp completes), each entering from a random side at a random height. each takes 3 taps at +5, dims per tap, bounces between edges until spent. afterwards lanterns return solo every 45-90s and exit if ignored. hover says "Paper Lantern", label below the cursor so +5 pops stay visible |
 | tutorials | none. all freeze tutorials removed. guidance happens through objectives and diver messages only |
 | objective rewards | every objective pays gold on completion (silent pre-completes included), shown as a "+N G" line at the bottom of its box plus a pop under the box. amounts live in data/content.js: +5 through income, five pays 50, twenty pays 1,000, fivesecond pays 10,000 |
@@ -81,11 +81,12 @@ Mating levels (5%/level), rolled once at birth.
 - two fish can eat one kelp at once, one bite each. claimed bites are gone.
   a kelp with no bites left vanishes instantly, no fade.
 - detection: every fish senses all food on the map, no radius limit.
-  reaction takes 0-3s after food appears or hunger starts; starving fish
+  reaction takes 0-1.5s after food appears or hunger starts; starving fish
   react instantly.
-- hungry fish approaches kelp: slows near it, steers vertically, no wall
-  flips. a STARVING fish sprints: dart-band speed (130-250 px/s), strong
-  vertical pull (cap 140), straight to the nearest kelp.
+- hunger speeds everything up: wander speed x1.35 while hungry or starving.
+  a hungry fish heads to kelp briskly (45-130 px/s, vertical cap 70), slows
+  near it, no wall flips. a STARVING fish sprints: dart-band speed
+  (130-250 px/s), strong vertical pull (cap 140), straight to the nearest kelp.
 
 ## movement
 - burst-coast: drag bleeds speed; below its cruise band the fish fires a short
@@ -103,7 +104,7 @@ Mating levels (5%/level), rolled once at birth.
   lifecycle economy: hunger, aging, income, spawning triggers, death.
   main.js startGame plus the loop and draw order.
 - world/: stage.js canvas world (fish motion, courtship moves, plants,
-  eggs, pops, swirls, held fish, resize). ambience.js bubbles, motes,
+  eggs, pops, held fish, resize). ambience.js bubbles, motes,
   silhouette. lantern.js paper lanterns.
 - ui/: panel.js hud. detail.js tooltip and fish card. corner.js icons and
   all settings wiring. front.js front page. pause.js pause and min-size.
@@ -134,7 +135,7 @@ Mating levels (5%/level), rolled once at birth.
   wired lines, each fires once ever: "Fish is hungry! Let's make sure to have
   enough kelp." (a fish turns hungry while no kelp is on screen),
   "This should feed the fish." (first kelp bought), "When will it hatch?"
-  (first egg bought), "The fish got bigger!" (first baby matures to adult,
+  (first egg bought), "Fish is growing!" (first baby matures to adult,
   skipped for fish loaded from a save already past adult age),
   "It's peaceful here. I should learn about the fish." (10s of unpaused time
   after the lantern objective completes, alongside the learn objective).
@@ -177,7 +178,16 @@ Mating levels (5%/level), rolled once at birth.
 - gold rate (top left, tight spacing): hover lists income per species with a
   fish icon, count, and +N / min per line.
 - money pops (earning, death) draw in the gold color.
-- bubbles are pure ambience now: very fast vents every 32-70s, not clickable.
+- bubbles are pure ambience now: very fast vents every 19-42s, not clickable.
+  water blue-grey strokes at 20-32% alpha; 25% of vents fire two streams at once.
+- ocean decor (world/ocean.js), ink line work behind the fish, click toys:
+  two seagrass tufts (ripple + bubble), a snail crawling the sand
+  (hides 2.2s), a clam that idly opens and closes (snaps shut, spits
+  bubbles), an occasional jellyfish drifting across, every 45-100s
+  (pulses and darts up). only the clam pays: every 60-100s it opens
+  wide holding a pearl; clicking collects 20% of current G/min (rounded,
+  min 1). floor decor sits at 93% screen height, below the fish band;
+  x positions are fractions of swim bounds so resizes keep them placed.
 - ui font is Zen Maru Gothic everywhere (title stays Shippori Mincho
   lowercase with the red seal mark). fonts are self-hosted in fonts/
   (latin woff2 subsets + fonts.css + OFL license files, ~86KB total,

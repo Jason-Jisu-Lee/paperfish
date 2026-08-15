@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=46" />
+    <link rel="stylesheet" href="base.css?v=47" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -22,7 +22,7 @@
           <button class="rbtn on" data-cat="fish" aria-label="fish">
             <svg viewBox="0 0 24 24"><path d="M3 12 Q12 4.5 21 14.5" /><path d="M3 12 Q12 19.5 21 9.5" /></svg>
           </button>
-          <button class="rbtn" data-cat="income" aria-label="income">
+          <button class="rbtn" data-cat="income" id="rail-income" aria-label="income">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5" /></svg>
           </button>
           <button class="rbtn" data-cat="food" id="rail-food" aria-label="food">
@@ -271,22 +271,23 @@
     </div>
 
     <script src="data/species.js?v=2"></script>
-    <script src="data/content.js?v=2"></script>
+    <script src="data/content.js?v=3"></script>
     <script src="core/state.js?v=7"></script>
-    <script src="world/stage.js?v=5"></script>
-    <script src="world/ambience.js?v=2"></script>
+    <script src="world/stage.js?v=6"></script>
+    <script src="world/ambience.js?v=3"></script>
+    <script src="world/ocean.js?v=1"></script>
     <script src="audio/sfx.js?v=4"></script>
     <script src="ui/panel.js?v=9"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=9"></script>
+    <script src="ui/obj.js?v=10"></script>
     <script src="world/lantern.js?v=2"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=7"></script>
+    <script src="ui/detail.js?v=8"></script>
     <script src="ui/dev.js?v=1"></script>
     <script src="ui/front.js?v=3"></script>
     <script src="core/sim.js?v=5"></script>
-    <script src="core/main.js?v=4"></script>
+    <script src="core/main.js?v=5"></script>
     <script src="ui/corner.js?v=3"></script>
   </body>
 </html>

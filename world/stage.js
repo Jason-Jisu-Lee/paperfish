@@ -73,6 +73,7 @@ const Stage = (() => {
       f.modeT = rand(3, 7);
       f.target = rand(65, 115);
     }
+    if (f.hstate) f.target *= 1.35;
   };
 
   const initMotion = f => {
@@ -167,7 +168,6 @@ const Stage = (() => {
     f.heldT = 0;
   };
   const release = () => { held = null; };
-  const swirls = [];
 
   const pickMate = f => {
     let best = null, bd = Infinity;
@@ -248,12 +248,6 @@ const Stage = (() => {
 
   const escape = (f, level) => {
     if (f.egg || f.eating || f.dying !== undefined || f.birth < 1 || f.court) return;
-    swirls.push({
-      x: f.x, y: f.y, t: 0,
-      rot: Math.random() * Math.PI * 2,
-      s: 0.8 + Math.random() * 0.5,
-      spin: Math.random() < 0.5 ? -1 : 1
-    });
     f.dir = Math.random() < 0.5 ? -1 : 1;
     f.spd = Math.min(240 + level * 32 + Math.random() * 150, 450);
     f.kick = 0.15 + Math.random() * 0.25;
@@ -350,7 +344,7 @@ const Stage = (() => {
       }
       if (f.hstate && plants.length) {
         if (f.hstate === 2) f.dT = 0;
-        else if (f.dT === undefined) f.dT = Math.random() * 3;
+        else if (f.dT === undefined) f.dT = Math.random() * 1.5;
         else if (f.dT > 0) f.dT -= mdt;
       } else {
         f.dT = undefined;
@@ -368,11 +362,11 @@ const Stage = (() => {
         const urgent = f.hstate === 2;
         const desired = urgent
           ? Math.min(Math.max(Math.abs(dx) * 3 + 60, 130), 250)
-          : Math.min(Math.max(Math.abs(dx) * 1.5 + 12, 16), 85);
-        f.spd += (desired - f.spd) * Math.min((urgent ? 9 : 4) * mdt, 1);
+          : Math.min(Math.max(Math.abs(dx) * 2 + 30, 45), 130);
+        f.spd += (desired - f.spd) * Math.min((urgent ? 9 : 6) * mdt, 1);
         f.vyT = urgent
           ? Math.min(Math.max((pyy - f.y) * 1.2, -140), 140)
-          : Math.min(Math.max((pyy - f.y) * 0.4, -45), 45);
+          : Math.min(Math.max((pyy - f.y) * 0.6, -70), 70);
       } else {
         f.schoolT = (f.schoolT || 0) - mdt;
         if (f.schoolT <= 0) {
@@ -406,7 +400,7 @@ const Stage = (() => {
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 6;
       if (f.y > bounds.b - 26) f.vyT = -Math.abs(f.vyT) || -6;
-      const vcap = seeking ? (f.hstate === 2 ? 140 : 45) : f.spd * 0.28;
+      const vcap = seeking ? (f.hstate === 2 ? 140 : 70) : f.spd * 0.28;
       if (f.vyT > vcap) f.vyT = vcap;
       if (f.vyT < -vcap) f.vyT = -vcap;
       const dv = f.vyT - f.vy;
@@ -438,10 +432,6 @@ const Stage = (() => {
       fd.dph += mdt * 0.1;
       fd.hx = Math.sin(fd.dph) * 22;
       fd.hy = Math.sin(fd.dph * 1.6 + 1.1) * 10;
-    }
-    for (let i = swirls.length - 1; i >= 0; i--) {
-      swirls[i].t += mdt;
-      if (swirls[i].t >= 0.9) swirls.splice(i, 1);
     }
     updatePops(mdt);
   };
@@ -762,36 +752,11 @@ const Stage = (() => {
     ctx.globalAlpha = 1;
   };
 
-  const drawSwirl = s => {
-    const u = s.t / 0.9;
-    ctx.save();
-    ctx.translate(s.x, s.y);
-    ctx.rotate(s.rot + u * 1.3 * s.spin);
-    const sc = s.s * (1 + u * 0.4);
-    ctx.scale(sc, sc);
-    ctx.globalAlpha = 0.3 * (1 - u);
-    ctx.strokeStyle = 'rgba(28,27,24,1)';
-    ctx.lineWidth = 1.1;
-    ctx.beginPath();
-    for (let i = 0; i <= 22; i++) {
-      const q = i / 22;
-      const ang = q * Math.PI * 2.6;
-      const r = 13 * (1 - q * 0.75);
-      const px = Math.cos(ang) * r, py = Math.sin(ang) * r;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    }
-    ctx.stroke();
-    ctx.restore();
-    ctx.globalAlpha = 1;
-  };
-
   const clear = () => ctx.clearRect(0, 0, W, H);
 
   const drawScene = () => {
     for (const p of plants) drawPlant(p);
     for (const fd of foods) drawFood(fd);
-    for (const s of swirls) drawSwirl(s);
     for (const f of Game.fish) if (f.egg) drawEgg(f);
     for (const f of Game.fish) if (!f.egg) drawFish(f);
     drawPops();

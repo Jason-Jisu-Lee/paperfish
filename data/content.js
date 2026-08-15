@@ -20,7 +20,7 @@ const WHISPERS = [
   { id: 'kelp', text: 'This should feed the fish.' },
   { id: 'hungry', text: "Fish is hungry! Let's make sure to have enough kelp." },
   { id: 'peaceful', text: "It's peaceful here. I should learn about the fish." },
-  { id: 'adult', text: 'The fish got bigger!' }
+  { id: 'adult', text: 'Fish is growing!' }
 ];
 
 const WHISPER = {};

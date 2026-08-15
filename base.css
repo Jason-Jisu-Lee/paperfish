@@ -536,7 +536,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   margin-bottom:7px;
 }
 #fc-graph{ width:100%; height:auto; display:block; margin-top:10px; }
-.g-axis{ fill:none; stroke:rgba(28,27,24,.25); stroke-width:1; }
+.g-axis{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:1; }
 .g-grid{ stroke:rgba(28,27,24,.12); stroke-width:1; }
 .g-line{ stroke:rgba(28,27,24,.85); stroke-width:2; stroke-linecap:round; }
 .g-guide{ stroke:rgba(28,27,24,.4); stroke-width:1; stroke-dasharray:2 4; }

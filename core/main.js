@@ -19,6 +19,7 @@ const startGame = () => {
   Game.started = true;
   Panel.refresh();
   Lantern.start();
+  Ocean.start();
   Obj.start();
 };
 
@@ -42,8 +43,10 @@ const startGame = () => {
     Ambience.update(mdt);
     Stage.update(mdt);
     Lantern.update(mdt);
+    Ocean.update(mdt);
     Stage.clear();
     Ambience.drawBack(Stage.ctx);
+    Ocean.draw(Stage.ctx);
     Stage.drawScene();
     Lantern.draw(Stage.ctx);
     Ambience.drawFront(Stage.ctx);
