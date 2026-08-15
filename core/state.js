@@ -23,7 +23,7 @@ let skipSave = false;
 
 const EGG_BASE = 5;
 const EGG_STEP = 5;
-const TIER_HATCH = [5, 12, 20, 30, 45, 60];
+const TIER_HATCH = [8, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
