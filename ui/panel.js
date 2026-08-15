@@ -6,7 +6,8 @@ const Panel = (() => {
   const upGrid = document.getElementById('up-grid');
   const fishGrid = document.getElementById('fish-grid');
   const uptip = document.getElementById('uptip');
-  const egginfo = document.getElementById('egginfo');
+  const eiModal = document.getElementById('egginfo-modal');
+  const eiBody = document.getElementById('ei-body');
   const railFood = document.getElementById('rail-food');
 
   const UPS = [
@@ -96,25 +97,20 @@ const Panel = (() => {
     refresh();
   });
 
-  const hideInfo = () => egginfo.setAttribute('hidden', '');
-
   fishGrid.addEventListener('click', e => {
     if (e.target.closest('[data-info]')) {
-      if (!egginfo.hasAttribute('hidden')) return hideInfo();
-      egginfo.innerHTML =
+      eiBody.innerHTML =
         `<div class="ei-tier">Tier 1</div>` +
-        `<div class="ei-row">${thumb(0)}<span class="ei-name">${SPECIES[0].name}</span><span class="ei-pct">100%</span></div>`;
-      const r = fishGrid.querySelector('[data-egg]').getBoundingClientRect();
-      egginfo.style.left = (r.right + 14) + 'px';
-      egginfo.style.top = r.top + 'px';
-      egginfo.removeAttribute('hidden');
+        `<div class="ei-row">${thumb(0)}<span>${SPECIES[0].name}</span><span class="ei-pct">100%</span></div>`;
+      eiModal.removeAttribute('hidden');
       return;
     }
     if (e.target.closest('[data-egg]') && buyEgg()) refresh();
   });
 
-  document.addEventListener('click', e => {
-    if (!e.target.closest('#egginfo') && !e.target.closest('[data-info]')) hideInfo();
+  document.getElementById('ei-x').addEventListener('click', () => eiModal.setAttribute('hidden', ''));
+  eiModal.addEventListener('click', e => {
+    if (e.target === eiModal) eiModal.setAttribute('hidden', '');
   });
 
   upGrid.addEventListener('click', e => {
@@ -144,7 +140,7 @@ const Panel = (() => {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = u.desc + '<br>' + u.cur();
     } else {
-      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' fish' : 'Tier 1 Egg';
+      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' fish' : 'Buy an egg';
     }
     const r = (ub || eb).getBoundingClientRect();
     uptip.style.right = 'auto';
