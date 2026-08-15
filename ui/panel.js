@@ -39,7 +39,7 @@ const Panel = (() => {
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
         <span class="ubtn-lvl">× ${living()}</span>
-        <span class="ubtn-icon full">${thumb(0)}</span>
+        <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/><circle class="edot" cx="0" cy="6" r="2.6"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
       </button>`;
     tick();

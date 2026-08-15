@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>egg design options</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:'Courier New',monospace; }
+  h1{ font-size:15px; letter-spacing:.2em; font-weight:normal; text-align:center; margin:26px 0 20px; }
+  .grid{ display:flex; flex-direction:column; gap:22px; align-items:center; padding-bottom:50px; }
+  .opt{ display:flex; align-items:center; gap:26px; background:rgba(255,255,255,.5); border:1px solid rgba(28,27,24,.15); padding:18px 30px; border-radius:12px; }
+  .lab{ width:150px; font-size:12px; letter-spacing:.12em; }
+  .sub{ font-size:10.5px; opacity:.55; margin-top:4px; letter-spacing:.06em; }
+  .tier{ text-align:center; }
+  .tier .t{ font-size:10px; letter-spacing:.14em; opacity:.5; margin-top:4px; }
+  svg{ width:74px; height:86px; overflow:visible; }
+  .egg{ animation:bob 3.2s ease-in-out infinite; transform-origin:center; }
+  .tier:nth-child(3) .egg{ animation-delay:.4s; }
+  .tier:nth-child(4) .egg{ animation-delay:.8s; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
+  path, ellipse, circle.o{ fill:none; stroke:rgba(28,27,24,.78); stroke-width:2; stroke-linecap:round; }
+  .dot{ fill:rgba(28,27,24,.6); stroke:none; }
+  .red{ stroke:rgba(180,58,43,.85); }
+  .redf{ fill:rgba(180,58,43,.8); stroke:none; }
+  .bluef{ fill:rgba(62,84,110,.14); stroke:none; }
+  .redw{ fill:rgba(180,58,43,.12); stroke:none; }
+  .thin{ stroke-width:1.2; }
+  .faint{ stroke:rgba(28,27,24,.4); }
+</style>
+</head>
+<body>
+<h1>egg design options · tiers 1-3</h1>
+<div class="grid" id="grid"></div>
+<script>
+const EGG = 'M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24';
+const opts = [
+  { lab: '1 · yolk + seal', sub: 'dot grows, tier 3 gets a hanko',
+    tiers: [
+      `<path d="${EGG}"/><circle class="dot" cx="0" cy="6" r="2.6"/>`,
+      `<path d="${EGG}"/><circle class="dot" cx="0" cy="6" r="4"/><path class="thin faint" d="M-12,14 C-5,19 5,19 12,14"/>`,
+      `<path d="${EGG}"/><circle class="dot" cx="0" cy="6" r="5.2"/><path class="thin faint" d="M-12,14 C-5,19 5,19 12,14"/><rect class="redf" x="5" y="-16" width="7" height="7" rx="1.5" transform="rotate(8 8 -12)"/>`
+    ]},
+  { lab: '2 · wrapped', sub: 'ink bands like a paper parcel',
+    tiers: [
+      `<path d="${EGG}"/>`,
+      `<path d="${EGG}"/><path class="thin" d="M-18.5,0 C-8,5 8,5 18.7,0"/>`,
+      `<path d="${EGG}"/><path class="thin" d="M-18.5,0 C-8,5 8,5 18.7,0"/><path class="thin" d="M-16,-12 C-7,-7 7,-7 16,-12"/><circle class="redf" cx="0" cy="-1" r="2.6"/>`
+    ]},
+  { lab: '3 · speckled', sub: 'quail specks, red joins at tier 3',
+    tiers: [
+      `<path d="${EGG}"/><circle class="dot" cx="-6" cy="-6" r="1.3"/><circle class="dot" cx="7" cy="2" r="1.1"/><circle class="dot" cx="-2" cy="12" r="1.2"/>`,
+      `<path d="${EGG}"/><circle class="dot" cx="-6" cy="-6" r="1.3"/><circle class="dot" cx="7" cy="2" r="1.1"/><circle class="dot" cx="-2" cy="12" r="1.2"/><circle class="dot" cx="8" cy="-10" r="1.2"/><circle class="dot" cx="-10" cy="4" r="1.1"/><path class="thin faint" d="M-4,-14 C0,-12 4,-13 7,-15"/>`,
+      `<path d="${EGG}"/><circle class="dot" cx="-6" cy="-6" r="1.3"/><circle class="dot" cx="7" cy="2" r="1.1"/><circle class="dot" cx="-2" cy="12" r="1.2"/><circle class="dot" cx="8" cy="-10" r="1.2"/><circle class="dot" cx="-10" cy="4" r="1.1"/><path class="thin faint" d="M-4,-14 C0,-12 4,-13 7,-15"/><circle class="redf" cx="3" cy="-4" r="1.5"/><circle class="redf" cx="-7" cy="9" r="1.3"/>`
+    ]},
+  { lab: '4 · aura', sub: 'currency-colored halo by tier',
+    tiers: [
+      `<path d="${EGG}"/><circle class="dot" cx="0" cy="6" r="2.6"/>`,
+      `<ellipse class="bluef" cx="0" cy="1" rx="27" ry="32"/><path d="${EGG}"/><circle class="dot" cx="0" cy="6" r="2.6"/>`,
+      `<ellipse class="redw" cx="0" cy="1" rx="27" ry="32"/><path d="${EGG}"/><path class="red thin" d="M0,-19 C9,-19 14,-8 14,3"/><circle class="redf" cx="0" cy="6" r="2.8"/>`
+    ]}
+];
+document.getElementById('grid').innerHTML = opts.map(o => `
+  <div class="opt">
+    <div class="lab">${o.lab}<div class="sub">${o.sub}</div></div>
+    ${o.tiers.map((t, i) => `
+      <div class="tier">
+        <svg viewBox="-37 -43 74 86"><g class="egg">${t}</g></svg>
+        <div class="t">TIER ${i + 1}</div>
+      </div>`).join('')}
+  </div>`).join('');
+</script>
+</body>
+</html>
