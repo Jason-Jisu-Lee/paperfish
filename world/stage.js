@@ -98,7 +98,7 @@ const Stage = (() => {
     if (!f.egg) {
       if (f.age === undefined) f.age = 0;
       f.adult = f.age >= adultAtOf();
-      if (!f.hungerAt) f.hungerAt = f.age + 10 / 60;
+      if (!f.hungerAt) f.hungerAt = f.age + HUNGER_AT;
       initMotion(f);
       f.birth = idx === undefined ? 1 : -idx * 0.26;
     }
@@ -110,7 +110,7 @@ const Stage = (() => {
     f.age = 0;
     f.adult = false;
     f.hstate = 0;
-    f.hungerAt = 10 / 60;
+    f.hungerAt = HUNGER_AT;
     initMotion(f);
     f.birth = 0;
   };

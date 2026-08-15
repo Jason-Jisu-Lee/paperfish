@@ -50,14 +50,15 @@ MECHANICS.md holds exact numbers.
   beat, so earning is unmissable.
 - Fish: fixed income for every fish, no maturity income difference:
   1 G / 5s base + in-game Income levels + prestige Base Income levels.
-  Growth to adult is visual only (half of life), keeps its pop and
-  one-time "Fish got bigger" whisper. Adulthood doing nothing is BY
+  Growth to adult is visual only and happens at a fixed age of 30s, so
+  a fish only ever reaches it with Lifespan levels (base life 20s dies
+  first). Keeps its pop and one-time "Fish got bigger" whisper. Adulthood doing nothing is BY
   DESIGN (confirmed 2026-08-15).
 - Soul counter: the number is dead-center top screen, much larger than
   gold; SOUL sits to its right as a currency label that doesn't shift
   the centering. Income graph removed from the
   fish card; the card shows age, income, death value.
-- Lifespan: shared per tier. Tier 1 base 10s, +5s per Tier 1 Lifespan
+- Lifespan: shared per tier. Tier 1 base 20s, +5s per Tier 1 Lifespan
   PRESTIGE level (persists across runs; costs 2, 5, 10, 20 souls then
   doubling). It only affects Tier 1 fish. The in-game life category is
   gone; its rail icon is hidden until a life upgrade exists again.
@@ -68,9 +69,9 @@ MECHANICS.md holds exact numbers.
   undiscovered as grey silhouettes named "?". Only firstF counts as
   discovered for now (real discovery tracking TBD; snail card waits on
   its asset).
-- Hunger: every fish, first hunger 10s after birth, again 10s after each
+- Hunger: every fish, first hunger 20s after birth, again 20s after each
   bite. A fish only becomes hungry if that moment lands before its death
-  age, so base-life (10s) fish never hunger; the system wakes with the
+  age, so base-life (20s) fish never hunger; the system wakes with the
   first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 10s
   (2s eating pause). Hungry or starving fish forfeit their souls when
   they die (mid-bite eaters don't); the fish card death row shows
@@ -112,7 +113,7 @@ MECHANICS.md holds exact numbers.
   revealed by the tutorial). Income icon is live from the start.
 - Whispers: "Soul collected" (first soulful death ever), "Fish got
   bigger" (first maturing ever). Objectives: none; format kept.
-- Clam pays its first pearl 3 min into a run, then every 60-80s
+- Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.

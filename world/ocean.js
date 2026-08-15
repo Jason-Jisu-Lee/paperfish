@@ -17,7 +17,7 @@ const Ocean = (() => {
   };
 
   const start = () => {
-    clam = { u: rand(0.38, 0.52), open: 0, opening: true, phase: rand(2, 5), pearl: false };
+    clam = { u: rand(0.06, 0.15), open: 0, opening: true, phase: rand(2, 5), pearl: false };
     nextPearl = 180;
     puffs.length = 0;
   };

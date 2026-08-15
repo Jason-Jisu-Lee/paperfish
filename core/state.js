@@ -39,8 +39,9 @@ const eggCost = () => {
 };
 const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
-const lifeOf = () => (10 + Game.pLife * 5) / 60;
-const adultAtOf = () => lifeOf() / 2;
+const lifeOf = () => (20 + Game.pLife * 5) / 60;
+const adultAtOf = () => 30 / 60;
+const HUNGER_AT = 20 / 60;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;

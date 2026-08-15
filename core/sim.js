@@ -42,11 +42,11 @@ const Sim = (() => {
           if (f.eating.t <= 0) {
             f.hstate = 0;
             f.hT = 0;
-            f.hungerAt = f.age + 10 / 60;
+            f.hungerAt = f.age + HUNGER_AT;
             delete f.eating;
           }
         } else {
-          if (!f.hstate && f.age >= (f.hungerAt || 10 / 60) && (f.hungerAt || 10 / 60) < lifeOf()) {
+          if (!f.hstate && f.age >= (f.hungerAt || HUNGER_AT) && (f.hungerAt || HUNGER_AT) < lifeOf()) {
             f.hstate = 1;
             f.hT = 0;
           }
