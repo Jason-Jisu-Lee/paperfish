@@ -194,103 +194,53 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .objbox{
   position:absolute; z-index:12;
-  top:calc(clamp(14px, 2.4vh, 26px) + 66px);
+  top:calc(clamp(14px, 2.4vh, 26px) + 62px);
   right:clamp(26px, 2.8vw, 46px);
-  width:250px;
-  background:var(--paper);
-  border:1px solid rgba(28,27,24,.45);
-  box-shadow:0 6px 26px rgba(28,27,24,.14);
-  padding:12px 14px;
+  text-align:right;
   color:var(--ink);
-  opacity:1;
-  transition:opacity .6s ease;
+  transition:opacity .55s ease, transform .55s ease;
 }
-.objbox.fade{ opacity:0; }
-.obj-row{
-  display:flex; align-items:center; justify-content:center; gap:9px;
-  font-size:14.5px; letter-spacing:.04em;
-  text-align:center;
-}
-.obj-mark{
-  flex:none;
-  width:13px; height:13px;
-  border:1.4px solid rgba(28,27,24,.6);
-  border-radius:3px;
+.objbox.fade{ opacity:0; transform:translateX(14px); }
+.obj-row{ display:flex; align-items:center; justify-content:flex-end; gap:11px; }
+.obj-text{
   position:relative;
+  font-size:15.5px; letter-spacing:.03em;
 }
-.obj-text{ position:relative; }
-.objbox.obj2{ top:calc(clamp(14px, 2.4vh, 26px) + 66px + 106px); }
-.obj-reward{
-  margin-top:8px;
-  font-size:11.5px;
-  letter-spacing:.08em;
-  text-align:center;
-  color:rgba(122,88,0,.85);
+.obj-text::after{
+  content:''; position:absolute; left:0; top:53%;
+  width:100%; height:1.4px; background:currentColor;
+  transform:scaleX(0); transform-origin:left;
 }
-.objbox.done{ animation:objpulse .5s ease; }
-.objbox.done .obj-mark{ border-color:#3a8a4e; }
-.objbox.done .obj-mark::before{
-  content:'';
-  position:absolute; inset:-1.4px;
-  background:#3a8a4e;
-  border-radius:3px;
-  animation:stamp .4s cubic-bezier(.34,1.56,.64,1) both;
+.objbox.done .obj-text::after{ animation:objstrike .32s ease-out .18s forwards; }
+@keyframes objstrike{ to{ transform:scaleX(1); } }
+.obj-mark{ flex:none; width:21px; height:21px; }
+.obj-mark svg{ width:21px; height:21px; display:block; overflow:visible; }
+.obj-mark .ring{
+  fill:none; stroke:rgba(28,27,24,.35); stroke-width:1.5;
+  transition:stroke .2s ease;
 }
-.objbox.done .obj-mark::after{
-  content:'';
-  position:absolute; left:3px; top:0;
-  width:5px; height:8px;
-  border-right:1.8px solid var(--paper);
-  border-bottom:1.8px solid var(--paper);
-  transform:rotate(40deg);
-  animation:markin .2s ease .16s both;
+.obj-mark .tick{
+  fill:none; stroke:var(--paper); stroke-width:2.2;
+  stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:18; stroke-dashoffset:18;
 }
-.objbox.done .obj-text::after{
-  content:attr(data-t);
-  position:absolute; left:0; top:0; width:100%;
-  text-decoration:line-through;
-  text-decoration-thickness:1.4px;
-  clip-path:inset(-3px 100% -3px 0);
-  animation:strike .34s ease-out .1s forwards;
-}
-@keyframes strike{ to{ clip-path:inset(-3px 0 -3px 0); } }
-@keyframes stamp{
-  from{ transform:scale(2.1); opacity:0; }
-  55%{ opacity:1; }
+.objbox.done .obj-mark .ring{ fill:var(--seal); stroke:var(--seal); animation:objstamp .38s cubic-bezier(.34,1.56,.64,1) both; }
+.objbox.done .obj-mark .tick{ animation:objtick .26s ease-out .2s forwards; }
+@keyframes objstamp{
+  from{ transform:scale(1.7); opacity:0; }
+  50%{ opacity:1; }
   to{ transform:scale(1); opacity:1; }
 }
-@keyframes markin{ from{ opacity:0; } to{ opacity:1; } }
-@keyframes objpulse{
-  0%{ transform:scale(1); }
-  35%{ transform:scale(1.03); }
-  100%{ transform:scale(1); }
+@keyframes objtick{ to{ stroke-dashoffset:0; } }
+.obj-reward{
+  display:inline-block; margin-top:7px;
+  font-size:12.5px; font-weight:500; font-feature-settings:'tnum';
+  color:#7a5800; background:rgba(122,88,0,.1);
+  border-radius:999px; padding:3px 11px;
+  transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .8s ease;
 }
-.obj-prog{
-  display:flex; align-items:center; justify-content:center; gap:9px;
-  margin-top:8px;
-}
-.obj-bar{
-  flex:none;
-  width:132px;
-  height:4px;
-  background:rgba(28,27,24,.14);
-  border-radius:2px;
-  overflow:hidden;
-}
-.obj-fill{
-  display:block;
-  height:100%;
-  background:rgba(28,27,24,.62);
-  border-radius:2px;
-  width:0;
-  transition:width .35s ease;
-}
-.obj-count{
-  flex:none;
-  font-size:11.5px;
-  font-feature-settings:'tnum';
-  color:rgba(28,27,24,.7);
-}
+.obj-reward.objsoul{ color:#3e546e; background:rgba(62,84,110,.11); }
+
 .saybox{
   position:absolute; z-index:12;
   left:50%; bottom:clamp(72px, 13vh, 160px);

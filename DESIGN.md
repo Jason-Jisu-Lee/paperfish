@@ -125,6 +125,12 @@ MECHANICS.md holds exact numbers.
   first fish death of all time, "Need more soul..." on the first death
   after the first prestige (so, run two), "Fish got bigger" on the first
   maturing.
+- Objective HUD is bare (demos/obj.html option 4): no panel, border, or
+  shadow, right aligned under the corner icons, and NEVER titled
+  "Objective". Task text with an ink ring beside it; on completion the
+  ring stamps into a seal-red hanko with a check drawing across it, the
+  text strikes through, and the reward chip flies into the gold or soul
+  counter, landing exactly as that counter ticks up.
 - Objectives (box top right, data/content.js OBJECTIVES): run-scoped,
   stored in Game.objs and wiped on every dive, so each run walks the
   same list. Gold rewards are run-only by nature; a reward flagged

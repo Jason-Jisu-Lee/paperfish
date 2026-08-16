@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=69" />
+    <link rel="stylesheet" href="base.css?v=71" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -168,14 +168,15 @@
 
     <div class="objbox" id="objbox" hidden>
       <div class="obj-row">
-        <span class="obj-mark"></span>
         <span class="obj-text" id="obj-text"></span>
+        <span class="obj-mark">
+          <svg viewBox="0 0 24 24">
+            <circle class="ring" cx="12" cy="12" r="9.5"/>
+            <path class="tick" d="M7.4 12.3 L10.5 15.3 L16.6 8.7"/>
+          </svg>
+        </span>
       </div>
-      <div class="obj-prog" id="obj-prog" hidden>
-        <span class="obj-bar"><span class="obj-fill" id="obj-fill"></span></span>
-        <span class="obj-count" id="obj-count"></span>
-      </div>
-      <div class="obj-reward" id="obj-reward"></div>
+      <span class="obj-reward" id="obj-reward"></span>
     </div>
 
     <div class="saybox" id="saybox"></div>
@@ -311,7 +312,7 @@
     <script src="ui/panel.js?v=18"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=16"></script>
+    <script src="ui/obj.js?v=18"></script>
     <script src="ui/soul.js?v=11"></script>
     <script src="ui/say.js?v=1"></script>
     <script src="ui/detail.js?v=16"></script>
