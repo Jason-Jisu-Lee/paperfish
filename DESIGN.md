@@ -144,6 +144,10 @@ MECHANICS.md holds exact numbers.
   box. The egg button pulses seal-red from run start until the first
   egg ever (flag eggBought); the objective HUD arriving at 10s is the
   opening beat. The hunger tutorial is the only modal tutorial left.
+- Prestige intro tour (2026-08-16, flag pIntro): first shop entry only,
+  fires 950ms after open. Three spotlight steps over the tabs, one line
+  each (Main / Tiers / Fish Index), Next then Got it. Diving mid-tour
+  ends it for good.
 - Objective HUD is bare and top center (demos/objhud.html option 2,
   picked 2026-08-16): no panel, border, or shadow, and NEVER titled
   "Objective". It sits centered below the Collect Soul button's

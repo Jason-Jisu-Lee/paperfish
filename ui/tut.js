@@ -28,7 +28,51 @@ const Tut = (() => {
     pointAt(f);
   };
 
+  const P_STEPS = [
+    ['up', 'Permanent upgrades, kept through every dive.'],
+    ['tier', 'Unlock new tiers of fish.'],
+    ['index', 'Your collection of discovered fish.']
+  ];
+  let pstep = -1;
+
+  const pShow = () => {
+    const [key, text] = P_STEPS[pstep];
+    const r = document.querySelector(`#p-tabs [data-tab="${key}"]`).getBoundingClientRect();
+    spot(r.left + r.width / 2, r.top + r.height / 2, Math.max(r.width * 0.75, 54));
+    txt.textContent = text;
+    btn.textContent = pstep === P_STEPS.length - 1 ? 'Got it' : 'Next';
+    box.classList.remove('side');
+    box.style.left = (r.left + r.width / 2) + 'px';
+    box.style.top = (r.top - 14) + 'px';
+    dim.removeAttribute('hidden');
+    btn.removeAttribute('hidden');
+    box.removeAttribute('hidden');
+  };
+
+  const pEnd = () => {
+    pstep = -1;
+    active = false;
+    Game.tuts.pIntro = 1;
+    btn.textContent = 'Next';
+    box.setAttribute('hidden', '');
+    dim.setAttribute('hidden', '');
+    saveGame();
+  };
+
+  const prestige = () => {
+    if (Game.tuts.pIntro || pstep >= 0) return;
+    active = true;
+    pstep = 0;
+    pShow();
+  };
+
   btn.addEventListener('click', () => {
+    if (pstep >= 0) {
+      pstep += 1;
+      if (pstep < P_STEPS.length) pShow();
+      else pEnd();
+      return;
+    }
     if (step !== 1) return;
     step = 2;
     revealed = true;
@@ -57,6 +101,7 @@ const Tut = (() => {
 
   const abort = () => {
     if (!active) return;
+    if (pstep >= 0) return pEnd();
     active = false;
     step = 0;
     revealed = false;
@@ -65,5 +110,5 @@ const Tut = (() => {
     dim.setAttribute('hidden', '');
   };
 
-  return { hungry, foodOpened, abort, get active() { return active; }, get revealed() { return revealed; } };
+  return { hungry, foodOpened, abort, prestige, get active() { return active; }, get revealed() { return revealed; } };
 })();

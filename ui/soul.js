@@ -170,6 +170,7 @@ const Soul = (() => {
     screen.classList.add('fresh');
     screen.removeAttribute('hidden');
     setTimeout(() => screen.classList.remove('fresh'), 900);
+    if (!Game.tuts.pIntro) setTimeout(Tut.prestige, 950);
   };
 
   const bankAndOpen = () => {
@@ -188,6 +189,7 @@ const Soul = (() => {
   });
 
   document.getElementById('p-dive').addEventListener('click', () => {
+    Tut.abort();
     Game.shop = 0;
     Game.tuts.prestiged = 1;
     Game.gold = startGold();
