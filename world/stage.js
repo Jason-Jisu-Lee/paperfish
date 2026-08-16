@@ -522,15 +522,9 @@ const Stage = (() => {
     }
     ctx.scale(q * 0.48, (2 - q) * 0.48);
     ctx.fillStyle = 'rgba(253,250,241,1)';
-    ctx.shadowColor = 'rgba(28,27,24,0.22)';
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetY = 3;
     ctx.fill(EGGP);
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.strokeStyle = 'rgba(28,27,24,0.85)';
-    ctx.lineWidth = 2.4;
+    ctx.strokeStyle = 'rgba(28,27,24,0.9)';
+    ctx.lineWidth = 2.6;
     ctx.lineCap = 'round';
     ctx.stroke(EGGP);
     ctx.restore();

@@ -23,7 +23,7 @@ MECHANICS.md holds exact numbers.
 - Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
   arrive with tiers 2-3. Same silhouette in shop icon and world egg; both render as a solid
-  shell (paper-white fill + soft shadow) so eggs read as objects against
+  shell (paper-white fill, no shadow: nothing underwater casts one) so eggs read against
   the line-art world (eggvis option 1, picked 2026-08-15).
 - Ocean decor: sepia clam (pearl income), water blue bubbles. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
