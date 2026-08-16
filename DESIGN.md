@@ -118,6 +118,36 @@ MECHANICS.md holds exact numbers.
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
 
+## first run tutorial (PROPOSED 2026-08-16, awaiting approval)
+The whole first run is tutorial-driven. Same modal-tutorial mechanic as
+the hunger tutorial: the world freezes, a box points at the subject,
+and the step ends on Next or on the player doing the thing. Every step
+fires once ever (flags in the persistent save), so later runs are silent.
+  1. points at the starting fish: "This fish earns gold while it lives."
+     [Next]
+  2. points at the gold counter as the first income lands: "That gold is
+     yours. Eggs cost gold." [Next]
+  3. points at the egg button: "Buy an egg." [player must click it]
+  4. points at the new egg: "It hatches in 8 seconds." [Next, unfreeze]
+  5. on the first death, points at the soul pop: "Fish do not last. Each
+     one leaves a soul." [Next]
+  6. points at Collect Soul: "Collecting ends the dive and banks your
+     souls." [player must click]
+  7. on the prestige screen, points at the cards: "Spend souls here.
+     These never reset." [player must buy one]
+  8. points at Start: "Dive again." [player must click; tutorial done]
+The existing hunger tutorial stays where it is, triggered by the first
+hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
+
+## environment (demos/reef.html, pick pending)
+- Reef backdrop options: ink wash mounds, coral branches, sea fans, or a
+  layered mix. Positions randomize every run, drawn behind everything at
+  very low alpha.
+- Passing school options: tight arrow, scatter cloud, or single-file
+  ribbon. Rare, fast, brief, background only, purely decorative.
+- Egg integration options: rest on the floor, tether to kelp, ink wash
+  shell, or a clutch of three. Current mid-water hover reads unnatural.
+
 ## tier plan (demos/tiers.html, all numbers TBD)
 - Tier 1: firstF, Sardine. Tier 2: secondF, Snail. Tier 3: Cod, Trout.
   Tier 4: Flounder, Mackerel. Tier 5: Pike, Seahorse. Tier 6: Ray,

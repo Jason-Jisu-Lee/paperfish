@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>environment designs</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:'Courier New',monospace; padding-bottom:60px; }
+  h1{ font-size:15px; letter-spacing:.2em; font-weight:normal; text-align:center; margin:26px 0 4px; }
+  .hint{ font-size:11px; letter-spacing:.08em; opacity:.55; text-align:center; margin-bottom:20px; }
+  h2{ font-size:12px; letter-spacing:.28em; font-weight:normal; text-align:center; margin:34px 0 14px; opacity:.6; }
+  .row{ display:flex; justify-content:center; gap:18px; flex-wrap:wrap; padding:0 20px; }
+  .opt{ text-align:center; }
+  canvas{ display:block; background:#f2efe6; border:1px solid rgba(28,27,24,.15); border-radius:4px; box-shadow:inset 0 0 40px rgba(28,27,24,.04); }
+  .lab{ font-size:11.5px; letter-spacing:.1em; margin-top:9px; }
+  .sub{ font-size:10px; opacity:.55; margin-top:3px; letter-spacing:.04em; width:330px; }
+</style>
+</head>
+<body>
+<h1>environment designs</h1>
+<div class="hint">reef backdrops vary position every run &middot; schools pass rarely &middot; egg needs to belong</div>
+
+<h2>REEF BACKDROP</h2>
+<div class="row" id="reefrow"></div>
+
+<h2>PASSING SCHOOL</h2>
+<div class="row" id="schoolrow"></div>
+
+<h2>EGG IN THE WORLD</h2>
+<div class="row" id="eggrow"></div>
+
+<script>
+const W = 330, H = 250, F = H - 26;
+const rand = (a, b) => a + Math.random() * (b - a);
+const INK = a => `rgba(28,27,24,${a})`;
+const EGG = 'M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24';
+const EGGP = new Path2D(EGG);
+
+const sand = ctx => {
+  ctx.strokeStyle = INK(0.13); ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(10, F + 8);
+  ctx.quadraticCurveTo(W / 2, F + 2, W - 10, F + 9); ctx.stroke();
+};
+
+const mkBubbles = n => Array.from({ length: n }, () => ({
+  x: rand(20, W - 20), y: rand(0, H), r: rand(1.2, 2.4), v: rand(11, 20), ph: rand(0, 7)
+}));
+const drawBubbles = (ctx, bs, dt, t) => {
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(62,84,110,.26)';
+  for (const b of bs) {
+    b.y -= b.v * dt;
+    if (b.y < -6) { b.y = H + rand(0, 40); b.x = rand(20, W - 20); }
+    ctx.beginPath(); ctx.arc(b.x + Math.sin(t * 1.4 + b.ph) * 3, b.y, b.r, 0, Math.PI * 2); ctx.stroke();
+  }
+};
+
+const mound = (ctx, x, w, h, a) => {
+  ctx.fillStyle = INK(a);
+  ctx.beginPath();
+  ctx.moveTo(x - w, F + 6);
+  ctx.bezierCurveTo(x - w * 0.7, F - h * 0.8, x - w * 0.25, F - h, x, F - h * 0.92);
+  ctx.bezierCurveTo(x + w * 0.35, F - h * 0.84, x + w * 0.75, F - h * 0.5, x + w, F + 6);
+  ctx.closePath(); ctx.fill();
+};
+
+const branch = (ctx, x, y, ang, len, depth) => {
+  if (depth === 0) return;
+  const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len;
+  ctx.lineWidth = depth * 1.5;
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
+  branch(ctx, x2, y2, ang - rand(0.25, 0.55), len * 0.72, depth - 1);
+  branch(ctx, x2, y2, ang + rand(0.25, 0.55), len * 0.72, depth - 1);
+};
+
+const fan = (ctx, x, h, w, a) => {
+  ctx.strokeStyle = INK(a); ctx.lineWidth = 1.1; ctx.lineCap = 'round';
+  for (let i = -5; i <= 5; i++) {
+    const sp = i / 5;
+    ctx.beginPath();
+    ctx.moveTo(x, F + 4);
+    ctx.quadraticCurveTo(x + sp * w * 0.4, F - h * 0.55, x + sp * w, F - h * (1 - Math.abs(sp) * 0.45));
+    ctx.stroke();
+  }
+  ctx.lineWidth = 0.8; ctx.strokeStyle = INK(a * 0.7);
+  for (let r = 0.4; r < 1; r += 0.22) {
+    ctx.beginPath();
+    ctx.moveTo(x - w * r, F - h * r * 0.8);
+    ctx.quadraticCurveTo(x, F - h * r * 1.15, x + w * r, F - h * r * 0.8);
+    ctx.stroke();
+  }
+};
+
+const REEFS = [
+  { lab: '1 · ink mounds', sub: 'soft wash rocks in the murk, no outlines. most subtle, pure background',
+    draw: (ctx, s) => { for (const m of s.ms) mound(ctx, m.x, m.w, m.h, m.a); } ,
+    init: () => ({ ms: [
+      { x: rand(30, 110), w: rand(55, 80), h: rand(28, 46), a: 0.05 },
+      { x: rand(130, 210), w: rand(70, 100), h: rand(40, 62), a: 0.045 },
+      { x: rand(240, 310), w: rand(50, 75), h: rand(24, 40), a: 0.055 }
+    ] }) },
+  { lab: '2 · coral branches', sub: 'staghorn silhouettes standing off the floor, ink strokes',
+    init: () => ({ cs: [ { x: rand(40, 90), l: rand(16, 22) }, { x: rand(150, 200), l: rand(20, 26) }, { x: rand(250, 300), l: rand(14, 20) } ] }),
+    draw: (ctx, s) => {
+      ctx.strokeStyle = INK(0.13); ctx.lineCap = 'round';
+      for (const c of s.cs) branch(ctx, c.x, F + 5, -Math.PI / 2, c.l, 4);
+    } },
+  { lab: '3 · sea fans', sub: 'lacy gorgonian fans, delicate and clearly alive',
+    init: () => ({ fs: [ { x: rand(50, 100), h: rand(45, 65), w: rand(26, 38) }, { x: rand(210, 280), h: rand(38, 58), w: rand(22, 34) } ] }),
+    draw: (ctx, s) => { for (const f of s.fs) fan(ctx, f.x, f.h, f.w, 0.16); } },
+  { lab: '4 · layered reef', sub: 'far wash mounds + nearer coral and a fan. most depth, my pick',
+    init: () => ({
+      ms: [ { x: rand(40, 120), w: rand(70, 100), h: rand(34, 52), a: 0.04 }, { x: rand(190, 290), w: rand(80, 110), h: rand(40, 60), a: 0.035 } ],
+      cs: [ { x: rand(60, 110), l: rand(15, 20) }, { x: rand(230, 285), l: rand(17, 23) } ],
+      fs: [ { x: rand(140, 190), h: rand(40, 55), w: rand(24, 32) } ]
+    }),
+    draw: (ctx, s) => {
+      for (const m of s.ms) mound(ctx, m.x, m.w, m.h, m.a);
+      for (const f of s.fs) fan(ctx, f.x, f.h, f.w, 0.12);
+      ctx.strokeStyle = INK(0.15); ctx.lineCap = 'round';
+      for (const c of s.cs) branch(ctx, c.x, F + 5, -Math.PI / 2, c.l, 4);
+    } }
+];
+
+const tiny = (ctx, x, y, s, dir) => {
+  ctx.beginPath();
+  ctx.moveTo(x - 5 * s * dir, y);
+  ctx.quadraticCurveTo(x, y - 2.2 * s, x + 5 * s * dir, y);
+  ctx.quadraticCurveTo(x, y + 2.2 * s, x - 5 * s * dir, y);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x - 4.5 * s * dir, y);
+  ctx.lineTo(x - 8 * s * dir, y - 2.4 * s);
+  ctx.lineTo(x - 8 * s * dir, y + 2.4 * s);
+  ctx.closePath(); ctx.fill();
+};
+
+const SCHOOLS = [
+  { lab: '1 · arrow', sub: 'tight wedge, crosses in about a second, all one heading',
+    init: () => ({ t: 0, n: 14 }),
+    draw: (ctx, s, dt) => {
+      s.t += dt; if (s.t > 4) s.t = 0;
+      const p = s.t / 1.5; if (p > 1) return;
+      const hx = -60 + p * (W + 120), hy = H * 0.36;
+      ctx.fillStyle = INK(0.16);
+      for (let i = 0; i < s.n; i++) {
+        const row = Math.floor(i / 4), col = i % 4;
+        tiny(ctx, hx - row * 13 - col * 3, hy + (col - 1.5) * 9 + row * 2, 1, 1);
+      }
+    } },
+  { lab: '2 · scatter cloud', sub: 'loose swarm, wobbles as it flees. feels startled',
+    init: () => ({ t: 0, fs: Array.from({ length: 20 }, () => ({ ox: rand(-70, 20), oy: rand(-26, 26), ph: rand(0, 7), s: rand(0.75, 1.15) })) }),
+    draw: (ctx, s, dt) => {
+      s.t += dt; if (s.t > 4) s.t = 0;
+      const p = s.t / 1.7; if (p > 1) return;
+      const hx = -70 + p * (W + 150), hy = H * 0.34;
+      ctx.fillStyle = INK(0.15);
+      for (const f of s.fs) tiny(ctx, hx + f.ox, hy + f.oy + Math.sin(s.t * 7 + f.ph) * 3, f.s, 1);
+    } },
+  { lab: '3 · ribbon', sub: 'single file along a curve, like a current is carrying them',
+    init: () => ({ t: 0, n: 18 }),
+    draw: (ctx, s, dt) => {
+      s.t += dt; if (s.t > 4.5) s.t = 0;
+      const p = s.t / 2; if (p > 1) return;
+      ctx.fillStyle = INK(0.16);
+      for (let i = 0; i < s.n; i++) {
+        const q = p - i * 0.022;
+        if (q < 0 || q > 1.15) continue;
+        const x = -40 + q * (W + 90);
+        tiny(ctx, x, H * 0.3 + Math.sin(q * 5.5) * 26, 1, 1);
+      }
+    } }
+];
+
+const drawEggAt = (ctx, x, y, wash, wob) => {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(wob || 0);
+  ctx.scale(0.48, 0.48);
+  ctx.fillStyle = wash ? 'rgba(28,27,24,0.06)' : 'rgba(253,250,241,1)';
+  ctx.fill(EGGP);
+  ctx.strokeStyle = INK(0.9); ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+  ctx.stroke(EGGP);
+  ctx.restore();
+};
+
+const kelp = (ctx, x, sway) => {
+  ctx.strokeStyle = INK(0.42); ctx.lineWidth = 2.1; ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x, F + 4);
+  ctx.bezierCurveTo(x + 3 + sway, F - 22, x - 4 + sway, F - 40, x + 1 + sway * 1.4, F - 58);
+  ctx.moveTo(x, F + 4);
+  ctx.bezierCurveTo(x - 6 + sway, F - 14, x - 4 + sway, F - 30, x - 9 + sway, F - 42);
+  ctx.stroke();
+};
+
+const EGGS = [
+  { lab: '1 · rests on the floor', sub: 'eggs sink. it sits in the sand instead of hovering mid-water',
+    draw: (ctx, s, dt, t) => { mound(ctx, 165, 80, 30, 0.05); drawEggAt(ctx, 165, F - 6, false, Math.sin(t * 0.8) * 0.03); } },
+  { lab: '2 · tethered to kelp', sub: 'a thread anchors it to a plant, the way real roe attaches',
+    draw: (ctx, s, dt, t) => {
+      const sway = Math.sin(t * 0.7) * 4;
+      kelp(ctx, 130, sway);
+      const ex = 176 + sway * 0.7, ey = F - 46 + Math.sin(t * 0.9) * 3;
+      ctx.strokeStyle = INK(0.3); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(131 + sway, F - 34); ctx.quadraticCurveTo(150 + sway, F - 44, ex - 8, ey); ctx.stroke();
+      drawEggAt(ctx, ex, ey, false, Math.sin(t * 0.9) * 0.05);
+    } },
+  { lab: '3 · ink wash shell', sub: 'no white fill, just a faint ink wash. drawn, not pasted on',
+    draw: (ctx, s, dt, t) => { drawEggAt(ctx, 165, H * 0.5 + Math.sin(t) * 3, true, 0); } },
+  { lab: '4 · clutch of three', sub: 'a small cluster on the floor, one big and two small',
+    draw: (ctx, s, dt, t) => {
+      mound(ctx, 165, 85, 26, 0.05);
+      ctx.save(); ctx.translate(0, 0);
+      drawEggAt(ctx, 148, F - 5, false, Math.sin(t * 0.7) * 0.03);
+      ctx.save(); ctx.translate(182, F - 3); ctx.scale(0.72, 0.72); drawEggAt(ctx, 0, 0, false, Math.sin(t * 0.9 + 1) * 0.04); ctx.restore();
+      ctx.save(); ctx.translate(166, F - 12); ctx.scale(0.6, 0.6); drawEggAt(ctx, 0, 0, false, Math.sin(t * 1.1 + 2) * 0.04); ctx.restore();
+      ctx.restore();
+    } }
+];
+
+const panels = [];
+const build = (rowId, list, withReef) => {
+  const row = document.getElementById(rowId);
+  for (const o of list) {
+    const d = document.createElement('div');
+    d.className = 'opt';
+    d.innerHTML = `<canvas width="${W}" height="${H}"></canvas><div class="lab">${o.lab}</div><div class="sub">${o.sub}</div>`;
+    row.appendChild(d);
+    panels.push({ o, ctx: d.querySelector('canvas').getContext('2d'), s: o.init ? o.init() : {}, bs: mkBubbles(5), reef: withReef });
+  }
+};
+build('reefrow', REEFS, false);
+build('schoolrow', SCHOOLS, true);
+build('eggrow', EGGS, true);
+
+const bgReef = REEFS[3];
+const bgState = bgReef.init();
+
+let last = performance.now();
+const frame = now => {
+  const dt = Math.min((now - last) / 1000, 0.1);
+  last = now;
+  const t = now / 1000;
+  for (const p of panels) {
+    const c = p.ctx;
+    c.clearRect(0, 0, W, H);
+    sand(c);
+    if (p.reef) bgReef.draw(c, bgState, dt);
+    p.o.draw(c, p.s, dt, t);
+    drawBubbles(c, p.bs, dt, t);
+  }
+  requestAnimationFrame(frame);
+};
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
