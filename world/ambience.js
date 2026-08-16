@@ -58,7 +58,7 @@ const Ambience = (() => {
       dir: ltr ? 1 : -1,
       x: ltr ? -120 : W + 120,
       y: rand(b.t + 24, b.t + (b.b - b.t) * 0.6),
-      v: rand(380, 520),
+      v: rand(266, 364),
       t: 0,
       fish: Array.from({ length: 20 + Math.floor(Math.random() * 8) }, () => ({
         ox: rand(-105, 18), oy: rand(-32, 32),
