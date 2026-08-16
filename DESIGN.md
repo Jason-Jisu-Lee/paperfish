@@ -20,6 +20,12 @@ MECHANICS.md holds exact numbers.
   "G / 5s" above the axis), per-5s hover readout under the dot, time
   tracking the x axis (replaces the end marker at the edge), seal-red
   now-dot. Fish pop briefly on evolving; no redraw-on.
+- Fish card is a specimen plate (demos/fishcard.html option 1): art panel
+  with the creature drawn large, seal-red tier stamp in the corner
+  holding the tier number, name in Shippori, stage and age side by side
+  and readable, a life bar that drains, then icon-led stat rows for
+  income and death value. Eggs use the same plate with the egg art and a
+  hatch countdown.
 - Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
   arrive with tiers 2-3. Same silhouette in shop icon and world egg; both render as a solid
@@ -115,8 +121,10 @@ MECHANICS.md holds exact numbers.
   (Game.pLife > 0).
 - In-game upgrades: Income +1 G/5s (income icon), Kelp (food icon,
   revealed by the tutorial). Income icon is live from the start.
-- Whispers: "Soul collected" (first soulful death ever), "Fish got
-  bigger" (first maturing ever).
+- Whispers, each once ever: "This fish doesn't live very long" on the
+  first fish death of all time, "Need more soul..." on the first death
+  after the first prestige (so, run two), "Fish got bigger" on the first
+  maturing.
 - Objectives (box top right, data/content.js OBJECTIVES): run-scoped,
   stored in Game.objs and wiped on every dive, so each run walks the
   same list. Gold rewards are run-only by nature; a reward flagged

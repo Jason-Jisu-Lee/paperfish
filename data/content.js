@@ -4,7 +4,8 @@ const OBJECTIVES = [
 ];
 
 const WHISPERS = [
-  { id: 'soul', text: 'Soul collected' },
+  { id: 'soul', text: "This fish doesn't live very long" },
+  { id: 'need', text: 'Need more soul...' },
   { id: 'adult', text: 'Fish got bigger' }
 ];
 

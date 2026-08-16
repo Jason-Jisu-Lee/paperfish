@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=66" />
+    <link rel="stylesheet" href="base.css?v=68" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -187,20 +187,29 @@
     <div class="tip" id="uptip" hidden></div>
 
     <div class="fishcard" id="fishcard" hidden>
-      <button class="fc-x" id="fc-x">×</button>
-      <div class="fc-name" id="fc-name"></div>
-      <div class="fc-stats">
-        <div class="stat" id="fc-hatch-row" hidden>
-          <span class="lab">hatches in</span><span class="value" id="fc-hatch"></span>
+      <button class="fc-x" id="fc-x">&times;</button>
+      <div class="fc-art">
+        <span class="fc-seal" id="fc-tier">1</span>
+        <span class="fc-pic" id="fc-pic"></span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-name" id="fc-name"></div>
+        <div class="fc-meta">
+          <span class="fc-stage" id="fc-stage"></span>
+          <span class="fc-age" id="fc-age"></span>
         </div>
-        <div class="stat" id="fc-age-row">
-          <span class="lab">age</span><span class="value" id="fc-age"></span>
+        <div class="fc-bar"><i id="fc-fill"></i></div>
+        <div class="fc-row" id="fc-freq-row">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></svg>
+          <span>Income</span><b class="fcg" id="fc-freq"></b>
         </div>
-        <div class="stat" id="fc-freq-row">
-          <span class="lab">income</span><span class="value" id="fc-freq"></span>
+        <div class="fc-row" id="fc-death-row" data-hint>
+          <svg viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg>
+          <span>On death</span><b class="fcs" id="fc-death"></b>
         </div>
-        <div class="stat" id="fc-death-row" data-hint>
-          <span class="lab">death value</span><span class="value" id="fc-death"></span>
+        <div class="fc-row" id="fc-hatch-row" hidden>
+          <svg viewBox="-26 -32 52 64"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>
+          <span>Hatches in</span><b id="fc-hatch"></b>
         </div>
       </div>
     </div>
@@ -293,8 +302,8 @@
     </div>
 
     <script src="data/species.js?v=4"></script>
-    <script src="data/content.js?v=8"></script>
-    <script src="core/state.js?v=20"></script>
+    <script src="data/content.js?v=9"></script>
+    <script src="core/state.js?v=21"></script>
     <script src="world/stage.js?v=18"></script>
     <script src="world/ambience.js?v=4"></script>
     <script src="world/ocean.js?v=7"></script>
@@ -303,12 +312,12 @@
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
     <script src="ui/obj.js?v=16"></script>
-    <script src="ui/soul.js?v=9"></script>
+    <script src="ui/soul.js?v=10"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=14"></script>
+    <script src="ui/detail.js?v=15"></script>
     <script src="ui/dev.js?v=2"></script>
     <script src="ui/front.js?v=4"></script>
-    <script src="core/sim.js?v=13"></script>
+    <script src="core/sim.js?v=14"></script>
     <script src="core/main.js?v=10"></script>
     <script src="ui/corner.js?v=3"></script>
   </body>

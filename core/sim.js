@@ -1,4 +1,14 @@
 const Sim = (() => {
+  const deathWhisper = () => {
+    if (!Game.tuts.saysoul) {
+      Game.tuts.saysoul = 1;
+      Say.say(WHISPER.soul);
+    } else if (!Game.tuts.sayneed && Game.tuts.prestiged) {
+      Game.tuts.sayneed = 1;
+      Say.say(WHISPER.need);
+    }
+  };
+
   const step = (sdt, mdt) => {
     let refresh = false;
     let earned = 0;
@@ -51,6 +61,7 @@ const Sim = (() => {
               f.nosoul = true;
               f.hstate = 0;
               f.dying = 0;
+              deathWhisper();
               continue;
             }
             const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
@@ -91,11 +102,8 @@ const Sim = (() => {
               const n = soulYield();
               Game.souls += n;
               Stage.spawnPop(f.x, f.y - 14, '+' + n, 'soul');
-              if (!Game.tuts.saysoul) {
-                Game.tuts.saysoul = 1;
-                Say.say(WHISPER.soul);
-              }
             }
+            deathWhisper();
           }
         }
       }

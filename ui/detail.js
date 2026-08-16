@@ -6,11 +6,24 @@ const Detail = (() => {
   const card = document.getElementById('fishcard');
   const elName = document.getElementById('fc-name');
   const elAge = document.getElementById('fc-age');
+  const elStage = document.getElementById('fc-stage');
+  const elTier = document.getElementById('fc-tier');
+  const elPic = document.getElementById('fc-pic');
+  const elFill = document.getElementById('fc-fill');
   const elFreq = document.getElementById('fc-freq');
   const elDeath = document.getElementById('fc-death');
   const hatchRow = document.getElementById('fc-hatch-row');
   const elHatch = document.getElementById('fc-hatch');
-  const fishRows = ['fc-age-row', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+  const fishRows = ['fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+
+  const EGGART = '<svg viewBox="-26 -32 52 64" class="eggart"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>';
+  const fishArt = s => {
+    const sp = SPECIES[s];
+    let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
+    return `<svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg>`;
+  };
   let cardMode = null;
   let mx = null, my = null, hover = null, sel = null;
 
@@ -36,7 +49,7 @@ const Detail = (() => {
   };
 
   const placeCard = (x, y, f) => {
-    const w = 280, h = 240, m = 14;
+    const w = 292, h = 340, m = 14;
     const fr = SPECIES[f.s].len * 0.65;
     let left = f.x + fr + 18;
     if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
@@ -135,10 +148,16 @@ const Detail = (() => {
         cardMode = 'egg';
         for (const r of fishRows) r.setAttribute('hidden', '');
         hatchRow.removeAttribute('hidden');
+        elPic.innerHTML = EGGART;
+        elTier.textContent = tierOf(sel.s);
+        elName.textContent = 'Egg';
+        elStage.textContent = 'Unhatched';
       }
-      elName.textContent = SPECIES[sel.s].name;
       const total = hatchTime();
-      elHatch.textContent = Math.max(Math.ceil(total - (sel.t || 0)), 0) + ' / ' + total + ' sec';
+      const left = Math.max(Math.ceil(total - (sel.t || 0)), 0);
+      elAge.textContent = left + 's';
+      elFill.style.width = Math.min((sel.t || 0) / total, 1) * 100 + '%';
+      elHatch.textContent = left + ' sec';
       return;
     }
     if (sel) {
@@ -146,13 +165,18 @@ const Detail = (() => {
         cardMode = 'fish';
         for (const r of fishRows) r.removeAttribute('hidden');
         hatchRow.setAttribute('hidden', '');
+        elPic.innerHTML = fishArt(sel.s);
+        elTier.textContent = tierOf(sel.s);
+        elName.textContent = SPECIES[sel.s].name;
         Stage.hold(sel);
       }
       const life = lifeOf();
-      elName.textContent = SPECIES[sel.s].name;
-      elAge.textContent = ageFmt(Math.min(sel.age || 0, life));
-      elFreq.textContent = fmt(incomePer5s()) + ' G / ' + TICK + ' sec';
-      elDeath.textContent = sel.hstate >= 1 ? 'none, hungry' : '+' + soulYield() + ' Soul';
+      const age = Math.min(sel.age || 0, life);
+      elStage.textContent = sel.hstate >= 1 ? 'Hungry' : sel.adult ? 'Adult' : 'Baby';
+      elAge.textContent = ageFmt(age);
+      elFill.style.width = (1 - age / life) * 100 + '%';
+      elFreq.textContent = fmt(incomePer5s()) + ' G / ' + TICK + 's';
+      elDeath.textContent = sel.hstate >= 1 ? 'no soul' : '+' + soulYield() + ' Soul';
     }
   };
 

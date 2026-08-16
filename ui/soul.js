@@ -162,6 +162,7 @@ const Soul = (() => {
 
   document.getElementById('p-dive').addEventListener('click', () => {
     Game.shop = 0;
+    Game.tuts.prestiged = 1;
     Game.gold = startGold();
     Game.souls = 0;
     Game.eggsBought = 0;
