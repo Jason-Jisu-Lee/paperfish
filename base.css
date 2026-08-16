@@ -784,6 +784,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fi-card.unknown{ background:rgba(255,255,255,.26); border-style:dashed; }
 .fi-card.unknown path{ stroke:rgba(28,27,24,.2); }
 .fi-card.unknown .dot{ fill:rgba(28,27,24,.2); }
+.fi-q{ font-size:32px; color:rgba(28,27,24,.22); }
 .fi-name{ font-size:12.5px; letter-spacing:.05em; }
 .fi-card.unknown .fi-name{ color:rgba(28,27,24,.38); letter-spacing:.24em; }
 

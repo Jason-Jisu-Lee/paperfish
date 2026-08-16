@@ -208,12 +208,16 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Egg integration options: rest on the floor, tether to kelp, ink wash
   shell, or a clutch of three. Current mid-water hover reads unnatural.
 
-## tier plan (demos/tiers.html, all numbers TBD)
-- Tier 1: firstF, Sardine. Tier 2: secondF, Snail. Tier 3: Cod, Trout.
-  Tier 4: Flounder, Mackerel. Tier 5: Pike, Seahorse. Tier 6: Ray,
-  Jellyfish, Anglerfish.
-- Bigger, fancier, rarer climbs tiers; per-tier income, lifespan, odds,
-  and exact membership all await the tier brainstorm.
+## tier plan (2026-08-16)
+- Membership follows species order: Tier 1 firstF, secondF (2 fish).
+  Tier 2 thirdF-sixthF (4). Tier 3 seventhF-tenthF (4). Tier 4
+  eleventhF, twelfthF (2). Tiers 5-6: two undesigned slots each, shown
+  in the index as dashed cards with a plain "?" icon.
+- Unlocking a tier unlocks ALL fish in that tier at once.
+- All 12 names are ordinal placeholders (firstF ... twelfthF).
+- secondF earns the same income as firstF (income is global for now).
+- Bigger, fancier, rarer climbs tiers; per-tier income, lifespan, odds
+  await the tier brainstorm.
 
 ## placeholder dials (picked by Claude, awaiting spec)
 - Extra Soul 2·2^lvl, Starting Gold 2·2^lvl, Base Income 3·2^lvl,
@@ -248,7 +252,7 @@ prestige, souls, permanent:
   plants as food. From fish 5: predators that eat prior fish, with
   prey-count thresholds per predator (define at thirdF).
 - 12 traced species assets exist (grid is source of truth, all face right).
-  Names are placeholders (firstF, secondF).
+  Names are ordinal placeholders (firstF ... twelfthF, species order).
 
 ## later (direction held, not yet built)
 - Zone descent via lump-sum gear, per-zone currency with conversion,

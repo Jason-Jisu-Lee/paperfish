@@ -100,6 +100,14 @@ const Soul = (() => {
           </div>
           <div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
       });
+      for (let t = TIER_FISH.length + 1; t <= 6; t++) {
+        h += `<div class="fi-head">
+            <span class="fi-seal">${t}</span>
+            <span class="fi-t">Tier ${t}</span>
+            <span class="fi-count">0 / 2</span>
+          </div>
+          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span></div>'.repeat(2)}</div>`;
+      }
     }
     list.innerHTML = h;
   };
