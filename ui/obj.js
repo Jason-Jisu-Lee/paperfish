@@ -38,7 +38,7 @@ const Obj = (() => {
     box.classList.add('done');
     setTimeout(() => fly(o.soul), 430);
     setTimeout(() => {
-      if (o.soul) Game.bank += o.reward;
+      if (o.soul) Game.souls += o.reward;
       else Game.gold += o.reward;
       saveGame();
     }, 1180);

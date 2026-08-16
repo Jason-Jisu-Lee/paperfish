@@ -37,6 +37,9 @@ const Soul = (() => {
         lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
     ] },
     ...[2, 3, 4, 5, 6].map(t => ({ tier: t, ups: [
+      ...(t === 2 ? [{ key: 'pLife2', ico: 'life', name: 'Lifespan',
+        desc: 'Fish live 10 seconds longer.',
+        lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }] : []),
       { key: 't' + t, ico: 'egg', name: 'Hatch Chance', dev: true,
         desc: `Eggs are more likely to hatch a Tier ${t} fish.`,
         lvl: () => Game.pTier[t - 2], cost: () => pTierCost(t), buy: () => Game.pTier[t - 2]++ }
@@ -157,13 +160,11 @@ const Soul = (() => {
   };
 
   btn.addEventListener('click', () => {
-    if (!Game.started || Game.souls < 1 || shopOpen || Tut.active || Pause.paused) return;
-    Game.bank += Game.souls;
-    Game.souls = 0;
+    if (!Game.started || Game.souls < 1 || shopOpen || Game.shop || Tut.active || Pause.paused) return;
     Game.shop = 1;
     saveGame();
     if (Obj.event('collectsoul')) setTimeout(bankAndOpen, 2200);
-    else open();
+    else bankAndOpen();
   });
 
   document.getElementById('p-dive').addEventListener('click', () => {
@@ -173,7 +174,6 @@ const Soul = (() => {
     Game.souls = 0;
     Game.eggsBought = 0;
     Game.incomeUp = 0;
-    Game.objs = {};
     Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();
@@ -208,7 +208,7 @@ const Soul = (() => {
   };
 
   const resume = () => {
-    if (Game.shop && !shopOpen) open();
+    if (Game.shop && !shopOpen) bankAndOpen();
   };
 
   const closeShop = () => {

@@ -71,6 +71,10 @@ MECHANICS.md holds exact numbers.
   PRESTIGE level (persists across runs; costs 2, 5, 10, 20 souls then
   doubling). It only affects Tier 1 fish. The in-game life category is
   gone; its rail icon is hidden until a life upgrade exists again.
+  Tier 2 of the prestige shop holds a second Lifespan upgrade: +10s per
+  level (costs 15 souls doubling, placeholder). For now it stacks onto
+  all fish since only Tier 1 exists; per-tier split awaits the tier
+  brainstorm (2026-08-16).
 - World egg is 40% smaller than the shop icon (same art). Prestige exit
   button reads "Start".
 - Fish Index: a section at the bottom of the prestige screen listing
@@ -92,8 +96,8 @@ MECHANICS.md holds exact numbers.
   when deceased" -> Next -> the food rail icon (hidden until now)
   appears flashing red: "Buy food for your fish" -> clicking the food
   icon ends the tutorial; the player buys kelp themselves.
-  Explicitly gated: never fires unless Lifespan Lv 1+ is owned AND the
-  fish has lived past 20s (hunger onset). During any tutorial box an
+  Explicitly gated: never fires unless a lifespan upgrade has pushed
+  life past the 20s hunger point AND the fish has lived past 20s. During any tutorial box an
   ink scrim dims the whole screen; a soft spotlight hole stays on the
   subject (the fish, then the food icon) and glides between steps
   (2026-08-16).
@@ -136,16 +140,17 @@ MECHANICS.md holds exact numbers.
   ring stamps into a seal-red hanko with a check drawing across it, the
   text strikes through, and the reward chip flies into the gold or soul
   counter, landing exactly as that counter ticks up.
-- Objectives (box top right, data/content.js OBJECTIVES): run-scoped,
-  stored in Game.objs and wiped on every dive, so each run walks the
-  same list. Gold rewards are run-only by nature; a reward flagged
-  soul:true pays into the permanent bank instead, which is how the game
-  teaches that some objectives outlast the run. Current list:
+- Objectives (box top right, data/content.js OBJECTIVES): once EVER,
+  stored in Game.objs which persists across dives; a completed
+  objective never reappears (changed from run-scoped 2026-08-16).
+  Gold rewards pay into the run; a reward flagged soul:true pays into
+  the soul counter. Current list:
   1. "Buy an egg" +5 G, fires on the first egg purchase.
-  2. "Collect Soul" +1 Soul, fires on clicking Collect Soul; the bonus
-     lands in the bank and the prestige screen waits ~2s so the player
-     sees it credited before the screen opens. Normal runs open it
-     immediately.
+  2. "Collect Soul" +1 Soul, fires on clicking Collect Soul. The soul
+     counter keeps showing the player's souls during the ~2s objective
+     animation, the +1 chip flies into it and ticks it up, then the
+     whole total banks as the prestige screen opens. Normal collects
+     open it immediately.
 - Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
 - SPECIES entries are pure art assets; all gameplay numbers live in
@@ -190,8 +195,9 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 
 ## placeholder dials (picked by Claude, awaiting spec)
 - Extra Soul 2·2^lvl, Starting Gold 2·2^lvl, Base Income 3·2^lvl,
-  Tier Chance 5·2^lvl souls; in-game Income 25·2^lvl, Lifespan 40·2^lvl
-  gold; hatch 20s; hungry window 20s -> starving 10s -> death.
+  Tier Chance 5·2^lvl, Tier 2 Lifespan 15·2^lvl souls; in-game Income
+  25·2^lvl, Lifespan 40·2^lvl gold; hatch 20s; hungry window 20s ->
+  starving 10s -> death.
 
 ## to decide (soul era)
 - per-tier income / lifespan / odds; egg roll implementation.
