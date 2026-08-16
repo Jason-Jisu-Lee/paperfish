@@ -9,14 +9,15 @@
   .hint{ font-size:11px; letter-spacing:.08em; opacity:.55; text-align:center; margin-bottom:22px; }
   .sec{ max-width:940px; margin:0 auto 20px; padding:16px 26px; background:rgba(255,255,255,.5); border:1px solid rgba(28,27,24,.15); border-radius:12px; }
   .s-head{ font-size:12px; letter-spacing:.22em; margin-bottom:14px; opacity:.7; }
-  .row{ display:flex; gap:30px; flex-wrap:wrap; align-items:center; }
-  .card{ text-align:center; position:relative; padding:10px 6px 4px; }
-  .card svg{ overflow:visible; display:block; margin:0 auto; }
+  .row{ display:flex; gap:18px; flex-wrap:wrap; }
+  .card{ text-align:center; position:relative; padding:12px 8px 8px; }
+  .card .art{ width:190px; height:104px; }
+  .card .art svg{ display:block; width:100%; height:100%; overflow:visible; }
   .card path{ fill:none; stroke:rgba(28,27,24,.75); stroke-width:1.6; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
   .card .dot{ fill:rgba(28,27,24,.75); }
-  .ref .card{ opacity:.45; }
-  .ref .card svg{ height:34px; }
-  .num{ position:absolute; top:-6px; left:-4px; width:20px; height:20px; border-radius:50%; background:#b43a2b; color:#f2efe6; font-size:11px; display:grid; place-items:center; }
+  .ref .card{ opacity:.45; padding:6px 4px; }
+  .ref .card .art{ width:104px; height:46px; }
+  .num{ position:absolute; top:0; left:0; width:20px; height:20px; border-radius:50%; background:#b43a2b; color:#f2efe6; font-size:11px; display:grid; place-items:center; }
   .nm{ font-size:11.5px; letter-spacing:.1em; margin-top:8px; }
   .ln{ font-size:9.5px; opacity:.45; letter-spacing:.08em; margin-top:2px; }
 </style>
@@ -25,51 +26,51 @@
 <h1>new fish candidates</h1>
 <div class="hint">same ink language: few strokes, right-facing, paper left bare · pick by number</div>
 <div class="sec ref"><div class="s-head">CURRENT ROSTER</div><div class="row" id="ref"></div></div>
-<div class="sec"><div class="s-head">CANDIDATES</div><div class="row" id="cand"></div></div>
+<div class="sec"><div class="s-head">FISH</div><div class="row" id="fish"></div></div>
+<div class="sec"><div class="s-head">CREATURES</div><div class="row" id="crea"></div></div>
 <script src="../data/species.js"></script>
 <script>
-const snailPath = (() => {
-  let d = '';
-  for (let i = 0; i <= 20; i++) {
-    const q = i / 20, ang = q * Math.PI * 2.3;
-    const r = 15 * (1 - q * 0.8);
-    d += (i ? 'L' : 'M') + (30 + Math.cos(ang) * r).toFixed(1) + ' ' + (22 + Math.sin(ang) * r).toFixed(1);
-  }
-  return d;
-})();
-const CAND = [
-  { name: 'Snail', note: 'floor dweller, Tier 2 per plan', vb: [60, 46],
-    paths: [snailPath, 'M14 41 Q30 46 54 38', 'M54 36 L60 24', 'M50 36 L54 24'] },
-  { name: 'Eel', note: 'two strokes, all motion', vb: [200, 56],
-    paths: ['M194 22 C158 2 124 30 94 32 C64 34 38 22 8 40', 'M194 22 C160 38 128 44 96 42 C66 40 40 32 8 40'] },
-  { name: 'Puffer', note: 'round and bristling', vb: [104, 88],
-    paths: ['M52 10 C76 10 90 26 90 44 C90 63 74 78 52 78 C30 78 14 63 14 44 C14 26 28 10 52 10 Z',
-      'M4 32 L16 44 L4 56 Z',
-      'M52 10 L52 2 M74 16 L80 9 M30 16 L24 9 M88 30 L96 26 M90 56 L98 60 M76 72 L82 79 M28 72 L22 79 M16 56 L8 60'] },
-  { name: 'Octopus', note: 'dome and curling arms', vb: [92, 96],
-    paths: ['M22 42 C16 12 34 4 46 4 C58 4 76 12 70 42',
-      'M22 44 C10 56 6 70 18 80 C24 84 30 80 28 74',
-      'M38 46 C34 66 44 76 38 92',
-      'M54 46 C58 66 48 78 56 92',
-      'M70 44 C82 54 86 68 74 78 C68 82 62 78 64 72'],
-    dots: [{ cx: 37, cy: 28, r: 2.6 }, { cx: 55, cy: 28, r: 2.6 }] },
-  { name: 'Turtle', note: 'slow, broad, calm', vb: [150, 92],
-    paths: ['M30 50 C32 22 62 10 84 12 C110 14 128 30 126 50 C110 60 46 60 30 50 Z',
-      'M126 44 C138 40 146 46 144 54 C142 60 132 60 128 56',
-      'M60 58 C54 70 42 80 28 82 C36 72 40 64 44 58',
-      'M104 58 C110 66 106 76 96 80'] },
-  { name: 'Swordfish', note: 'pike energy, bigger blade', vb: [212, 72],
-    paths: ['M42 42 C72 26 132 28 164 42 C132 54 74 54 42 42 Z',
-      'M164 42 L208 34', 'M10 14 L42 42 L10 68 Z', 'M80 31 C88 8 114 4 134 15 L122 33'] },
+const FISH = [
+  { name: 'Eel', note: 'one ribbon, all motion', vb: [206, 64],
+    paths: ['M198 26 C166 8 130 14 104 28 C82 40 42 44 10 22',
+      'M198 26 C172 30 138 36 108 44 C80 51 40 48 10 22'] },
+  { name: 'Puffer', note: 'round and bristling', vb: [104, 90],
+    paths: ['M52 14 C74 10 90 26 88 46 C86 64 72 78 52 78 C32 78 16 64 16 44 C16 26 32 18 52 14 Z',
+      'M6 36 L20 45 L6 54 Z',
+      'M60 42 C66 45 66 51 60 54',
+      'M46 14 L44 4 M64 15 L68 6 M78 24 L86 17 M87 40 L97 38 M85 58 L94 63 M70 74 L75 83 M50 78 L49 88 M32 72 L26 80 M19 56 L9 60 M20 30 L12 24'] },
+  { name: 'Swordfish', note: 'pike energy, bigger blade', vb: [222, 80],
+    paths: ['M48 48 C78 30 140 32 170 48 C140 62 82 62 48 48 Z',
+      'M170 48 C184 44 202 40 216 38',
+      'M18 20 L48 48 L18 76 Z',
+      'M84 35 C92 12 118 8 138 18 L108 36'] },
   { name: 'Sunfish', note: 'tall, truncated, strange', vb: [124, 132],
     paths: ['M28 32 C50 14 88 18 102 42 C110 56 110 80 102 94 C88 118 50 122 28 104 C33 80 33 56 28 32 Z',
-      'M60 22 C62 4 78 -2 90 6 L76 30', 'M60 112 C62 130 78 136 90 128 L76 104'] },
-  { name: 'Crab', note: 'floor dweller, claws up', vb: [112, 72],
-    paths: ['M28 38 C28 22 44 16 56 16 C68 16 84 22 84 38 C84 50 70 58 56 58 C42 58 28 50 28 38 Z',
-      'M84 30 C94 26 100 18 98 10 L90 14',
-      'M28 30 C18 26 12 18 14 10 L22 14',
-      'M34 52 L22 64 M44 56 L38 68 M78 52 L90 64 M68 56 L74 68'],
-    dots: [{ cx: 48, cy: 22, r: 2.4 }, { cx: 64, cy: 22, r: 2.4 }] }
+      'M60 22 C62 4 78 -2 90 6 L76 30', 'M60 112 C62 130 78 136 90 128 L76 104'] }
+];
+const CREA = [
+  { name: 'Turtle', note: 'slow, broad, calm', vb: [156, 96],
+    paths: ['M30 52 C36 22 70 10 94 14 C116 18 130 34 128 52 C122 58 108 61 94 61 L58 61 C44 61 34 58 30 52 Z',
+      'M46 30 C68 18 98 20 114 32',
+      'M128 50 C138 44 148 48 148 56 C147 62 138 64 130 61',
+      'M70 61 C64 72 54 80 42 84 C50 72 54 66 56 61',
+      'M100 61 C106 70 102 78 92 81'] },
+  { name: 'Octopus', note: 'dome and curling arms', vb: [110, 100],
+    paths: ['M32 38 C26 10 46 2 56 2 C66 2 86 10 80 38',
+      'M32 40 C14 46 4 60 8 74 C11 84 24 84 24 75',
+      'M42 44 C36 60 52 72 44 90',
+      'M55 44 C60 62 46 78 55 96',
+      'M68 44 C74 60 66 74 72 88',
+      'M78 40 C96 44 106 58 102 71 C99 81 86 81 87 71'],
+    dots: [{ cx: 45, cy: 26, r: 2.6 }, { cx: 63, cy: 26, r: 2.6 }] },
+  { name: 'Crab', note: 'floor dweller, claws up', vb: [120, 84],
+    paths: ['M30 48 C30 32 46 26 60 26 C74 26 90 32 90 48 C90 62 76 70 60 70 C44 70 30 62 30 48 Z',
+      'M32 40 C26 38 20 33 18 26 C8 24 2 16 6 8',
+      'M18 26 C14 18 16 8 24 4',
+      'M88 40 C94 38 100 33 102 26 C112 24 118 16 114 8',
+      'M102 26 C106 18 104 8 96 4',
+      'M38 66 L28 78 M48 70 L44 80 M82 66 L92 78 M72 70 L76 80'],
+    dots: [{ cx: 52, cy: 32, r: 2.4 }, { cx: 68, cy: 32, r: 2.4 }] }
 ];
 const art = sp => {
   let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
@@ -77,15 +78,12 @@ const art = sp => {
   if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
   return inner;
 };
-document.getElementById('ref').innerHTML = SPECIES.map(sp =>
-  `<div class="card"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${Math.min(Math.round(34 * sp.vb[0] / sp.vb[1]), 90)}px">${art(sp)}</svg>
-    <div class="ln">${sp.name}</div></div>`).join('');
-document.getElementById('cand').innerHTML = CAND.map((sp, i) => {
-  const w = Math.min(Math.round(84 * sp.vb[0] / sp.vb[1]), 190);
-  return `<div class="card"><span class="num">${i + 1}</span>
-    <svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${w}px">${art(sp)}</svg>
-    <div class="nm">${sp.name}</div><div class="ln">${sp.note}</div></div>`;
-}).join('');
+const card = (sp, n) => `<div class="card">${n ? `<span class="num">${n}</span>` : ''}
+  <div class="art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${art(sp)}</svg></div>
+  <div class="${n ? 'nm' : 'ln'}">${sp.name}</div>${n ? `<div class="ln">${sp.note}</div>` : ''}</div>`;
+document.getElementById('ref').innerHTML = SPECIES.map(sp => card(sp, 0)).join('');
+document.getElementById('fish').innerHTML = FISH.map((sp, i) => card(sp, i + 1)).join('');
+document.getElementById('crea').innerHTML = CREA.map((sp, i) => card(sp, i + 5)).join('');
 </script>
 </body>
 </html>
