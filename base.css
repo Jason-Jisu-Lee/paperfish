@@ -836,6 +836,19 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ei-row .thumb path{ fill:none; stroke:rgba(28,27,24,.75); stroke-width:1.2; vector-effect:non-scaling-stroke; stroke-linecap:round; }
 .ei-pct{ margin-left:auto; font-feature-settings:'tnum'; color:#7a5800; font-weight:500; }
 
+@property --hx{ syntax:'<length>'; inherits:false; initial-value:-999px; }
+@property --hy{ syntax:'<length>'; inherits:false; initial-value:-999px; }
+@property --hr{ syntax:'<length>'; inherits:false; initial-value:0px; }
+.tutdim{
+  position:fixed; inset:0; z-index:65;
+  background:rgba(28,27,24,.44);
+  pointer-events:none;
+  -webkit-mask:radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 55%, #000 100%);
+  mask:radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 55%, #000 100%);
+  transition:--hx .5s ease, --hy .5s ease, --hr .5s ease;
+  animation:dimin .45s ease;
+}
+@keyframes dimin{ from{ opacity:0; } }
 .tutbox{
   position:fixed; z-index:70;
   transform:translate(-50%, -100%);

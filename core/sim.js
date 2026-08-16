@@ -51,7 +51,7 @@ const Sim = (() => {
             f.hstate = 1;
             f.hT = 0;
           }
-          if (f.hstate === 1 && !Game.tuts.hungryTut && !Tut.active) Tut.hungry(f);
+          if (f.hstate === 1 && Game.pLife > 0 && !Game.tuts.hungryTut && !Tut.active) Tut.hungry(f);
           if (f.hstate) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hstate === 1 && f.hT >= 20) {

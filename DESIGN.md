@@ -92,6 +92,11 @@ MECHANICS.md holds exact numbers.
   when deceased" -> Next -> the food rail icon (hidden until now)
   appears flashing red: "Buy food for your fish" -> clicking the food
   icon ends the tutorial; the player buys kelp themselves.
+  Explicitly gated: never fires unless Lifespan Lv 1+ is owned AND the
+  fish has lived past 20s (hunger onset). During any tutorial box an
+  ink scrim dims the whole screen; a soft spotlight hole stays on the
+  subject (the fish, then the food icon) and glides between steps
+  (2026-08-16).
 - Souls: each soulful death pays 1 + Extra Soul level the instant the
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
