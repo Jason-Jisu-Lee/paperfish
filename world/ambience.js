@@ -51,19 +51,22 @@ const Ambience = (() => {
   };
 
   const spawnSchool = () => {
-    const { W } = Stage.size;
-    const b = Stage.bounds;
-    const ltr = Math.random() < 0.5;
+    const { W, H } = Stage.size;
+    const ang = rand(0, Math.PI * 2);
+    const lead = Math.max(W, H) * 0.75;
+    const dx = Math.cos(ang), dy = Math.sin(ang);
     school = {
-      dir: ltr ? 1 : -1,
-      x: ltr ? -120 : W + 120,
-      y: rand(b.t + 24, b.t + (b.b - b.t) * 0.6),
-      v: rand(266, 364),
+      ang, dx, dy,
+      x: W * rand(0.25, 0.75) - dx * lead,
+      y: H * rand(0.25, 0.75) - dy * lead,
+      prog: 0,
+      total: lead * 2,
+      v: rand(200, 273),
       t: 0,
       fish: Array.from({ length: 20 + Math.floor(Math.random() * 8) }, () => ({
         ox: rand(-105, 18), oy: rand(-32, 32),
         ph: rand(0, 7), wf: rand(5, 9),
-        s: rand(0.95, 1.69), lag: rand(0.85, 1.15)
+        s: rand(1.14, 2.03), lag: rand(0.85, 1.15)
       }))
     };
   };
@@ -146,9 +149,12 @@ const Ambience = (() => {
 
     if (school) {
       school.t += mdt;
-      school.x += school.dir * school.v * (1 + school.t * 0.25) * mdt;
-      school.y += Math.sin(school.t * 1.7) * 14 * mdt;
-      if (school.x < -320 || school.x > W + 320) {
+      const step = school.v * (1 + school.t * 0.25) * mdt;
+      const drift = Math.sin(school.t * 1.7) * 14 * mdt;
+      school.prog += step;
+      school.x += school.dx * step - school.dy * drift;
+      school.y += school.dy * step + school.dx * drift;
+      if (school.prog > school.total) {
         school = null;
         nextSchool = rand(20, 50);
       }
@@ -175,13 +181,15 @@ const Ambience = (() => {
     }
     ctx.fillStyle = 'rgba(28,27,24,1)';
     if (school) {
-      const W = Stage.size.W;
-      for (const f of school.fish) {
-        const x = school.x + f.ox * school.dir * f.lag;
-        const edge = Math.min(x + 130, W + 130 - x) / 110;
-        if (edge <= 0) continue;
+      const edge = Math.min(school.prog, school.total - school.prog) / 240;
+      if (edge > 0) {
         ctx.globalAlpha = 0.14 * Math.min(edge, 1);
-        tinyFish(ctx, x, school.y + f.oy + Math.sin(school.t * f.wf + f.ph) * 3.2, f.s, school.dir);
+        ctx.save();
+        ctx.translate(school.x, school.y);
+        ctx.rotate(school.ang);
+        for (const f of school.fish)
+          tinyFish(ctx, f.ox * f.lag, f.oy + Math.sin(school.t * f.wf + f.ph) * 3.2, f.s, 1);
+        ctx.restore();
       }
     }
     for (const m of motes) {

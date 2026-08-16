@@ -630,6 +630,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   100%{ transform:translateY(-34px); opacity:0; }
 }
 
+.ubtn.pulse{ animation:eggpulse 1.1s ease-in-out infinite; }
+.ubtn.pulse .eggicon path{ animation:eggpulsestroke 1.1s ease-in-out infinite; }
+@keyframes eggpulse{ 50%{ border-color:var(--seal); box-shadow:0 1px 10px rgba(180,58,43,.28); } }
+@keyframes eggpulsestroke{ 50%{ stroke:var(--seal); } }
 .ubtn.devlock{ opacity:.45; border-style:dashed; cursor:default; }
 .ubtn.devlock:hover{ transform:none; box-shadow:0 1px 4px rgba(28,27,24,.12); border-color:rgba(28,27,24,.22); }
 .rbtn.dev{ opacity:.5; border-style:dashed; }

@@ -34,7 +34,10 @@ MECHANICS.md holds exact numbers.
 - Ocean decor: sepia clam (pearl income), water blue bubbles, and a
   scatter-cloud school of ~20-27 tiny fish that flees across the
   background every 20-50s: loose formation, individual wobble,
-  accelerating as it crosses, fading in and out at the edges. Seagrass and
+  accelerating as it crosses, fading in and out at the edges. It can
+  spawn from anywhere and cross at any angle (fish are drawn rotated
+  along the heading); speed and size tuned by feel over several passes
+  (latest 2026-08-16: 25% slower, 20% bigger). Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,

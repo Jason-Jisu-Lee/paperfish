@@ -150,6 +150,7 @@ const buyEgg = () => {
   if (Game.fish.filter(f => f.dying === undefined).length >= FIRSTF_CAP) return false;
   Game.gold -= c;
   Game.eggsBought += 1;
+  Game.tuts.eggBought = 1;
   const f = { s: 0, egg: true, t: 0 };
   Game.fish.push(f);
   Stage.materialize(f);

@@ -69,7 +69,10 @@ const Panel = (() => {
     goldNum.textContent = fmt(Game.gold);
     goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
     const eb = fishGrid.querySelector('[data-egg]');
-    if (eb) eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP);
+    if (eb) {
+      eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP);
+      eb.classList.toggle('pulse', !!Game.tuts.introTut && !Game.tuts.eggBought);
+    }
     for (const el of upGrid.querySelectorAll('[data-key]')) {
       const u = UPS.find(x => x.key === el.dataset.key);
       el.classList.toggle('off', Game.gold < u.cost());
