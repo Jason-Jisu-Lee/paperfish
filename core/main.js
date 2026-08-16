@@ -51,7 +51,6 @@ const startGame = () => {
     } else {
       Panel.tick();
     }
-    Obj.tick();
     Soul.tick();
     Detail.tick();
 

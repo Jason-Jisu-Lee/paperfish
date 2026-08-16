@@ -130,13 +130,21 @@ const Soul = (() => {
     saveGame();
   });
 
+  const bankAndOpen = () => {
+    Game.bank += Game.souls;
+    Game.souls = 0;
+    open();
+    saveGame();
+  };
+
   btn.addEventListener('click', () => {
     if (!Game.started || Game.souls < 1 || shopOpen || Tut.active || Pause.paused) return;
     Game.bank += Game.souls;
     Game.souls = 0;
     Game.shop = 1;
-    open();
     saveGame();
+    if (Obj.event('collectsoul')) setTimeout(bankAndOpen, 2200);
+    else open();
   });
 
   document.getElementById('p-dive').addEventListener('click', () => {
@@ -145,6 +153,7 @@ const Soul = (() => {
     Game.souls = 0;
     Game.eggsBought = 0;
     Game.incomeUp = 0;
+    Game.objs = {};
     Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();
@@ -152,6 +161,7 @@ const Soul = (() => {
     for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
     Ocean.start();
     Panel.refresh();
+    Obj.start();
     screen.setAttribute('hidden', '');
     shopOpen = false;
     saveGame();

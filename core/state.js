@@ -12,6 +12,7 @@ const Game = {
   eggsBought: 0,
   incomeUp: 0,
   plants: 0,
+  objs: {},
   tuts: {},
   fish: [],
   speed: 1,
@@ -89,6 +90,7 @@ const saveGame = () => {
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
       plants: Game.plants,
+      objs: Game.objs || {},
       tuts: Game.tuts || {},
       fish: Game.fish.map(f => ({
         s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
@@ -117,6 +119,7 @@ const loadGame = () => {
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
     Game.plants = d.plants || 0;
+    Game.objs = d.objs || {};
     Game.tuts = d.tuts || {};
     Game.fish = (d.fish || [])
       .filter(f => f && f.s === 0)
@@ -145,6 +148,7 @@ const buyEgg = () => {
   const f = { s: 0, egg: true, t: 0 };
   Game.fish.push(f);
   Stage.materialize(f);
+  Obj.event('buyegg');
   saveGame();
   return true;
 };

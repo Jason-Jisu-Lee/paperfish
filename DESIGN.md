@@ -25,7 +25,10 @@ MECHANICS.md holds exact numbers.
   arrive with tiers 2-3. Same silhouette in shop icon and world egg; both render as a solid
   shell (paper-white fill, no shadow: nothing underwater casts one) so eggs read against
   the line-art world (eggvis option 1, picked 2026-08-15).
-- Ocean decor: sepia clam (pearl income), water blue bubbles. Seagrass and
+- Ocean decor: sepia clam (pearl income), water blue bubbles, and a
+  scatter-cloud school of ~20-27 tiny fish that flees across the
+  background every 20-50s: loose formation, individual wobble,
+  accelerating as it crosses, fading in and out at the edges. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
 - Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
@@ -83,7 +86,8 @@ MECHANICS.md holds exact numbers.
   when deceased" -> Next -> the food rail icon (hidden until now)
   appears flashing red: "Buy food for your fish" -> clicking the food
   icon ends the tutorial; the player buys kelp themselves.
-- Souls: each soulful death pays 1 + Extra Soul level, shown as a big
+- Souls: each soulful death pays 1 + Extra Soul level the instant the
+  fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
   Counter top middle, Collect Soul under it; collecting banks 1:1,
   freezes the world, opens the Prestige overlay; Dive Again resets the
@@ -112,7 +116,17 @@ MECHANICS.md holds exact numbers.
 - In-game upgrades: Income +1 G/5s (income icon), Kelp (food icon,
   revealed by the tutorial). Income icon is live from the start.
 - Whispers: "Soul collected" (first soulful death ever), "Fish got
-  bigger" (first maturing ever). Objectives: none; format kept.
+  bigger" (first maturing ever).
+- Objectives (box top right, data/content.js OBJECTIVES): run-scoped,
+  stored in Game.objs and wiped on every dive, so each run walks the
+  same list. Gold rewards are run-only by nature; a reward flagged
+  soul:true pays into the permanent bank instead, which is how the game
+  teaches that some objectives outlast the run. Current list:
+  1. "Buy an egg" +5 G, fires on the first egg purchase.
+  2. "Collect Soul" +1 Soul, fires on clicking Collect Soul; the bonus
+     lands in the bank and the prestige screen waits ~2s so the player
+     sees it credited before the screen opens. Normal runs open it
+     immediately.
 - Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
 - SPECIES entries are pure art assets; all gameplay numbers live in

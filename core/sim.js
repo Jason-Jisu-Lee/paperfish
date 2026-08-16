@@ -13,15 +13,6 @@ const Sim = (() => {
       } else if (f.dying !== undefined) {
         f.dying += mdt;
         if (f.dying >= 2.8) {
-          if (!f.nosoul) {
-            const n = soulYield();
-            Game.souls += n;
-            Stage.spawnPop(f.x, f.y, '+' + n, 'soul');
-            if (!Game.tuts.saysoul) {
-              Game.tuts.saysoul = 1;
-              Say.say(WHISPER.soul);
-            }
-          }
           Game.fish.splice(i, 1);
           refresh = true;
         }
@@ -96,6 +87,15 @@ const Sim = (() => {
           if (f.deathWait <= 0) {
             f.nosoul = f.hstate >= 1 && !f.eating;
             f.dying = 0;
+            if (!f.nosoul) {
+              const n = soulYield();
+              Game.souls += n;
+              Stage.spawnPop(f.x, f.y - 14, '+' + n, 'soul');
+              if (!Game.tuts.saysoul) {
+                Game.tuts.saysoul = 1;
+                Say.say(WHISPER.soul);
+              }
+            }
           }
         }
       }
