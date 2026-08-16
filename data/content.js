@@ -1,6 +1,6 @@
 const OBJECTIVES = [
   { id: 'buyegg', text: 'Buy an egg', reward: 5 },
-  { id: 'collectsoul', text: 'Collect Soul', reward: 1, soul: true }
+  { id: 'collectsoul', text: 'Collect Soul', reward: 1, soul: true, needs: 'soulOpen' }
 ];
 
 const WHISPERS = [

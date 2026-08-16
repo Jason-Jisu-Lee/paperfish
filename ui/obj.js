@@ -7,7 +7,7 @@ const Obj = (() => {
   let cur = null, transitioning = false;
 
   const showNext = () => {
-    cur = OBJECTIVES.find(o => !Game.objs[o.id]) || null;
+    cur = OBJECTIVES.find(o => !Game.objs[o.id] && (!o.needs || Game.tuts[o.needs])) || null;
     if (!cur) {
       box.setAttribute('hidden', '');
       return;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=65" />
+    <link rel="stylesheet" href="base.css?v=66" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -18,7 +18,7 @@
 
     <div class="soulbox" id="soulbox" hidden>
       <div class="soul"><span id="soul-num">0</span><span class="soul-lab">SOUL</span></div>
-      <button class="collect" id="collect-soul"><i class="wisp"></i><i class="wisp"></i><i class="wisp"></i>Collect Soul</button>
+      <button class="collect" id="collect-soul" hidden><i class="wisp"></i><i class="wisp"></i><i class="wisp"></i>Collect Soul</button>
     </div>
 
     <aside class="hud" id="hud" hidden>
@@ -140,9 +140,15 @@
       <div class="pr-inner">
         <div class="pr-title">Prestige</div>
         <div class="pr-souls"><span id="p-bank">0</span><span class="pr-lab">SOUL</span></div>
+        <nav class="pr-tabs" id="p-tabs">
+          <button data-tab="up" class="on">Upgrades</button>
+          <button data-tab="tier">Tiers</button>
+          <button data-tab="index">Fish Index</button>
+        </nav>
         <div id="p-list"></div>
       </div>
       <button class="pr-dive" id="p-dive">Start</button>
+      <div class="pctip" id="pctip" hidden></div>
     </section>
 
     <div class="modal" id="egginfo-modal" hidden>
@@ -287,7 +293,7 @@
     </div>
 
     <script src="data/species.js?v=4"></script>
-    <script src="data/content.js?v=7"></script>
+    <script src="data/content.js?v=8"></script>
     <script src="core/state.js?v=20"></script>
     <script src="world/stage.js?v=18"></script>
     <script src="world/ambience.js?v=4"></script>
@@ -296,8 +302,8 @@
     <script src="ui/panel.js?v=18"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=15"></script>
-    <script src="ui/soul.js?v=8"></script>
+    <script src="ui/obj.js?v=16"></script>
+    <script src="ui/soul.js?v=9"></script>
     <script src="ui/say.js?v=1"></script>
     <script src="ui/detail.js?v=14"></script>
     <script src="ui/dev.js?v=2"></script>
