@@ -176,7 +176,7 @@ const Detail = (() => {
       elAge.textContent = ageFmt(age);
       elFill.style.width = (1 - age / life) * 100 + '%';
       elFreq.textContent = fmt(incomePer5s()) + ' G / ' + TICK + 's';
-      elDeath.textContent = sel.hstate >= 1 ? 'no soul' : '+' + soulYield() + ' Soul';
+      elDeath.textContent = sel.hstate >= 1 ? '0' : '+' + soulYield();
     }
   };
 
