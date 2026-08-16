@@ -62,17 +62,18 @@ const Soul = (() => {
       </button>`;
   };
 
+  const seen = s => s === 0;
+
   const fiCard = s => {
     const sp = SPECIES[s];
-    const known = s === 0;
+    const known = seen(s);
     let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
     if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
-    const w = Math.min(Math.round(30 * sp.vb[0] / sp.vb[1]), 96);
     return `
       <div class="fi-card${known ? '' : ' unknown'}">
-        <svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${w}px">${inner}</svg>
-        <span class="fi-name">${known ? sp.name : '?'}</span>
+        <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
+        <span class="fi-name">${known ? sp.name : '???'}</span>
       </div>`;
   };
 
@@ -89,7 +90,12 @@ const Soul = (() => {
       }
     } else {
       TIER_FISH.forEach((arr, i) => {
-        h += `<div class="fi-tier">Tier ${i + 1}</div><div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
+        h += `<div class="fi-head">
+            <span class="fi-seal">${i + 1}</span>
+            <span class="fi-t">Tier ${i + 1}</span>
+            <span class="fi-count">${arr.filter(seen).length} / ${arr.length}</span>
+          </div>
+          <div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
       });
     }
     list.innerHTML = h;
