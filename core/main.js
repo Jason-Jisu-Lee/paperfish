@@ -15,13 +15,14 @@ const startGame = () => {
   Game.started = true;
   Panel.refresh();
   Ocean.start();
-  Obj.start();
+  if (Game.tuts.obj1) Obj.start();
   Soul.resume();
 };
 
 (() => {
   let last = 0;
   let saveT = 0;
+  let objT = 0;
 
   const loop = ts => {
     requestAnimationFrame(loop);
@@ -53,9 +54,13 @@ const startGame = () => {
     }
     Soul.tick();
     Detail.tick();
-    if (!Game.tuts.introTut && !Tut.active) {
-      const f = Game.fish.find(x => !x.egg && x.dying === undefined);
-      if (f && f.birth >= 1) Tut.intro();
+    if (!Game.tuts.obj1) {
+      objT += mdt;
+      if (objT >= 10) {
+        Game.tuts.obj1 = 1;
+        Obj.start();
+        saveGame();
+      }
     }
 
     saveT += mdt;

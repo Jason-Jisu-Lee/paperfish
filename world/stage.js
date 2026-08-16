@@ -3,7 +3,7 @@ const Stage = (() => {
   const ctx = canvas.getContext('2d');
   const plants = [];
   const SLICES = 18;
-  let W = 0, H = 0, bounds = { l: 60, r: 600, t: 80, b: 500 };
+  let W = 0, H = 0, bounds = { l: 60, r: 600, t: 80, b: 500 }, open = { l: 60, r: 600, t: 80, b: 500 }, goldZone = null;
 
   const measure = () => {
     const ns = 'http://www.w3.org/2000/svg';
@@ -38,7 +38,11 @@ const Stage = (() => {
     const panelW = hud && !hud.hidden ? hud.getBoundingClientRect().width + 48 : Math.min(320, W * 0.28) + 48;
     const old = bounds;
     const nl = panelW + 20;
-    bounds = { l: nl, r: Math.max(W - 50, nl + 260), t: H * 0.13, b: H * 0.8 };
+    bounds = { l: 24, r: Math.max(W - 24, 300), t: Math.min(H * 0.12, 64), b: H * 0.875 };
+    open = { l: nl, r: Math.max(W - 50, nl + 260), t: H * 0.13, b: H * 0.8 };
+    const gb = document.getElementById('goldbox');
+    const gr = gb && !gb.hidden ? gb.getBoundingClientRect() : null;
+    goldZone = gr ? { r: gr.right + 40, b: gr.bottom + 40 } : null;
     const ow = old.r - old.l, oh = old.b - old.t;
     const remap = o => {
       if (o.x === undefined || ow <= 0 || oh <= 0) return;
@@ -91,9 +95,25 @@ const Stage = (() => {
     f.depth = rand(0.88, 1.14);
   };
 
+  const uiBlocked = (x, y) => {
+    for (const id of ['goldbox', 'soulbox', 'objbox', 'corner']) {
+      const el = document.getElementById(id);
+      if (!el || el.hidden) continue;
+      const r = el.getBoundingClientRect();
+      if (x > r.left - 40 && x < r.right + 40 && y > r.top - 40 && y < r.bottom + 40) return true;
+    }
+    return false;
+  };
+
   const materialize = (f, idx) => {
-    f.x = rand(bounds.l + 50, bounds.r - 50);
-    f.y = rand(bounds.t + 30, bounds.b - 30);
+    let x = 0, y = 0;
+    for (let i = 0; i < 30; i++) {
+      x = rand(open.l + 50, open.r - 50);
+      y = rand(open.t + 30, open.b - 30);
+      if (!uiBlocked(x, y)) break;
+    }
+    f.x = x;
+    f.y = y;
     f.ph = rand(0, Math.PI * 2);
     if (!f.egg) {
       if (f.age === undefined) f.age = 0;
@@ -117,8 +137,8 @@ const Stage = (() => {
 
   const spawnPlant = center => {
     plants.push({
-      x: center ? rand(0.42, 0.58) * (bounds.r - bounds.l) + bounds.l : rand(bounds.l + 60, bounds.r - 60),
-      y: center ? rand(0.42, 0.58) * (bounds.b - bounds.t) + bounds.t : rand(bounds.t + 40, bounds.b - 20),
+      x: center ? rand(0.42, 0.58) * (open.r - open.l) + open.l : rand(open.l + 60, open.r - 60),
+      y: center ? rand(0.42, 0.58) * (open.b - open.t) + open.t : rand(open.t + 40, open.b - 20),
       hx: 0, hy: 0,
       ph: rand(0, Math.PI * 2),
       dph: rand(0, Math.PI * 2),
@@ -242,7 +262,7 @@ const Stage = (() => {
           f.dir *= -1;
           flipKick(f);
         }
-        f.vyT = rand(-1, 1) * (6 + f.spd * 0.16) * (Math.random() < 0.25 ? 1.8 : 1);
+        f.vyT = rand(-1, 1) * (9 + f.spd * 0.22) * (Math.random() < 0.3 ? 1.9 : 1);
       }
       if (f.hstate && plants.length) {
         if (f.hstate === 2) f.dT = 0;
@@ -302,7 +322,11 @@ const Stage = (() => {
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 6;
       if (f.y > bounds.b - 26) f.vyT = -Math.abs(f.vyT) || -6;
-      const vcap = seeking ? (f.hstate === 2 ? 140 : 70) : f.spd * 0.28;
+      if (goldZone && f.x < goldZone.r && f.y < goldZone.b) {
+        if (f.vyT < 10) f.vyT = 10;
+        if (f.vy < 0) f.vy = 0;
+      }
+      const vcap = seeking ? (f.hstate === 2 ? 140 : 70) : f.spd * 0.34;
       if (f.vyT > vcap) f.vyT = vcap;
       if (f.vyT < -vcap) f.vyT = -vcap;
       const dv = f.vyT - f.vy;
@@ -317,6 +341,16 @@ const Stage = (() => {
       f.y += f.vy * mdt;
       f.x = Math.min(Math.max(f.x, bounds.l), bounds.r);
       f.y = Math.min(Math.max(f.y, bounds.t), bounds.b);
+      if (!seeking && f.x < open.l - 20) {
+        f.lurkT = (f.lurkT || 0) + mdt;
+        if (f.lurkT > 4) {
+          f.lurkT = 0;
+          f.dir = 1;
+          flipKick(f);
+        }
+      } else {
+        f.lurkT = 0;
+      }
     }
     for (let i = plants.length - 1; i >= 0; i--) {
       const p = plants[i];
@@ -617,6 +651,7 @@ const Stage = (() => {
   return {
     ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
     get bounds() { return bounds; },
+    get open() { return open; },
     get size() { return { W, H }; }
   };
 })();

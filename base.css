@@ -213,10 +213,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 @keyframes objwash{ 0%{ opacity:0; } 25%{ opacity:1; } 100%{ opacity:0; } }
 .objbox.in .ring{ animation:objringflash 1.6s ease .5s both; }
 @keyframes objringflash{ 0%{ stroke:var(--seal); stroke-width:3; } 100%{ stroke:rgba(28,27,24,.35); stroke-width:1.5; } }
-.obj-row{ display:flex; align-items:center; justify-content:center; gap:11px; }
+.obj-row{ display:flex; align-items:center; justify-content:center; gap:13px; }
 .obj-text{
   position:relative;
-  font-size:15.5px; letter-spacing:.03em;
+  font-size:19px; letter-spacing:.03em;
 }
 .obj-text::after{
   content:''; position:absolute; left:0; top:53%;
@@ -225,9 +225,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .objbox.done .obj-text::after{ animation:objstrike .32s ease-out .18s forwards; }
 @keyframes objstrike{ to{ transform:scaleX(1); } }
-.obj-count{ font-size:12px; font-feature-settings:'tnum'; color:rgba(28,27,24,.55); }
-.obj-mark{ flex:none; width:21px; height:21px; }
-.obj-mark svg{ width:21px; height:21px; display:block; overflow:visible; }
+.obj-count{ font-size:15px; font-feature-settings:'tnum'; color:rgba(28,27,24,.55); }
+.obj-mark{ flex:none; width:26px; height:26px; }
+.obj-mark svg{ width:26px; height:26px; display:block; overflow:visible; }
 .obj-mark .ring{
   fill:none; stroke:rgba(28,27,24,.35); stroke-width:1.5;
   transition:stroke .2s ease;
@@ -246,10 +246,10 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 @keyframes objtick{ to{ stroke-dashoffset:0; } }
 .obj-reward{
-  display:inline-block; margin-top:7px;
-  font-size:12.5px; font-weight:500; font-feature-settings:'tnum';
+  display:inline-block; margin-top:8px;
+  font-size:15.5px; font-weight:500; font-feature-settings:'tnum';
   color:#7a5800; background:rgba(122,88,0,.1);
-  border-radius:999px; padding:3px 11px;
+  border-radius:999px; padding:4px 14px;
   transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .8s ease;
 }
 .obj-reward.objsoul{ color:#3e546e; background:rgba(62,84,110,.11); }

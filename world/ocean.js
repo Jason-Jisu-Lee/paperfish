@@ -7,7 +7,7 @@ const Ocean = (() => {
   let nextPearl = 0, tNow = 0;
 
   const fy = () => Stage.size.H * 0.93;
-  const xAt = u => { const b = Stage.bounds; return b.l + u * (b.r - b.l); };
+  const xAt = u => { const b = Stage.open; return b.l + u * (b.r - b.l); };
 
   const puff = (x, y, n) => {
     for (let i = 0; i < n; i++) puffs.push({

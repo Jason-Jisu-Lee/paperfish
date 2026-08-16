@@ -140,11 +140,10 @@ MECHANICS.md holds exact numbers.
   first fish death of all time, "Need more soul..." on the first death
   after the first prestige (so, run two), "Fish got bigger" on the first
   maturing.
-- Intro tutorial (first game start ever, flag introTut): fires the
-  moment the starting fish finishes its ink draw-on (birth >= 1); the
-  world freezes under the ink scrim, spotlight on the starting fish:
-  "Fish generate gold passively, and a soul on death" [Next]. The
-  opening beat that replaced the old egg objective (2026-08-16).
+- Intro tutorial cut (2026-08-16): the run opens with no freeze or
+  box. The egg button pulses seal-red from run start until the first
+  egg ever (flag eggBought); the objective HUD arriving at 10s is the
+  opening beat. The hunger tutorial is the only modal tutorial left.
 - Objective HUD is bare and top center (demos/objhud.html option 2,
   picked 2026-08-16): no panel, border, or shadow, and NEVER titled
   "Objective". It sits centered below the Collect Soul button's
@@ -158,15 +157,24 @@ MECHANICS.md holds exact numbers.
 - Objectives (data/content.js OBJECTIVES): once EVER, stored in
   Game.objs which persists across dives; a completed objective never
   reappears. Counts tick by amount via Obj.event(id, n). Current list
-  is one objective: "Collect 3 Souls" (+10 G, count 3), shown from
-  run start and ticked by each soul paid on death; completing it
+  is one objective: "Collect 3 Souls" (+10 G, count 3), arriving 10
+  seconds of unpaused play into the first run ever (flag obj1, then
+  visible from start) and ticked by each soul paid on death; completing it
   coincides with the Collect Soul button revealing at 3 souls.
   Clicking Collect Soul during the reward animation defers the
   prestige screen ~2s (Obj.busy) so the reward lands in the counter
   and banks with the rest. The egg and Paper Lantern objectives and the
   lantern object itself were cut (2026-08-16).
-- Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
+- Clam sits bottom-left of the open water and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
+- Two swim rectangles (2026-08-16): fish ROAM nearly the whole screen
+  (24px side margins, top 64px, bottom 0.875H above the ground line)
+  including behind the translucent upgrade panel, like the shadow ray;
+  an anti-lurk timer kicks any fish that dawdles behind the panel over
+  4s back into open water, and a gold-counter zone steers them down
+  out of the top-left. SPAWNS (eggs, kelp, clam) stay in the old open
+  water right of the panel; eggs also reroll their spot until clear of
+  visible UI overlays (gold, soul counter, objective, corner icons).
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
 
