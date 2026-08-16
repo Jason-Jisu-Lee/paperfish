@@ -22,7 +22,6 @@ const startGame = () => {
 (() => {
   let last = 0;
   let saveT = 0;
-  let objT = 0;
 
   const loop = ts => {
     requestAnimationFrame(loop);
@@ -54,15 +53,6 @@ const startGame = () => {
     }
     Soul.tick();
     Detail.tick();
-    if (!Game.tuts.obj1) {
-      objT += sdt;
-      if (objT >= 10) {
-        Game.tuts.obj1 = 1;
-        Obj.start();
-        saveGame();
-      }
-    }
-
     saveT += mdt;
     if (saveT >= 5) {
       saveT = 0;

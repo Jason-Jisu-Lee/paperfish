@@ -1,4 +1,11 @@
 const Sim = (() => {
+  const firstDeath = () => {
+    if (Game.tuts.obj1) return;
+    Game.tuts.obj1 = 1;
+    Obj.start();
+    saveGame();
+  };
+
   const deathWhisper = () => {
     if (!Game.tuts.saysoul) {
       Game.tuts.saysoul = 1;
@@ -61,6 +68,7 @@ const Sim = (() => {
               f.nosoul = true;
               f.hstate = 0;
               f.dying = 0;
+              firstDeath();
               deathWhisper();
               continue;
             }
@@ -98,6 +106,7 @@ const Sim = (() => {
           if (f.deathWait <= 0) {
             f.nosoul = f.hstate >= 1 && !f.eating;
             f.dying = 0;
+            firstDeath();
             if (!f.nosoul) {
               const n = soulYield();
               Game.souls += n;

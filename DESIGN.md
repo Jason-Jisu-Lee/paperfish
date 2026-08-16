@@ -142,8 +142,8 @@ MECHANICS.md holds exact numbers.
   maturing.
 - Intro tutorial cut (2026-08-16): the run opens with no freeze or
   box. The egg button pulses seal-red from run start until the first
-  egg ever (flag eggBought); the objective HUD arriving at 10s is the
-  opening beat. The hunger tutorial is the only modal tutorial left.
+  egg ever (flag eggBought); the objective HUD arriving on the first
+  fish death is the opening beat. The hunger tutorial is the only modal tutorial left.
 - Prestige intro tour (2026-08-16, flag pIntro): first shop entry only,
   fires 950ms after open. Three spotlight steps over the tabs, one line
   each (Main / Tiers / Fish Index), Next then Got it. Diving mid-tour
@@ -161,9 +161,10 @@ MECHANICS.md holds exact numbers.
 - Objectives (data/content.js OBJECTIVES): once EVER, stored in
   Game.objs which persists across dives; a completed objective never
   reappears. Counts tick by amount via Obj.event(id, n). Current list
-  is one objective: "Collect 3 Souls" (+10 G, count 3), arriving 10
-  seconds of unpaused play into the first run ever (flag obj1, then
-  visible from start) and ticked by each soul paid on death; completing it
+  is one objective: "Collect 3 Souls" (+10 G, count 3), arriving the
+  moment the first fish ever starts dying (flag obj1, fired before the
+  soul is paid so that soul counts; then visible from run start)
+  and ticked by each soul paid on death; completing it
   coincides with the Collect Soul button revealing at 3 souls.
   Clicking Collect Soul during the reward animation defers the
   prestige screen ~2s (Obj.busy) so the reward lands in the counter
