@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>new fish candidates</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:'Courier New',monospace; padding-bottom:60px; }
+  h1{ font-size:15px; letter-spacing:.2em; font-weight:normal; text-align:center; margin:26px 0 4px; }
+  .hint{ font-size:11px; letter-spacing:.08em; opacity:.55; text-align:center; margin-bottom:22px; }
+  .sec{ max-width:940px; margin:0 auto 20px; padding:16px 26px; background:rgba(255,255,255,.5); border:1px solid rgba(28,27,24,.15); border-radius:12px; }
+  .s-head{ font-size:12px; letter-spacing:.22em; margin-bottom:14px; opacity:.7; }
+  .row{ display:flex; gap:30px; flex-wrap:wrap; align-items:center; }
+  .card{ text-align:center; position:relative; padding:10px 6px 4px; }
+  .card svg{ overflow:visible; display:block; margin:0 auto; }
+  .card path{ fill:none; stroke:rgba(28,27,24,.75); stroke-width:1.6; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
+  .card .dot{ fill:rgba(28,27,24,.75); }
+  .ref .card{ opacity:.45; }
+  .ref .card svg{ height:34px; }
+  .num{ position:absolute; top:-6px; left:-4px; width:20px; height:20px; border-radius:50%; background:#b43a2b; color:#f2efe6; font-size:11px; display:grid; place-items:center; }
+  .nm{ font-size:11.5px; letter-spacing:.1em; margin-top:8px; }
+  .ln{ font-size:9.5px; opacity:.45; letter-spacing:.08em; margin-top:2px; }
+</style>
+</head>
+<body>
+<h1>new fish candidates</h1>
+<div class="hint">same ink language: few strokes, right-facing, paper left bare · pick by number</div>
+<div class="sec ref"><div class="s-head">CURRENT ROSTER</div><div class="row" id="ref"></div></div>
+<div class="sec"><div class="s-head">CANDIDATES</div><div class="row" id="cand"></div></div>
+<script src="../data/species.js"></script>
+<script>
+const snailPath = (() => {
+  let d = '';
+  for (let i = 0; i <= 20; i++) {
+    const q = i / 20, ang = q * Math.PI * 2.3;
+    const r = 15 * (1 - q * 0.8);
+    d += (i ? 'L' : 'M') + (30 + Math.cos(ang) * r).toFixed(1) + ' ' + (22 + Math.sin(ang) * r).toFixed(1);
+  }
+  return d;
+})();
+const CAND = [
+  { name: 'Snail', note: 'floor dweller, Tier 2 per plan', vb: [60, 46],
+    paths: [snailPath, 'M14 41 Q30 46 54 38', 'M54 36 L60 24', 'M50 36 L54 24'] },
+  { name: 'Eel', note: 'two strokes, all motion', vb: [200, 56],
+    paths: ['M194 22 C158 2 124 30 94 32 C64 34 38 22 8 40', 'M194 22 C160 38 128 44 96 42 C66 40 40 32 8 40'] },
+  { name: 'Puffer', note: 'round and bristling', vb: [104, 88],
+    paths: ['M52 10 C76 10 90 26 90 44 C90 63 74 78 52 78 C30 78 14 63 14 44 C14 26 28 10 52 10 Z',
+      'M4 32 L16 44 L4 56 Z',
+      'M52 10 L52 2 M74 16 L80 9 M30 16 L24 9 M88 30 L96 26 M90 56 L98 60 M76 72 L82 79 M28 72 L22 79 M16 56 L8 60'] },
+  { name: 'Octopus', note: 'dome and curling arms', vb: [92, 96],
+    paths: ['M22 42 C16 12 34 4 46 4 C58 4 76 12 70 42',
+      'M22 44 C10 56 6 70 18 80 C24 84 30 80 28 74',
+      'M38 46 C34 66 44 76 38 92',
+      'M54 46 C58 66 48 78 56 92',
+      'M70 44 C82 54 86 68 74 78 C68 82 62 78 64 72'],
+    dots: [{ cx: 37, cy: 28, r: 2.6 }, { cx: 55, cy: 28, r: 2.6 }] },
+  { name: 'Turtle', note: 'slow, broad, calm', vb: [150, 92],
+    paths: ['M30 50 C32 22 62 10 84 12 C110 14 128 30 126 50 C110 60 46 60 30 50 Z',
+      'M126 44 C138 40 146 46 144 54 C142 60 132 60 128 56',
+      'M60 58 C54 70 42 80 28 82 C36 72 40 64 44 58',
+      'M104 58 C110 66 106 76 96 80'] },
+  { name: 'Swordfish', note: 'pike energy, bigger blade', vb: [212, 72],
+    paths: ['M42 42 C72 26 132 28 164 42 C132 54 74 54 42 42 Z',
+      'M164 42 L208 34', 'M10 14 L42 42 L10 68 Z', 'M80 31 C88 8 114 4 134 15 L122 33'] },
+  { name: 'Sunfish', note: 'tall, truncated, strange', vb: [124, 132],
+    paths: ['M28 32 C50 14 88 18 102 42 C110 56 110 80 102 94 C88 118 50 122 28 104 C33 80 33 56 28 32 Z',
+      'M60 22 C62 4 78 -2 90 6 L76 30', 'M60 112 C62 130 78 136 90 128 L76 104'] },
+  { name: 'Crab', note: 'floor dweller, claws up', vb: [112, 72],
+    paths: ['M28 38 C28 22 44 16 56 16 C68 16 84 22 84 38 C84 50 70 58 56 58 C42 58 28 50 28 38 Z',
+      'M84 30 C94 26 100 18 98 10 L90 14',
+      'M28 30 C18 26 12 18 14 10 L22 14',
+      'M34 52 L22 64 M44 56 L38 68 M78 52 L90 64 M68 56 L74 68'],
+    dots: [{ cx: 48, cy: 22, r: 2.4 }, { cx: 64, cy: 22, r: 2.4 }] }
+];
+const art = sp => {
+  let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
+  if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+  if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
+  return inner;
+};
+document.getElementById('ref').innerHTML = SPECIES.map(sp =>
+  `<div class="card"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${Math.min(Math.round(34 * sp.vb[0] / sp.vb[1]), 90)}px">${art(sp)}</svg>
+    <div class="ln">${sp.name}</div></div>`).join('');
+document.getElementById('cand').innerHTML = CAND.map((sp, i) => {
+  const w = Math.min(Math.round(84 * sp.vb[0] / sp.vb[1]), 190);
+  return `<div class="card"><span class="num">${i + 1}</span>
+    <svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}" style="width:${w}px">${art(sp)}</svg>
+    <div class="nm">${sp.name}</div><div class="ln">${sp.note}</div></div>`;
+}).join('');
+</script>
+</body>
+</html>
