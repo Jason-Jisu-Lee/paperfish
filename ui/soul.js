@@ -74,7 +74,7 @@ const Soul = (() => {
     if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
     return `
-      <div class="fi-card${known ? '' : ' unknown'}">
+      <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
         <span class="fi-name">${known ? sp.name : '???'}</span>
       </div>`;
@@ -125,7 +125,23 @@ const Soul = (() => {
     saveGame();
   });
 
+  const placeTip = el => {
+    const r = el.getBoundingClientRect();
+    tip.removeAttribute('hidden');
+    const tw = tip.getBoundingClientRect().width;
+    tip.style.left = Math.min(Math.max(r.left + r.width / 2 - tw / 2, 12), innerWidth - tw - 12) + 'px';
+    tip.style.top = (r.bottom + 10) + 'px';
+  };
+
   list.addEventListener('mouseover', e => {
+    const fi = e.target.closest('[data-fi]');
+    if (fi) {
+      const s = +fi.dataset.fi;
+      tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
+        `Tier ${tierOf(s)}<br>${fmtG(incomePer5s())} G / ${TICK}s<br>+${soulYield()} soul on death`;
+      placeTip(fi);
+      return;
+    }
     const el = e.target.closest('[data-p]');
     if (!el) return;
     const u = ALL.find(x => x.key === el.dataset.p);
@@ -134,14 +150,10 @@ const Soul = (() => {
     tip.innerHTML = locked
       ? '<span class="pct-name">Locked</span>Own the tier before this one to unlock it.'
       : `<span class="pct-name">${u.name}</span>${u.desc}`;
-    const r = el.getBoundingClientRect();
-    tip.removeAttribute('hidden');
-    const tw = tip.getBoundingClientRect().width;
-    tip.style.left = Math.min(Math.max(r.left + r.width / 2 - tw / 2, 12), innerWidth - tw - 12) + 'px';
-    tip.style.top = (r.bottom + 10) + 'px';
+    placeTip(el);
   });
   list.addEventListener('mouseout', e => {
-    if (e.target.closest('[data-p]')) tip.setAttribute('hidden', '');
+    if (e.target.closest('[data-p],[data-fi]')) tip.setAttribute('hidden', '');
   });
 
   const open = () => {
