@@ -35,11 +35,11 @@ const startGame = () => {
     const mdt = Pause.paused || Soul.shopOpen || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
 
-    const refresh = Sim.step(sdt, mdt);
+    const refresh = Sim.step(sdt);
 
-    Ambience.update(mdt);
-    Stage.update(mdt);
-    Ocean.update(mdt);
+    Ambience.update(sdt);
+    Stage.update(sdt);
+    Ocean.update(sdt);
     Stage.clear();
     Ambience.drawBack(Stage.ctx);
     Ocean.draw(Stage.ctx);
@@ -55,7 +55,7 @@ const startGame = () => {
     Soul.tick();
     Detail.tick();
     if (!Game.tuts.obj1) {
-      objT += mdt;
+      objT += sdt;
       if (objT >= 10) {
         Game.tuts.obj1 = 1;
         Obj.start();

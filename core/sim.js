@@ -9,7 +9,7 @@ const Sim = (() => {
     }
   };
 
-  const step = (sdt, mdt) => {
+  const step = sdt => {
     let refresh = false;
     let earned = 0;
     for (let i = Game.fish.length - 1; i >= 0; i--) {
@@ -21,7 +21,7 @@ const Sim = (() => {
           refresh = true;
         }
       } else if (f.dying !== undefined) {
-        f.dying += mdt;
+        f.dying += sdt;
         if (f.dying >= 2.8) {
           Game.fish.splice(i, 1);
           refresh = true;
