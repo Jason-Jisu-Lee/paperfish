@@ -29,9 +29,9 @@ const Tut = (() => {
   };
 
   const P_STEPS = [
-    ['up', 'Permanent upgrades, kept through every dive.'],
-    ['tier', 'Unlock new tiers of fish.'],
-    ['index', 'Your collection of discovered fish.']
+    ['up', 'You can find universal upgrades here.'],
+    ['tier', 'Tier upgrades improve every fish in that tier.'],
+    ['index', 'Each fish is unique. You can view them here.']
   ];
   let pstep = -1;
 

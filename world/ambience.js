@@ -60,12 +60,12 @@ const Ambience = (() => {
       y: H * rand(0.12, 0.88),
       prog: 0,
       total: W + 360,
-      v: rand(200, 273),
+      v: rand(160, 218),
       t: 0,
-      fish: Array.from({ length: 20 + Math.floor(Math.random() * 8) }, () => ({
+      fish: Array.from({ length: 26 + Math.floor(Math.random() * 10) }, () => ({
         ox: rand(-105, 18), oy: rand(-32, 32),
         ph: rand(0, 7), wf: rand(5, 9),
-        s: rand(1.14, 2.03), lag: rand(0.85, 1.15)
+        s: rand(1.48, 2.64), lag: rand(0.85, 1.15)
       }))
     };
   };

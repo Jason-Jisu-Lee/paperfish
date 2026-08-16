@@ -32,7 +32,7 @@ MECHANICS.md holds exact numbers.
   shell (paper-white fill, no shadow: nothing underwater casts one) so eggs read against
   the line-art world (eggvis option 1, picked 2026-08-15).
 - Ocean decor: sepia clam (pearl income), water blue bubbles, and a
-  scatter-cloud school of ~20-27 tiny fish that flees across the
+  scatter-cloud school of ~26-35 tiny fish that flees across the
   background every 20-50s: loose formation, individual wobble,
   accelerating as it crosses, fading in and out at the edges. It
   enters from the left or right edge at any height and crosses
