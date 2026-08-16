@@ -84,7 +84,7 @@ const Soul = (() => {
     bankEl.textContent = fmtG(Game.bank);
     let h = '';
     if (tab === 'up') {
-      h = `<div class="p-cat">Core</div><div class="p-grid">${CORE.map(u => card(u, false)).join('')}</div>`;
+      h = `<div class="p-grid">${CORE.map(u => card(u, false)).join('')}</div>`;
     } else if (tab === 'tier') {
       for (const t of TIERS) {
         const locked = !tierOpen(t.tier);

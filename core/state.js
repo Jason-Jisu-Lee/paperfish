@@ -48,7 +48,7 @@ const HUNGER_AT = 20 / 60;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;
-const startGoldCost = () => 2 * 2 ** Game.pStartGold;
+const startGoldCost = () => 3 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 5;
