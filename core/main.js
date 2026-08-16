@@ -17,6 +17,9 @@ const startGame = () => {
   Ocean.start();
   Obj.start();
   Soul.resume();
+  if (!Game.tuts.introTut) setTimeout(() => {
+    if (Game.started && !Game.tuts.introTut) Tut.intro();
+  }, 900);
 };
 
 (() => {

@@ -194,14 +194,26 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 
 .objbox{
   position:absolute; z-index:12;
-  top:calc(clamp(14px, 2.4vh, 26px) + 62px);
-  right:clamp(26px, 2.8vw, 46px);
-  text-align:right;
+  top:calc(10px + clamp(59px, 6.3vw, 84px) + 48px);
+  left:50%; transform:translateX(-50%);
+  text-align:center;
   color:var(--ink);
   transition:opacity .55s ease, transform .55s ease;
 }
-.objbox.fade{ opacity:0; transform:translateX(14px); }
-.obj-row{ display:flex; align-items:center; justify-content:flex-end; gap:11px; }
+.objbox.fade{ opacity:0; transform:translate(-50%, -12px); }
+.objbox.in{ animation:objarrive .7s cubic-bezier(.2,.9,.3,1) both; }
+@keyframes objarrive{
+  from{ opacity:0; transform:translate(-50%, -14px); }
+  to{ opacity:1; transform:translate(-50%, 0); }
+}
+.objbox.in::before{
+  content:''; position:absolute; inset:-8px -16px; border-radius:4px;
+  background:rgba(180,58,43,.09); animation:objwash 1.5s ease .1s both;
+}
+@keyframes objwash{ 0%{ opacity:0; } 25%{ opacity:1; } 100%{ opacity:0; } }
+.objbox.in .ring{ animation:objringflash 1.6s ease .5s both; }
+@keyframes objringflash{ 0%{ stroke:var(--seal); stroke-width:3; } 100%{ stroke:rgba(28,27,24,.35); stroke-width:1.5; } }
+.obj-row{ display:flex; align-items:center; justify-content:center; gap:11px; }
 .obj-text{
   position:relative;
   font-size:15.5px; letter-spacing:.03em;
@@ -241,23 +253,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .8s ease;
 }
 .obj-reward.objsoul{ color:#3e546e; background:rgba(62,84,110,.11); }
-
-.lantern{
-  position:fixed; z-index:11;
-  width:46px; margin:-30px 0 0 -23px;
-  cursor:pointer;
-  filter:drop-shadow(0 0 10px rgba(226,180,90,.45));
-  transition:opacity .8s ease, filter .3s ease;
-  animation:lanbob 4.2s ease-in-out infinite;
-}
-.lantern:hover{ filter:drop-shadow(0 0 18px rgba(226,180,90,.8)); }
-.lantern svg{ display:block; width:100%; overflow:visible; }
-.lantern path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:1.7; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
-.lantern .lbody{ fill:rgba(238,199,113,.28); }
-@keyframes lanbob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
-.lantern.bump svg{ animation:lanbump .35s ease; }
-@keyframes lanbump{ 40%{ transform:scale(1.14); } }
-.lantern.out{ animation:none; opacity:0; transform:translateY(-26px); transition:opacity .8s ease, transform .8s ease; }
 
 .saybox{
   position:absolute; z-index:12;

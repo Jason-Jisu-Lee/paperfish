@@ -18,7 +18,6 @@ const Obj = (() => {
 
   const showNext = () => {
     cur = OBJECTIVES.find(o => got(o) < need(o) && (!o.needs || Game.tuts[o.needs])) || null;
-    Lantern.sync();
     if (!cur) {
       box.setAttribute('hidden', '');
       return;
@@ -29,7 +28,9 @@ const Obj = (() => {
     rewardEl.classList.toggle('objsoul', !!cur.soul);
     rewardEl.style.transform = '';
     rewardEl.style.opacity = '';
-    box.classList.remove('done', 'fade');
+    box.classList.remove('done', 'fade', 'in');
+    void box.offsetWidth;
+    box.classList.add('in');
     box.removeAttribute('hidden');
   };
 
@@ -43,9 +44,9 @@ const Obj = (() => {
     rewardEl.style.opacity = '0';
   };
 
-  const event = id => {
+  const event = (id, n = 1) => {
     if (!Game.started || transitioning || !cur || cur.id !== id) return false;
-    Game.objs[id] = got(cur) + 1;
+    Game.objs[id] = Math.min(got(cur) + n, need(cur));
     if (Game.objs[id] < need(cur)) {
       showCount();
       saveGame();
@@ -54,6 +55,7 @@ const Obj = (() => {
     const o = cur;
     transitioning = true;
     showCount();
+    box.classList.remove('in');
     box.classList.add('done');
     setTimeout(() => fly(o.soul), 430);
     setTimeout(() => {
@@ -75,5 +77,5 @@ const Obj = (() => {
     showNext();
   };
 
-  return { start, event };
+  return { start, event, get busy() { return transitioning; } };
 })();

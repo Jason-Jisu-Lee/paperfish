@@ -38,7 +38,6 @@
     Tut.abort();
     Soul.closeShop();
     Game.started = false;
-    Lantern.sync();
     document.getElementById('hud').setAttribute('hidden', '');
     document.getElementById('corner').setAttribute('hidden', '');
     document.getElementById('goldbox').setAttribute('hidden', '');

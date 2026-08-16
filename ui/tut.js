@@ -3,7 +3,7 @@ const Tut = (() => {
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-next');
   const dim = document.getElementById('tut-dim');
-  let active = false, step = 0, revealed = false;
+  let active = false, step = 0, revealed = false, mode = '';
 
   const spot = (x, y, r) => {
     dim.style.setProperty('--hx', Math.round(x) + 'px');
@@ -11,12 +11,9 @@ const Tut = (() => {
     dim.style.setProperty('--hr', Math.round(r) + 'px');
   };
 
-  const hungry = f => {
-    active = true;
-    step = 1;
+  const pointAt = f => {
     spot(f.x, f.y, SPECIES[f.s].len * 0.9);
     dim.removeAttribute('hidden');
-    txt.textContent = 'Fish is hungry. Hungry fish do not generate soul when deceased';
     btn.removeAttribute('hidden');
     box.classList.remove('side');
     box.style.left = Math.min(Math.max(f.x, 210), innerWidth - 210) + 'px';
@@ -24,7 +21,33 @@ const Tut = (() => {
     box.removeAttribute('hidden');
   };
 
+  const intro = () => {
+    const f = Game.fish.find(x => !x.egg && x.dying === undefined);
+    if (!f || active || Soul.shopOpen) return;
+    active = true;
+    mode = 'intro';
+    txt.textContent = 'Fish generate gold passively, and a soul on death';
+    pointAt(f);
+  };
+
+  const hungry = f => {
+    active = true;
+    mode = 'hungry';
+    step = 1;
+    txt.textContent = 'Fish is hungry. Hungry fish do not generate soul when deceased';
+    pointAt(f);
+  };
+
   btn.addEventListener('click', () => {
+    if (mode === 'intro') {
+      active = false;
+      mode = '';
+      Game.tuts.introTut = 1;
+      box.setAttribute('hidden', '');
+      dim.setAttribute('hidden', '');
+      saveGame();
+      return;
+    }
     if (step !== 1) return;
     step = 2;
     revealed = true;
@@ -44,6 +67,7 @@ const Tut = (() => {
     if (step !== 2) return;
     active = false;
     step = 0;
+    mode = '';
     Game.tuts.hungryTut = 1;
     document.getElementById('rail-food').classList.remove('pulse');
     box.setAttribute('hidden', '');
@@ -55,11 +79,12 @@ const Tut = (() => {
     if (!active) return;
     active = false;
     step = 0;
+    mode = '';
     revealed = false;
     document.getElementById('rail-food').classList.remove('pulse');
     box.setAttribute('hidden', '');
     dim.setAttribute('hidden', '');
   };
 
-  return { hungry, foodOpened, abort, get active() { return active; }, get revealed() { return revealed; } };
+  return { intro, hungry, foodOpened, abort, get active() { return active; }, get revealed() { return revealed; } };
 })();

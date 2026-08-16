@@ -102,6 +102,7 @@ const Sim = (() => {
               const n = soulYield();
               Game.souls += n;
               Stage.spawnPop(f.x, f.y - 14, '+' + n, 'soul');
+              Obj.event('souls3', n);
             }
             deathWhisper();
           }

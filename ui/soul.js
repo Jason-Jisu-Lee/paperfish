@@ -163,7 +163,7 @@ const Soul = (() => {
     if (!Game.started || Game.souls < 1 || shopOpen || Game.shop || Tut.active || Pause.paused) return;
     Game.shop = 1;
     saveGame();
-    if (Obj.event('collectsoul')) setTimeout(bankAndOpen, 2200);
+    if (Obj.busy) setTimeout(bankAndOpen, 2200);
     else bankAndOpen();
   });
 
@@ -198,7 +198,6 @@ const Soul = (() => {
     if (!Game.tuts.soulOpen && Game.souls >= 3) {
       Game.tuts.soulOpen = 1;
       btn.removeAttribute('hidden');
-      Obj.start();
       saveGame();
     }
     if (Game.tuts.soulOpen) {

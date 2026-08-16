@@ -105,8 +105,8 @@ MECHANICS.md holds exact numbers.
 - Souls: each soulful death pays 1 + Extra Soul level the instant the
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
-  Counter top middle, Collect Soul under it (button and its objective
-  reveal at 3 souls, raised from 2); collecting banks 1:1,
+  Counter top middle, Collect Soul under it (button reveals at 3
+  souls, raised from 2); collecting banks 1:1,
   freezes the world, opens the Prestige overlay; Dive Again resets the
   run (gold to startGold, egg cost, run upgrades, kelp all reset).
   The open shop persists in the save: refreshing mid-prestige returns
@@ -136,33 +136,30 @@ MECHANICS.md holds exact numbers.
   first fish death of all time, "Need more soul..." on the first death
   after the first prestige (so, run two), "Fish got bigger" on the first
   maturing.
-- Objective HUD is bare (demos/obj.html option 4): no panel, border, or
-  shadow, right aligned under the corner icons, and NEVER titled
-  "Objective". Task text with an ink ring beside it; on completion the
-  ring stamps into a seal-red hanko with a check drawing across it, the
-  text strikes through, and the reward chip flies into the gold or soul
+- Intro tutorial (first game start ever, flag introTut): ~1s in, the
+  world freezes under the ink scrim, spotlight on the starting fish:
+  "Fish generate gold passively, and a soul on death" [Next]. The
+  opening beat that replaced the old egg objective (2026-08-16).
+- Objective HUD is bare and top center (demos/objhud.html option 2,
+  picked 2026-08-16): no panel, border, or shadow, and NEVER titled
+  "Objective". It sits centered below the Collect Soul button's
+  reserved slot under the soul counter, so the button appearing later
+  never moves it. Row: ink ring, task text, progress count; the reward
+  chip sits on its own line underneath. New objectives arrive with a
+  slide-in, a fading red ink wash, and a seal-red ring flash. On
+  completion the ring stamps into a seal-red hanko with a check, the
+  text strikes through, and the chip flies into the gold or soul
   counter, landing exactly as that counter ticks up.
-- Objectives (box top right, data/content.js OBJECTIVES): once EVER,
-  stored in Game.objs which persists across dives; a completed
-  objective never reappears (changed from run-scoped 2026-08-16).
-  Gold rewards pay into the run; a reward flagged soul:true pays into
-  the soul counter. Objectives can carry a count (progress shown as
-  "1 / 2" in the row); each event ticks it and completion fires at the
-  target. Current list:
-  1. "Buy two eggs" +5 G, count 2, ticks per egg purchase.
-  2. "Collect gold from Paper Lantern" +3 G, completes on the first
-     lantern tap.
-  3. "Collect Soul" +1 Soul, fires on clicking Collect Soul. The soul
-     counter keeps showing the player's souls during the ~2s objective
-     animation, the +1 chip flies into it and ticks it up, then the
-     whole total banks as the prestige screen opens. Normal collects
-     open it immediately.
-- Paper Lantern (world/lantern.js): a warm-glowing chochin that fades
-  in mid-water (64% across, 26% down the swim area) the moment the
-  two-egg objective completes. Each tap pays 3 G with a +3 G pop and a
-  bump; after 3 taps it drifts up and fades for good (taps persist in
-  the save, once ever like its objective). DOM overlay, gentle bob,
-  clicks blocked while paused / tutorial / shop.
+- Objectives (data/content.js OBJECTIVES): once EVER, stored in
+  Game.objs which persists across dives; a completed objective never
+  reappears. Counts tick by amount via Obj.event(id, n). Current list
+  is one objective: "Collect 3 Souls" (+1 Soul, count 3), shown from
+  run start and ticked by each soul paid on death; completing it
+  coincides with the Collect Soul button revealing at 3 souls.
+  Clicking Collect Soul during the reward animation defers the
+  prestige screen ~2s (Obj.busy) so the +1 lands in the counter and
+  banks with the rest. The egg and Paper Lantern objectives and the
+  lantern object itself were cut (2026-08-16).
 - Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
 - SPECIES entries are pure art assets; all gameplay numbers live in
