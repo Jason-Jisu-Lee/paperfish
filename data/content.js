@@ -1,5 +1,6 @@
 const OBJECTIVES = [
-  { id: 'buyegg', text: 'Buy an egg', reward: 5 },
+  { id: 'buyegg', text: 'Buy two eggs', reward: 5, count: 2 },
+  { id: 'lantern', text: 'Collect gold from Paper Lantern', reward: 3 },
   { id: 'collectsoul', text: 'Collect Soul', reward: 1, soul: true, needs: 'soulOpen' }
 ];
 

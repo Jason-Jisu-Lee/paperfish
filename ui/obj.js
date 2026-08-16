@@ -1,17 +1,30 @@
 const Obj = (() => {
   const box = document.getElementById('objbox');
   const txt = document.getElementById('obj-text');
+  const cnt = document.getElementById('obj-count');
   const rewardEl = document.getElementById('obj-reward');
 
   let cur = null, transitioning = false;
 
+  const need = o => o.count || 1;
+  const got = o => Game.objs[o.id] || 0;
+
+  const showCount = () => {
+    if (need(cur) > 1) {
+      cnt.textContent = got(cur) + ' / ' + need(cur);
+      cnt.removeAttribute('hidden');
+    } else cnt.setAttribute('hidden', '');
+  };
+
   const showNext = () => {
-    cur = OBJECTIVES.find(o => !Game.objs[o.id] && (!o.needs || Game.tuts[o.needs])) || null;
+    cur = OBJECTIVES.find(o => got(o) < need(o) && (!o.needs || Game.tuts[o.needs])) || null;
+    Lantern.sync();
     if (!cur) {
       box.setAttribute('hidden', '');
       return;
     }
     txt.textContent = cur.text;
+    showCount();
     rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.soul ? ' Soul' : ' G');
     rewardEl.classList.toggle('objsoul', !!cur.soul);
     rewardEl.style.transform = '';
@@ -32,9 +45,15 @@ const Obj = (() => {
 
   const event = id => {
     if (!Game.started || transitioning || !cur || cur.id !== id) return false;
+    Game.objs[id] = got(cur) + 1;
+    if (Game.objs[id] < need(cur)) {
+      showCount();
+      saveGame();
+      return false;
+    }
     const o = cur;
-    Game.objs[id] = 1;
     transitioning = true;
+    showCount();
     box.classList.add('done');
     setTimeout(() => fly(o.soul), 430);
     setTimeout(() => {

@@ -213,6 +213,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .objbox.done .obj-text::after{ animation:objstrike .32s ease-out .18s forwards; }
 @keyframes objstrike{ to{ transform:scaleX(1); } }
+.obj-count{ font-size:12px; font-feature-settings:'tnum'; color:rgba(28,27,24,.55); }
 .obj-mark{ flex:none; width:21px; height:21px; }
 .obj-mark svg{ width:21px; height:21px; display:block; overflow:visible; }
 .obj-mark .ring{
@@ -240,6 +241,23 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .8s ease;
 }
 .obj-reward.objsoul{ color:#3e546e; background:rgba(62,84,110,.11); }
+
+.lantern{
+  position:fixed; z-index:11;
+  width:46px; margin:-30px 0 0 -23px;
+  cursor:pointer;
+  filter:drop-shadow(0 0 10px rgba(226,180,90,.45));
+  transition:opacity .8s ease, filter .3s ease;
+  animation:lanbob 4.2s ease-in-out infinite;
+}
+.lantern:hover{ filter:drop-shadow(0 0 18px rgba(226,180,90,.8)); }
+.lantern svg{ display:block; width:100%; overflow:visible; }
+.lantern path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:1.7; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
+.lantern .lbody{ fill:rgba(238,199,113,.28); }
+@keyframes lanbob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+.lantern.bump svg{ animation:lanbump .35s ease; }
+@keyframes lanbump{ 40%{ transform:scale(1.14); } }
+.lantern.out{ animation:none; opacity:0; transform:translateY(-26px); transition:opacity .8s ease, transform .8s ease; }
 
 .saybox{
   position:absolute; z-index:12;

@@ -13,6 +13,7 @@ const Game = {
   eggsBought: 0,
   incomeUp: 0,
   plants: 0,
+  lanternTaps: 0,
   objs: {},
   tuts: {},
   fish: [],
@@ -32,7 +33,7 @@ const FIRSTF_CAP = 20;
 const TIER_FISH = [[0, 2], [1], [3, 5], [4, 6], [7, 10], [8, 9, 11]];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
-const startGold = () => 5 + Game.pStartGold * 5;
+const startGold = () => 10 + Game.pStartGold * 5;
 const eggCost = () => {
   const n = Game.eggsBought;
   if (n < EGG_COSTS.length) return EGG_COSTS[n];
@@ -94,6 +95,7 @@ const saveGame = () => {
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
       plants: Game.plants,
+      lt: Game.lanternTaps,
       objs: Game.objs || {},
       tuts: Game.tuts || {},
       fish: Game.fish.map(f => ({
@@ -124,6 +126,7 @@ const loadGame = () => {
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
     Game.plants = d.plants || 0;
+    Game.lanternTaps = d.lt || 0;
     Game.objs = d.objs || {};
     Game.tuts = d.tuts || {};
     Game.fish = (d.fish || [])

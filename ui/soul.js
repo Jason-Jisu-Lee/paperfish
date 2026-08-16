@@ -195,7 +195,7 @@ const Soul = (() => {
     }
     box.removeAttribute('hidden');
     num.textContent = fmtG(Game.souls);
-    if (!Game.tuts.soulOpen && Game.souls >= 2) {
+    if (!Game.tuts.soulOpen && Game.souls >= 3) {
       Game.tuts.soulOpen = 1;
       btn.removeAttribute('hidden');
       Obj.start();

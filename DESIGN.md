@@ -43,7 +43,8 @@ MECHANICS.md holds exact numbers.
 ## core loop (soul prestige, tier era 2026-08-15)
 - Currencies: Gold (run) + Soul (prestige). Souls render in water blue
   (#3e546e family); gold stays #7a5800.
-- Run start: 1 firstF + 5 gold (+5 per Starting Gold prestige level).
+- Run start: 1 firstF + 10 gold (+5 per Starting Gold prestige level,
+  raised from 5 base 2026-08-16).
 - Egg: hand-tuned cost curve 5, 7, 12, 20, 25, 30, 40, 50, 70, 90, 120,
   150, 200, 250, 300, then x1.3 per purchase rounded to 2 significant
   digits; cost resets each run. Hatch time is
@@ -104,7 +105,8 @@ MECHANICS.md holds exact numbers.
 - Souls: each soulful death pays 1 + Extra Soul level the instant the
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
-  Counter top middle, Collect Soul under it; collecting banks 1:1,
+  Counter top middle, Collect Soul under it (button and its objective
+  reveal at 3 souls, raised from 2); collecting banks 1:1,
   freezes the world, opens the Prestige overlay; Dive Again resets the
   run (gold to startGold, egg cost, run upgrades, kelp all reset).
   The open shop persists in the save: refreshing mid-prestige returns
@@ -144,13 +146,23 @@ MECHANICS.md holds exact numbers.
   stored in Game.objs which persists across dives; a completed
   objective never reappears (changed from run-scoped 2026-08-16).
   Gold rewards pay into the run; a reward flagged soul:true pays into
-  the soul counter. Current list:
-  1. "Buy an egg" +5 G, fires on the first egg purchase.
-  2. "Collect Soul" +1 Soul, fires on clicking Collect Soul. The soul
+  the soul counter. Objectives can carry a count (progress shown as
+  "1 / 2" in the row); each event ticks it and completion fires at the
+  target. Current list:
+  1. "Buy two eggs" +5 G, count 2, ticks per egg purchase.
+  2. "Collect gold from Paper Lantern" +3 G, completes on the first
+     lantern tap.
+  3. "Collect Soul" +1 Soul, fires on clicking Collect Soul. The soul
      counter keeps showing the player's souls during the ~2s objective
      animation, the +1 chip flies into it and ticks it up, then the
      whole total banks as the prestige screen opens. Normal collects
      open it immediately.
+- Paper Lantern (world/lantern.js): a warm-glowing chochin that fades
+  in mid-water (64% across, 26% down the swim area) the moment the
+  two-egg objective completes. Each tap pays 3 G with a +3 G pop and a
+  bump; after 3 taps it drifts up and fades for good (taps persist in
+  the save, once ever like its objective). DOM overlay, gentle bob,
+  clicks blocked while paused / tutorial / shop.
 - Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
 - SPECIES entries are pure art assets; all gameplay numbers live in

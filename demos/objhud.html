@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../fonts/fonts.css" />
+<title>objective placement</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:'Zen Maru Gothic',sans-serif; padding-bottom:70px; }
+  h1{ font-family:'Courier New',monospace; font-size:15px; letter-spacing:.2em; font-weight:normal; text-align:center; margin:26px 0 6px; }
+  .hint{ font-family:'Courier New',monospace; font-size:11px; letter-spacing:.08em; opacity:.55; text-align:center; margin-bottom:24px; }
+  .row{ display:flex; justify-content:center; gap:24px; flex-wrap:wrap; padding:0 20px; max-width:1030px; margin:0 auto; }
+  .opt{ text-align:center; position:relative; flex:none; }
+  .lab{ font-family:'Courier New',monospace; font-size:11.5px; letter-spacing:.1em; margin-top:11px; }
+  .sub{ font-family:'Courier New',monospace; font-size:10px; opacity:.55; margin-top:4px; letter-spacing:.04em; width:470px; }
+  .n{ position:absolute; top:-9px; left:-9px; z-index:2; width:22px; height:22px; border-radius:50%;
+    background:#b43a2b; color:#f2efe6; font-family:'Courier New',monospace; font-size:12px; display:grid; place-items:center; }
+  .stage{
+    width:470px; height:250px; position:relative; cursor:pointer;
+    background:#f2efe6; border:1px solid rgba(28,27,24,.14); border-radius:4px;
+    box-shadow:inset 0 0 40px rgba(28,27,24,.04); overflow:hidden;
+  }
+  .gold{ position:absolute; left:16px; top:10px; font-size:26px; color:#1c1b18; font-feature-settings:'tnum'; }
+  .gold b{ font-weight:500; }
+  .gold i{ font-size:13px; font-style:normal; margin-left:5px; letter-spacing:.1em; }
+  .grate{ position:absolute; left:17px; top:44px; font-family:'Courier New',monospace; font-size:8.5px; letter-spacing:.2em; opacity:.5; }
+  .soulc{ position:absolute; left:50%; top:8px; transform:translateX(-50%); font-size:32px; font-feature-settings:'tnum'; }
+  .soulc i{ font-size:11px; font-style:normal; letter-spacing:.22em; margin-left:6px; vertical-align:6px; opacity:.7; }
+  .corner{ position:absolute; right:14px; top:14px; display:flex; gap:9px; opacity:.5; }
+  .corner span{ width:13px; height:13px; border:1.4px solid #1c1b18; border-radius:3px; }
+  .fish{ position:absolute; left:44%; top:62%; width:52px; opacity:.75; }
+  .fish path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:5; vector-effect:non-scaling-stroke; stroke-linecap:round; }
+  .tapme{ position:absolute; left:14px; bottom:10px; font-family:'Courier New',monospace; font-size:9.5px; letter-spacing:.14em; opacity:.35; }
+
+  .ob{ position:absolute; display:flex; align-items:center; gap:10px; }
+  .ob .tk{ font-size:16px; letter-spacing:.03em; }
+  .ob .ct{ font-size:12.5px; font-feature-settings:'tnum'; opacity:.55; }
+  .ob .chip{ font-size:12.5px; font-weight:500; color:#7a5800; font-feature-settings:'tnum';
+    background:rgba(122,88,0,.1); border-radius:999px; padding:2px 9px; }
+  .ob svg{ width:21px; height:21px; flex:none; overflow:visible; }
+  .ob circle{ fill:none; stroke:rgba(28,27,24,.35); stroke-width:1.5; }
+  .in .ob{ animation:arrive .7s cubic-bezier(.2,.9,.3,1) both; }
+  .in .ob circle{ animation:ringflash 1.6s ease .5s both; }
+  @keyframes arrive{ from{ opacity:0; transform:translateY(-14px); } }
+  @keyframes ringflash{ 0%{ stroke:#b43a2b; stroke-width:3; } 100%{ stroke:rgba(28,27,24,.35); stroke-width:1.5; } }
+  .in .ob::before{
+    content:''; position:absolute; inset:-7px -11px; border-radius:4px;
+    background:rgba(180,58,43,.09); animation:wash 1.5s ease .1s both;
+  }
+  @keyframes wash{ 0%{ opacity:0; } 25%{ opacity:1; } 100%{ opacity:0; } }
+
+  .p1{ left:17px; top:64px; }
+  .p2{ left:50%; top:56px; transform:translateX(-50%); }
+  .in .p2{ animation:arrive2 .7s cubic-bezier(.2,.9,.3,1) both; }
+  @keyframes arrive2{ from{ opacity:0; transform:translate(-50%,-14px); } to{ transform:translate(-50%,0); } }
+  .p3{ right:16px; top:58px; }
+  .p4{ left:50%; bottom:26px; transform:translateX(-50%); }
+  .in .p4{ animation:arrive2 .7s cubic-bezier(.2,.9,.3,1) both; }
+
+  .lansec{ text-align:center; margin-top:38px; }
+  .lansec .lan{ display:inline-block; width:44px; filter:drop-shadow(0 0 12px rgba(226,180,90,.5)); animation:bob 4s ease-in-out infinite; }
+  .lansec svg{ display:block; width:100%; overflow:visible; }
+  .lansec path{ fill:none; stroke:rgba(28,27,24,.8); stroke-width:1.7; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
+  .lansec .lbody{ fill:rgba(238,199,113,.28); }
+  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+</style>
+</head>
+<body>
+<h1>objective placement</h1>
+<div class="hint">the corner spot was invisible &middot; click a panel to replay the arrival &middot; pick by number</div>
+<div class="row" id="row"></div>
+<div class="lansec">
+  <div class="lan"><svg viewBox="0 0 60 88">
+    <path d="M30 3 L30 9"/><path d="M21 9 L39 9"/>
+    <path class="lbody" d="M30 11 C45 11 52 23 52 40 C52 57 45 68 30 68 C15 68 8 57 8 40 C8 23 15 11 30 11 Z"/>
+    <path d="M9.5 27 C22 31 38 31 50.5 27"/><path d="M8 41 C22 45 38 45 52 41"/><path d="M9.5 55 C22 59 38 59 50.5 55"/>
+    <path d="M23 68 L37 68"/><path d="M30 68 L30 80"/>
+  </svg></div>
+  <div class="lab">the Paper Lantern (already wired in game: 3 G, three taps)</div>
+</div>
+<script>
+const FISH = '<svg class="fish" viewBox="0 0 340 200"><path d="M310 100 Q180 10 30 148"/><path d="M310 100 Q180 190 30 52"/></svg>';
+const OBJ = pos => `<div class="ob ${pos}"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/></svg><span class="tk">Buy two eggs</span><span class="ct">0 / 2</span><span class="chip">+5 G</span></div>`;
+const OPTS = [
+  { pos: 'p1', lab: '1 · under the gold', sub: 'lives directly below the gold counter, where the eyes already are. left aligned, reads top-down with the money' },
+  { pos: 'p2', lab: '2 · top center', sub: 'a centered strip under the soul counter. dead center of the screen, impossible to miss' },
+  { pos: 'p3', lab: '3 · corner, amplified', sub: 'same right side but bigger, lower, and every new objective arrives with a slide and a red ink wash' },
+  { pos: 'p4', lab: '4 · above the floor', sub: 'floats bottom center in whisper territory, out of the HUD entirely' }
+];
+const row = document.getElementById('row');
+for (const [i, o] of OPTS.entries()) {
+  const d = document.createElement('div');
+  d.className = 'opt';
+  d.innerHTML = `<span class="n">${i + 1}</span>
+    <div class="stage in"><div class="gold"><b>10</b><i>G</i></div><div class="grate">+12 G / MIN</div>
+    <div class="soulc">0<i>SOUL</i></div><div class="corner"><span></span><span></span></div>
+    ${FISH}${OBJ(o.pos)}<span class="tapme">click: replay arrival</span></div>
+    <div class="lab">${o.lab}</div><div class="sub">${o.sub}</div>`;
+  row.appendChild(d);
+  const stage = d.querySelector('.stage');
+  stage.addEventListener('click', () => {
+    stage.classList.remove('in');
+    void stage.offsetWidth;
+    stage.classList.add('in');
+  });
+}
+</script>
+</body>
+</html>
