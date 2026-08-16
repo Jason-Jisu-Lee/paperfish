@@ -17,9 +17,6 @@ const startGame = () => {
   Ocean.start();
   Obj.start();
   Soul.resume();
-  if (!Game.tuts.introTut) setTimeout(() => {
-    if (Game.started && !Game.tuts.introTut) Tut.intro();
-  }, 900);
 };
 
 (() => {
@@ -56,6 +53,10 @@ const startGame = () => {
     }
     Soul.tick();
     Detail.tick();
+    if (!Game.tuts.introTut && !Tut.active) {
+      const f = Game.fish.find(x => !x.egg && x.dying === undefined);
+      if (f && f.birth >= 1) Tut.intro();
+    }
 
     saveT += mdt;
     if (saveT >= 5) {

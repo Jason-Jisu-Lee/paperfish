@@ -136,7 +136,8 @@ MECHANICS.md holds exact numbers.
   first fish death of all time, "Need more soul..." on the first death
   after the first prestige (so, run two), "Fish got bigger" on the first
   maturing.
-- Intro tutorial (first game start ever, flag introTut): ~1s in, the
+- Intro tutorial (first game start ever, flag introTut): fires the
+  moment the starting fish finishes its ink draw-on (birth >= 1); the
   world freezes under the ink scrim, spotlight on the starting fish:
   "Fish generate gold passively, and a soul on death" [Next]. The
   opening beat that replaced the old egg objective (2026-08-16).
