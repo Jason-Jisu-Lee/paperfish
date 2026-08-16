@@ -1,5 +1,5 @@
 const OBJECTIVES = [
-  { id: 'souls3', text: 'Collect 3 Souls', reward: 1, soul: true, count: 3 }
+  { id: 'souls3', text: 'Collect 3 Souls', reward: 10, count: 3 }
 ];
 
 const WHISPERS = [

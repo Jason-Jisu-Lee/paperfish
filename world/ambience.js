@@ -52,15 +52,14 @@ const Ambience = (() => {
 
   const spawnSchool = () => {
     const { W, H } = Stage.size;
-    const ang = rand(0, Math.PI * 2);
-    const lead = Math.max(W, H) * 0.75;
-    const dx = Math.cos(ang), dy = Math.sin(ang);
+    const ltr = Math.random() < 0.5;
+    const dx = ltr ? 1 : -1;
     school = {
-      ang, dx, dy,
-      x: W * rand(0.25, 0.75) - dx * lead,
-      y: H * rand(0.25, 0.75) - dy * lead,
+      ang: ltr ? 0 : Math.PI, dx, dy: 0,
+      x: ltr ? -180 : W + 180,
+      y: H * rand(0.12, 0.88),
       prog: 0,
-      total: lead * 2,
+      total: W + 360,
       v: rand(200, 273),
       t: 0,
       fish: Array.from({ length: 20 + Math.floor(Math.random() * 8) }, () => ({

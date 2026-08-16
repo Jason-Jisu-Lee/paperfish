@@ -34,9 +34,10 @@ MECHANICS.md holds exact numbers.
 - Ocean decor: sepia clam (pearl income), water blue bubbles, and a
   scatter-cloud school of ~20-27 tiny fish that flees across the
   background every 20-50s: loose formation, individual wobble,
-  accelerating as it crosses, fading in and out at the edges. It can
-  spawn from anywhere and cross at any angle (fish are drawn rotated
-  along the heading); speed and size tuned by feel over several passes
+  accelerating as it crosses, fading in and out at the edges. It
+  enters from the left or right edge at any height and crosses
+  horizontally with a gentle vertical wobble (no vertical or diagonal
+  headings, 2026-08-16); speed and size tuned by feel over several passes
   (latest 2026-08-16: 25% slower, 20% bigger). Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
@@ -157,12 +158,12 @@ MECHANICS.md holds exact numbers.
 - Objectives (data/content.js OBJECTIVES): once EVER, stored in
   Game.objs which persists across dives; a completed objective never
   reappears. Counts tick by amount via Obj.event(id, n). Current list
-  is one objective: "Collect 3 Souls" (+1 Soul, count 3), shown from
+  is one objective: "Collect 3 Souls" (+10 G, count 3), shown from
   run start and ticked by each soul paid on death; completing it
   coincides with the Collect Soul button revealing at 3 souls.
   Clicking Collect Soul during the reward animation defers the
-  prestige screen ~2s (Obj.busy) so the +1 lands in the counter and
-  banks with the rest. The egg and Paper Lantern objectives and the
+  prestige screen ~2s (Obj.busy) so the reward lands in the counter
+  and banks with the rest. The egg and Paper Lantern objectives and the
   lantern object itself were cut (2026-08-16).
 - Clam sits bottom-left of the swim area and pays its first pearl 3 min into a run, then every 60-80s
   (20% of current G/min).
