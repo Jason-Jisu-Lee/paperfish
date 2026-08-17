@@ -52,8 +52,11 @@ const Music = (() => {
   };
 
   const sync = () => {
-    if (master) master.gain.value = window.paperfish && !paperfish.sound ? 0 : 1;
+    if (!ctx) return;
+    const on = (!window.paperfish || paperfish.sound) && !(window.Pause && Pause.paused);
+    master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 0.3);
   };
+  document.addEventListener('pausechange', sync);
 
   const arm = () => {
     if (ctx) return;

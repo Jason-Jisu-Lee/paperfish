@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>school styles</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:Georgia,serif; padding:34px 44px 60px; }
+  h1{ font-size:16px; letter-spacing:.34em; text-transform:uppercase; font-weight:normal; margin:0 0 6px; }
+  .sub{ font-size:12.5px; opacity:.55; margin:0 0 26px; letter-spacing:.04em; }
+  .opt{ margin-bottom:32px; }
+  .cap{ font-size:13.5px; letter-spacing:.05em; margin:0 0 7px; }
+  .cap b{ color:#b43a2b; font-weight:600; margin-right:9px; }
+  .cap span{ opacity:.58; }
+  canvas{ display:block; width:100%; height:220px; background:linear-gradient(#f4f1e8,#eeebe0); border:1px solid rgba(28,27,24,.14); border-radius:4px; }
+</style>
+</head>
+<body>
+<h1>school styles</h1>
+<p class="sub">each school loops its crossing. same ink, same alpha family as the game.</p>
+
+<div class="opt"><p class="cap"><b>1</b>current blob<span>loose scatter, uniform drift, what ships today</span></p><canvas id="c1"></canvas></div>
+<div class="opt"><p class="cap"><b>2</b>ribbon stream<span>single file along a traveling wave, slight tilt into the curve</span></p><canvas id="c2"></canvas></div>
+<div class="opt"><p class="cap"><b>3</b>comet<span>dense bold head thinning into a sparse faint tail</span></p><canvas id="c3"></canvas></div>
+<div class="opt"><p class="cap"><b>4</b>ink dashes, two depths<span>calligraphic dashes in a far layer and a near layer, parallax</span></p><canvas id="c4"></canvas></div>
+<div class="opt"><p class="cap"><b>5</b>boids<span>real mini-flock, the cloud breathes and shears as it crosses</span></p><canvas id="c5"></canvas></div>
+
+<script>
+const R = (a, b) => a + Math.random() * (b - a);
+const INK = a => `rgba(28,27,24,${a})`;
+
+const fish = (x, y, s, dir, c) => {
+  c.beginPath();
+  c.moveTo(x - 5 * s * dir, y);
+  c.quadraticCurveTo(x, y - 2.1 * s, x + 5 * s * dir, y);
+  c.quadraticCurveTo(x, y + 2.1 * s, x - 5 * s * dir, y);
+  c.fill();
+  c.beginPath();
+  c.moveTo(x - 4.4 * s * dir, y);
+  c.lineTo(x - 8.2 * s * dir, y - 2.5 * s);
+  c.lineTo(x - 8.2 * s * dir, y + 2.5 * s);
+  c.closePath();
+  c.fill();
+};
+
+const dash = (x, y, s, dir, c) => {
+  c.beginPath();
+  c.moveTo(x + 5.5 * s * dir, y);
+  c.quadraticCurveTo(x, y - 1.7 * s, x - 6.2 * s * dir, y - 0.3 * s);
+  c.quadraticCurveTo(x - 3.8 * s * dir, y + 0.6 * s, x + 0.4 * s * dir, y + 1.4 * s);
+  c.quadraticCurveTo(x + 3.2 * s * dir, y + 1.2 * s, x + 5.5 * s * dir, y);
+  c.fill();
+};
+
+const edgeA = (p, total) => Math.max(Math.min(Math.min(p, total - p) / 240, 1), 0);
+
+const panels = [];
+const panel = (id, o) => {
+  const cv = document.getElementById(id);
+  panels.push({ cv, c: cv.getContext('2d'), o, W: 0, H: 0 });
+};
+
+panel('c1', {
+  init(p) {
+    p.t = 0;
+    p.f = Array.from({ length: 30 }, () => ({
+      ox: R(-105, 18) * R(0.85, 1.15), oy: R(-32, 32),
+      ph: R(0, 7), wf: R(5, 9), s: R(1.48, 2.64)
+    }));
+    p.x = -180;
+  },
+  step(p, dt) {
+    p.t += dt;
+    p.x += 165 * (1 + p.t * 0.25) * dt;
+    if (p.x > p.W + 220) this.init(p);
+  },
+  draw(p, c) {
+    const a = 0.14 * edgeA(p.x + 180, p.W + 360);
+    if (a <= 0) return;
+    c.fillStyle = INK(a);
+    const y0 = p.H * 0.5 + Math.sin(p.t * 1.7) * 10;
+    for (const f of p.f) fish(p.x + f.ox, y0 + f.oy + Math.sin(p.t * f.wf + f.ph) * 3.2, f.s, 1, c);
+  }
+});
+
+panel('c2', {
+  init(p) {
+    p.t = 0;
+    p.x = -60;
+    p.f = Array.from({ length: 24 }, () => ({ s: R(1.7, 2.4), ph: R(0, 7), wf: R(4, 7) }));
+  },
+  step(p, dt) {
+    p.t += dt;
+    p.x += 150 * dt;
+    if (p.x - 24 * 15 > p.W + 80) this.init(p);
+  },
+  draw(p, c) {
+    const k = 0.016, A = 30;
+    for (let i = 0; i < p.f.length; i++) {
+      const f = p.f[i];
+      const x = p.x - i * 15;
+      const a = 0.15 * edgeA(x + 80, p.W + 160);
+      if (a <= 0) continue;
+      const arg = x * k + p.t * 1.5;
+      const y = p.H * 0.5 + Math.sin(arg) * A + Math.sin(p.t * f.wf + f.ph) * 1.4;
+      const tilt = Math.atan(Math.cos(arg) * k * A) * 0.75;
+      c.save();
+      c.translate(x, y);
+      c.rotate(-tilt);
+      c.fillStyle = INK(a);
+      fish(0, 0, f.s, 1, c);
+      c.restore();
+    }
+  }
+});
+
+panel('c3', {
+  init(p) {
+    p.t = 0;
+    p.x = -190;
+    p.f = Array.from({ length: 36 }, () => {
+      const ox = -Math.pow(Math.random(), 1.5) * 160;
+      return {
+        ox, oy: (Math.random() * 2 - 1) * (5 - ox * 0.28),
+        s: 2.7 + ox / 160 * 1.5, a: 0.19 + ox / 160 * 0.115,
+        ph: R(0, 7), wf: R(5, 9)
+      };
+    });
+  },
+  step(p, dt) {
+    p.t += dt;
+    p.x += 150 * (1 + p.t * 0.18) * dt;
+    if (p.x > p.W + 230) this.init(p);
+  },
+  draw(p, c) {
+    const e = edgeA(p.x + 190, p.W + 380);
+    if (e <= 0) return;
+    const y0 = p.H * 0.5 + Math.sin(p.t * 0.9) * 12;
+    for (const f of p.f) {
+      c.fillStyle = INK(f.a * e);
+      fish(p.x + f.ox, y0 + f.oy + Math.sin(p.t * f.wf + f.ph) * 2.6, f.s, 1, c);
+    }
+  }
+});
+
+panel('c4', {
+  init(p) {
+    p.t = 0;
+    const blob = (n, sl, sh) => Array.from({ length: n }, () => ({
+      ox: R(-95, 15), oy: R(-24, 24), ph: R(0, 7), wf: R(4, 8), s: R(sl, sh)
+    }));
+    p.far = blob(13, 1.1, 1.6);
+    p.near = blob(13, 2.2, 3.2);
+    p.fx = -140;
+    p.nx = -260;
+  },
+  step(p, dt) {
+    p.t += dt;
+    p.fx += 95 * dt;
+    p.nx += 165 * dt;
+    if (p.fx > p.W + 180 && p.nx > p.W + 180) this.init(p);
+  },
+  draw(p, c) {
+    const fa = 0.075 * edgeA(p.fx + 140, p.W + 320);
+    if (fa > 0) {
+      c.fillStyle = INK(fa);
+      const y0 = p.H * 0.36 + Math.sin(p.t * 1.2) * 7;
+      for (const f of p.far) dash(p.fx + f.ox, y0 + f.oy + Math.sin(p.t * f.wf + f.ph) * 2.4, f.s, 1, c);
+    }
+    const na = 0.19 * edgeA(p.nx + 260, p.W + 440);
+    if (na > 0) {
+      c.fillStyle = INK(na);
+      const y0 = p.H * 0.62 + Math.sin(p.t * 1.6 + 2) * 9;
+      for (const f of p.near) dash(p.nx + f.ox, y0 + f.oy + Math.sin(p.t * f.wf + f.ph) * 3, f.s, 1, c);
+    }
+  }
+});
+
+panel('c5', {
+  init(p) {
+    p.t = 0;
+    p.tx = -120;
+    p.f = Array.from({ length: 26 }, () => ({
+      x: R(-190, -60), y: R(p.H * 0.3, p.H * 0.7),
+      vx: R(60, 90), vy: R(-14, 14), s: R(1.6, 2.5)
+    }));
+  },
+  step(p, dt) {
+    p.t += dt;
+    p.tx += 120 * dt;
+    if (p.tx > p.W + 260) this.init(p);
+    const ty = p.H * 0.5 + Math.sin(p.t * 0.6) * p.H * 0.22;
+    for (const f of p.f) {
+      let cx = 0, cy = 0, ax = 0, ay = 0, n = 0, sx = 0, sy = 0;
+      for (const o of p.f) {
+        if (o === f) continue;
+        const dx = o.x - f.x, dy = o.y - f.y, d2 = dx * dx + dy * dy;
+        if (d2 < 46 * 46) { cx += o.x; cy += o.y; ax += o.vx; ay += o.vy; n++; }
+        if (d2 < 15 * 15 && d2 > 0.01) { sx -= dx / d2; sy -= dy / d2; }
+      }
+      if (n) {
+        f.vx += ((cx / n - f.x) * 0.9 + (ax / n - f.vx) * 1.4) * dt;
+        f.vy += ((cy / n - f.y) * 0.9 + (ay / n - f.vy) * 1.4) * dt;
+      }
+      f.vx += (sx * 320 + (p.tx - f.x) * 0.5) * dt;
+      f.vy += (sy * 320 + (ty - f.y) * 0.5) * dt;
+      const sp = Math.hypot(f.vx, f.vy) || 1;
+      const cl = Math.min(Math.max(sp, 42), 110);
+      f.vx *= cl / sp;
+      f.vy *= cl / sp;
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+    }
+  },
+  draw(p, c) {
+    const a = 0.14 * edgeA(p.tx + 120, p.W + 380);
+    if (a <= 0) return;
+    c.fillStyle = INK(a);
+    for (const f of p.f) fish(f.x, f.y, f.s, f.vx < 0 ? -1 : 1, c);
+  }
+});
+
+const size = () => {
+  const dpr = window.devicePixelRatio || 1;
+  for (const p of panels) {
+    p.W = p.cv.clientWidth;
+    p.H = p.cv.clientHeight;
+    p.cv.width = Math.round(p.W * dpr);
+    p.cv.height = Math.round(p.H * dpr);
+    p.c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+};
+window.addEventListener('resize', size);
+size();
+for (const p of panels) {
+  p.o.init(p);
+  for (let i = 0; i < 240; i++) p.o.step(p, 1 / 60);
+}
+
+let last = performance.now();
+const loop = now => {
+  const dt = Math.min((now - last) / 1000, 0.05);
+  last = now;
+  for (const p of panels) {
+    p.o.step(p, dt);
+    p.c.clearRect(0, 0, p.W, p.H);
+    p.o.draw(p, p.c);
+  }
+  requestAnimationFrame(loop);
+};
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
