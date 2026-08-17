@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>lantern styles</title>
+<style>
+  body{ margin:0; background:#f2efe6; color:#1c1b18; font-family:Georgia,serif; padding:34px 44px 60px; }
+  h1{ font-size:16px; letter-spacing:.34em; text-transform:uppercase; font-weight:normal; margin:0 0 6px; }
+  .sub{ font-size:12.5px; opacity:.55; margin:0 0 26px; letter-spacing:.04em; }
+  .opt{ margin-bottom:32px; }
+  .cap{ font-size:13.5px; letter-spacing:.05em; margin:0 0 7px; }
+  .cap b{ color:#b43a2b; font-weight:600; margin-right:9px; }
+  .cap span{ opacity:.58; }
+  canvas{ display:block; width:100%; height:190px; background:linear-gradient(#f4f1e8,#eeebe0); border:1px solid rgba(28,27,24,.14); border-radius:4px; }
+</style>
+</head>
+<body>
+<h1>lantern styles</h1>
+<p class="sub">each shown at 3, 2, and 1 charges left to right. all bob like the real one will.</p>
+
+<div class="opt"><p class="cap"><b>1</b>line chochin<span>pure ink strokes like the fish, no fill, no halo; a seal-red flame that shrinks per tap</span></p><canvas data-s="0"></canvas></div>
+<div class="opt"><p class="cap"><b>2</b>toro raft<span>a square water lantern on a raft stroke, warmth lives only inside the paper panel</span></p><canvas data-s="1"></canvas></div>
+<div class="opt"><p class="cap"><b>3</b>ink stamp<span>solid silhouette with paper ribs knocked out, seal-red cap, reads like a hanko mark</span></p><canvas data-s="2"></canvas></div>
+
+<script>
+const INK = a => `rgba(28,27,24,${a})`;
+const SEAL = a => `rgba(180,58,43,${a})`;
+
+const line = (c, x, y, heat) => {
+  c.strokeStyle = INK(0.8);
+  c.lineWidth = 1.6;
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+  c.beginPath();
+  c.moveTo(x, y - 33); c.lineTo(x, y - 27);
+  c.moveTo(x - 8, y - 27); c.lineTo(x + 8, y - 27);
+  c.stroke();
+  c.beginPath();
+  c.moveTo(x, y - 25);
+  c.bezierCurveTo(x + 15, y - 25, x + 20, y - 13, x + 20, y);
+  c.bezierCurveTo(x + 20, y + 13, x + 15, y + 25, x, y + 25);
+  c.bezierCurveTo(x - 15, y + 25, x - 20, y + 13, x - 20, y);
+  c.bezierCurveTo(x - 20, y - 13, x - 15, y - 25, x, y - 25);
+  c.stroke();
+  c.strokeStyle = INK(0.4);
+  c.lineWidth = 1.1;
+  for (const dy of [-12, 0, 12]) {
+    const w = 19.4 - Math.abs(dy) * 0.42;
+    c.beginPath();
+    c.moveTo(x - w, y + dy);
+    c.quadraticCurveTo(x, y + dy + 3.4, x + w, y + dy);
+    c.stroke();
+  }
+  c.strokeStyle = INK(0.8);
+  c.lineWidth = 1.6;
+  c.beginPath();
+  c.moveTo(x - 6, y + 25); c.lineTo(x + 6, y + 25);
+  c.moveTo(x, y + 25); c.lineTo(x, y + 32);
+  c.stroke();
+  const fs = heat === 3 ? 1 : heat === 2 ? 0.65 : 0.35;
+  c.fillStyle = SEAL(0.85);
+  c.beginPath();
+  c.moveTo(x, y - 6.5 * fs);
+  c.quadraticCurveTo(x + 4.6 * fs, y, x, y + 6.5 * fs);
+  c.quadraticCurveTo(x - 4.6 * fs, y, x, y - 6.5 * fs);
+  c.fill();
+};
+
+const toro = (c, x, y, heat) => {
+  const warm = heat === 3 ? 0.34 : heat === 2 ? 0.2 : 0.09;
+  c.fillStyle = `rgba(238,199,113,${warm})`;
+  c.fillRect(x - 13, y - 12, 26, 26);
+  c.strokeStyle = INK(0.8);
+  c.lineWidth = 1.6;
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+  c.strokeRect(x - 13, y - 12, 26, 26);
+  c.beginPath();
+  c.moveTo(x - 17, y - 12);
+  c.lineTo(x, y - 24);
+  c.lineTo(x + 17, y - 12);
+  c.closePath();
+  c.fillStyle = '#f2efe6';
+  c.fill();
+  c.stroke();
+  c.strokeStyle = INK(0.4);
+  c.lineWidth = 1.1;
+  c.beginPath();
+  c.moveTo(x, y - 12); c.lineTo(x, y + 14);
+  c.moveTo(x - 13, y + 1); c.lineTo(x + 13, y + 1);
+  c.stroke();
+  c.strokeStyle = INK(0.8);
+  c.lineWidth = 1.7;
+  c.beginPath();
+  c.moveTo(x - 22, y + 17);
+  c.quadraticCurveTo(x, y + 21, x + 22, y + 17);
+  c.stroke();
+};
+
+const stamp = (c, x, y, heat) => {
+  const a = heat === 3 ? 0.78 : heat === 2 ? 0.55 : 0.32;
+  c.fillStyle = SEAL(0.9);
+  c.fillRect(x - 8, y - 30, 16, 5);
+  c.fillStyle = INK(a);
+  c.beginPath();
+  c.moveTo(x, y - 24);
+  c.bezierCurveTo(x + 14, y - 24, x + 19, y - 12, x + 19, y);
+  c.bezierCurveTo(x + 19, y + 12, x + 14, y + 23, x, y + 23);
+  c.bezierCurveTo(x - 14, y + 23, x - 19, y + 12, x - 19, y);
+  c.bezierCurveTo(x - 19, y - 12, x - 14, y - 24, x, y - 24);
+  c.fill();
+  c.strokeStyle = '#f2efe6';
+  c.lineWidth = 1.8;
+  for (const dy of [-11, 0, 11]) {
+    const w = 18 - Math.abs(dy) * 0.4;
+    c.beginPath();
+    c.moveTo(x - w, y + dy);
+    c.quadraticCurveTo(x, y + dy + 3.2, x + w, y + dy);
+    c.stroke();
+  }
+  c.fillStyle = SEAL(0.9);
+  c.fillRect(x - 6, y + 23, 12, 4);
+};
+
+const STYLES = [line, toro, stamp];
+const panels = [];
+for (const cv of document.querySelectorAll('canvas')) {
+  panels.push({ cv, c: cv.getContext('2d'), s: +cv.dataset.s, W: 0, H: 0, t: Math.random() * 7 });
+}
+
+const size = () => {
+  const dpr = window.devicePixelRatio || 1;
+  for (const p of panels) {
+    p.W = p.cv.clientWidth;
+    p.H = p.cv.clientHeight;
+    p.cv.width = Math.round(p.W * dpr);
+    p.cv.height = Math.round(p.H * dpr);
+    p.c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+};
+window.addEventListener('resize', size);
+size();
+
+let last = performance.now();
+const loop = now => {
+  const dt = Math.min((now - last) / 1000, 0.05);
+  last = now;
+  for (const p of panels) {
+    p.t += dt;
+    p.c.clearRect(0, 0, p.W, p.H);
+    for (let i = 0; i < 3; i++) {
+      const x = p.W * (0.25 + 0.25 * i) + Math.sin(p.t * 0.7 + i * 2) * 3;
+      const y = p.H / 2 + Math.sin(p.t * 2 * Math.PI / 4.2 + i) * 4;
+      STYLES[p.s](p.c, x, y, 3 - i);
+    }
+  }
+  requestAnimationFrame(loop);
+};
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
