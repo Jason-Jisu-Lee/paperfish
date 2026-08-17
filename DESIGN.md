@@ -184,6 +184,12 @@ MECHANICS.md holds exact numbers.
   water right of the panel; eggs and kelp also reroll their spot until
   clear of visible UI overlays (gold, soul counter, objective, corner
   icons).
+- Idle hover (2026-08-17): on top of cruise/glide/dart, each fish rolls
+  two personal timers for a near-still drift (2-5 px/s, idle tail sway,
+  ~0.8s ease-in, resumes with a natural tail kick): every 10-30s a 50%
+  chance of a 1-3s hover, every 25-50s a 25% chance of a 3-6s one.
+  Fleeing, hungry, eating, and held fish skip it; a scare pauses the
+  hover and it resumes after.
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
 

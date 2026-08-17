@@ -93,6 +93,9 @@ const Stage = (() => {
     f.tailAmp = 0.1;
     f.slowPh = rand(0, Math.PI * 2);
     f.depth = rand(0.88, 1.14);
+    f.hovA = rand(10, 30);
+    f.hovB = rand(25, 50);
+    f.hov = 0;
   };
 
   const uiBlocked = (x, y) => {
@@ -251,13 +254,31 @@ const Stage = (() => {
           f.vyT = -(f.vyT || 0) * (0.6 + Math.random() * 0.8);
         }
       }
-      f.modeT -= mdt;
-      if (f.modeT <= 0) pickMode(f);
-      const kicking = f.kick > 0;
+      f.hovA -= mdt;
+      if (f.hovA <= 0) {
+        f.hovA = rand(10, 30);
+        if (Math.random() < 0.5) { f.hov = Math.max(f.hov, rand(1, 3)); f.hovS = rand(2, 5); }
+      }
+      f.hovB -= mdt;
+      if (f.hovB <= 0) {
+        f.hovB = rand(25, 50);
+        if (Math.random() < 0.25) { f.hov = Math.max(f.hov, rand(3, 6)); f.hovS = rand(2, 5); }
+      }
+      const hovering = f.hov > 0 && !(f.fleeT > 0) && !f.hstate;
+      let kicking = false;
+      if (hovering) {
+        f.hov -= mdt;
+        f.kick = 0;
+        f.spd += (f.hovS - f.spd) * Math.min(4 * mdt, 1);
+      } else {
+        f.modeT -= mdt;
+        if (f.modeT <= 0) pickMode(f);
+        kicking = f.kick > 0;
+      }
       if (kicking) {
         f.kick -= mdt;
         f.spd += (f.kickTop - f.spd) * Math.min(5 * mdt, 1);
-      } else {
+      } else if (!hovering) {
         f.spd -= f.spd * 0.22 * mdt;
         const floor = f.mode === 'glide' ? f.target : f.target * 0.82;
         if (f.spd < floor) {
