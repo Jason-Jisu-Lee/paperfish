@@ -136,9 +136,14 @@ const Stage = (() => {
   };
 
   const spawnPlant = center => {
+    let x = 0, y = 0;
+    for (let i = 0; i < 20; i++) {
+      x = center ? rand(0.42, 0.58) * (open.r - open.l) + open.l : rand(open.l + 60, open.r - 60);
+      y = center ? rand(0.42, 0.58) * (open.b - open.t) + open.t : rand(open.t + 40, open.b - 20);
+      if (!uiBlocked(x, y)) break;
+    }
     plants.push({
-      x: center ? rand(0.42, 0.58) * (open.r - open.l) + open.l : rand(open.l + 60, open.r - 60),
-      y: center ? rand(0.42, 0.58) * (open.b - open.t) + open.t : rand(open.t + 40, open.b - 20),
+      x, y,
       hx: 0, hy: 0,
       ph: rand(0, Math.PI * 2),
       dph: rand(0, Math.PI * 2),
@@ -190,11 +195,27 @@ const Stage = (() => {
     f.kickTop = Math.max(f.target, f.spd) * 1.05;
   };
 
-  let tNow = 0;
+  let tNow = 0, topZone = null, zoneT = 0;
+
+  const topBoxes = () => {
+    let l = Infinity, r = -Infinity, b = -Infinity;
+    for (const id of ['soulbox', 'objbox']) {
+      const el = document.getElementById(id);
+      if (!el || el.hidden) continue;
+      const rc = el.getBoundingClientRect();
+      if (!rc.width) continue;
+      l = Math.min(l, rc.left);
+      r = Math.max(r, rc.right);
+      b = Math.max(b, rc.bottom);
+    }
+    return r > l ? { l: l - 30, r: r + 30, b: b + 70 } : null;
+  };
 
   const update = mdt => {
     if (!mdt) return;
     tNow += mdt;
+    zoneT -= mdt;
+    if (zoneT <= 0) { zoneT = 0.5; topZone = topBoxes(); }
     for (const f of Game.fish) {
       if (f.pop) f.pop = Math.max(f.pop - mdt, 0);
       if (f.egg) { f.ph += mdt * 2.6; continue; }
@@ -322,9 +343,10 @@ const Stage = (() => {
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 6;
       if (f.y > bounds.b - 26) f.vyT = -Math.abs(f.vyT) || -6;
-      if (goldZone && f.x < goldZone.r && f.y < goldZone.b) {
-        if (f.vyT < 10) f.vyT = 10;
-        if (f.vy < 0) f.vy = 0;
+      if (topZone && !seeking && f.y < topZone.b) {
+        const zm = 20 + f.spd * 0.3;
+        if (f.dir > 0 && f.x > topZone.l - zm && f.x < topZone.l) { f.dir = -1; flipKick(f); }
+        else if (f.dir < 0 && f.x < topZone.r + zm && f.x > topZone.r) { f.dir = 1; flipKick(f); }
       }
       const vcap = seeking ? (f.hstate === 2 ? 140 : 70) : f.spd * 0.34;
       if (f.vyT > vcap) f.vyT = vcap;
@@ -335,6 +357,15 @@ const Stage = (() => {
       const vmax = (seeking ? 50 : f.spd * 0.35) + 8;
       if (f.vy > vmax) f.vy = vmax;
       if (f.vy < -vmax) f.vy = -vmax;
+      if (topZone && f.y < topZone.b && f.x > topZone.l && f.x < topZone.r) {
+        const sink = 40 + (topZone.b - f.y) * 0.7;
+        if (f.vyT < sink) f.vyT = sink;
+        if (f.vy < sink) f.vy = sink;
+      } else if (goldZone && f.x < goldZone.r && f.y < goldZone.b) {
+        const sink = 30 + (goldZone.b - f.y) * 0.5;
+        if (f.vyT < sink) f.vyT = sink;
+        if (f.vy < sink) f.vy = sink;
+      }
 
       const mod = 0.95 + 0.05 * Math.sin(f.slowPh);
       f.x += f.dir * f.spd * mod * mdt;
