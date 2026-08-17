@@ -20,7 +20,7 @@ const Panel = (() => {
     {
       key: 'kelp', name: 'Kelp', cat: 'food',
       cost: () => KELP_COST, lvl: () => Game.plants, buy: buyKelp,
-      desc: 'two bites, one bite satisfies hunger for 10s',
+      desc: 'two bites, one bite satisfies hunger for 20s',
       cur: () => 'Current: × ' + Game.plants + ' floating'
     }
   ];

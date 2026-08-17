@@ -189,7 +189,6 @@ const Stage = (() => {
     f.vyT = (Math.random() * 2 - 1) * (50 + level * 20);
     f.vy = f.vyT * 0.8;
     f.fleeT = 0.5 + Math.random() * 0.4;
-    if (level >= 3) f.jukeT = 0.1 + Math.random() * 0.22;
     f.turnT = Math.max(f.turnT || 0, 2);
   };
 
@@ -256,14 +255,6 @@ const Stage = (() => {
       }
 
       if (f.fleeT > 0) f.fleeT -= mdt;
-      if (f.jukeT !== undefined) {
-        f.jukeT -= mdt;
-        if (f.jukeT <= 0) {
-          delete f.jukeT;
-          if (Math.random() < 0.7) f.dir *= -1;
-          f.vyT = -(f.vyT || 0) * (0.6 + Math.random() * 0.8);
-        }
-      }
       f.hovA -= mdt;
       if (f.hovA <= 0) {
         f.hovA = rand(10, 30);
@@ -433,10 +424,6 @@ const Stage = (() => {
       p.dph += mdt * 0.11;
       p.hx = Math.sin(p.dph) * 26;
       p.hy = Math.sin(p.dph * 1.7 + 1.3) * 12;
-      if (p.fade !== undefined) {
-        p.fade -= mdt / 1.6;
-        if (p.fade <= 0) plants.splice(i, 1);
-      }
     }
     updatePops(mdt);
   };
@@ -660,7 +647,6 @@ const Stage = (() => {
   const drawPlant = p => {
     const half = p.bites === 1;
     ctx.save();
-    if (p.fade !== undefined) ctx.globalAlpha = Math.max(p.fade, 0);
     ctx.translate(p.x + p.hx, p.y + p.hy);
     ctx.scale(p.sc * (half ? 0.78 : 1), p.sc * (half ? 0.78 : 1));
     ctx.transform(1, 0, Math.sin(p.ph) * 0.16, 1, 0, 0);

@@ -4,7 +4,7 @@ Idle/incremental for itch.io then Steam. Single-screen deep sea, descending
 zones, no bottom. Player is the diver. Opens lighthearted, turns unsettling
 later. Active play is rewarded; the game pauses when hidden and never
 progresses unattended. Focus right now: the soul-prestige core loop.
-MECHANICS.md holds exact numbers.
+Exact numbers live in core/state.js.
 
 ## visual language
 - Warm paper field, sumi ink strokes, hanko seal red as the only accent.
@@ -16,10 +16,7 @@ MECHANICS.md holds exact numbers.
   (seal strokes on a faint red wash), one flat level, no nesting.
   Rail icons stay even while their categories are empty.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
-- Fish card: enlarged-step income graph, y axis in G per 5s (unit caption
-  "G / 5s" above the axis), per-5s hover readout under the dot, time
-  tracking the x axis (replaces the end marker at the edge), seal-red
-  now-dot. Fish pop briefly on evolving; no redraw-on.
+- Fish pop briefly on evolving; no redraw-on.
 - Fish card is a specimen plate (demos/fishcard.html option 1): art panel
   with the creature drawn large, seal-red tier stamp in the corner
   holding the tier number, name in Shippori, stage and age side by side
@@ -41,8 +38,8 @@ MECHANICS.md holds exact numbers.
   (latest 2026-08-16: 25% slower, 20% bigger). Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
-- Front page: hero fish draw-on, PAPERFISH title, play / settings / quit,
-  Steam and Discord marks, vertical caption, red seal.
+- Front page: hero fish draw-on, PAPERFISH title, play / settings,
+  Steam and Discord marks (inert placeholders, no links yet), red seal.
 
 ## core loop (soul prestige, tier era 2026-08-15)
 - Currencies: Gold (run) + Soul (prestige). Souls render in water blue
@@ -84,13 +81,15 @@ MECHANICS.md holds exact numbers.
   button reads "Start".
 - Fish Index: a section at the bottom of the prestige screen listing
   every creature by tier; discovered fish in full ink with names,
-  undiscovered as grey silhouettes named "?". Only firstF counts as
-  discovered for now (real discovery tracking TBD; snail card waits on
-  its asset).
+  undiscovered as grey silhouettes named "???". The dev panel "reveal"
+  toggle (Game.devReveal, 2026-08-17) swaps ??? for real species names;
+  the same flag will gate future dev-only reveals (hidden upgrades etc.).
+  Only firstF counts as discovered for now (real discovery tracking TBD;
+  snail card waits on its asset).
 - Hunger: every fish, first hunger 20s after birth, again 20s after each
   bite. A fish only becomes hungry if that moment lands before its death
   age, so base-life (20s) fish never hunger; the system wakes with the
-  first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 10s
+  first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 20s
   (2s eating pause). Hungry or starving fish forfeit their souls when
   they die (mid-bite eaters don't); the fish card death row shows
   "none, hungry" while it would forfeit. A held (selected) fish keeps
@@ -111,18 +110,18 @@ MECHANICS.md holds exact numbers.
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
   Counter top middle, Collect Soul under it (button reveals at 3
   souls, raised from 2); collecting banks 1:1,
-  freezes the world, opens the Prestige overlay; Dive Again resets the
+  freezes the world, opens the Prestige overlay; Start resets the
   run (gold to startGold, egg cost, run upgrades, kelp all reset).
   The open shop persists in the save: refreshing mid-prestige returns
   to the shop, never back to the collected run.
 - Prestige is a fullscreen animated screen (the reward heart of the
-  game): blue-washed paper takeover, PRESTIGE title, giant glowing
+  game): blue-washed paper takeover, Prestige title, giant glowing
   serif soul count, background soul wisps rising, staggered card
-  entrance on open, fixed Dive Again pill at the bottom. Upgrades are
+  entrance on open, fixed Start pill at the bottom. Upgrades are
   hover-lift cards: name + cost always visible, one-line gamer-speak
   description reveals on hover in a reserved slot (no reflow), level
   shows as "Lv N" only when above 0 (never ×0). Scrollable, categories
-  with wide spacing: BASICS (Starting Gold +5 at 2·2^lvl, Base Income
+  with wide spacing: BASICS (Starting Gold +5 at 4·2^lvl, Base Income
   +1 G/5s at 3·2^lvl, Starting Kelp +1 kelp each run at flat 5 souls
   capped at Lv 5, Extra Soul +1 at 20·2^lvl) then TIER 2-6 chance
   cards (dev-tagged, purchasable, no effect yet: +10%/+5, +5%/+2.5,
@@ -239,10 +238,11 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   await the tier brainstorm.
 
 ## placeholder dials (picked by Claude, awaiting spec)
-- Extra Soul 2·2^lvl, Starting Gold 2·2^lvl, Base Income 3·2^lvl,
-  Tier Chance 5·2^lvl, Tier 2 Lifespan 15·2^lvl souls; in-game Income
-  25·2^lvl, Lifespan 40·2^lvl gold; hatch 20s; hungry window 20s ->
-  starving 10s -> death.
+- Souls: Extra Soul 20·2^lvl, Starting Gold 4·2^lvl, Base Income
+  3·2^lvl, Lifespan [2,5,10,20] then 20·2^(lvl-3), Lifespan II
+  15·2^lvl, Tier Chance 30·10^(tier-2)·2^lvl, Starting Kelp flat 5.
+  In-game gold: Income 25·2^lvl, kelp 2. Hatch 8s; hungry window
+  20s -> starving 10s -> death.
 
 ## to decide (soul era)
 - per-tier income / lifespan / odds; egg roll implementation.
@@ -280,12 +280,21 @@ prestige, souls, permanent:
   the unsettling turn, self-hosted fonts for Steam.
 
 ## audio
-- All sound effects removed 2026-08-15 (audio/sfx.js deleted); sound
-  returns as a designed pass later. The Sound toggle in settings stays
-  wired to the flag for when it does.
+- Music system (2026-08-17, world/audio.js): three looping tracks via
+  Web Audio, armed on the first user gesture (autoplay policy).
+  Front screen plays Canon in D Major; a run plays Canon in D for Two
+  Harps; opening the prestige shop ducks the harps (gain 0.8 -> 0.25)
+  and low-passes them to 500Hz (the underwater muffle) while
+  Equatorial Complex plays on top; diving back restores the harps.
+  Crossfades ~0.35s time-constant; faded-out tracks pause after 1.4s.
+  The Sound toggle (corner note + settings) drives a master gain.
+  Spare takes sit in audio/ (8 Bit Synths, Autoharp, Interstellar
+  Mix, Morning) for future zones or auditioning.
+- Sound effects still absent (sfx removed 2026-08-15); they return as
+  a designed pass later.
 
 ## workflow
-- Claude maintains DESIGN.md and MECHANICS.md as decisions land, commits
+- Claude maintains DESIGN.md as decisions land, commits
   and pushes at verified milestones. Numbers are specced on paper before
   implementation; mechanics iterate by feel. One full-loop playtest after
   each system.
