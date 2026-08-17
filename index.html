@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=80" />
+    <link rel="stylesheet" href="base.css?v=81" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -247,6 +247,16 @@
           </svg>
         </button>
       </nav>
+      <nav class="corner front-sound">
+        <button class="icon" id="front-music" aria-label="music">
+          <svg viewBox="0 0 24 24">
+            <circle class="note-head" cx="9.8" cy="16.6" r="2.1" />
+            <path d="M11.9 16.6 V5.6" />
+            <path d="M11.9 5.6 C14.6 6.4 15.8 8.2 15.2 10.8" />
+            <path id="fmusic-slash" d="M4.5 4.5 L19.5 19.5" hidden />
+          </svg>
+        </button>
+      </nav>
       <div class="front-mid">
         <div class="f-title">paperfish<span class="tseal"></span></div>
         <div class="hero-wrap">
@@ -335,6 +345,6 @@
     <script src="ui/front.js?v=8"></script>
     <script src="core/sim.js?v=17"></script>
     <script src="core/main.js?v=15"></script>
-    <script src="ui/corner.js?v=4"></script>
+    <script src="ui/corner.js?v=5"></script>
   </body>
 </html>

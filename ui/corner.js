@@ -10,6 +10,7 @@
   const modal = document.getElementById('setmodal');
   const menuRow = document.getElementById('set-menu-row');
   const slash = document.getElementById('music-slash');
+  const fslash = document.getElementById('fmusic-slash');
   const glyphExpand = document.getElementById('glyph-expand');
   const glyphContract = document.getElementById('glyph-contract');
   const glyphPause = document.getElementById('glyph-pause');
@@ -23,6 +24,7 @@
 
   const render = () => {
     slash.toggleAttribute('hidden', state.sound);
+    fslash.toggleAttribute('hidden', state.sound);
     setSound.classList.toggle('on', state.sound);
     const full = !!document.fullscreenElement;
     glyphExpand.toggleAttribute('hidden', full);
@@ -40,6 +42,7 @@
   };
 
   document.getElementById('music').addEventListener('click', toggleSound);
+  document.getElementById('front-music').addEventListener('click', toggleSound);
   document.getElementById('screen').addEventListener('click', toggleScreen);
   document.getElementById('pause').addEventListener('click', () => Pause.set(!Pause.paused));
   document.getElementById('settings').addEventListener('click', () => {
