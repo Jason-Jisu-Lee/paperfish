@@ -81,6 +81,10 @@ const Lantern = (() => {
         const hx = f.x + (f.dir > 0 ? 1 : -1) * SPECIES[f.s].len * 0.4;
         if (Math.hypot(hx - lan.x, f.y - lan.y) < 7) {
           pay();
+          if (!Game.tuts.goodFish) {
+            Game.tuts.goodFish = 1;
+            Say.say('Good fish');
+          }
           delete f.lant;
         }
         continue;

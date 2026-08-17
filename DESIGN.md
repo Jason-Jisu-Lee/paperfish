@@ -314,7 +314,11 @@ prestige, souls, permanent:
   The Sound toggle (corner note + settings) drives a master gain,
   pause fades the master out and back (~1s), and the very first
   arm fades in from silence over ~3s so a cold-start buffering gap
-  reads as intentional atmosphere.
+  reads as intentional atmosphere. The run track waits 3s after Play
+  before fading in and always enters at its 13s mark (skips the
+  intro; native loop still wraps to 0). First fish lantern tap ever
+  whispers "Good fish" via the saybox. All three tracks re-encoded
+  to 128kbps (33MB -> 15MB); untouched originals in audio/original/.
   Spare takes sit in audio/ (8 Bit Synths, Autoharp, Interstellar
   Mix, Morning) for future zones or auditioning.
 - Sound effects still absent (sfx removed 2026-08-15); they return as

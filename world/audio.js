@@ -5,6 +5,7 @@ const Music = (() => {
     shop: 'audio/Equatorial Complex.mp3'
   };
   const LEVEL = { front: 0.8, game: 0.8, shop: 0.8, duck: 0.25 };
+  const START = { game: 13 };
   const els = {};
   for (const name of Object.keys(SRC)) {
     const el = new Audio(SRC[name]);
@@ -40,7 +41,10 @@ const Music = (() => {
     };
     for (const name of Object.keys(SRC)) {
       const tr = track(name);
-      if (want[name]) tr.el.play().catch(() => {});
+      if (want[name]) {
+        if (tr.el.paused && START[name] !== undefined) tr.el.currentTime = START[name];
+        tr.el.play().catch(() => {});
+      }
       tr.gain.gain.setTargetAtTime(want[name], t, 0.35);
       tr.filter.frequency.setTargetAtTime(name === 'game' && mode === 'shop' ? 500 : 20000, t, 0.3);
     }
@@ -51,10 +55,11 @@ const Music = (() => {
     }, 1400);
   };
 
+  const stilled = () => typeof Pause !== 'undefined' && Pause.paused;
+  const live = () => (!window.paperfish || paperfish.sound) && !stilled();
   const sync = () => {
     if (!ctx) return;
-    const on = (!window.paperfish || paperfish.sound) && !(window.Pause && Pause.paused);
-    master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 0.3);
+    master.gain.setTargetAtTime(live() ? 1 : 0, ctx.currentTime, 0.3);
   };
   document.addEventListener('pausechange', sync);
 
@@ -64,8 +69,7 @@ const Music = (() => {
     master = ctx.createGain();
     master.connect(ctx.destination);
     master.gain.value = 0;
-    const on = (!window.paperfish || paperfish.sound) && !(window.Pause && Pause.paused);
-    master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 1.1);
+    master.gain.setTargetAtTime(live() ? 1 : 0, ctx.currentTime, 1.1);
     apply();
   };
   for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown']) {
@@ -79,5 +83,14 @@ const Music = (() => {
     apply();
   };
 
-  return { front: () => set('front'), game: () => set('game'), shop: () => set('shop'), sync };
+  let gameHold = 0;
+  const game = () => {
+    clearTimeout(gameHold);
+    set('gamewait');
+    gameHold = setTimeout(() => {
+      if (mode === 'gamewait') set('game');
+    }, 3000);
+  };
+
+  return { front: () => set('front'), game, shop: () => set('shop'), sync };
 })();
