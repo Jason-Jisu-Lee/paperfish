@@ -253,6 +253,16 @@ const Stage = (() => {
         f.y += (f.eating.y - f.y) * Math.min(3 * mdt, 1);
         continue;
       }
+      if (f.lant) {
+        f.tailPh += mdt * Math.PI * 2 * 0.55;
+        f.tailAmp += (0.3 - f.tailAmp) * Math.min(4 * mdt, 1);
+        const dx = f.lant.x - f.x;
+        if (Math.abs(dx) > 10) f.dir = Math.sign(dx);
+        const cx = f.lant.x - f.dir * SPECIES[f.s].len * 0.4;
+        f.x += (cx - f.x) * Math.min(2.4 * mdt, 1);
+        f.y += (f.lant.y - f.y) * Math.min(2.4 * mdt, 1);
+        continue;
+      }
 
       if (f.fleeT > 0) f.fleeT -= mdt;
       f.hovA -= mdt;
@@ -710,7 +720,7 @@ const Stage = (() => {
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize,
+    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize, uiBlocked,
     get bounds() { return bounds; },
     get open() { return open; },
     get size() { return { W, H }; }

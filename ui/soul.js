@@ -16,7 +16,9 @@ const Soul = (() => {
     soul: '<svg viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg>',
     life: '<svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5"/><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z"/><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z"/></svg>',
     egg: '<svg viewBox="-23 -29 46 58"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>',
-    lock: '<svg viewBox="0 0 24 24"><rect x="5.5" y="10.8" width="13" height="8.7" rx="2"/><path d="M8.6 10.8 V8.4 a3.4 3.4 0 0 1 6.8 0 V10.8"/></svg>'
+    lock: '<svg viewBox="0 0 24 24"><rect x="5.5" y="10.8" width="13" height="8.7" rx="2"/><path d="M8.6 10.8 V8.4 a3.4 3.4 0 0 1 6.8 0 V10.8"/></svg>',
+    lantern: '<svg viewBox="0 0 24 24"><path d="M9.5 4.2 H14.5"/><path d="M9.5 19.8 H14.5"/><path d="M12 4.8 C16.6 4.8 18.2 8.2 18.2 12 C18.2 15.8 16.6 19.2 12 19.2 C7.4 19.2 5.8 15.8 5.8 12 C5.8 8.2 7.4 4.8 12 4.8 Z"/><path d="M6.6 9 Q12 10.6 17.4 9"/><path d="M6.4 15 Q12 16.6 17.6 15"/></svg>',
+    curious: '<svg viewBox="0 0 24 24"><path d="M3.5 13 Q11.5 6.5 19.5 15"/><path d="M3.5 13 Q11.5 19.5 19.5 11"/><circle cx="19" cy="5.5" r="1.1"/><path d="M19 8.2 V9.6"/></svg>'
   };
 
   const CORE = [
@@ -28,7 +30,16 @@ const Soul = (() => {
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
       max: () => Game.pKelp >= PKELP_MAX, gate: () => Game.pLife > 0 },
     { key: 'soulUp', ico: 'soul', name: 'Extra Soul', desc: 'Every fish leaves 1 more soul when it dies.',
-      lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++ }
+      lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++ },
+    { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
+      lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
+      max: () => Game.pLantGold >= PLANTGOLD_MAX },
+    { key: 'lantFish', ico: 'curious', name: 'Curious Fish', desc: 'Tier 1 fish may tap a passing lantern once themselves, 4% more likely per level.',
+      lvl: () => Game.pLantFish, cost: pLantFishCost, buy: () => Game.pLantFish++,
+      max: () => Game.pLantFish >= PLANTFISH_MAX },
+    { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
+      lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
+      max: () => Game.pLantRate >= PLANTRATE_MAX }
   ];
 
   const TIERS = [
@@ -203,6 +214,7 @@ const Soul = (() => {
     Game.fish.forEach(f => Stage.materialize(f, 0));
     for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
     Ocean.start();
+    Lantern.start();
     Panel.refresh();
     Obj.start();
     screen.setAttribute('hidden', '');

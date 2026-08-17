@@ -15,6 +15,7 @@ const startGame = () => {
   Game.started = true;
   Panel.refresh();
   Ocean.start();
+  Lantern.start();
   if (Game.tuts.obj1) Obj.start();
   Soul.resume();
 };
@@ -39,9 +40,11 @@ const startGame = () => {
     Ambience.update(sdt);
     Stage.update(sdt);
     Ocean.update(sdt);
+    Lantern.update(sdt);
     Stage.clear();
     Ambience.drawBack(Stage.ctx);
     Ocean.draw(Stage.ctx);
+    Lantern.draw(Stage.ctx);
     Stage.drawScene();
     Ambience.drawFront(Stage.ctx);
 

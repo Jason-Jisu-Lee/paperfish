@@ -195,6 +195,18 @@ Exact numbers live in core/state.js.
   hover and it resumes after.
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
+- Paper lantern (2026-08-17, world/lantern.js): one at a time, spawns
+  10-12s (minus 1s per Lantern Tide level, max 5, 150·2^lvl souls,
+  late-game) after the previous one ends. It descends slowly from the
+  top of open water, swaying; reaching the bottom fades it out.
+  3 charges; each click pays 1 G plus 1 per Lantern Gold level
+  (max 10, 3·2^lvl souls). Glow and flame dim as charges spend.
+  Curious Fish (4% per level, max 5, 10·2^lvl souls): a tier 1 fish
+  entering the trigger radius (1.5x the shadow ray's on-screen
+  height, ~415px) rolls its chance exactly once per lantern; on
+  success it swims over and taps the lantern's center with its head,
+  worth one click. The dev reveal toggle draws the radius as a dashed
+  ring for tuning.
 
 ## first run tutorial (PROPOSED 2026-08-16, awaiting approval)
 The whole first run is tutorial-driven. Same modal-tutorial mechanic as

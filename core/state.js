@@ -10,6 +10,9 @@ const Game = {
   pLife: 0,
   pLife2: 0,
   pTier: [0, 0, 0, 0, 0],
+  pLantGold: 0,
+  pLantRate: 0,
+  pLantFish: 0,
   eggsBought: 0,
   incomeUp: 0,
   plants: 0,
@@ -57,6 +60,17 @@ const pLife2Cost = () => 15 * 2 ** Game.pLife2;
 const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 
+const PLANTGOLD_MAX = 10;
+const PLANTRATE_MAX = 5;
+const PLANTFISH_MAX = 5;
+const lantGold = () => 1 + Game.pLantGold;
+const lantMin = () => 10 - Game.pLantRate;
+const lantMax = () => 12 - Game.pLantRate;
+const lantTapChance = () => 0.04 * Game.pLantFish;
+const pLantGoldCost = () => 3 * 2 ** Game.pLantGold;
+const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
+const pLantFishCost = () => 10 * 2 ** Game.pLantFish;
+
 const fmtG = n => {
   n = Math.floor(n);
   const one = v => {
@@ -91,6 +105,9 @@ const saveGame = () => {
       pl: Game.pLife,
       pl2: Game.pLife2,
       pt: Game.pTier,
+      plg: Game.pLantGold,
+      plr: Game.pLantRate,
+      plf: Game.pLantFish,
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
       plants: Game.plants,
@@ -121,6 +138,9 @@ const loadGame = () => {
     Game.pLife = d.pl || 0;
     Game.pLife2 = d.pl2 || 0;
     Game.pTier = Array.isArray(d.pt) && d.pt.length === 5 ? d.pt : [0, 0, 0, 0, 0];
+    Game.pLantGold = d.plg || 0;
+    Game.pLantRate = d.plr || 0;
+    Game.pLantFish = d.plf || 0;
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
     Game.plants = d.plants || 0;

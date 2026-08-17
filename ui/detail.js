@@ -72,7 +72,7 @@ const Detail = (() => {
       placeCard(hover.x, hover.y, hover);
       card.removeAttribute('hidden');
     } else {
-      if (Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
+      if (Lantern.clickAt(e.clientX, e.clientY) || Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
       close();
     }
   });
@@ -124,7 +124,7 @@ const Detail = (() => {
     }
     if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
     hover = hitTest();
-    const oceanHover = mx !== null && Ocean.hoverAt(mx, my);
+    const oceanHover = mx !== null && (Ocean.hoverAt(mx, my) || Lantern.hoverAt(mx, my));
     canvas.style.cursor = hover || oceanHover ? 'pointer' : '';
     if (hover) {
       const sp = SPECIES[hover.s];
