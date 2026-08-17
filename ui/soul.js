@@ -76,7 +76,7 @@ const Soul = (() => {
     return `
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
-        <span class="fi-name">${known ? sp.name : '???'}</span>
+        <span class="fi-name">${sp.name}</span>
       </div>`;
   };
 

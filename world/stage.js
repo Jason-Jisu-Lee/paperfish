@@ -198,7 +198,17 @@ const Stage = (() => {
     f.kickTop = Math.max(f.target, f.spd) * 1.05;
   };
 
-  let tNow = 0, topZone = null, zoneT = 0;
+  let tNow = 0, topZone = null, zoneT = 0, btnZones = [];
+
+  const btnBoxes = () => {
+    const out = [];
+    for (const el of document.querySelectorAll('#hud .ubtn, #hud .rbtn')) {
+      const rc = el.getBoundingClientRect();
+      if (!rc.width) continue;
+      out.push({ l: rc.left - 12, r: rc.right + 12, t: rc.top - 12, b: rc.bottom + 12 });
+    }
+    return out;
+  };
 
   const topBoxes = () => {
     let l = Infinity, r = -Infinity, b = -Infinity;
@@ -218,7 +228,7 @@ const Stage = (() => {
     if (!mdt) return;
     tNow += mdt;
     zoneT -= mdt;
-    if (zoneT <= 0) { zoneT = 0.5; topZone = topBoxes(); }
+    if (zoneT <= 0) { zoneT = 0.5; topZone = topBoxes(); btnZones = btnBoxes(); }
     for (const f of Game.fish) {
       if (f.pop) f.pop = Math.max(f.pop - mdt, 0);
       if (f.egg) { f.ph += mdt * 2.6; continue; }
@@ -386,6 +396,19 @@ const Stage = (() => {
         const sink = 30 + (goldZone.b - f.y) * 0.5;
         if (f.vyT < sink) f.vyT = sink;
         if (f.vy < sink) f.vy = sink;
+      }
+      for (const z of btnZones) {
+        if (f.x > z.l && f.x < z.r && f.y > z.t && f.y < z.b) {
+          const dl = f.x - z.l, dr = z.r - f.x, dt = f.y - z.t, db = z.b - f.y;
+          const m = Math.min(dl, dr, dt, db);
+          if (m === dt) { if (f.vyT > -26) f.vyT = -26; if (f.vy > -26) f.vy = -26; }
+          else if (m === db) { if (f.vyT < 26) f.vyT = 26; if (f.vy < 26) f.vy = 26; }
+          else {
+            f.dir = m === dl ? -1 : 1;
+            if (f.spd < 70) f.spd = 70;
+          }
+          break;
+        }
       }
 
       const mod = 0.95 + 0.05 * Math.sin(f.slowPh);

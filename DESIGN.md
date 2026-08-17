@@ -180,7 +180,11 @@ MECHANICS.md holds exact numbers.
   of the top-left, and a top-center zone (soul counter + objective,
   30px sides, 70px below so income/soul pops clear the buttons) turns
   fish away at its rim and sinks out any that end up inside
-  (2026-08-17). SPAWNS (eggs, kelp, clam) stay in the old open
+  (2026-08-17). Each visible upgrade card and rail icon is also its
+  own small exclusion box (12px pad): a fish inside gets pushed out
+  the nearest edge, so fish still roam the panel area and slip
+  between buttons but never sit directly behind one, keeping both
+  the UI readable and the fish clickable (2026-08-17). SPAWNS (eggs, kelp, clam) stay in the old open
   water right of the panel; eggs and kelp also reroll their spot until
   clear of visible UI overlays (gold, soul counter, objective, corner
   icons).
