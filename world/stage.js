@@ -129,6 +129,8 @@ const Stage = (() => {
 
   const hatch = f => {
     f.egg = false;
+    f.s = Math.random() < eggChance() ? 1 : 0;
+    Game.seen[f.s] = 1;
     f.t = 0;
     f.age = 0;
     f.adult = false;

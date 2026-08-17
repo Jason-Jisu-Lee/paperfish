@@ -79,7 +79,7 @@ const Soul = (() => {
       </button>`;
   };
 
-  const seen = s => s === 0;
+  const seen = s => !!Game.seen[s];
 
   const fiCard = s => {
     const sp = SPECIES[s];
@@ -196,7 +196,7 @@ const Soul = (() => {
   };
 
   btn.addEventListener('click', () => {
-    if (!Game.started || Game.souls < 1 || shopOpen || Game.shop || Tut.active || Pause.paused) return;
+    if (!Game.started || shopOpen || Game.shop || Tut.active || Pause.paused) return;
     Game.shop = 1;
     saveGame();
     if (Obj.busy) setTimeout(bankAndOpen, 2200);
@@ -211,6 +211,8 @@ const Soul = (() => {
     Game.souls = 0;
     Game.eggsBought = 0;
     Game.incomeUp = 0;
+    Game.eggUp = 0;
+    Game.lifeUp = 0;
     Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();
@@ -239,10 +241,7 @@ const Soul = (() => {
       btn.removeAttribute('hidden');
       saveGame();
     }
-    if (Game.tuts.soulOpen) {
-      btn.removeAttribute('hidden');
-      btn.classList.toggle('off', Game.souls < 1);
-    }
+    if (Game.tuts.soulOpen) btn.removeAttribute('hidden');
   };
 
   const resume = () => {

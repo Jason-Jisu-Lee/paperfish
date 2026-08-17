@@ -16,6 +16,9 @@ const Game = {
   pAutoEgg: 0,
   eggsBought: 0,
   incomeUp: 0,
+  eggUp: 0,
+  lifeUp: 0,
+  seen: { 0: 1 },
   plants: 0,
   objs: {},
   tuts: {},
@@ -46,7 +49,7 @@ const eggCost = () => {
 };
 const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
-const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10) / 60;
+const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
 const HUNGER_AT = 20 / 60;
 const hatchTime = () => TIER_HATCH[0];
@@ -60,13 +63,17 @@ const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3)
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
 const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
+const EGGUP_MAX = 5;
+const eggChance = () => 0.1 * Game.eggUp;
+const eggUpCost = () => 40 * 2 ** Game.eggUp;
+const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
 
 const PLANTGOLD_MAX = 10;
 const PLANTRATE_MAX = 5;
 const PLANTFISH_MAX = 5;
 const lantGold = () => 1 + Game.pLantGold;
-const lantMin = () => 10 - Game.pLantRate;
-const lantMax = () => 12 - Game.pLantRate;
+const lantMin = () => 15 - Game.pLantRate;
+const lantMax = () => 17 - Game.pLantRate;
 const lantTapChance = () => 0.04 * Game.pLantFish;
 const pLantGoldCost = () => 3 * 2 ** Game.pLantGold;
 const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
@@ -113,6 +120,9 @@ const saveGame = () => {
       pae: Game.pAutoEgg,
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
+      eu: Game.eggUp,
+      lu: Game.lifeUp,
+      sn: Game.seen,
       plants: Game.plants,
       objs: Game.objs || {},
       tuts: Game.tuts || {},
@@ -147,11 +157,14 @@ const loadGame = () => {
     Game.pAutoEgg = d.pae || 0;
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
+    Game.eggUp = d.eu || 0;
+    Game.lifeUp = d.lu || 0;
+    Game.seen = d.sn || { 0: 1 };
     Game.plants = d.plants || 0;
     Game.objs = d.objs || {};
     Game.tuts = d.tuts || {};
     Game.fish = (d.fish || [])
-      .filter(f => f && f.s === 0)
+      .filter(f => f && TIER_FISH[0].includes(f.s))
       .map(f => {
         const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 };
         if (f.d) o.dying = 0;
@@ -196,6 +209,25 @@ const buyIncomeUp = () => {
   if (Game.gold < c) return false;
   Game.gold -= c;
   Game.incomeUp += 1;
+  saveGame();
+  return true;
+};
+
+const buyEggUp = () => {
+  if (Game.eggUp >= EGGUP_MAX) return false;
+  const c = eggUpCost();
+  if (Game.gold < c) return false;
+  Game.gold -= c;
+  Game.eggUp += 1;
+  saveGame();
+  return true;
+};
+
+const buyLifeUp = () => {
+  const c = lifeUpCost();
+  if (Game.gold < c) return false;
+  Game.gold -= c;
+  Game.lifeUp += 1;
   saveGame();
   return true;
 };

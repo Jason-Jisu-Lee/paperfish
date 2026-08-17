@@ -118,7 +118,9 @@ Exact numbers live in core/state.js.
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
   Counter top middle, Collect Soul under it (button reveals at 3
-  souls, raised from 2); collecting banks 1:1,
+  souls the first time ever, then stays usable at ANY count including
+  0, the standard end-run-whenever prestige affordance, 2026-08-17);
+  collecting banks 1:1,
   freezes the world, opens the Prestige overlay; Start resets the
   run (gold to startGold, egg cost, run upgrades, kelp all reset).
   The open shop persists in the save: refreshing mid-prestige returns
@@ -207,7 +209,7 @@ Exact numbers live in core/state.js.
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
 - Paper lantern (2026-08-17, world/lantern.js): one at a time, spawns
-  10-12s (minus 1s per Lantern Tide level, max 5, 150·2^lvl souls,
+  15-17s (minus 1s per Lantern Tide level, max 5, 150·2^lvl souls,
   late-game) after the previous one ends. It descends slowly from the
   top of open water, swaying; reaching the bottom fades it out.
   3 charges; each click pays 1 G plus 1 per Lantern Gold level
@@ -281,7 +283,17 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - snail asset + behavior as a Tier 2 creature.
 - objectives rework; collect-flow polish (confirm? dissolve animation?).
 
-## upgrade catalog (full list on paper, revealed progressively)
+## gacha groundwork (2026-08-17)
+- In-game Egg Chance (fish tab, next to the egg): +10% per level that
+  an egg hatches a secondF, max 5 (50%), 40·2^lvl G, resets each run.
+- In-game Lifespan (life tab, now active): +5s fish life per level,
+  40·2^lvl G, resets each run; stacks with prestige Lifespans.
+- secondF is functionally identical to firstF (income, souls, life
+  are species-independent in code); it differs only in art and name,
+  divergence reserved for later.
+- Discovery is real now: Game.seen persists per species; hatching a
+  species marks it, the Fish Index lights it up with its name.
+
 in-game, gold, this run only:
 - egg (the only starter purchase)
 - kelp, then better foods (hunger management)

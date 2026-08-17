@@ -22,6 +22,19 @@ const Panel = (() => {
       cost: () => KELP_COST, lvl: () => Game.plants, buy: buyKelp,
       desc: 'two bites, one bite satisfies hunger for 20s',
       cur: () => 'Current: × ' + Game.plants + ' floating'
+    },
+    {
+      key: 'eggup', name: 'Egg Chance', cat: 'fish',
+      cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
+      maxed: () => Game.eggUp >= EGGUP_MAX,
+      desc: 'each egg is 10% more likely to hatch a secondF',
+      cur: () => 'Current: ' + Math.round(eggChance() * 100) + '% secondF'
+    },
+    {
+      key: 'life', name: 'Lifespan', cat: 'life',
+      cost: lifeUpCost, lvl: () => Game.lifeUp, buy: buyLifeUp,
+      desc: 'every fish lives 5 seconds longer this run',
+      cur: () => 'Current: ' + Math.round(lifeOf() * 60) + 's'
     }
   ];
 
@@ -37,21 +50,23 @@ const Panel = (() => {
 
   const living = () => Game.fish.filter(f => f.dying === undefined).length;
 
-  const refresh = () => {
-    railFood.toggleAttribute('hidden', !Game.tuts.hungryTut && !Tut.revealed);
-    upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(u => `
-      <button class="ubtn" data-key="${u.key}">
+  const ucard = u => `
+      <button class="ubtn${u.maxed && u.maxed() ? ' off' : ''}" data-key="${u.key}">
         <span class="ubtn-lvl">× ${u.lvl()}</span>
         <span class="ubtn-name">${u.name}</span>
-        <span class="ubtn-cost">${fmt(u.cost())} G</span>
-      </button>`).join('');
+        <span class="ubtn-cost">${u.maxed && u.maxed() ? 'Max' : fmt(u.cost()) + ' G'}</span>
+      </button>`;
+
+  const refresh = () => {
+    railFood.toggleAttribute('hidden', !Game.tuts.hungryTut && !Tut.revealed);
+    upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(ucard).join('');
 
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
         <span class="ubtn-info" data-info>i</span>
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
-      </button>`;
+      </button>` + UPS.filter(u => u.cat === 'fish').map(ucard).join('');
     tick();
   };
 
@@ -73,9 +88,9 @@ const Panel = (() => {
       eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP);
       eb.classList.toggle('pulse', !Game.tuts.eggBought);
     }
-    for (const el of upGrid.querySelectorAll('[data-key]')) {
+    for (const el of document.querySelectorAll('#up-grid [data-key], #fish-grid [data-key]')) {
       const u = UPS.find(x => x.key === el.dataset.key);
-      el.classList.toggle('off', Game.gold < u.cost());
+      el.classList.toggle('off', (u.maxed && u.maxed()) || Game.gold < u.cost());
     }
   };
 
@@ -105,6 +120,12 @@ const Panel = (() => {
   });
 
   fishGrid.addEventListener('click', e => {
+    const uk = e.target.closest('[data-key]');
+    if (uk) {
+      const u = UPS.find(x => x.key === uk.dataset.key);
+      if (u && u.buy()) refresh();
+      return;
+    }
     if (e.target.closest('[data-info]')) {
       eiBody.innerHTML =
         `<div class="ei-tier">Tier 1</div>` +
