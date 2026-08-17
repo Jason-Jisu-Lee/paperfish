@@ -33,7 +33,7 @@
     glyphPlay.toggleAttribute('hidden', !Pause.paused);
   };
 
-  const toggleSound = () => { state.sound = !state.sound; save(); render(); };
+  const toggleSound = () => { state.sound = !state.sound; save(); render(); Music.sync(); };
   const toggleScreen = () => {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     else document.documentElement.requestFullscreen().catch(() => {});

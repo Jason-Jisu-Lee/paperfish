@@ -76,7 +76,7 @@ const Soul = (() => {
     return `
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
-        <span class="fi-name">${sp.name}</span>
+        <span class="fi-name">${known || Game.devReveal ? sp.name : '???'}</span>
       </div>`;
   };
 
@@ -166,6 +166,7 @@ const Soul = (() => {
 
   const open = () => {
     shopOpen = true;
+    Music.shop();
     render();
     screen.classList.add('fresh');
     screen.removeAttribute('hidden');
@@ -207,6 +208,7 @@ const Soul = (() => {
     screen.setAttribute('hidden', '');
     tip.setAttribute('hidden', '');
     shopOpen = false;
+    Music.game();
     saveGame();
   });
 

@@ -22,6 +22,10 @@
       saveGame();
     }
     if (b.dataset.act === 'soul') Game.souls += 1;
+    if (b.dataset.act === 'reveal') {
+      Game.devReveal = !Game.devReveal;
+      b.classList.toggle('on', Game.devReveal);
+    }
     if (b.dataset.act === 'reset') resetGame();
   });
 })();

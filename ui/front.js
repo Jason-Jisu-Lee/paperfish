@@ -13,6 +13,7 @@
   document.getElementById('m-play').addEventListener('click', () => {
     front.classList.add('gone');
     setTimeout(() => front.setAttribute('hidden', ''), 750);
+    Music.game();
     startGame();
   });
 
@@ -44,6 +45,7 @@
     document.getElementById('soulbox').setAttribute('hidden', '');
     front.removeAttribute('hidden');
     replayHero();
+    Music.front();
     requestAnimationFrame(() => front.classList.remove('gone'));
   };
 })();
