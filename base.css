@@ -516,29 +516,35 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   position:fixed; z-index:90;
   left:clamp(16px, 2vw, 28px);
   bottom:clamp(14px, 2.6vh, 26px);
-  width:216px;
-  padding:8px 12px 6px;
-  background:rgba(242,239,230,.88);
-  border:1px solid rgba(28,27,24,.16);
-  border-radius:6px;
+  width:322px;
+  padding:12px 15px 11px;
+  background:rgba(242,239,230,.93);
+  border:1px solid rgba(28,27,24,.2);
+  border-radius:9px;
 }
 .dev-row{
-  display:flex; align-items:baseline; gap:12px;
-  padding:5px 0;
+  display:flex; align-items:center; gap:7px;
+  padding:4px 0;
+  flex-wrap:wrap;
 }
 .dev-tag{
-  font-size:10px; letter-spacing:.28em; text-transform:uppercase;
-  color:rgba(28,27,24,.55);
-  width:48px; flex:none;
+  font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(28,27,24,.6);
+  width:54px; flex:none;
 }
 .dev button{
-  font-size:12px; letter-spacing:.1em;
+  font-size:13px; letter-spacing:.03em;
   color:rgba(28,27,24,.85);
+  background:rgba(255,255,255,.75);
+  border:1px solid rgba(28,27,24,.3);
+  border-radius:6px;
+  padding:4px 8px;
+  cursor:pointer;
   font-feature-settings:'tnum';
-  transition:color .3s ease;
+  transition:border-color .2s ease, background .2s ease;
 }
-.dev button:hover{ color:var(--ink); }
-.dev button.on{ color:var(--ink); border-bottom:1px solid rgba(28,27,24,.6); }
+.dev button:hover{ border-color:rgba(28,27,24,.65); }
+.dev button.on{ background:rgba(180,58,43,.1); border-color:var(--seal); color:var(--ink); }
 
 @media (max-width: 640px){
   .hud{ width:min(250px, 64vw); }

@@ -104,13 +104,6 @@ const Lantern = (() => {
     const x = lan.x, y = lan.y + Math.sin(lan.ph * 2 * Math.PI / 4.2) * 4;
     const heat = lan.charges / 3;
     ctx.save();
-    const g = ctx.createRadialGradient(x, y, 3, x, y, 42);
-    g.addColorStop(0, `rgba(226,180,90,${0.4 * a * (0.3 + heat * 0.7)})`);
-    g.addColorStop(1, 'rgba(226,180,90,0)');
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.arc(x, y, 42, 0, Math.PI * 2);
-    ctx.fill();
     ctx.globalAlpha = a;
     ctx.translate(x, y);
     ctx.scale(SC, SC);
@@ -118,9 +111,12 @@ const Lantern = (() => {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.lineWidth = 1.7 / SC;
-    ctx.strokeStyle = 'rgba(28,27,24,0.8)';
+    ctx.shadowColor = `rgba(226,180,90,${0.45 * (0.25 + heat * 0.75)})`;
+    ctx.shadowBlur = 10;
     ctx.fillStyle = `rgba(238,199,113,${0.28 * (0.4 + heat * 0.6)})`;
     ctx.fill(ART.body);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(28,27,24,0.8)';
     ctx.stroke(ART.loop);
     ctx.stroke(ART.body);
     ctx.stroke(ART.ribs);
