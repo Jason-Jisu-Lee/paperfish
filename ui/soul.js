@@ -254,5 +254,5 @@ const Soul = (() => {
     screen.setAttribute('hidden', '');
   };
 
-  return { tick, resume, closeShop, get shopOpen() { return shopOpen; } };
+  return { tick, resume, closeShop, render, get shopOpen() { return shopOpen; } };
 })();

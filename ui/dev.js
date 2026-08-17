@@ -25,6 +25,7 @@
     if (b.dataset.act === 'reveal') {
       Game.devReveal = !Game.devReveal;
       b.classList.toggle('on', Game.devReveal);
+      if (Soul.shopOpen) Soul.render();
     }
     if (b.dataset.act === 'reset') resetGame();
   });
