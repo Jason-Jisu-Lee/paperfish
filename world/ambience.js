@@ -53,20 +53,30 @@ const Ambience = (() => {
   const spawnSchool = () => {
     const { W, H } = Stage.size;
     const ltr = Math.random() < 0.5;
-    const dx = ltr ? 1 : -1;
+    const giant = Math.random() < 0.1;
+    const m = giant
+      ? { s: 3.6, a: 0.34, v: 0.38, sp: 3.2, fade: 620 }
+      : { s: 1, a: 1, v: 1, sp: 1, fade: 240 };
     school = {
-      ang: ltr ? 0 : Math.PI, dx, dy: 0,
-      x: ltr ? -180 : W + 180,
-      y: H * rand(0.12, 0.88),
+      giant, am: m.a, fadeW: m.fade,
+      ang: ltr ? 0 : Math.PI, dx: ltr ? 1 : -1, dy: 0,
+      x: ltr ? -180 * m.sp : W + 180 * m.sp,
+      y: H * (giant ? rand(0.3, 0.7) : rand(0.12, 0.88)),
       prog: 0,
-      total: W + 360,
-      v: rand(160, 218),
+      total: W + 360 * m.sp,
+      v: rand(160, 218) * m.v,
       t: 0,
-      fish: Array.from({ length: 26 + Math.floor(Math.random() * 10) }, () => ({
-        ox: rand(-105, 18), oy: rand(-32, 32),
-        ph: rand(0, 7), wf: rand(5, 9),
-        s: rand(1.48, 2.64), lag: rand(0.85, 1.15)
-      }))
+      fish: Array.from({ length: 26 + Math.floor(Math.random() * 10) }, () => {
+        const far = !giant && Math.random() < 0.42;
+        return {
+          ox: rand(-105, 18) * m.sp,
+          oy: (rand(-32, 32) + (far ? -8 : 5)) * m.sp,
+          ph: rand(0, 7), wf: rand(5, 9),
+          s: rand(1.48, 2.64) * m.s * (far ? 0.62 : 1),
+          lag: rand(0.85, 1.15),
+          far, drift: far ? rand(-24, -11) : 0
+        };
+      })
     };
   };
 
@@ -148,11 +158,12 @@ const Ambience = (() => {
 
     if (school) {
       school.t += mdt;
-      const step = school.v * (1 + school.t * 0.25) * mdt;
+      const step = school.v * (1 + school.t * (school.giant ? 0.06 : 0.25)) * mdt;
       const drift = Math.sin(school.t * 1.7) * 14 * mdt;
       school.prog += step;
       school.x += school.dx * step - school.dy * drift;
       school.y += school.dy * step + school.dx * drift;
+      for (const f of school.fish) if (f.drift) f.ox += f.drift * mdt;
       if (school.prog > school.total) {
         school = null;
         nextSchool = rand(20, 50);
@@ -163,7 +174,23 @@ const Ambience = (() => {
     }
   };
 
+  const paintSchool = ctx => {
+    const edge = Math.min(school.prog, school.total - school.prog) / school.fadeW;
+    if (edge <= 0) return;
+    const base = 0.14 * school.am * Math.min(edge, 1);
+    ctx.fillStyle = 'rgba(28,27,24,1)';
+    ctx.save();
+    ctx.translate(school.x, school.y);
+    ctx.rotate(school.ang);
+    for (const f of school.fish) {
+      ctx.globalAlpha = base * (f.far ? 0.52 : 1);
+      tinyFish(ctx, f.ox * f.lag, f.oy + Math.sin(school.t * f.wf + f.ph) * 3.2, f.s, 1);
+    }
+    ctx.restore();
+  };
+
   const drawBack = ctx => {
+    if (school && school.giant) paintSchool(ctx);
     if (sil) {
       const sp = sil.sp;
       ctx.save();
@@ -178,19 +205,8 @@ const Ambience = (() => {
       for (const p of sp.p2d) ctx.fill(p);
       ctx.restore();
     }
+    if (school && !school.giant) paintSchool(ctx);
     ctx.fillStyle = 'rgba(28,27,24,1)';
-    if (school) {
-      const edge = Math.min(school.prog, school.total - school.prog) / 240;
-      if (edge > 0) {
-        ctx.globalAlpha = 0.14 * Math.min(edge, 1);
-        ctx.save();
-        ctx.translate(school.x, school.y);
-        ctx.rotate(school.ang);
-        for (const f of school.fish)
-          tinyFish(ctx, f.ox * f.lag, f.oy + Math.sin(school.t * f.wf + f.ph) * 3.2, f.s, 1);
-        ctx.restore();
-      }
-    }
     for (const m of motes) {
       ctx.globalAlpha = m.a;
       ctx.beginPath();

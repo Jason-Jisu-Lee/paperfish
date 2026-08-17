@@ -35,7 +35,14 @@ Exact numbers live in core/state.js.
   enters from the left or right edge at any height and crosses
   horizontally with a gentle vertical wobble (no vertical or diagonal
   headings, 2026-08-16); speed and size tuned by feel over several passes
-  (latest 2026-08-16: 25% slower, 20% bigger). Seagrass and
+  (latest 2026-08-16: 25% slower, 20% bigger). Two depth layers per
+  crossing (2026-08-17): ~42% of the fish render smaller, fainter,
+  and slowly fall behind the group, a parallax read inside one blob.
+  1 in 10 crossings is a giant deep-background school: fish 3.6x
+  bigger, near-invisible (about a third of normal alpha), moving at
+  ~0.4x speed, drawn behind even the shadow ray, so the ocean
+  occasionally feels vast. Individual fish shape and in-blob speed
+  variability are being demoed (demos/fishshape.html), pick pending. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
 - Front page: hero fish draw-on, PAPERFISH title, play / settings,
@@ -202,11 +209,16 @@ Exact numbers live in core/state.js.
   3 charges; each click pays 1 G plus 1 per Lantern Gold level
   (max 10, 3·2^lvl souls). Glow and flame dim as charges spend.
   Curious Fish (4% per level, max 5, 10·2^lvl souls): a tier 1 fish
-  entering the trigger radius (1.5x the shadow ray's on-screen
-  height, ~415px) rolls its chance exactly once per lantern; on
-  success it swims over and taps the lantern's center with its head,
-  worth one click. The dev reveal toggle draws the radius as a dashed
-  ring for tuning.
+  entering the trigger radius (0.9x the shadow ray's on-screen
+  height, ~250px, cut 40% from the first pass) rolls its chance
+  exactly once per lantern; on success it swims over and taps the
+  lantern's center with its head, worth one click. The dev reveal
+  toggle draws the radius as a dashed ring for tuning. Art is the
+  original 2026-08-16 DOM lantern ported to canvas: hanging loop,
+  amber-washed body, three sagging ribs, foot bar and tassel, golden
+  glow that dims as charges spend.
+- Auto Egg (flat 20 souls, one level): once owned, an egg is bought
+  automatically the moment gold covers the current egg cost.
 
 ## first run tutorial (PROPOSED 2026-08-16, awaiting approval)
 The whole first run is tutorial-driven. Same modal-tutorial mechanic as
@@ -299,7 +311,10 @@ prestige, souls, permanent:
   and low-passes them to 500Hz (the underwater muffle) while
   Equatorial Complex plays on top; diving back restores the harps.
   Crossfades ~0.35s time-constant; faded-out tracks pause after 1.4s.
-  The Sound toggle (corner note + settings) drives a master gain.
+  The Sound toggle (corner note + settings) drives a master gain,
+  pause fades the master out and back (~1s), and the very first
+  arm fades in from silence over ~3s so a cold-start buffering gap
+  reads as intentional atmosphere.
   Spare takes sit in audio/ (8 Bit Synths, Autoharp, Interstellar
   Mix, Morning) for future zones or auditioning.
 - Sound effects still absent (sfx removed 2026-08-15); they return as

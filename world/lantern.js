@@ -4,8 +4,16 @@ const Lantern = (() => {
 
   const measure = () => {
     const sp = SPECIES.find(s => s.file === 'ray');
-    radius = 1.5 * (sp.len / sp.vb[0]) * 3.9 * sp.vb[1];
+    radius = 0.9 * (sp.len / sp.vb[0]) * 3.9 * sp.vb[1];
   };
+
+  const ART = {
+    loop: new Path2D('M30 3 L30 9 M21 9 L39 9'),
+    body: new Path2D('M30 11 C45 11 52 23 52 40 C52 57 45 68 30 68 C15 68 8 57 8 40 C8 23 15 11 30 11 Z'),
+    ribs: new Path2D('M9.5 27 C22 31 38 31 50.5 27 M8 41 C22 45 38 45 52 41 M9.5 55 C22 59 38 59 50.5 55'),
+    foot: new Path2D('M23 68 L37 68 M30 68 L30 80')
+  };
+  const SC = 0.77;
 
   const start = () => {
     if (!radius) measure();
@@ -89,47 +97,30 @@ const Lantern = (() => {
     if (!Game.started || !lan) return;
     const a = lan.gone ? Math.max(1 - lan.fade, 0) : 1;
     if (a <= 0) return;
-    const x = lan.x, y = lan.y + Math.sin(lan.ph * 1.6) * 2;
+    const x = lan.x, y = lan.y + Math.sin(lan.ph * 2 * Math.PI / 4.2) * 4;
     const heat = lan.charges / 3;
     ctx.save();
-    const g = ctx.createRadialGradient(x, y, 2, x, y, 36);
-    g.addColorStop(0, `rgba(122,88,0,${0.24 * a * heat})`);
-    g.addColorStop(1, 'rgba(122,88,0,0)');
+    const g = ctx.createRadialGradient(x, y, 3, x, y, 42);
+    g.addColorStop(0, `rgba(226,180,90,${0.4 * a * (0.3 + heat * 0.7)})`);
+    g.addColorStop(1, 'rgba(226,180,90,0)');
     ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.arc(x, y, 36, 0, Math.PI * 2);
+    ctx.arc(x, y, 42, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = a;
+    ctx.translate(x, y);
+    ctx.scale(SC, SC);
+    ctx.translate(-30, -40);
     ctx.lineCap = 'round';
-    ctx.fillStyle = 'rgba(253,250,241,0.92)';
-    ctx.strokeStyle = 'rgba(28,27,24,0.78)';
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(x, y - 13);
-    ctx.bezierCurveTo(x + 11, y - 13, x + 12, y - 5, x + 12, y);
-    ctx.bezierCurveTo(x + 12, y + 6, x + 10, y + 13, x, y + 13);
-    ctx.bezierCurveTo(x - 10, y + 13, x - 12, y + 6, x - 12, y);
-    ctx.bezierCurveTo(x - 12, y - 5, x - 11, y - 13, x, y - 13);
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = 'rgba(28,27,24,0.28)';
-    ctx.lineWidth = 1;
-    for (const dy of [-6.5, 0, 6.5]) {
-      const w = 12 - Math.abs(dy) * 0.45;
-      ctx.beginPath();
-      ctx.moveTo(x - w, y + dy);
-      ctx.quadraticCurveTo(x, y + dy + 2.2, x + w, y + dy);
-      ctx.stroke();
-    }
-    ctx.fillStyle = 'rgba(28,27,24,0.82)';
-    ctx.fillRect(x - 6, y - 16.5, 12, 3.2);
-    ctx.fillRect(x - 6, y + 13.3, 12, 3.2);
-    if (heat > 0) {
-      ctx.fillStyle = `rgba(180,58,43,${0.35 + heat * 0.5})`;
-      ctx.beginPath();
-      ctx.arc(x, y - 1 + Math.sin(lan.ph * 5) * 0.7, 2.1 + heat, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 1.7 / SC;
+    ctx.strokeStyle = 'rgba(28,27,24,0.8)';
+    ctx.fillStyle = `rgba(238,199,113,${0.28 * (0.4 + heat * 0.6)})`;
+    ctx.fill(ART.body);
+    ctx.stroke(ART.loop);
+    ctx.stroke(ART.body);
+    ctx.stroke(ART.ribs);
+    ctx.stroke(ART.foot);
     ctx.restore();
     if (Game.devReveal && !lan.gone) {
       ctx.save();

@@ -13,6 +13,7 @@ const Game = {
   pLantGold: 0,
   pLantRate: 0,
   pLantFish: 0,
+  pAutoEgg: 0,
   eggsBought: 0,
   incomeUp: 0,
   plants: 0,
@@ -70,6 +71,7 @@ const lantTapChance = () => 0.04 * Game.pLantFish;
 const pLantGoldCost = () => 3 * 2 ** Game.pLantGold;
 const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
 const pLantFishCost = () => 10 * 2 ** Game.pLantFish;
+const pAutoEggCost = () => 20;
 
 const fmtG = n => {
   n = Math.floor(n);
@@ -108,6 +110,7 @@ const saveGame = () => {
       plg: Game.pLantGold,
       plr: Game.pLantRate,
       plf: Game.pLantFish,
+      pae: Game.pAutoEgg,
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
       plants: Game.plants,
@@ -141,6 +144,7 @@ const loadGame = () => {
     Game.pLantGold = d.plg || 0;
     Game.pLantRate = d.plr || 0;
     Game.pLantFish = d.plf || 0;
+    Game.pAutoEgg = d.pae || 0;
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
     Game.plants = d.plants || 0;

@@ -36,6 +36,7 @@ const startGame = () => {
     const sdt = mdt * Game.speed;
 
     const refresh = Sim.step(sdt);
+    if (Game.pAutoEgg && mdt && buyEgg()) Panel.refresh();
 
     Ambience.update(sdt);
     Stage.update(sdt);

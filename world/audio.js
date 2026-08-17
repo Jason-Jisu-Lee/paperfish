@@ -63,7 +63,9 @@ const Music = (() => {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain();
     master.connect(ctx.destination);
-    sync();
+    master.gain.value = 0;
+    const on = (!window.paperfish || paperfish.sound) && !(window.Pause && Pause.paused);
+    master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, 1.1);
     apply();
   };
   for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown']) {
