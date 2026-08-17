@@ -176,10 +176,14 @@ MECHANICS.md holds exact numbers.
   (24px side margins, top 64px, bottom 0.875H above the ground line)
   including behind the translucent upgrade panel, like the shadow ray;
   an anti-lurk timer kicks any fish that dawdles behind the panel over
-  4s back into open water, and a gold-counter zone steers them down
-  out of the top-left. SPAWNS (eggs, kelp, clam) stay in the old open
-  water right of the panel; eggs also reroll their spot until clear of
-  visible UI overlays (gold, soul counter, objective, corner icons).
+  4s back into open water; a gold-counter zone steers them down out
+  of the top-left, and a top-center zone (soul counter + objective,
+  30px sides, 70px below so income/soul pops clear the buttons) turns
+  fish away at its rim and sinks out any that end up inside
+  (2026-08-17). SPAWNS (eggs, kelp, clam) stay in the old open
+  water right of the panel; eggs and kelp also reroll their spot until
+  clear of visible UI overlays (gold, soul counter, objective, corner
+  icons).
 - SPECIES entries are pure art assets; all gameplay numbers live in
   core/state.js.
 
