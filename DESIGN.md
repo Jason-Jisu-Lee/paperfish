@@ -216,9 +216,12 @@ Exact numbers live in core/state.js.
   exactly once per lantern; on success it swims over and taps the
   lantern's center with its head, worth one click. The dev reveal
   toggle draws the radius as a dashed ring for tuning. Art is the
-  original 2026-08-16 DOM lantern ported to canvas: hanging loop,
-  amber-washed body, three sagging ribs, foot bar and tassel, golden
-  glow that dims as charges spend.
+  first-ever lantern recovered from m1/firstF_refinement (d744dec)
+  after two redesign rounds missed: compact barrel with bowed sides,
+  paper-white fill and clear ink border, two straight rib lines,
+  small outlined caps, tiny flickering muted-gold flame, whisper of
+  glow (0.15 alpha); fill and flame dim as charges spend, and it
+  jolts on each tap.
 - Auto Egg (flat 20 souls, one level): once owned, an egg is bought
   automatically the moment gold covers the current egg cost.
 

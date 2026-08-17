@@ -7,14 +7,6 @@ const Lantern = (() => {
     radius = 0.9 * (sp.len / sp.vb[0]) * 3.9 * sp.vb[1];
   };
 
-  const ART = {
-    loop: new Path2D('M30 3 L30 9 M21 9 L39 9'),
-    body: new Path2D('M30 11 C45 11 52 23 52 40 C52 57 45 68 30 68 C15 68 8 57 8 40 C8 23 15 11 30 11 Z'),
-    ribs: new Path2D('M9.5 27 C22 31 38 31 50.5 27 M8 41 C22 45 38 45 52 41 M9.5 55 C22 59 38 59 50.5 55'),
-    foot: new Path2D('M23 68 L37 68 M30 68 L30 80')
-  };
-  const SC = 0.77;
-
   const start = () => {
     if (!radius) measure();
     lan = null;
@@ -39,6 +31,7 @@ const Lantern = (() => {
     Game.gold += lantGold();
     Stage.spawnPop(lan.x, lan.y - 26, '+' + fmtG(lantGold()) + ' G', 'gold');
     lan.charges -= 1;
+    lan.jolt = 1;
     if (lan.charges <= 0) lan.gone = true;
   };
 
@@ -59,7 +52,8 @@ const Lantern = (() => {
       if (nextT <= 0) spawn();
       return;
     }
-    lan.ph += mdt;
+    lan.ph += mdt * 1.1;
+    lan.jolt = Math.max((lan.jolt || 0) - mdt * 4, 0);
     if (lan.gone) {
       for (const f of Game.fish) delete f.lant;
       lan.fade += mdt / 0.8;
@@ -101,26 +95,47 @@ const Lantern = (() => {
     if (!Game.started || !lan) return;
     const a = lan.gone ? Math.max(1 - lan.fade, 0) : 1;
     if (a <= 0) return;
-    const x = lan.x, y = lan.y + Math.sin(lan.ph * 2 * Math.PI / 4.2) * 4;
-    const heat = lan.charges / 3;
+    const lit = lan.charges / 3;
+    const x = lan.x, y = lan.y + Math.sin(lan.ph * 1.4) * 4 + (lan.jolt || 0) * 3;
     ctx.save();
     ctx.globalAlpha = a;
+    if (lit > 0) {
+      const g = ctx.createRadialGradient(x, y, 2, x, y, 48);
+      g.addColorStop(0, 'rgba(190,150,40,' + 0.15 * lit + ')');
+      g.addColorStop(1, 'rgba(190,150,40,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, 48, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.translate(x, y);
-    ctx.scale(SC, SC);
-    ctx.translate(-30, -40);
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 1.7 / SC;
-    ctx.shadowColor = `rgba(226,180,90,${0.45 * (0.25 + heat * 0.75)})`;
-    ctx.shadowBlur = 10;
-    ctx.fillStyle = `rgba(238,199,113,${0.28 * (0.4 + heat * 0.6)})`;
-    ctx.fill(ART.body);
-    ctx.shadowBlur = 0;
     ctx.strokeStyle = 'rgba(28,27,24,0.8)';
-    ctx.stroke(ART.loop);
-    ctx.stroke(ART.body);
-    ctx.stroke(ART.ribs);
-    ctx.stroke(ART.foot);
+    ctx.fillStyle = 'rgba(255,251,240,' + (0.35 + 0.3 * lit) + ')';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(-9, -12);
+    ctx.bezierCurveTo(-13, -4, -13, 6, -9, 14);
+    ctx.lineTo(9, 14);
+    ctx.bezierCurveTo(13, 6, 13, -4, 9, -12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-11.6, -3);
+    ctx.lineTo(11.6, -3);
+    ctx.moveTo(-11.9, 4);
+    ctx.lineTo(11.9, 4);
+    ctx.stroke();
+    ctx.lineWidth = 1.4;
+    ctx.strokeRect(-5, -15, 10, 3);
+    ctx.strokeRect(-5, 14, 10, 3);
+    if (lit > 0) {
+      ctx.fillStyle = 'rgba(170,125,20,' + (0.5 * lit + 0.2) + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 1 + Math.sin(lan.ph * 4.5) * 0.6, 2.4, 3.4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.restore();
     if (Game.devReveal && !lan.gone) {
       ctx.save();
