@@ -5,13 +5,19 @@ const Music = (() => {
     shop: 'audio/Equatorial Complex.mp3'
   };
   const LEVEL = { front: 0.8, game: 0.8, shop: 0.8, duck: 0.25 };
+  const els = {};
+  for (const name of Object.keys(SRC)) {
+    const el = new Audio(SRC[name]);
+    el.loop = true;
+    el.preload = 'auto';
+    els[name] = el;
+  }
   const tracks = {};
   let ctx = null, master = null, mode = 'front', fadeId = 0;
 
   const track = name => {
     if (tracks[name]) return tracks[name];
-    const el = new Audio(SRC[name]);
-    el.loop = true;
+    const el = els[name];
     const filter = ctx.createBiquadFilter();
     filter.type = 'lowpass';
     filter.frequency.value = 20000;
@@ -33,7 +39,6 @@ const Music = (() => {
       shop: mode === 'shop' ? LEVEL.shop : 0
     };
     for (const name of Object.keys(SRC)) {
-      if (!tracks[name] && !want[name]) continue;
       const tr = track(name);
       if (want[name]) tr.el.play().catch(() => {});
       tr.gain.gain.setTargetAtTime(want[name], t, 0.35);
