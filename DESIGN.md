@@ -183,6 +183,8 @@ Exact numbers live in core/state.js.
 - Two swim rectangles (2026-08-16): fish ROAM nearly the whole screen
   (24px side margins, top 64px, bottom 0.875H above the ground line)
   including behind the translucent upgrade panel, like the shadow ray;
+  the panel is click-transparent everywhere except its actual buttons,
+  so fish behind it stay selectable (2026-08-17);
   an anti-lurk timer kicks any fish that dawdles behind the panel over
   4s back into open water; a gold-counter zone steers them down out
   of the top-left, and a top-center zone (soul counter + objective,
