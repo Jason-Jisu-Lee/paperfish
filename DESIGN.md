@@ -41,8 +41,10 @@ Exact numbers live in core/state.js.
   1 in 10 crossings is a giant deep-background school: fish 3.6x
   bigger, near-invisible (about a third of normal alpha), moving at
   ~0.4x speed, drawn behind even the shadow ray, so the ocean
-  occasionally feels vast. Individual fish shape and in-blob speed
-  variability are being demoed (demos/fishshape.html), pick pending. Seagrass and
+  occasionally feels vast. School fish render as brush dashes, one
+  calligraphic tapered stroke each, no tail (picked 2026-08-17 from
+  demos/fishshape.html option 3); in-blob motion stays the existing
+  wobble, judged to already read like a real school. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
 - Front page: hero fish draw-on, PAPERFISH title, play / settings,

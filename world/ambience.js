@@ -82,15 +82,10 @@ const Ambience = (() => {
 
   const tinyFish = (ctx, x, y, s, dir) => {
     ctx.beginPath();
-    ctx.moveTo(x - 5 * s * dir, y);
-    ctx.quadraticCurveTo(x, y - 2.1 * s, x + 5 * s * dir, y);
-    ctx.quadraticCurveTo(x, y + 2.1 * s, x - 5 * s * dir, y);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(x - 4.4 * s * dir, y);
-    ctx.lineTo(x - 8.2 * s * dir, y - 2.5 * s);
-    ctx.lineTo(x - 8.2 * s * dir, y + 2.5 * s);
-    ctx.closePath();
+    ctx.moveTo(x + 5.5 * s * dir, y);
+    ctx.quadraticCurveTo(x, y - 1.7 * s, x - 6.2 * s * dir, y - 0.3 * s);
+    ctx.quadraticCurveTo(x - 3.8 * s * dir, y + 0.6 * s, x + 0.4 * s * dir, y + 1.4 * s);
+    ctx.quadraticCurveTo(x + 3.2 * s * dir, y + 1.2 * s, x + 5.5 * s * dir, y);
     ctx.fill();
   };
 
