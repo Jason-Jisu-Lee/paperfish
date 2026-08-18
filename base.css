@@ -660,6 +660,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   color:rgba(28,27,24,.5);
   margin:38px 0 18px;
 }
+.p-cat svg{ width:16px; height:16px; opacity:.6; vertical-align:-3.5px; margin-right:9px; }
+.p-cat svg path, .p-cat svg circle, .p-cat svg rect{ fill:none; stroke:var(--ink); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .p-cat.dim{ opacity:.4; }
 .p-grid{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
 .pcard{

@@ -18,6 +18,7 @@ const Soul = (() => {
     egg: '<svg viewBox="-23 -29 46 58"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>',
     lock: '<svg viewBox="0 0 24 24"><rect x="5.5" y="10.8" width="13" height="8.7" rx="2"/><path d="M8.6 10.8 V8.4 a3.4 3.4 0 0 1 6.8 0 V10.8"/></svg>',
     lantern: '<svg viewBox="0 0 24 24"><path d="M9.5 4.2 H14.5"/><path d="M9.5 19.8 H14.5"/><path d="M12 4.8 C16.6 4.8 18.2 8.2 18.2 12 C18.2 15.8 16.6 19.2 12 19.2 C7.4 19.2 5.8 15.8 5.8 12 C5.8 8.2 7.4 4.8 12 4.8 Z"/><path d="M6.6 9 Q12 10.6 17.4 9"/><path d="M6.4 15 Q12 16.6 17.6 15"/></svg>',
+    fish: '<svg viewBox="0 0 24 24"><path d="M3 12 Q12 4.5 21 14.5"/><path d="M3 12 Q12 19.5 21 9.5"/></svg>',
     curious: '<svg viewBox="0 0 24 24"><path d="M3.5 13 Q11.5 6.5 19.5 15"/><path d="M3.5 13 Q11.5 19.5 19.5 11"/><circle cx="19" cy="5.5" r="1.1"/><path d="M19 8.2 V9.6"/></svg>'
   };
 
@@ -75,6 +76,13 @@ const Soul = (() => {
       max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp }
   ];
 
+  const U_SECTS = [
+    ['Fish', 'fish', ['u_eggup']],
+    ['Income', 'income', ['u_income']],
+    ['Food', 'kelp', ['u_kelp']],
+    ['Life', 'life', ['u_life']]
+  ];
+
   const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
   const tierOpen = t => t <= 2 || Game.pTier[t - 3] >= 1;
 
@@ -115,7 +123,11 @@ const Soul = (() => {
     if (tab === 'up') {
       h = `<div class="p-grid">${CORE.map(u => card(u, false)).join('')}</div>`;
     } else if (tab === 'unlock') {
-      h = `<div class="p-grid">${UNLOCKS.map(u => card(u, u.req && !u.req())).join('')}</div>`;
+      for (const [label, ico, keys] of U_SECTS) {
+        const ups = UNLOCKS.filter(u => keys.includes(u.key));
+        h += `<div class="p-cat">${ICO[ico]}${label}</div>` +
+          `<div class="p-grid">${ups.map(u => card(u, u.req && !u.req())).join('')}</div>`;
+      }
     } else if (tab === 'tier') {
       for (const t of TIERS) {
         const locked = !tierOpen(t.tier);
