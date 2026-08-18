@@ -64,7 +64,7 @@ const Ambience = (() => {
       y: H * (giant ? rand(0.3, 0.7) : rand(0.12, 0.88)),
       prog: 0,
       total: W + 360 * m.sp,
-      v: rand(160, 218) * m.v,
+      v: rand(240, 327) * m.v,
       t: 0,
       fish: Array.from({ length: 26 + Math.floor(Math.random() * 10) }, () => {
         const far = !giant && Math.random() < 0.42;
@@ -72,7 +72,7 @@ const Ambience = (() => {
           ox: rand(-105, 18) * m.sp,
           oy: (rand(-32, 32) + (far ? -8 : 5)) * m.sp,
           ph: rand(0, 7), wf: rand(5, 9),
-          s: rand(1.48, 2.64) * m.s * (far ? 0.62 : 1),
+          s: rand(0.89, 1.58) * m.s * (far ? 0.62 : 1),
           lag: rand(0.85, 1.15),
           far, drift: far ? rand(-24, -11) : 0
         };

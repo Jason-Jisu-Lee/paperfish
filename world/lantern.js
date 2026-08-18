@@ -83,7 +83,7 @@ const Lantern = (() => {
         }
         continue;
       }
-      if (!chance || f.lanSeen === lan.id) continue;
+      if (!chance || f.lanSeen === lan.id || tierOf(f.s) !== 1) continue;
       if (Math.hypot(f.x - lan.x, f.y - lan.y) < radius) {
         f.lanSeen = lan.id;
         if (Math.random() < chance) f.lant = { x: lan.x, y: lan.y };

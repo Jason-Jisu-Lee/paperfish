@@ -95,7 +95,7 @@ const Sim = (() => {
             fired += 1;
           }
           if (fired) {
-            const amt = incomePer5s() * fired;
+            const amt = fishIncome(f.s) * fired;
             earned += amt;
             Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 10, '+' + fmtG(amt) + ' G');
           }
@@ -108,7 +108,7 @@ const Sim = (() => {
             f.dying = 0;
             firstDeath();
             if (!f.nosoul) {
-              const n = soulYield();
+              const n = soulYieldOf(f.s);
               Game.souls += n;
               Stage.spawnPop(f.x, f.y - 14, '+' + n, 'soul');
               Obj.event('souls3', n);

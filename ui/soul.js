@@ -60,7 +60,22 @@ const Soul = (() => {
     ] }))
   ];
 
-  const ALL = [...CORE, ...TIERS.flatMap(t => t.ups)];
+  const UNLOCKS = [
+    { key: 'u_income', ico: 'income', name: 'Income', desc: 'Unlock the in-run Income upgrade.',
+      lvl: () => Game.unlocks.income, cost: () => UNLOCK_COST, buy: () => Game.unlocks.income = 1,
+      max: () => !!Game.unlocks.income },
+    { key: 'u_kelp', ico: 'kelp', name: 'Kelp', desc: 'Unlock buying kelp during a run.',
+      lvl: () => Game.unlocks.kelp, cost: () => UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
+      max: () => !!Game.unlocks.kelp },
+    { key: 'u_eggup', ico: 'egg', name: 'Egg Chance', desc: 'Unlock the in-run Egg Chance upgrade.',
+      lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
+      max: () => !!Game.unlocks.eggup },
+    { key: 'u_life', ico: 'life', name: 'Lifespan', desc: 'Unlock the in-run Lifespan upgrade.',
+      lvl: () => Game.unlocks.life, cost: () => UNLOCK_COST, buy: () => Game.unlocks.life = 1,
+      max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp }
+  ];
+
+  const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
   const tierOpen = t => t <= 2 || Game.pTier[t - 3] >= 1;
 
   const card = (u, locked) => {
@@ -99,6 +114,8 @@ const Soul = (() => {
     let h = '';
     if (tab === 'up') {
       h = `<div class="p-grid">${CORE.map(u => card(u, false)).join('')}</div>`;
+    } else if (tab === 'unlock') {
+      h = `<div class="p-grid">${UNLOCKS.map(u => card(u, u.req && !u.req())).join('')}</div>`;
     } else if (tab === 'tier') {
       for (const t of TIERS) {
         const locked = !tierOpen(t.tier);

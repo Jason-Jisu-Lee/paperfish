@@ -19,6 +19,7 @@ const Game = {
   eggUp: 0,
   lifeUp: 0,
   seen: { 0: 1 },
+  unlocks: { income: 0, kelp: 0, life: 0, eggup: 0 },
   plants: 0,
   objs: {},
   tuts: {},
@@ -36,7 +37,7 @@ const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
 
-const TIER_FISH = [[0, 1], [2, 3, 4, 5], [6, 7, 8, 9], [10, 11]];
+const TIER_FISH = [[0], [1, 3, 4, 2], [7, 8, 9], [10, 11]];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
 const startGold = () => 10 + Game.pStartGold * 5;
@@ -49,6 +50,9 @@ const eggCost = () => {
 };
 const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
+const fishIncome = s => (tierOf(s) === 2 ? 3 : 1) + Game.incomeUp + Game.pIncome;
+const soulYieldOf = s => (tierOf(s) === 2 ? 2 : 1) + Game.soulUp;
+const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
 const HUNGER_AT = 20 / 60;
@@ -93,9 +97,9 @@ const fmtG = n => {
 };
 
 const ratePerMin = () => {
-  let n = 0;
-  for (const f of Game.fish) if (!f.egg && f.dying === undefined) n += 1;
-  return n * incomePer5s() * (60 / TICK);
+  let r = 0;
+  for (const f of Game.fish) if (!f.egg && f.dying === undefined) r += fishIncome(f.s);
+  return r * (60 / TICK);
 };
 
 const saveGame = () => {
@@ -123,6 +127,7 @@ const saveGame = () => {
       eu: Game.eggUp,
       lu: Game.lifeUp,
       sn: Game.seen,
+      un: Game.unlocks,
       plants: Game.plants,
       objs: Game.objs || {},
       tuts: Game.tuts || {},
@@ -160,11 +165,12 @@ const loadGame = () => {
     Game.eggUp = d.eu || 0;
     Game.lifeUp = d.lu || 0;
     Game.seen = d.sn || { 0: 1 };
+    Game.unlocks = Object.assign({ income: 0, kelp: 0, life: 0, eggup: 0 }, d.un || {});
     Game.plants = d.plants || 0;
     Game.objs = d.objs || {};
     Game.tuts = d.tuts || {};
     Game.fish = (d.fish || [])
-      .filter(f => f && TIER_FISH[0].includes(f.s))
+      .filter(f => f && tierOf(f.s) > 0)
       .map(f => {
         const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 };
         if (f.d) o.dying = 0;

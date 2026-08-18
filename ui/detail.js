@@ -175,8 +175,8 @@ const Detail = (() => {
       elStage.textContent = sel.hstate >= 1 ? 'Hungry' : sel.adult ? 'Adult' : 'Baby';
       elAge.textContent = ageFmt(age);
       elFill.style.width = (1 - age / life) * 100 + '%';
-      elFreq.textContent = fmt(incomePer5s()) + ' G / ' + TICK + 's';
-      elDeath.textContent = sel.hstate >= 1 ? '0' : '+' + soulYield();
+      elFreq.textContent = fmt(fishIncome(sel.s)) + ' G / ' + TICK + 's';
+      elDeath.textContent = sel.hstate >= 1 ? '0' : '+' + soulYieldOf(sel.s);
     }
   };
 

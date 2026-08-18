@@ -35,7 +35,7 @@ Exact numbers live in core/state.js.
   enters from the left or right edge at any height and crosses
   horizontally with a gentle vertical wobble (no vertical or diagonal
   headings, 2026-08-16); speed and size tuned by feel over several passes
-  (latest 2026-08-16: 25% slower, 20% bigger). Two depth layers per
+  (latest 2026-08-17: 40% smaller, 50% faster). Two depth layers per
   crossing (2026-08-17): ~42% of the fish render smaller, fainter,
   and slowly fall behind the group, a parallax read inside one blob.
   1 in 10 crossings is a giant deep-background school: fish 3.6x
@@ -284,14 +284,28 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - objectives rework; collect-flow polish (confirm? dissolve animation?).
 
 ## gacha groundwork (2026-08-17)
+- Retier (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
+  fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF (3 fish,
+  seventhF cut from the roster); Tier 4 unchanged.
+- Tier 2 fish earn base 3 G/5s (vs 1) and pay +2 souls on death
+  (vs 1); income and soul upgrades stack on top (fishIncome /
+  soulYieldOf in state.js).
 - In-game Egg Chance (fish tab, next to the egg): +10% per level that
-  an egg hatches a secondF, max 5 (50%), 40·2^lvl G, resets each run.
-- In-game Lifespan (life tab, now active): +5s fish life per level,
-  40·2^lvl G, resets each run; stacks with prestige Lifespans.
-- secondF is functionally identical to firstF (income, souls, life
-  are species-independent in code); it differs only in art and name,
-  divergence reserved for later.
-- Discovery is real now: Game.seen persists per species; hatching a
+  an egg hatches a Tier 2 secondF, max 5 (50%), 40·2^lvl G, resets
+  each run.
+- In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
+  resets each run; stacks with prestige Lifespans.
+- Unlock layer (2026-08-17): every in-run upgrade except egg buying
+  (Income, Kelp, Egg Chance, Lifespan) is invisible until unlocked in
+  the prestige shop's new Upgrades tab, 5 souls each; Lifespan's
+  unlock is locked until Kelp's is owned. The food rail icon appears
+  only once Kelp is unlocked.
+- Hunger tutorial simplified: one step pointing at the hungry fish,
+  "Hungry fish do not generate Soul", Got it. No kelp pointing, no
+  rail reveal (kelp may not be unlocked yet). Elegant consequence:
+  base 20s life never hungers, so hunger only exists after Lifespan,
+  which requires Kelp first, so food always exists when hunger does.
+- Discovery is real: Game.seen persists per species; hatching a
   species marks it, the Fish Index lights it up with its name.
 
 in-game, gold, this run only:

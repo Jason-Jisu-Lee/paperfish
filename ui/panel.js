@@ -12,31 +12,33 @@ const Panel = (() => {
 
   const UPS = [
     {
-      key: 'income', name: 'Income', cat: 'income',
+      key: 'income', name: 'Income', cat: 'income', unlock: 'income',
       cost: incomeUpCost, lvl: () => Game.incomeUp, buy: buyIncomeUp,
       desc: '+1 G / 5s for every fish',
       cur: () => 'Current: ' + fmt(incomePer5s()) + ' G / 5s'
     },
     {
-      key: 'kelp', name: 'Kelp', cat: 'food',
+      key: 'kelp', name: 'Kelp', cat: 'food', unlock: 'kelp',
       cost: () => KELP_COST, lvl: () => Game.plants, buy: buyKelp,
       desc: 'two bites, one bite satisfies hunger for 20s',
       cur: () => 'Current: × ' + Game.plants + ' floating'
     },
     {
-      key: 'eggup', name: 'Egg Chance', cat: 'fish',
+      key: 'eggup', name: 'Egg Chance', cat: 'fish', unlock: 'eggup',
       cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
       maxed: () => Game.eggUp >= EGGUP_MAX,
-      desc: 'each egg is 10% more likely to hatch a secondF',
+      desc: 'each egg is 10% more likely to hatch a Tier 2 secondF',
       cur: () => 'Current: ' + Math.round(eggChance() * 100) + '% secondF'
     },
     {
-      key: 'life', name: 'Lifespan', cat: 'life',
+      key: 'life', name: 'Lifespan', cat: 'life', unlock: 'life',
       cost: lifeUpCost, lvl: () => Game.lifeUp, buy: buyLifeUp,
       desc: 'every fish lives 5 seconds longer this run',
       cur: () => 'Current: ' + Math.round(lifeOf() * 60) + 's'
     }
   ];
+
+  const owned = u => !u.unlock || Game.unlocks[u.unlock];
 
   let cat = 'fish';
 
@@ -58,15 +60,15 @@ const Panel = (() => {
       </button>`;
 
   const refresh = () => {
-    railFood.toggleAttribute('hidden', !Game.tuts.hungryTut && !Tut.revealed);
-    upGrid.innerHTML = UPS.filter(u => u.cat === cat).map(ucard).join('');
+    railFood.toggleAttribute('hidden', !Game.unlocks.kelp);
+    upGrid.innerHTML = UPS.filter(u => u.cat === cat && owned(u)).map(ucard).join('');
 
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
         <span class="ubtn-info" data-info>i</span>
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
-      </button>` + UPS.filter(u => u.cat === 'fish').map(ucard).join('');
+      </button>` + UPS.filter(u => u.cat === 'fish' && owned(u)).map(ucard).join('');
     tick();
   };
 
@@ -115,7 +117,6 @@ const Panel = (() => {
     for (const rb of document.querySelectorAll('.rail [data-cat]')) rb.classList.toggle('on', rb === b);
     fishGrid.toggleAttribute('hidden', cat !== 'fish');
     upGrid.toggleAttribute('hidden', cat === 'fish');
-    if (cat === 'food') Tut.foodOpened();
     refresh();
   });
 
