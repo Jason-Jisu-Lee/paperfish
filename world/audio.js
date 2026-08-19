@@ -1,19 +1,14 @@
 const Music = (() => {
   const SRC = {
     front: 'audio/Canon in D Major.mp3',
-    game: 'audio/Canon in D for Two Harps.mp3',
+    game: 'audio/Canon in D for Two Harps.mp3?v=2',
     shop: 'audio/Equatorial Complex.mp3'
   };
   const LEVEL = { front: 0.8, game: 0.8, shop: 0.8, duck: 0.25 };
-  const START = { game: 13 };
   const els = {};
   for (const name of Object.keys(SRC)) {
     const el = new Audio(SRC[name]);
-    if (START[name] === undefined) el.loop = true;
-    else el.addEventListener('ended', () => {
-      el.currentTime = START[name];
-      el.play().catch(() => {});
-    });
+    el.loop = true;
     el.preload = 'auto';
     els[name] = el;
   }
@@ -45,10 +40,7 @@ const Music = (() => {
     };
     for (const name of Object.keys(SRC)) {
       const tr = track(name);
-      if (want[name]) {
-        if (tr.el.paused && START[name] !== undefined) tr.el.currentTime = START[name];
-        tr.el.play().catch(() => {});
-      }
+      if (want[name]) tr.el.play().catch(() => {});
       tr.gain.gain.setTargetAtTime(want[name], t, 0.35);
       tr.filter.frequency.setTargetAtTime(name === 'game' && mode === 'shop' ? 500 : 20000, t, 0.3);
     }

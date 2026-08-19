@@ -310,8 +310,11 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Fish Index cards show a rarity line under the name: the live chance
   an egg hatches that fish's tier. Index tooltip fixed to per-species
   stats (fishIncome / soulYieldOf, was flat tier-1 numbers).
-- Game track (Canon in D for Two Harps) enters at 13s and now loops
-  back to 13s, not 0 (native loop off, seek on ended).
+- Game track trimmed at the file level (2026-08-19): first 13s cut
+  with ffmpeg stream copy, so play and every native loop begin at the
+  old 13s mark. No runtime seeking (currentTime seeks can stall or
+  fall back to 0 on servers without Range support). Original kept in
+  audio/original; src cache-busted with ?v=2.
 - In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
   resets each run; stacks with prestige Lifespans.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying
