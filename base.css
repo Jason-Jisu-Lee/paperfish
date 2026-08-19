@@ -814,9 +814,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ubtn-info:hover{ border-color:var(--seal); color:var(--seal); background:rgba(180,58,43,.07); }
 .egginfo-card{ width:340px; }
 .ei-tier{
+  display:flex; align-items:baseline;
   font-size:11px; letter-spacing:.24em; text-transform:uppercase;
   color:rgba(28,27,24,.55); margin:16px 2px 8px;
 }
+.ei-row + .ei-row{ margin-top:6px; }
 .ei-row{
   display:flex; align-items:center; gap:13px; font-size:15px;
   padding:9px 12px;

@@ -287,16 +287,24 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Retier (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
   fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF (3 fish,
   seventhF cut from the roster); Tier 4 unchanged.
-- Tier 2 fish earn base 3 G/5s (vs 1) and pay +2 souls on death
+- Tier 2 fish earn base 2 G/5s (vs 1) and pay +2 souls on death
   (vs 1); income and soul upgrades stack on top (fishIncome /
   soulYieldOf in state.js).
-- In-game Egg Chance (fish tab, next to the egg): +10% per level that
-  an egg hatches a Tier 2 secondF, max 5 (50%), 40·2^lvl G, resets
-  each run.
+- In-game Fish Tier (2026-08-18, renamed from Egg Chance, fish tab):
+  cascading tier-up roll, the standard gacha rarity ladder. Each egg
+  starts at Tier 1 and climbs one tier per success at chance p, rolled
+  tier by tier, capped at the highest tier that has fish (auto-extends
+  when Tiers 5-6 get species). p = 1% per level, max 50 (50% cap),
+  cost 25·1.25^lvl G, resets each run. Species within the landed tier
+  is a uniform pick. At max level: T1 50%, T2 25%, T3 12.5%, T4 12.5%
+  (top tier absorbs). At level 10: T2 9%, T3 under 1%.
+- Egg info modal lists every tier with live hatch odds; unseen species
+  show their silhouette with ??? for the name; sub-1% odds display as
+  "<1%", never decimals.
 - In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
   resets each run; stacks with prestige Lifespans.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying
-  (Income, Kelp, Egg Chance, Lifespan) is invisible until unlocked in
+  (Income, Kelp, Fish Tier, Lifespan) is invisible until unlocked in
   the prestige shop's new Upgrades tab, 5 souls each; Lifespan's
   unlock is locked until Kelp's is owned. The food rail icon appears
   only once Kelp is unlocked.
@@ -307,6 +315,10 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   which requires Kelp first, so food always exists when hunger does.
 - Discovery is real: Game.seen persists per species; hatching a
   species marks it, the Fish Index lights it up with its name.
+- Prestige Main tab grouped like the Upgrades tab (2026-08-18), rail
+  icon headers per section: Fish (Auto Egg), Income (Starting Gold,
+  Base Income), Food (Starting Kelp), Soul (Extra Soul), Lantern
+  (Lantern Gold, Curious Fish, Lantern Tide).
 
 in-game, gold, this run only:
 - egg (the only starter purchase)

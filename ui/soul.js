@@ -68,7 +68,7 @@ const Soul = (() => {
     { key: 'u_kelp', ico: 'kelp', name: 'Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
       max: () => !!Game.unlocks.kelp },
-    { key: 'u_eggup', ico: 'egg', name: 'Egg Chance', desc: 'Unlock the in-run Egg Chance upgrade.',
+    { key: 'u_eggup', ico: 'egg', name: 'Fish Tier', desc: 'Unlock the in-run Fish Tier upgrade.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup },
     { key: 'u_life', ico: 'life', name: 'Lifespan', desc: 'Unlock the in-run Lifespan upgrade.',
@@ -81,6 +81,14 @@ const Soul = (() => {
     ['Income', 'income', ['u_income']],
     ['Food', 'kelp', ['u_kelp']],
     ['Life', 'life', ['u_life']]
+  ];
+
+  const M_SECTS = [
+    ['Fish', 'fish', ['autoEgg']],
+    ['Income', 'income', ['startGold', 'pIncome']],
+    ['Food', 'kelp', ['pKelp']],
+    ['Soul', 'soul', ['soulUp']],
+    ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
 
   const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
@@ -121,7 +129,11 @@ const Soul = (() => {
     bankEl.textContent = fmtG(Game.bank);
     let h = '';
     if (tab === 'up') {
-      h = `<div class="p-grid">${CORE.map(u => card(u, false)).join('')}</div>`;
+      for (const [label, ico, keys] of M_SECTS) {
+        const ups = CORE.filter(u => keys.includes(u.key));
+        h += `<div class="p-cat">${ICO[ico]}${label}</div>` +
+          `<div class="p-grid">${ups.map(u => card(u, false)).join('')}</div>`;
+      }
     } else if (tab === 'unlock') {
       for (const [label, ico, keys] of U_SECTS) {
         const ups = UNLOCKS.filter(u => keys.includes(u.key));

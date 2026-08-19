@@ -129,7 +129,10 @@ const Stage = (() => {
 
   const hatch = f => {
     f.egg = false;
-    f.s = Math.random() < eggChance() ? 1 : 0;
+    let t = 1;
+    while (t < TIER_FISH.length && Math.random() < tierUpChance()) t++;
+    const pool = TIER_FISH[t - 1];
+    f.s = pool[Math.floor(Math.random() * pool.length)];
     Game.seen[f.s] = 1;
     f.t = 0;
     f.age = 0;

@@ -24,11 +24,11 @@ const Panel = (() => {
       cur: () => 'Current: × ' + Game.plants + ' floating'
     },
     {
-      key: 'eggup', name: 'Egg Chance', cat: 'fish', unlock: 'eggup',
+      key: 'eggup', name: 'Fish Tier', cat: 'fish', unlock: 'eggup',
       cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
       maxed: () => Game.eggUp >= EGGUP_MAX,
-      desc: 'each egg is 10% more likely to hatch a Tier 2 secondF',
-      cur: () => 'Current: ' + Math.round(eggChance() * 100) + '% secondF'
+      desc: 'each level: 1% more chance an egg climbs a tier, rolled tier by tier',
+      cur: () => 'Current: ' + Math.round(tierUpChance() * 100) + '% per climb'
     },
     {
       key: 'life', name: 'Lifespan', cat: 'life', unlock: 'life',
@@ -128,9 +128,11 @@ const Panel = (() => {
       return;
     }
     if (e.target.closest('[data-info]')) {
-      eiBody.innerHTML =
-        `<div class="ei-tier">Tier 1</div>` +
-        `<div class="ei-row">${thumb(0)}<span>${SPECIES[0].name}</span><span class="ei-pct">100%</span></div>`;
+      const pct = c => c >= 0.995 ? '100%' : c >= 0.01 ? Math.round(c * 100) + '%' : c > 0 ? '<1%' : '0%';
+      eiBody.innerHTML = TIER_FISH.map((arr, i) =>
+        `<div class="ei-tier">Tier ${i + 1}<span class="ei-pct">${pct(tierChance(i + 1))}</span></div>` +
+        arr.map(s => `<div class="ei-row">${thumb(s)}<span>${Game.seen[s] ? SPECIES[s].name : '???'}</span></div>`).join('')
+      ).join('');
       eiModal.removeAttribute('hidden');
       return;
     }

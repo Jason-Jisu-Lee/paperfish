@@ -50,7 +50,7 @@ const eggCost = () => {
 };
 const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
-const fishIncome = s => (tierOf(s) === 2 ? 3 : 1) + Game.incomeUp + Game.pIncome;
+const fishIncome = s => (tierOf(s) === 2 ? 2 : 1) + Game.incomeUp + Game.pIncome;
 const soulYieldOf = s => (tierOf(s) === 2 ? 2 : 1) + Game.soulUp;
 const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
@@ -67,9 +67,13 @@ const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3)
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
 const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
-const EGGUP_MAX = 5;
-const eggChance = () => 0.1 * Game.eggUp;
-const eggUpCost = () => 40 * 2 ** Game.eggUp;
+const EGGUP_MAX = 50;
+const tierUpChance = () => 0.01 * Game.eggUp;
+const tierChance = t => {
+  const p = tierUpChance();
+  return t < TIER_FISH.length ? p ** (t - 1) * (1 - p) : p ** (t - 1);
+};
+const eggUpCost = () => Math.round(25 * 1.25 ** Game.eggUp);
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
 
 const PLANTGOLD_MAX = 10;
