@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>paperfish - the rowing</title>
+<style>
+  html, body { margin:0; height:100%; background:#f2efe6; overflow:hidden; }
+  canvas { display:block; width:100vw; height:100vh; }
+  #again {
+    position:fixed; left:50%; bottom:9%; transform:translateX(-50%);
+    font:15px/1 Georgia, serif; letter-spacing:.35em; text-transform:lowercase;
+    color:#f2efe6; background:none; border:1px solid rgba(242,239,230,.45);
+    border-radius:999px; padding:12px 30px 12px 34px; cursor:pointer;
+    opacity:0; transition:opacity 1.2s ease; pointer-events:none;
+  }
+  #again.on { opacity:1; pointer-events:auto; }
+  #again:hover { border-color:#b43a2b; color:#b43a2b; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<button id="again">again</button>
+<script>
+const cv = document.getElementById('c');
+const cx = cv.getContext('2d');
+const againBtn = document.getElementById('again');
+const PAPER = '#f2efe6', INK = '#1c1b18', SEAL = '#b43a2b';
+let W = 0, H = 0;
+const fit = () => {
+  const d = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * d; cv.height = H * d;
+  cx.setTransform(d, 0, 0, d, 0, 0);
+};
+addEventListener('resize', fit);
+fit();
+
+const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const S = (a, b, x) => { x = (x - a) / (b - a); x = x < 0 ? 0 : x > 1 ? 1 : x; return x * x * (3 - 2 * x); };
+const L = (a, b, x) => a + (b - a) * x;
+
+const DUR = 12;
+const frozen = new URLSearchParams(location.search).get('t');
+let t0 = performance.now();
+
+const ink = a => `rgba(28,27,24,${a})`;
+const pap = a => `rgba(242,239,230,${a})`;
+
+const stroke = (pts, w, a) => {
+  cx.strokeStyle = ink(a); cx.lineWidth = w; cx.lineCap = 'round';
+  cx.beginPath();
+  cx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) cx.lineTo(pts[i][0], pts[i][1]);
+  cx.stroke();
+};
+
+const draw = t => {
+  const cycle = 2.2;
+  const ph = (t / cycle) % 1;
+  const pull = S(0.05, 0.3, ph) * (1 - S(0.42, 0.6, ph));
+  const swell = S(6.9, 8.1, t);
+  const fall = S(8.1, 8.85, t);
+  const uw = S(8.75, 9.15, t);
+  const surge = 1 + pull * 0.9 + swell * 0.6;
+
+  cx.fillStyle = PAPER;
+  cx.fillRect(0, 0, W, H);
+
+  const roll = (Math.sin(t * 2.86) * 0.014 + Math.sin(t * 0.7) * 0.01) * (1 - fall)
+    + swell * 0.06 + fall * 0.62;
+  const bob = Math.sin(ph * Math.PI * 2) * H * 0.008 + Math.sin(t * 0.9) * H * 0.006;
+  const HY = L(H * 0.42, -H * 0.9, fall) + bob - swell * H * 0.09;
+
+  cx.save();
+  cx.translate(W / 2, H / 2);
+  cx.rotate(roll);
+  cx.translate(-W / 2, -H / 2);
+
+  if (uw < 1) {
+    for (let i = 0; i < 3; i++) {
+      cx.fillStyle = ink(0.045);
+      const cy0 = HY - H * (0.13 + i * 0.09) + Math.sin(t * 0.12 + i * 2) * 8;
+      cx.beginPath();
+      cx.ellipse(W * (0.22 + i * 0.3), cy0, W * 0.24, H * 0.022, 0, 0, 7);
+      cx.fill();
+    }
+    cx.fillStyle = SEAL;
+    cx.globalAlpha = 0.85;
+    cx.beginPath();
+    cx.arc(W * 0.72, HY - H * 0.16, H * 0.038, 0, 7);
+    cx.fill();
+    cx.globalAlpha = 1;
+
+    cx.fillStyle = ink(0.08);
+    cx.fillRect(-W * 0.2, HY, W * 1.4, H * 2);
+    stroke([[-W * 0.2, HY], [W * 1.2, HY]], 1.4, 0.5);
+
+    for (let i = 0; i < 15; i++) {
+      const depth = Math.pow(i / 14, 1.7);
+      const y = HY + depth * (H * 1.15 - HY);
+      const wob = Math.sin(t * surge * 1.6 + i * 1.7);
+      cx.strokeStyle = ink(0.12 + depth * 0.42);
+      cx.lineWidth = (1 + depth * 3.4) * (0.7 + rnd(i + 21) * 0.8);
+      cx.lineCap = 'round';
+      cx.beginPath();
+      for (let x = -W * 0.15; x <= W * 1.15; x += W * 0.02) {
+        const yy = y + Math.sin(x * 0.012 + t * surge * 2.2 + i * 9) * (2 + depth * 7) * (0.6 + rnd(i) * 1.6) + wob * 2;
+        x <= -W * 0.15 + 1 ? cx.moveTo(x, yy) : cx.lineTo(x, yy);
+      }
+      cx.stroke();
+    }
+    for (let i = 0; i < 40; i++) {
+      const sp = 0.05 + rnd(i) * 0.1;
+      let p = (rnd(i + 50) + t * sp * surge) % 1;
+      const depth = Math.pow(p, 1.6);
+      const y = HY + depth * (H * 1.15 - HY);
+      const x = rnd(i + 99) * W * 1.2 - W * 0.1 + Math.sin(t + i) * 10 * depth;
+      cx.strokeStyle = pap(0.25 + depth * 0.55);
+      cx.lineWidth = 1 + depth * 2.4;
+      cx.beginPath();
+      cx.moveTo(x, y); cx.lineTo(x + 6 + depth * 26, y);
+      cx.stroke();
+    }
+
+    const bY = H - H * 0.02 + fall * H * 0.5;
+    const tipY = bY - H * 0.19;
+    cx.fillStyle = ink(0.92);
+    cx.beginPath();
+    cx.moveTo(-W * 0.1, H * 1.2);
+    cx.lineTo(-W * 0.02, bY - H * 0.05);
+    cx.quadraticCurveTo(W * 0.24, bY - H * 0.115, W * 0.5, tipY);
+    cx.quadraticCurveTo(W * 0.76, bY - H * 0.115, W * 1.02, bY - H * 0.05);
+    cx.lineTo(W * 1.1, H * 1.2);
+    cx.closePath();
+    cx.fill();
+    cx.strokeStyle = pap(0.35);
+    cx.lineWidth = 1.6;
+    cx.beginPath();
+    cx.moveTo(W * 0.08, bY + H * 0.005);
+    cx.quadraticCurveTo(W * 0.5, bY - H * 0.085, W * 0.92, bY + H * 0.005);
+    cx.stroke();
+
+    for (const side of [-1, 1]) {
+      const px = W * 0.5 + side * W * 0.36;
+      const py = bY - H * 0.075;
+      const reach = Math.cos(ph * Math.PI * 2);
+      const dip = ph < 0.38 ? 1 : 0;
+      const ex = px + side * W * (0.16 + 0.05 * reach);
+      const ey = HY + (dip ? H * 0.012 : -H * (0.05 + 0.035 * Math.sin(ph * Math.PI * 2)));
+      const fly = side === 1 ? fall : 0;
+      const fx = ex + fly * W * 0.25, fy = ey - fly * H * 0.3;
+      cx.strokeStyle = ink(0.88);
+      cx.lineWidth = Math.max(5, W * 0.005);
+      cx.lineCap = 'round';
+      cx.beginPath(); cx.moveTo(px, py); cx.lineTo(fx, fy); cx.stroke();
+      cx.fillStyle = ink(0.88);
+      cx.save();
+      cx.translate(fx, fy);
+      cx.rotate(Math.atan2(fy - py, fx - px) + fly * 2.2);
+      cx.beginPath(); cx.ellipse(W * 0.01, 0, W * 0.017, W * 0.0062, 0, 0, 7); cx.fill();
+      cx.restore();
+      if (dip && uw < 0.4) {
+        const ra = 0.5 - Math.abs(ph - 0.19) * 1.8;
+        if (ra > 0) {
+          cx.strokeStyle = pap(ra + 0.2);
+          cx.lineWidth = 2.2;
+          cx.beginPath(); cx.ellipse(ex, HY + 4, 20 + ph * 70, 5 + ph * 14, 0, 0, 7); cx.stroke();
+          cx.strokeStyle = ink(ra * 0.5);
+          cx.beginPath(); cx.ellipse(ex, HY + 4, 32 + ph * 80, 8 + ph * 16, 0, 0, 7); cx.stroke();
+        }
+      }
+    }
+  }
+  cx.restore();
+
+  const spl = S(8.45, 8.8, t) * (1 - S(9.0, 9.55, t));
+  if (spl > 0) {
+    cx.fillStyle = pap(spl * 0.9);
+    cx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 34; i++) {
+      const a = rnd(i + 7) * Math.PI * 2;
+      const r = (0.25 + rnd(i + 31) * 0.75) * spl * H * 0.95;
+      cx.strokeStyle = i % 3 ? ink(0.7 * spl) : `rgba(180,58,43,${0.55 * spl})`;
+      cx.lineWidth = 1.5 + rnd(i) * 3;
+      cx.beginPath();
+      cx.moveTo(W / 2 + Math.cos(a) * r * 0.45, H / 2 + Math.sin(a) * r * 0.45);
+      cx.lineTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r);
+      cx.stroke();
+    }
+  }
+
+  if (uw > 0) {
+    const sink = S(9, 11.6, t);
+    const g = cx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, `rgba(58,66,60,${uw * 0.88})`);
+    g.addColorStop(1, `rgba(24,26,23,${uw * 0.97})`);
+    cx.fillStyle = g;
+    cx.fillRect(0, 0, W, H);
+
+    const sy = L(H * 0.24, -H * 0.18, sink);
+    cx.strokeStyle = pap(0.5 * uw * (1 - sink * 0.85));
+    cx.lineWidth = 3;
+    cx.beginPath();
+    for (let x = 0; x <= W; x += 18) {
+      const yy = sy + Math.sin(x * 0.02 + t * 1.7) * 9;
+      x === 0 ? cx.moveTo(x, yy) : cx.lineTo(x, yy);
+    }
+    cx.stroke();
+    cx.fillStyle = ink(0.85 * uw * (1 - sink));
+    cx.beginPath();
+    cx.ellipse(W * 0.5, sy - 12, W * 0.13, H * 0.03, 0.06, 0, 7);
+    cx.fill();
+
+    for (let i = 0; i < 5; i++) {
+      cx.fillStyle = pap(0.035 * uw * (1 - sink * 0.7));
+      cx.beginPath();
+      const bx = W * (0.15 + i * 0.18);
+      cx.moveTo(bx - 30, sy); cx.lineTo(bx + 60, sy);
+      cx.lineTo(bx + 170, H); cx.lineTo(bx - 10, H);
+      cx.closePath(); cx.fill();
+    }
+    for (let i = 0; i < 22; i++) {
+      const p = (rnd(i + 3) + (t - 8.8) * (0.1 + rnd(i) * 0.14)) % 1;
+      const bx = W * rnd(i + 61) + Math.sin(t * 2 + i) * 9;
+      const by = H * (1 - p);
+      cx.strokeStyle = pap(0.42 * uw * (1 - p * 0.6));
+      cx.lineWidth = 1.4;
+      cx.beginPath();
+      cx.arc(bx, by, 2.5 + rnd(i + 13) * 5, 0, 7);
+      cx.stroke();
+    }
+
+    const ft = S(9.5, 11.2, t);
+    if (ft > 0 && ft < 1) {
+      const fx = L(W * 1.15, -W * 0.15, ft);
+      const fy = H * 0.44 + Math.sin(ft * 9) * H * 0.03;
+      const fw = W * 0.085;
+      cx.strokeStyle = pap(0.55 * uw);
+      cx.lineWidth = 2.4;
+      cx.lineCap = 'round';
+      cx.beginPath();
+      cx.moveTo(fx + fw, fy);
+      cx.quadraticCurveTo(fx + fw * 0.4, fy - fw * 0.28, fx, fy + fw * 0.06);
+      cx.moveTo(fx + fw, fy);
+      cx.quadraticCurveTo(fx + fw * 0.4, fy + fw * 0.34, fx, fy - fw * 0.06);
+      cx.moveTo(fx + fw, fy);
+      cx.lineTo(fx + fw * 1.22, fy - fw * 0.2);
+      cx.moveTo(fx + fw, fy);
+      cx.lineTo(fx + fw * 1.22, fy + fw * 0.2);
+      cx.stroke();
+    }
+  }
+
+  cx.fillStyle = `rgba(20,20,18,${S(10.8, 12, t)})`;
+  cx.fillRect(0, 0, W, H);
+};
+
+const loop = now => {
+  const t = frozen !== null ? +frozen : Math.min((now - t0) / 1000, DUR + 0.01);
+  draw(t);
+  if (frozen === null && t >= DUR) againBtn.classList.add('on');
+  requestAnimationFrame(loop);
+};
+requestAnimationFrame(loop);
+
+againBtn.addEventListener('click', () => {
+  t0 = performance.now();
+  againBtn.classList.remove('on');
+});
+</script>
+</body>
+</html>
