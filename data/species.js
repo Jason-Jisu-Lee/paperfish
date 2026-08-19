@@ -8,8 +8,8 @@ const SPECIES = [
     paths: ['M30 32 C64 12 128 10 164 32', 'M30 32 C64 52 128 54 164 32', 'M4 8 L30 32 L4 56 Z', 'M60 16 L74 2 L87 14']
   },
   {
-    file: 'minnow', name: 'thirdF', vb: [170, 50], sw: 4.6, len: 74,
-    paths: ['M30 25 C64 12 128 11 164 25', 'M30 25 C64 38 128 39 164 25', 'M4 10 L30 25 L4 40 Z', 'M74 13 L86 2 L96 12']
+    file: 'pike', name: 'thirdF', vb: [175, 48], sw: 3.7, len: 108,
+    paths: ['M29 26 C60 10 132 12 171 28 C132 42 62 40 29 26 Z', 'M4 4 L29 26 L4 46 Z']
   },
   {
     file: 'cod', name: 'fourthF', vb: [150, 82], sw: 4.4, len: 88,
@@ -28,8 +28,8 @@ const SPECIES = [
     paths: ['M26 34 C56 16 122 14 161 34', 'M26 34 C56 52 122 50 161 34', 'M26 34 C18 30 10 23 4 13 L11 34 L5 55 C10 47 18 39 26 34 Z', 'M82 20 L94 6 L105 18']
   },
   {
-    file: 'pike', name: 'eighthF', vb: [175, 48], sw: 3.7, len: 108,
-    paths: ['M29 26 C60 10 132 12 171 28 C132 42 62 40 29 26 Z', 'M4 4 L29 26 L4 46 Z']
+    file: 'minnow', name: 'eighthF', vb: [170, 50], sw: 4.6, len: 74,
+    paths: ['M30 25 C64 12 128 11 164 25', 'M30 25 C64 38 128 39 164 25', 'M4 10 L30 25 L4 40 Z', 'M74 13 L86 2 L96 12']
   },
   {
     file: 'ray', name: 'ninthF', vb: [200, 140], sw: 3, len: 126,
