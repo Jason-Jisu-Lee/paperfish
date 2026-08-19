@@ -293,14 +293,25 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - In-game Fish Tier (2026-08-18, renamed from Egg Chance, fish tab):
   cascading tier-up roll, the standard gacha rarity ladder. Each egg
   starts at Tier 1 and climbs one tier per success at chance p, rolled
-  tier by tier, capped at the highest tier that has fish (auto-extends
-  when Tiers 5-6 get species). p = 1% per level, max 50 (50% cap),
-  cost 25·1.25^lvl G, resets each run. Species within the landed tier
-  is a uniform pick. At max level: T1 50%, T2 25%, T3 12.5%, T4 12.5%
-  (top tier absorbs). At level 10: T2 9%, T3 under 1%.
+  tier by tier. Species within the landed tier is a uniform pick.
+  Cost 25·1.25^lvl G, resets each run.
+- Curve retuned front-loaded (2026-08-19): p = 50%·(1 - 0.9^lvl),
+  max 50 levels. Lv 1 = 5%, Lv 5 = 20%, Lv 10 = 33%, Lv 20 = 44%,
+  Lv 50 = 50% cap. First buy matters in run one; the cap takes a LOT
+  of buys. Replaces the flat 1%/lvl that made early levels useless.
+- Tier gate (2026-08-19): eggs can only climb into tiers opened in
+  the prestige Tiers tab. Hatch Chance there is now a real one-time
+  buy per tier (30·10^(tier-2) souls: 30, 300, 3k, 30k, 300k), dev
+  tag removed; locked tiers show "Locked" in the egg modal and 0%
+  rarity. Prestige opens the ceiling, in-run Fish Tier buys the odds.
 - Egg info modal lists every tier with live hatch odds; unseen species
   show their silhouette with ??? for the name; sub-1% odds display as
-  "<1%", never decimals.
+  "<1%", never decimals (fmtPct in state.js).
+- Fish Index cards show a rarity line under the name: the live chance
+  an egg hatches that fish's tier. Index tooltip fixed to per-species
+  stats (fishIncome / soulYieldOf, was flat tier-1 numbers).
+- Game track (Canon in D for Two Harps) enters at 13s and now loops
+  back to 13s, not 0 (native loop off, seek on ended).
 - In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
   resets each run; stacks with prestige Lifespans.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying

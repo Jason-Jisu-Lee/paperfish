@@ -742,7 +742,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   width:642px; max-width:92vw; margin:0 auto;
 }
 .fi-card{
-  height:128px; padding:12px 10px 13px;
+  height:142px; padding:12px 10px 13px;
   display:flex; flex-direction:column; align-items:center; justify-content:space-between;
   background:rgba(255,255,255,.55);
   border:1px solid rgba(28,27,24,.16); border-radius:12px;
@@ -759,6 +759,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fi-card.unknown .dot{ fill:rgba(28,27,24,.2); }
 .fi-q{ font-size:32px; color:rgba(28,27,24,.22); }
 .fi-name{ font-size:12.5px; letter-spacing:.05em; }
+.fi-rar{ font-size:11px; color:rgba(28,27,24,.42); font-feature-settings:'tnum'; margin-top:3px; }
 .fi-card.unknown .fi-name{ color:rgba(28,27,24,.38); letter-spacing:.24em; }
 
 .pr-dive{

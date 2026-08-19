@@ -55,9 +55,10 @@ const Soul = (() => {
       ...(t === 2 ? [{ key: 'pLife2', ico: 'life', name: 'Lifespan',
         desc: 'Fish live 10 seconds longer.',
         lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }] : []),
-      { key: 't' + t, ico: 'egg', name: 'Hatch Chance', dev: true,
-        desc: `Eggs are more likely to hatch a Tier ${t} fish.`,
-        lvl: () => Game.pTier[t - 2], cost: () => pTierCost(t), buy: () => Game.pTier[t - 2]++ }
+      { key: 't' + t, ico: 'egg', name: 'Hatch Chance',
+        desc: `Eggs can climb into Tier ${t}.`,
+        lvl: () => Game.pTier[t - 2], cost: () => pTierCost(t), buy: () => Game.pTier[t - 2]++,
+        max: () => Game.pTier[t - 2] >= 1 }
     ] }))
   ];
 
@@ -122,6 +123,7 @@ const Soul = (() => {
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
         <span class="fi-name">${known || Game.devReveal ? sp.name : '???'}</span>
+        <span class="fi-rar">${fmtPct(tierChance(tierOf(s)))}</span>
       </div>`;
   };
 
@@ -161,7 +163,7 @@ const Soul = (() => {
             <span class="fi-t">Tier ${t}</span>
             <span class="fi-count">0 / 2</span>
           </div>
-          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span></div>'.repeat(2)}</div>`;
+          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span><span class="fi-rar">0%</span></div>'.repeat(2)}</div>`;
       }
     }
     list.innerHTML = h;
@@ -201,7 +203,7 @@ const Soul = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG(incomePer5s())} G / ${TICK}s<br>+${soulYield()} soul on death`;
+        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} soul on death`;
       placeTip(fi);
       return;
     }

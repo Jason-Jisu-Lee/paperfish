@@ -68,10 +68,15 @@ const pLife2Cost = () => 15 * 2 ** Game.pLife2;
 const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 const EGGUP_MAX = 50;
-const tierUpChance = () => 0.01 * Game.eggUp;
+const tierUpChance = () => 0.5 * (1 - 0.9 ** Game.eggUp);
+const maxTier = () => {
+  let t = 1;
+  while (t < TIER_FISH.length && Game.pTier[t - 1] >= 1) t++;
+  return t;
+};
 const tierChance = t => {
-  const p = tierUpChance();
-  return t < TIER_FISH.length ? p ** (t - 1) * (1 - p) : p ** (t - 1);
+  const p = tierUpChance(), m = maxTier();
+  return t > m ? 0 : t < m ? p ** (t - 1) * (1 - p) : p ** (t - 1);
 };
 const eggUpCost = () => Math.round(25 * 1.25 ** Game.eggUp);
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
@@ -99,6 +104,8 @@ const fmtG = n => {
   if (n >= 1e5) return one(n / 1e3) + 'k';
   return n.toLocaleString('en-US');
 };
+
+const fmtPct = c => c >= 0.995 ? '100%' : c >= 0.01 ? Math.round(c * 100) + '%' : c > 0 ? '&lt;1%' : '0%';
 
 const ratePerMin = () => {
   let r = 0;

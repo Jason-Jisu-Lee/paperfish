@@ -9,7 +9,11 @@ const Music = (() => {
   const els = {};
   for (const name of Object.keys(SRC)) {
     const el = new Audio(SRC[name]);
-    el.loop = true;
+    if (START[name] === undefined) el.loop = true;
+    else el.addEventListener('ended', () => {
+      el.currentTime = START[name];
+      el.play().catch(() => {});
+    });
     el.preload = 'auto';
     els[name] = el;
   }
