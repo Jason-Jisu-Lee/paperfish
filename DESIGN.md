@@ -17,13 +17,13 @@ Exact numbers live in core/state.js.
   Rail icons stay even while their categories are empty.
   Corner icons: music, screen, pause, settings. Pause veil washes the scene.
 - Fish pop briefly on evolving; no redraw-on.
-- Fish card is a specimen plate (demos/fishcard.html option 1): art panel
+- Fish card is a specimen plate (picked from demo options): art panel
   with the creature drawn large, seal-red tier stamp in the corner
   holding the tier number, name in Shippori, stage and age side by side
   and readable, a life bar that drains, then icon-led stat rows for
   income and death value. Eggs use the same plate with the egg art and a
   hatch countdown.
-- Egg art: wrapped direction (demos/eggs.html option 2). All eggs use
+- Egg art: wrapped direction (picked from demo options). All eggs use
   tier 1 art (clean band-less egg) until tiers exist; bands + red knot
   arrive with tiers 2-3. Same silhouette in shop icon and world egg; both render as a solid
   shell (paper-white fill, no shadow: nothing underwater casts one) so eggs read against
@@ -43,7 +43,7 @@ Exact numbers live in core/state.js.
   ~0.4x speed, drawn behind even the shadow ray, so the ocean
   occasionally feels vast. School fish render as brush dashes, one
   calligraphic tapered stroke each, no tail (picked 2026-08-17 from
-  demos/fishshape.html option 3); in-blob motion stays the existing
+  demo options); in-blob motion stays the existing
   wobble, judged to already read like a real school. Seagrass and
   jellyfish removed in the pivot; snail promoted to a Tier 2 creature
   (needs a real SPECIES asset when Tier 2 lands).
@@ -158,8 +158,8 @@ Exact numbers live in core/state.js.
   fires 950ms after open. Three spotlight steps over the tabs, one line
   each (Main / Tiers / Fish Index), Next then Got it. Diving mid-tour
   ends it for good.
-- Objective HUD is bare and top center (demos/objhud.html option 2,
-  picked 2026-08-16): no panel, border, or shadow, and NEVER titled
+- Objective HUD is bare and top center (picked 2026-08-16 from demo
+  options): no panel, border, or shadow, and NEVER titled
   "Objective". It sits centered below the Collect Soul button's
   reserved slot under the soul counter, so the button appearing later
   never moves it. Row: ink ring, task text, progress count; the reward
@@ -250,7 +250,7 @@ fires once ever (flags in the persistent save), so later runs are silent.
 The existing hunger tutorial stays where it is, triggered by the first
 hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 
-## environment (demos/reef.html, pick pending)
+## environment (pick pending; demos retired 2026-08-19)
 - Reef backdrop options: ink wash mounds, coral branches, sea fans, or a
   layered mix. Positions randomize every run, drawn behind everything at
   very low alpha.
