@@ -1,7 +1,7 @@
 const Music = (() => {
   const SRC = {
     front: 'audio/Canon in D Major.mp3',
-    game: 'audio/Canon in D for Two Harps.mp3?v=2',
+    game: 'audio/Two Harps from 13s.mp3',
     shop: 'audio/Equatorial Complex.mp3'
   };
   const LEVEL = { front: 0.8, game: 0.8, shop: 0.8, duck: 0.25 };
