@@ -150,6 +150,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ubtn-cost{ font-size:14.5px; font-weight:500; color:#6e4f00; font-feature-settings:'tnum'; }
 .ubtn-lvl{ position:absolute; top:7px; right:10px; font-size:12px; opacity:.85; }
 .ubtn.off{ opacity:.4; cursor:default; }
+.eggcd{ position:absolute; left:0; top:0; bottom:0; background:rgba(28,27,24,.12); border-radius:inherit; pointer-events:none; }
 .ubtn.off:hover{ transform:none; box-shadow:0 1px 4px rgba(28,27,24,.12); }
 .thumb{ width:38px; flex:none; display:flex; align-items:center; }
 .thumb svg{ width:38px; height:17px; overflow:visible; }

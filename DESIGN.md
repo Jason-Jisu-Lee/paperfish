@@ -346,8 +346,13 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   lantern debug overlay, eat-radius rings drawn, and ALL tutorials
   suppressed (any active tutorial aborts). Tutorials stay in the
   real game.
-- Starting Gold buffed (2026-08-21): +10 gold per level (was 5),
-  first level 2 souls (was 4), still doubling; early game stronger.
+- First egg cheaper (2026-08-21): egg ladder now opens 2, 3, 5, 8
+  before easing into the old curve; Starting Gold prestige upgrade
+  unchanged (+5 per level, 4 souls doubling), run starts at 10 G.
+- Egg buy cooldown (2026-08-21): 0.5s real-time between egg buys;
+  the button disables and a translucent wipe drains across it, the
+  standard action-cooldown pattern. Auto Egg respects it too (max 2
+  eggs per second).
 - Tier gates deleted (2026-08-21): the prestige Hatch Chance buys are
   gone entirely; the in-run Fish Tier upgrade is the only tier lever
   and all 4 tiers are open. Tiers tab now holds only the two

@@ -33,7 +33,10 @@ const Game = {
 const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
-const EGG_COSTS = [5, 7, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
+const EGG_COSTS = [2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
+const EGG_CD = 500;
+let eggCdUntil = 0;
+const eggCd = () => Math.max(eggCdUntil - Date.now(), 0);
 const TIER_HATCH = [8, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
@@ -42,7 +45,7 @@ const FIRSTF_CAP = 20;
 const TIER_FISH = [[0], [1, 3, 4, 2], [7, 8, 9], [10, 11]];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
-const startGold = () => 10 + Game.pStartGold * 10;
+const startGold = () => 10 + Game.pStartGold * 5;
 const eggCost = () => {
   const n = Game.eggsBought;
   if (n < EGG_COSTS.length) return EGG_COSTS[n];
@@ -68,7 +71,7 @@ const EAT_R = 195;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;
-const startGoldCost = () => 2 * 2 ** Game.pStartGold;
+const startGoldCost = () => 4 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 5;
@@ -217,9 +220,11 @@ const resetGame = () => {
 };
 
 const buyEgg = () => {
+  if (eggCd()) return false;
   const c = eggCost();
   if (Game.gold < c) return false;
   if (Game.fish.filter(f => f.dying === undefined).length >= FIRSTF_CAP) return false;
+  eggCdUntil = Date.now() + EGG_CD;
   Game.gold -= c;
   Game.eggsBought += 1;
   Game.tuts.eggBought = 1;

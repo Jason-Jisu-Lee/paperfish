@@ -50,7 +50,13 @@ grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
 | Unlock Kelp | 100 (slated to move later into late game) |
 | Unlock Income / Fish Tier / Lifespan | 5 each |
 | Extra Soul | 20 x 2^lvl |
-| Starting Gold | +10 gold per lvl, 2 x 2^lvl |
+| Starting Gold | +5 gold per lvl, 4 x 2^lvl |
+
+## Eggs
+
+- run starts with 10 G base
+- cost ladder: 2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300, then 300 x 1.3^n rounded
+- buy cooldown 0.50s real time; button disables and a wipe drains across it
 
 ## Lifespan
 

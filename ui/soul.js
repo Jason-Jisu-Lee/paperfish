@@ -23,7 +23,7 @@ const Soul = (() => {
   };
 
   const CORE = [
-    { key: 'startGold', ico: 'gold', name: 'Starting Gold', desc: 'Begin every dive with 10 more gold.',
+    { key: 'startGold', ico: 'gold', name: 'Starting Gold', desc: 'Begin every dive with 5 more gold.',
       lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++ },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
