@@ -203,7 +203,7 @@ const Soul = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} soul on death`;
+        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} soul`;
       placeTip(fi);
       return;
     }

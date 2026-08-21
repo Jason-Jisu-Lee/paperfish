@@ -9,6 +9,8 @@ const Panel = (() => {
   const eiModal = document.getElementById('egginfo-modal');
   const eiBody = document.getElementById('ei-body');
   const railFood = document.getElementById('rail-food');
+  const railIncome = document.getElementById('rail-income');
+  const railLife = document.getElementById('rail-life');
 
   const UPS = [
     {
@@ -61,6 +63,8 @@ const Panel = (() => {
 
   const refresh = () => {
     railFood.toggleAttribute('hidden', !Game.unlocks.kelp);
+    railIncome.toggleAttribute('hidden', !Game.unlocks.income);
+    railLife.toggleAttribute('hidden', !Game.unlocks.life);
     upGrid.innerHTML = UPS.filter(u => u.cat === cat && owned(u)).map(ucard).join('');
 
     fishGrid.innerHTML = `
