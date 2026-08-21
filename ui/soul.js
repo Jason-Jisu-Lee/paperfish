@@ -55,11 +55,11 @@ const Soul = (() => {
       ...(t === 2 ? [{ key: 'pLife2', ico: 'life', name: 'Lifespan',
         desc: 'Fish live 10 seconds longer.',
         lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }] : []),
-      { key: 't' + t, ico: 'egg', name: 'Hatch Chance',
+      ...(t >= 4 ? [{ key: 't' + t, ico: 'egg', name: 'Hatch Chance',
         desc: `Eggs can climb into Tier ${t}.`,
         lvl: () => Game.pTier[t - 2], cost: () => pTierCost(t), buy: () => Game.pTier[t - 2]++,
-        max: () => Game.pTier[t - 2] >= 1 }
-    ] }))
+        max: () => Game.pTier[t - 2] >= 1 }] : [])
+    ] })).filter(g => g.ups.length)
   ];
 
   const UNLOCKS = [
@@ -93,7 +93,7 @@ const Soul = (() => {
   ];
 
   const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
-  const tierOpen = t => t <= 2 || Game.pTier[t - 3] >= 1;
+  const tierOpen = t => t <= 4 || Game.pTier[t - 3] >= 1;
 
   const card = (u, locked) => {
     const maxed = u.max && u.max();

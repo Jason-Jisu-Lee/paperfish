@@ -65,12 +65,12 @@ const PKELP_MAX = 5;
 const pKelpCost = () => 5;
 const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3);
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
-const pTierCost = t => 30 * 10 ** (t - 2) * 2 ** Game.pTier[t - 2];
+const pTierCost = t => 30 * 10 ** (t - 4) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 const EGGUP_MAX = 50;
-const tierUpChance = () => 0.5 * (1 - 0.9 ** Game.eggUp);
+const tierUpChance = () => Game.eggUp ? 0.5 - 0.3 * 0.9 ** (Game.eggUp - 1) : 0;
 const maxTier = () => {
-  let t = 1;
+  let t = Math.min(3, TIER_FISH.length);
   while (t < TIER_FISH.length && Game.pTier[t - 1] >= 1) t++;
   return t;
 };

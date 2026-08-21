@@ -295,15 +295,19 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   starts at Tier 1 and climbs one tier per success at chance p, rolled
   tier by tier. Species within the landed tier is a uniform pick.
   Cost 25·1.25^lvl G, resets each run.
-- Curve retuned front-loaded (2026-08-19): p = 50%·(1 - 0.9^lvl),
-  max 50 levels. Lv 1 = 5%, Lv 5 = 20%, Lv 10 = 33%, Lv 20 = 44%,
-  Lv 50 = 50% cap. First buy matters in run one; the cap takes a LOT
-  of buys. Replaces the flat 1%/lvl that made early levels useless.
-- Tier gate (2026-08-19): eggs can only climb into tiers opened in
-  the prestige Tiers tab. Hatch Chance there is now a real one-time
-  buy per tier (30·10^(tier-2) souls: 30, 300, 3k, 30k, 300k), dev
-  tag removed; locked tiers show "Locked" in the egg modal and 0%
-  rarity. Prestige opens the ceiling, in-run Fish Tier buys the odds.
+- Curve retuned again (2026-08-20): p = 50% - 30%·0.9^(lvl-1), 0% at
+  Lv 0, max 50 levels. Lv 1 = 20%, Lv 2 = 23%, Lv 5 = 30%, Lv 10 =
+  38%, Lv 20 = 46%, cap 50%. First buy is the big unlock moment;
+  the rest is diminishing polish. Replaces the 5%-first-level curve
+  whose opening buys felt dead.
+- Tier gate rebased (2026-08-20): tiers 1-3 are open in every run;
+  the first buy of in-run Fish Tier immediately exposes Tier 2 (20%)
+  and Tier 3 (p² = 4%). Prestige Hatch Chance now starts at Tier 4
+  (30·10^(tier-4) souls: 30, 300, 3k), one-time buy per tier; its
+  Tiers-tab entries for tiers 2-3 are gone and the Tier 3 group
+  vanished with them. Locked tiers still show "Locked" in the egg
+  modal and 0% rarity. Prestige opens the ceiling, in-run Fish Tier
+  buys the odds.
 - Egg info modal lists every tier with live hatch odds; unseen species
   show their silhouette with ??? for the name; sub-1% odds display as
   "<1%", never decimals (fmtPct in state.js).
