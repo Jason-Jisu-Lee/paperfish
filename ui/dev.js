@@ -26,9 +26,11 @@
       Game.shop = 1;
       Soul.resume();
     }
-    if (b.dataset.act === 'reveal') {
-      Game.devReveal = !Game.devReveal;
-      b.classList.toggle('on', Game.devReveal);
+    if (b.dataset.act === 'devmode') {
+      Game.devMode = !Game.devMode;
+      b.classList.toggle('on', Game.devMode);
+      b.textContent = Game.devMode ? 'on' : 'off';
+      if (Game.devMode) Tut.abort();
       if (Soul.shopOpen) Soul.render();
     }
     if (b.dataset.act === 'reset') resetGame();

@@ -342,15 +342,12 @@ const Stage = (() => {
         }
         f.vyT = rand(-1, 1) * (9 + f.spd * 0.22) * (Math.random() < 0.3 ? 1.9 : 1);
       }
-      if (f.hstate && (plants.length || pellets.length)) {
-        if (f.hstate === 2) f.dT = 0;
-        else if (f.dT === undefined) f.dT = Math.random() * 1.5;
-        else if (f.dT > 0) f.dT -= mdt;
-      } else {
-        f.dT = undefined;
-      }
       let seeking = false;
-      const target = f.hstate && f.dT !== undefined && f.dT <= 0 && !(f.fleeT > 0) ? nearestFood(f.x, f.y) : null;
+      let target = null;
+      if (!(f.fleeT > 0) && (plants.length || pellets.length)) {
+        const t = nearestFood(f.x, f.y);
+        if (t && (f.hstate || (t.x + t.hx - f.x) ** 2 + (t.y + t.hy - f.y) ** 2 < EAT_R * EAT_R)) target = t;
+      }
       if (target) {
         seeking = true;
         const px = Math.min(Math.max(target.x + target.hx, bounds.l + 20), bounds.r - 20);
@@ -361,11 +358,13 @@ const Stage = (() => {
         f.kick = 0;
         const urgent = f.hstate === 2;
         const desired = urgent
-          ? Math.min(Math.max(Math.abs(dx) * 3 + 60, 130), 250)
-          : Math.min(Math.max(Math.abs(dx) * 2 + 30, 45), 130);
-        f.spd += (desired - f.spd) * Math.min((urgent ? 9 : 6) * mdt, 1);
+          ? Math.min(Math.max(Math.abs(dx) * 4 + 80, 180), 320)
+          : f.hstate === 1
+            ? Math.min(Math.max(Math.abs(dx) * 2 + 30, 45), 130)
+            : Math.min(Math.max(Math.abs(dx) * 1.5 + 25, 35), 90);
+        f.spd += (desired - f.spd) * Math.min((urgent ? 10 : 6) * mdt, 1);
         f.vyT = urgent
-          ? Math.min(Math.max((pyy - f.y) * 1.2, -140), 140)
+          ? Math.min(Math.max((pyy - f.y) * 1.2, -150), 150)
           : Math.min(Math.max((pyy - f.y) * 0.6, -70), 70);
       } else {
         f.schoolT = (f.schoolT || 0) - mdt;
@@ -405,13 +404,13 @@ const Stage = (() => {
         if (f.dir > 0 && f.x > topZone.l - zm && f.x < topZone.l) { f.dir = -1; flipKick(f); }
         else if (f.dir < 0 && f.x < topZone.r + zm && f.x > topZone.r) { f.dir = 1; flipKick(f); }
       }
-      const vcap = seeking ? (f.hstate === 2 ? 140 : 70) : f.spd * 0.34;
+      const vcap = seeking ? (f.hstate === 2 ? 150 : 70) : f.spd * 0.34;
       if (f.vyT > vcap) f.vyT = vcap;
       if (f.vyT < -vcap) f.vyT = -vcap;
       const dv = f.vyT - f.vy;
       const vacc = (8 + f.spd * 0.1) * mdt * (seeking ? 3 : 1);
       f.vy += Math.min(Math.max(dv, -vacc), vacc);
-      const vmax = (seeking ? 50 : f.spd * 0.35) + 8;
+      const vmax = (seeking ? (f.hstate === 2 ? 90 : 50) : f.spd * 0.35) + 8;
       if (f.vy > vmax) f.vy = vmax;
       if (f.vy < -vmax) f.vy = -vmax;
       if (topZone && f.y < topZone.b && f.x > topZone.l && f.x < topZone.r) {
@@ -758,6 +757,16 @@ const Stage = (() => {
     for (const p of plants) drawPlant(p);
     for (const f of Game.fish) if (f.egg) drawEgg(f);
     for (const f of Game.fish) if (!f.egg) drawFish(f);
+    if (Game.devMode) {
+      ctx.strokeStyle = 'rgba(180,58,43,0.3)';
+      ctx.lineWidth = 1;
+      for (const f of Game.fish) {
+        if (f.egg || f.dying !== undefined || f.birth < 1) continue;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, EAT_R, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
     drawPops();
   };
 

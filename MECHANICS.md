@@ -19,7 +19,19 @@ Backend keeps 2 decimals; players only ever see bars, never these numbers.
 
 Early loop: base life 20s + hatch fill 18.00s means an unfed Tier 1 fish
 goes hungry at ~9s and dies soulless; feeding is what keeps souls flowing.
-First-ever hungry fish triggers the feed tutorial.
+By design: fish die of old age long before hunger death until lifespan
+grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
+
+## Food seeking (2026-08-21)
+
+| state | radius | speed |
+|---|---|---|
+| normal | 130px | gentle, 35-90 |
+| hungry (≤30%) | unlimited, immediate | 45-130 |
+| starving (≤5%) | unlimited | 180-320, fast vertical |
+
+- any fish eats food it touches (70px bite range), even when full
+- dev mode draws the 130px radius ring around every fish
 
 ## Fish Tier, in-run (2026-08-20)
 
@@ -37,6 +49,7 @@ First-ever hungry fish triggers the feed tutorial.
 | Kelp unlock | 100 (slated to move later into late game) |
 | Income / Fish Tier / Lifespan unlocks | 5 each |
 | Extra Soul | 20 x 2^lvl |
+| Starting Gold | +10 gold per lvl, 2 x 2^lvl |
 
 ## Lifespan
 

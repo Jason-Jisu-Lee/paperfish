@@ -42,7 +42,7 @@ const FIRSTF_CAP = 20;
 const TIER_FISH = [[0], [1, 3, 4, 2], [7, 8, 9], [10, 11]];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
-const startGold = () => 10 + Game.pStartGold * 5;
+const startGold = () => 10 + Game.pStartGold * 10;
 const eggCost = () => {
   const n = Game.eggsBought;
   if (n < EGG_COSTS.length) return EGG_COSTS[n];
@@ -63,10 +63,11 @@ const HUNGRY_AT = 0.3;
 const STARVE_AT = 0.05;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
+const EAT_R = 130;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;
-const startGoldCost = () => 4 * 2 ** Game.pStartGold;
+const startGoldCost = () => 2 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 5;

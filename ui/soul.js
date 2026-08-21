@@ -23,7 +23,7 @@ const Soul = (() => {
   };
 
   const CORE = [
-    { key: 'startGold', ico: 'gold', name: 'Starting Gold', desc: 'Begin every dive with 5 more gold.',
+    { key: 'startGold', ico: 'gold', name: 'Starting Gold', desc: 'Begin every dive with 10 more gold.',
       lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++ },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
@@ -125,7 +125,7 @@ const Soul = (() => {
     return `
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
-        <span class="fi-name">${known || Game.devReveal ? sp.name : '???'}</span>
+        <span class="fi-name">${known || Game.devMode ? sp.name : '???'}</span>
         <span class="fi-rar">${fmtPct(tierChance(tierOf(s)))}</span>
       </div>`;
   };

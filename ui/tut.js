@@ -22,6 +22,7 @@ const Tut = (() => {
   };
 
   const hungry = f => {
+    if (Game.devMode) return;
     active = true;
     step = 1;
     txt.innerHTML = 'A fish is hungry<br>Click the water to drop food';
@@ -61,7 +62,7 @@ const Tut = (() => {
   };
 
   const prestige = () => {
-    if (Game.tuts.pIntro || pstep >= 0) return;
+    if (Game.devMode || Game.tuts.pIntro || pstep >= 0) return;
     active = true;
     pstep = 0;
     pShow();

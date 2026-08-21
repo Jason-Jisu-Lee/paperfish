@@ -137,7 +137,7 @@ const Lantern = (() => {
       ctx.fill();
     }
     ctx.restore();
-    if (Game.devReveal && !lan.gone) {
+    if (Game.devMode && !lan.gone) {
       ctx.save();
       ctx.strokeStyle = 'rgba(62,84,110,0.42)';
       ctx.setLineDash([4, 6]);

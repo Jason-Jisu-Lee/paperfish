@@ -337,6 +337,17 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   Late-game soul harvest lever; early fish just die from it.
 - Fish Tier card shows an egg-with-chevron icon instead of its name;
   the hover tip now leads with the upgrade name.
+- Seek model (2026-08-21): every fish opportunistically eats food
+  within a 130px radius at gentle speed; hungry removes the radius
+  (global, immediate); starving adds a big speed boost. Numbers in
+  MECHANICS.md.
+- Dev mode (2026-08-21): the dev panel's reveal row is now a single
+  on/off "dev mode" toggle. On: fish names revealed in the index,
+  lantern debug overlay, eat-radius rings drawn, and ALL tutorials
+  suppressed (any active tutorial aborts). Tutorials stay in the
+  real game.
+- Starting Gold buffed (2026-08-21): +10 gold per level (was 5),
+  first level 2 souls (was 4), still doubling; early game stronger.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying
   (Income, Kelp, Fish Tier, Lifespan) is invisible until unlocked in
   the prestige shop's new Upgrades tab, 5 souls each; Lifespan's

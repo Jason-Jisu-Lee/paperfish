@@ -57,7 +57,7 @@ const Sim = (() => {
           f.hunger = Math.max((f.hunger ?? HUNGER_FULL) - sdt, 0);
           const pct = f.hunger / HUNGER_FULL;
           f.hstate = pct <= STARVE_AT ? 2 : pct <= HUNGRY_AT ? 1 : 0;
-          if (f.hstate === 1 && f.birth >= 1 && !Game.tuts.hungryTut && !Tut.active) Tut.hungry(f);
+          if (f.hstate === 1 && f.birth >= 1 && !Game.tuts.hungryTut && !Tut.active && !Game.devMode) Tut.hungry(f);
           if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hT >= 10) {
@@ -71,9 +71,8 @@ const Sim = (() => {
           } else {
             f.hT = 0;
           }
-          if (f.hstate && f.birth >= 1) {
-            const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
-            const p = aware ? Stage.nearestFood(f.x, f.y) : null;
+          if (f.birth >= 1) {
+            const p = Stage.nearestFood(f.x, f.y);
             if (p) {
               const px = p.x + p.hx, pyy = p.y + p.hy;
               if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
