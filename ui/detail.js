@@ -3,8 +3,10 @@ const Detail = (() => {
   const tip = document.getElementById('fishtip');
   const tipName = document.getElementById('fishtip-name');
   const tipStage = document.getElementById('fishtip-stage');
-  const tipBar = document.getElementById('fishtip-bar');
-  const tipFill = document.getElementById('fishtip-fill');
+  const tipHun = document.getElementById('fishtip-hunger');
+  const tipHFill = document.getElementById('fishtip-hfill');
+  const tipLife = document.getElementById('fishtip-life');
+  const tipLFill = document.getElementById('fishtip-lfill');
   const card = document.getElementById('fishcard');
   const elName = document.getElementById('fc-name');
   const elAge = document.getElementById('fc-age');
@@ -135,14 +137,18 @@ const Detail = (() => {
       if (hover.egg) {
         tipStage.textContent = 'egg';
         tipStage.removeAttribute('hidden');
-        tipBar.setAttribute('hidden', '');
+        tipHun.setAttribute('hidden', '');
+        tipLife.setAttribute('hidden', '');
         tip.style.top = (hover.y - 26) + 'px';
       } else {
         tipStage.textContent = hover.adult ? 'adult' : 'baby';
         tipStage.removeAttribute('hidden');
-        tipFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
-        tipBar.classList.toggle('low', hover.hstate >= 1);
-        tipBar.removeAttribute('hidden');
+        tipHFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
+        tipHun.classList.toggle('low', hover.hstate >= 1);
+        tipHun.removeAttribute('hidden');
+        const lifeT = lifeOf();
+        tipLFill.style.width = Math.max(1 - Math.min(hover.age || 0, lifeT) / lifeT, 0) * 100 + '%';
+        tipLife.removeAttribute('hidden');
         tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
       }
       tip.style.left = hover.x + 'px';

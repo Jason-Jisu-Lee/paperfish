@@ -75,17 +75,21 @@ const Sim = (() => {
             const p = Stage.nearestFood(f.x, f.y);
             if (p) {
               const px = p.x + p.hx, pyy = p.y + p.hy;
-              if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
-                if (p.kind) {
+              if (p.kind) {
+                const reach = SPECIES[f.s].len * 0.45;
+                const mouth = f.x + f.dir * reach;
+                if ((px - mouth) ** 2 + (pyy - f.y) ** 2 < 26 * 26) {
                   Stage.eatPellet(p);
-                  f.eating = { t: 0.8, sat: PELLET_SAT, x: px, y: pyy };
-                } else {
-                  Stage.biteKelp(p);
-                  if (p.bites <= 0) Game.plants -= 1;
-                  const side = f.x < px ? -1 : 1;
-                  f.dir = -side;
-                  f.eating = { t: 2, sat: KELP_SAT, x: px + side * 13, y: pyy };
+                  f.dir = f.x < px ? 1 : -1;
+                  f.eating = { t: 0.8, sat: PELLET_SAT, x: px - f.dir * reach, y: pyy };
+                  refresh = true;
                 }
+              } else if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
+                Stage.biteKelp(p);
+                if (p.bites <= 0) Game.plants -= 1;
+                const side = f.x < px ? -1 : 1;
+                f.dir = -side;
+                f.eating = { t: 2, sat: KELP_SAT, x: px + side * 13, y: pyy };
                 refresh = true;
               }
             }

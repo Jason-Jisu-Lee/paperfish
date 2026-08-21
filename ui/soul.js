@@ -54,28 +54,23 @@ const Soul = (() => {
       { key: 'pLife', ico: 'life', name: 'Lifespan', desc: 'Tier 1 fish live 5 seconds longer.',
         lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
     ] },
-    ...[2, 3, 4, 5, 6].map(t => ({ tier: t, ups: [
-      ...(t === 2 ? [{ key: 'pLife2', ico: 'life', name: 'Lifespan',
-        desc: 'Fish live 10 seconds longer.',
-        lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }] : []),
-      ...(t >= 4 ? [{ key: 't' + t, ico: 'egg', name: 'Hatch Chance',
-        desc: `Eggs can climb into Tier ${t}.`,
-        lvl: () => Game.pTier[t - 2], cost: () => pTierCost(t), buy: () => Game.pTier[t - 2]++,
-        max: () => Game.pTier[t - 2] >= 1 }] : [])
-    ] })).filter(g => g.ups.length)
+    { tier: 2, ups: [
+      { key: 'pLife2', ico: 'life', name: 'Lifespan', desc: 'Fish live 10 seconds longer.',
+        lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }
+    ] }
   ];
 
   const UNLOCKS = [
-    { key: 'u_income', ico: 'income', name: 'Income', desc: 'Unlock the in-run Income upgrade.',
+    { key: 'u_income', ico: 'income', name: 'Unlock Income', desc: 'Unlock the in-run Income upgrade.',
       lvl: () => Game.unlocks.income, cost: () => UNLOCK_COST, buy: () => Game.unlocks.income = 1,
       max: () => !!Game.unlocks.income },
-    { key: 'u_kelp', ico: 'kelp', name: 'Kelp', desc: 'Unlock buying kelp during a run.',
+    { key: 'u_kelp', ico: 'kelp', name: 'Unlock Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
       max: () => !!Game.unlocks.kelp },
-    { key: 'u_eggup', ico: 'egg', name: 'Fish Tier', desc: 'Unlock the in-run Fish Tier upgrade.',
+    { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock the in-run Fish Tier upgrade.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup },
-    { key: 'u_life', ico: 'life', name: 'Lifespan', desc: 'Unlock the in-run Lifespan upgrade.',
+    { key: 'u_life', ico: 'life', name: 'Unlock Lifespan', desc: 'Unlock the in-run Lifespan upgrade.',
       lvl: () => Game.unlocks.life, cost: () => UNLOCK_COST, buy: () => Game.unlocks.life = 1,
       max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp }
   ];
@@ -96,7 +91,6 @@ const Soul = (() => {
   ];
 
   const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
-  const tierOpen = t => t <= 4 || Game.pTier[t - 3] >= 1;
 
   const card = (u, locked) => {
     const maxed = u.max && u.max();
@@ -126,7 +120,6 @@ const Soul = (() => {
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
         <span class="fi-art"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>
         <span class="fi-name">${known || Game.devMode ? sp.name : '???'}</span>
-        <span class="fi-rar">${fmtPct(tierChance(tierOf(s)))}</span>
       </div>`;
   };
 
@@ -147,9 +140,8 @@ const Soul = (() => {
       }
     } else if (tab === 'tier') {
       for (const t of TIERS) {
-        const locked = !tierOpen(t.tier);
-        h += `<div class="p-cat${locked ? ' dim' : ''}">Tier ${t.tier}</div>` +
-          `<div class="p-grid">${t.ups.map(u => card(u, locked)).join('')}</div>`;
+        h += `<div class="p-cat">Tier ${t.tier}</div>` +
+          `<div class="p-grid">${t.ups.map(u => card(u, false)).join('')}</div>`;
       }
     } else {
       TIER_FISH.forEach((arr, i) => {
@@ -166,7 +158,7 @@ const Soul = (() => {
             <span class="fi-t">Tier ${t}</span>
             <span class="fi-count">0 / 2</span>
           </div>
-          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span><span class="fi-rar">0%</span></div>'.repeat(2)}</div>`;
+          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span></div>'.repeat(2)}</div>`;
       }
     }
     list.innerHTML = h;

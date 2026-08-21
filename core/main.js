@@ -11,6 +11,7 @@ const startGame = () => {
   Stage.resize();
   Stage.resetPlants();
   Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
+  if (fresh) Game.fish[0].hunger = HUNGER_FIRST;
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
   Game.started = true;
   Panel.refresh();

@@ -58,12 +58,13 @@ const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
 const HUNGER_FULL = 30;
-const HUNGER_HATCH = 18;
+const HUNGER_HATCH = 24;
+const HUNGER_FIRST = 18;
 const HUNGRY_AT = 0.3;
 const STARVE_AT = 0.05;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
-const EAT_R = 130;
+const EAT_R = 195;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;
@@ -73,15 +74,10 @@ const PKELP_MAX = 5;
 const pKelpCost = () => 5;
 const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3);
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
-const pTierCost = t => 30 * 10 ** (t - 4) * 2 ** Game.pTier[t - 2];
 const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
 const EGGUP_MAX = 50;
 const tierUpChance = () => Game.eggUp ? 0.5 - 0.3 * 0.9 ** (Game.eggUp - 1) : 0;
-const maxTier = () => {
-  let t = Math.min(3, TIER_FISH.length);
-  while (t < TIER_FISH.length && Game.pTier[t - 1] >= 1) t++;
-  return t;
-};
+const maxTier = () => TIER_FISH.length;
 const tierChance = t => {
   const p = tierUpChance(), m = maxTier();
   return t > m ? 0 : t < m ? p ** (t - 1) * (1 - p) : p ** (t - 1);

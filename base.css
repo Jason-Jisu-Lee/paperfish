@@ -424,9 +424,14 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 #fishtip{ transform:translate(-50%, -100%); text-align:center; padding:10px 15px; }
 .tip-stage{ display:block; font-size:10.5px; letter-spacing:.3em; text-transform:uppercase; color:rgba(28,27,24,.6); margin-top:4px; }
 .tip-name{ display:block; font-family:'Shippori Mincho',serif; font-size:16px; letter-spacing:.04em; }
-.tip-bar{ display:block; width:86px; height:4px; margin:7px auto 1px; background:rgba(28,27,24,.14); border-radius:2px; }
-.tip-bar i{ display:block; height:100%; width:100%; background:rgba(28,27,24,.75); border-radius:2px; }
-.tip-bar.low i{ background:var(--seal); }
+.tip-meter{ display:flex; align-items:center; gap:6px; width:96px; margin:6px auto 0; }
+.tip-meter svg{ width:11px; height:11px; flex:none; }
+.tip-meter path{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:2; stroke-linecap:round; }
+.tip-meter circle{ fill:rgba(28,27,24,.5); }
+.mtrack{ flex:1; height:4px; background:rgba(28,27,24,.14); border-radius:2px; }
+.mtrack b{ display:block; height:100%; background:rgba(28,27,24,.75); border-radius:2px; }
+#fishtip-hunger.low .mtrack b{ background:var(--seal); }
+#fishtip-life .mtrack b{ background:#3e546e; }
 #uptip{
   max-width:236px;
   white-space:normal;
@@ -760,7 +765,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fi-card.unknown .dot{ fill:rgba(28,27,24,.2); }
 .fi-q{ font-size:32px; color:rgba(28,27,24,.22); }
 .fi-name{ font-size:12.5px; letter-spacing:.05em; }
-.fi-rar{ font-size:11px; color:rgba(28,27,24,.42); font-feature-settings:'tnum'; margin-top:3px; }
 .fi-card.unknown .fi-name{ color:rgba(28,27,24,.38); letter-spacing:.24em; }
 
 .pr-dive{

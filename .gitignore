@@ -2,7 +2,4 @@ CLAUDE.md
 Thumbs.db
 .DS_Store
 desktop.ini
-audio/*
-!audio/Canon in D Major.mp3
-!audio/Two Harps from 13s.mp3
-!audio/Equatorial Complex.mp3
+serve.py

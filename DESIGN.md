@@ -348,6 +348,24 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   real game.
 - Starting Gold buffed (2026-08-21): +10 gold per level (was 5),
   first level 2 souls (was 4), still doubling; early game stronger.
+- Tier gates deleted (2026-08-21): the prestige Hatch Chance buys are
+  gone entirely; the in-run Fish Tier upgrade is the only tier lever
+  and all 4 tiers are open. Tiers tab now holds only the two
+  Lifespan upgrades. Fish Index rarity % removed (was misleading,
+  changes in-run anyway).
+- Unlock cards renamed Unlock Income / Unlock Kelp / Unlock Fish
+  Tier / Unlock Lifespan (2026-08-21).
+- Hunger tweaks (2026-08-21): hatch fill 80%; the single starting
+  fish of a brand-new save still spawns at 60% so feeding teaches
+  itself immediately. Casual eat radius up 50% to 195px. Pellets are
+  now eaten at the mouth: bite triggers when the mouth tip nears the
+  pellet and the eat anim anchors the mouth to it, not mid-body.
+- Hover tip shows two labeled meters (2026-08-21): pellet-dot icon +
+  ink bar for hunger (seal red when hungry), sprout icon + slate
+  blue bar for remaining life.
+- Repo hygiene (2026-08-21): serve.py untracked (local dev tool);
+  ALL audio committed for now including spares and originals,
+  pruning deferred until closer to publishing.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying
   (Income, Kelp, Fish Tier, Lifespan) is invisible until unlocked in
   the prestige shop's new Upgrades tab, 5 souls each; Lifespan's
