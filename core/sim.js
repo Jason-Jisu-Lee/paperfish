@@ -78,7 +78,7 @@ const Sim = (() => {
               if (p.kind) {
                 const reach = SPECIES[f.s].len * 0.45;
                 const mouth = f.x + f.dir * reach;
-                if ((px - mouth) ** 2 + (pyy - f.y) ** 2 < 26 * 26) {
+                if ((px - mouth) ** 2 + (pyy - f.y) ** 2 < 10 * 10) {
                   Stage.eatPellet(p);
                   f.dir = f.x < px ? 1 : -1;
                   f.eating = { t: 0.8, sat: PELLET_SAT, x: px - f.dir * reach, y: pyy };

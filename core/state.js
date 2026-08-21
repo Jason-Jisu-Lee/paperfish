@@ -67,7 +67,7 @@ const HUNGRY_AT = 0.3;
 const STARVE_AT = 0.05;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
-const EAT_R = 195;
+const EAT_R = 234;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;

@@ -349,6 +349,10 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - First egg cheaper (2026-08-21): egg ladder now opens 2, 3, 5, 8
   before easing into the old curve; Starting Gold prestige upgrade
   unchanged (+5 per level, 4 souls doubling), run starts at 10 G.
+- Bite tightened (2026-08-21): pellet vanishes only when the mouth
+  tip actually touches it (10px, was a 26px sphere that could even
+  trigger on food behind the mouth); casual eat radius up 20% to
+  234px.
 - Egg buy cooldown (2026-08-21): 0.5s real-time between egg buys;
   the button disables and a translucent wipe drains across it, the
   standard action-cooldown pattern. Auto Egg respects it too (max 2

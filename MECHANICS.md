@@ -16,7 +16,7 @@ Backend keeps 2 decimals; players only ever see bars, never these numbers.
 | empty meter | 10.00s at zero kills the fish, no soul |
 | death while hungry/starving | no soul (any cause) |
 | pellet | free, click open water, +5.00s, one fish, sinks then fades ~8s on the floor |
-| pellet eat trigger | mouth (front 45% of body) within 26px; eat anim anchors mouth to the pellet |
+| pellet eat trigger | mouth tip within 10px, an actual touch; eat anim anchors mouth to the pellet |
 | kelp bite | +20.00s, 2 bites per kelp, 2 G, 70px body contact |
 
 Early loop: base life 20s + hatch fill 18.00s means an unfed Tier 1 fish
@@ -28,12 +28,12 @@ grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
 
 | state | radius | speed |
 |---|---|---|
-| normal | 195px | gentle, 35-90 |
+| normal | 234px | gentle, 35-90 |
 | hungry (≤30%) | unlimited, immediate | 45-130 |
 | starving (≤5%) | unlimited | 180-320, fast vertical |
 
 - any fish eats food it reaches, even when full
-- dev mode draws the 195px radius ring around every fish
+- dev mode draws the 234px radius ring around every fish
 
 ## Fish Tier, in-run (2026-08-20)
 
