@@ -322,6 +322,21 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   stall or fall back to 0 on servers without Range support).
 - In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
   resets each run; stacks with prestige Lifespans.
+- Hunger rewrite (2026-08-21): continuous hunger meter replaces the
+  age-based hungerAt timer. Numbers live in MECHANICS.md. Feeding is
+  the core early loop: click open water to drop a free pellet, one
+  fish eats it. Hover a fish to see its hunger bar (seal red when
+  hungry); no numbers shown, ever. Hungry fish seek the nearest food
+  (pellet or kelp). The old "hungry fish" tutorial is replaced by a
+  first-hunger message teaching the click-to-feed. Kelp becomes an
+  advanced tool (unlock now 100 souls, moving further back later);
+  bigger plant roles planned.
+- Life Burn (2026-08-21): prestige one-time buy, 500 souls, Soul
+  section. Grants a flame button in the corner nav (leftmost slot, no
+  reflow) usable once per dive: every living fish ages one minute.
+  Late-game soul harvest lever; early fish just die from it.
+- Fish Tier card shows an egg-with-chevron icon instead of its name;
+  the hover tip now leads with the upgrade name.
 - Unlock layer (2026-08-17): every in-run upgrade except egg buying
   (Income, Kelp, Fish Tier, Lifespan) is invisible until unlocked in
   the prestige shop's new Upgrades tab, 5 souls each; Lifespan's

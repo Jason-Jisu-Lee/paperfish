@@ -24,7 +24,7 @@ const Tut = (() => {
   const hungry = f => {
     active = true;
     step = 1;
-    txt.textContent = 'Hungry fish do not generate Soul';
+    txt.innerHTML = 'A fish is hungry<br>Click the water to drop food';
     btn.textContent = 'Got it';
     pointAt(f);
   };

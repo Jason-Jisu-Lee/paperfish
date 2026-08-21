@@ -27,6 +27,7 @@ const Panel = (() => {
     },
     {
       key: 'eggup', name: 'Fish Tier', cat: 'fish', unlock: 'eggup',
+      icon: '<svg viewBox="-26 -32 52 64"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/><path class="chev" d="M-7.5,7 L0,-3.5 L7.5,7"/></svg>',
       cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
       maxed: () => Game.eggUp >= EGGUP_MAX,
       desc: 'eggs may climb tiers, one roll per tier; early levels give the most',
@@ -57,12 +58,13 @@ const Panel = (() => {
   const ucard = u => `
       <button class="ubtn${u.maxed && u.maxed() ? ' off' : ''}" data-key="${u.key}">
         <span class="ubtn-lvl">× ${u.lvl()}</span>
-        <span class="ubtn-name">${u.name}</span>
+        ${u.icon ? `<span class="ubtn-icon eggicon">${u.icon}</span>` : `<span class="ubtn-name">${u.name}</span>`}
         <span class="ubtn-cost">${u.maxed && u.maxed() ? 'Max' : fmt(u.cost()) + ' G'}</span>
       </button>`;
 
   const refresh = () => {
     railFood.toggleAttribute('hidden', !Game.unlocks.kelp);
+    document.getElementById('burn').toggleAttribute('hidden', !(Game.pBurn && !Game.burnUsed));
     railIncome.toggleAttribute('hidden', !Game.unlocks.income);
     railLife.toggleAttribute('hidden', !Game.unlocks.life);
     upGrid.innerHTML = UPS.filter(u => u.cat === cat && owned(u)).map(ucard).join('');
@@ -184,7 +186,7 @@ const Panel = (() => {
     uptip.classList.remove('cap');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
-      uptip.innerHTML = u.desc + '<br>' + u.cur();
+      uptip.innerHTML = (u.icon ? u.name + '<br>' : '') + u.desc + '<br>' + u.cur();
     } else {
       uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' fish' : 'Buy an egg';
     }

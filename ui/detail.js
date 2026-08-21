@@ -3,6 +3,8 @@ const Detail = (() => {
   const tip = document.getElementById('fishtip');
   const tipName = document.getElementById('fishtip-name');
   const tipStage = document.getElementById('fishtip-stage');
+  const tipBar = document.getElementById('fishtip-bar');
+  const tipFill = document.getElementById('fishtip-fill');
   const card = document.getElementById('fishcard');
   const elName = document.getElementById('fc-name');
   const elAge = document.getElementById('fc-age');
@@ -73,6 +75,7 @@ const Detail = (() => {
       card.removeAttribute('hidden');
     } else {
       if (Lantern.clickAt(e.clientX, e.clientY) || Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
+      else if (!Pause.paused && !Soul.shopOpen) Stage.spawnPellet(e.clientX, e.clientY);
       close();
     }
   });
@@ -132,10 +135,14 @@ const Detail = (() => {
       if (hover.egg) {
         tipStage.textContent = 'egg';
         tipStage.removeAttribute('hidden');
+        tipBar.setAttribute('hidden', '');
         tip.style.top = (hover.y - 26) + 'px';
       } else {
         tipStage.textContent = hover.adult ? 'adult' : 'baby';
         tipStage.removeAttribute('hidden');
+        tipFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
+        tipBar.classList.toggle('low', hover.hstate >= 1);
+        tipBar.removeAttribute('hidden');
         tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
       }
       tip.style.left = hover.x + 'px';
@@ -172,7 +179,7 @@ const Detail = (() => {
       }
       const life = lifeOf();
       const age = Math.min(sel.age || 0, life);
-      elStage.textContent = sel.hstate >= 1 ? 'Hungry' : sel.adult ? 'Adult' : 'Baby';
+      elStage.textContent = sel.hstate === 2 ? 'Starving' : sel.hstate === 1 ? 'Hungry' : sel.adult ? 'Adult' : 'Baby';
       elAge.textContent = ageFmt(age);
       elFill.style.width = (1 - age / life) * 100 + '%';
       elFreq.textContent = fmt(fishIncome(sel.s)) + ' G / ' + TICK + 's';

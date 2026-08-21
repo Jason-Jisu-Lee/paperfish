@@ -48,23 +48,19 @@ const Sim = (() => {
         if (f.eating) {
           f.eating.t -= sdt;
           if (f.eating.t <= 0) {
+            f.hunger = Math.min((f.hunger || 0) + f.eating.sat, HUNGER_FULL);
             f.hstate = 0;
             f.hT = 0;
-            f.hungerAt = f.age + HUNGER_AT;
             delete f.eating;
           }
         } else {
-          if (!f.hstate && f.age >= (f.hungerAt || HUNGER_AT) && (f.hungerAt || HUNGER_AT) < lifeOf()) {
-            f.hstate = 1;
-            f.hT = 0;
-          }
-          if (f.hstate === 1 && lifeOf() > HUNGER_AT && !Game.tuts.hungryTut && !Tut.active) Tut.hungry(f);
-          if (f.hstate) {
+          f.hunger = Math.max((f.hunger ?? HUNGER_FULL) - sdt, 0);
+          const pct = f.hunger / HUNGER_FULL;
+          f.hstate = pct <= STARVE_AT ? 2 : pct <= HUNGRY_AT ? 1 : 0;
+          if (f.hstate === 1 && f.birth >= 1 && !Game.tuts.hungryTut && !Tut.active) Tut.hungry(f);
+          if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
-            if (f.hstate === 1 && f.hT >= 20) {
-              f.hstate = 2;
-              f.hT = 0;
-            } else if (f.hstate === 2 && f.hT >= 10) {
+            if (f.hT >= 10) {
               f.nosoul = true;
               f.hstate = 0;
               f.dying = 0;
@@ -72,16 +68,25 @@ const Sim = (() => {
               deathWhisper();
               continue;
             }
+          } else {
+            f.hT = 0;
+          }
+          if (f.hstate && f.birth >= 1) {
             const aware = f.hstate === 2 || (f.dT !== undefined && f.dT <= 0);
-            const p = aware ? Stage.nearestPlant(f.x, f.y) : null;
+            const p = aware ? Stage.nearestFood(f.x, f.y) : null;
             if (p) {
               const px = p.x + p.hx, pyy = p.y + p.hy;
               if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
-                Stage.biteKelp(p);
-                if (p.bites <= 0) Game.plants -= 1;
-                const side = f.x < px ? -1 : 1;
-                f.dir = -side;
-                f.eating = { t: 2, x: px + side * 13, y: pyy };
+                if (p.kind) {
+                  Stage.eatPellet(p);
+                  f.eating = { t: 0.8, sat: PELLET_SAT, x: px, y: pyy };
+                } else {
+                  Stage.biteKelp(p);
+                  if (p.bites <= 0) Game.plants -= 1;
+                  const side = f.x < px ? -1 : 1;
+                  f.dir = -side;
+                  f.eating = { t: 2, sat: KELP_SAT, x: px + side * 13, y: pyy };
+                }
                 refresh = true;
               }
             }

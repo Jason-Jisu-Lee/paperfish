@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=86" />
+    <link rel="stylesheet" href="base.css?v=87" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -45,6 +45,12 @@
     </aside>
 
     <nav class="corner" id="corner" hidden>
+      <button class="icon" id="burn" aria-label="life burn" hidden>
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3.6 C14.2 6.4 17.4 9.4 17.4 13.3 C17.4 17.1 15 19.9 12 19.9 C9 19.9 6.6 17.1 6.6 13.3 C6.6 10.5 8.3 8.3 9.6 6.6 C10.4 5.6 11.3 4.6 12 3.6 Z" />
+          <path d="M12 19.9 C10.5 17.9 10.9 15.9 12 14.3 C13.1 15.9 13.5 17.9 12 19.9" />
+        </svg>
+      </button>
       <button class="icon" id="music" aria-label="music">
         <svg viewBox="0 0 24 24">
           <circle class="note-head" cx="9.8" cy="16.6" r="2.1" />
@@ -187,6 +193,7 @@
     <div class="tip" id="fishtip" hidden>
       <span class="tip-name" id="fishtip-name"></span>
       <span class="tip-stage" id="fishtip-stage"></span>
+      <span class="tip-bar" id="fishtip-bar" hidden><i id="fishtip-fill"></i></span>
     </div>
     <div class="tip" id="uptip" hidden></div>
 
@@ -328,24 +335,24 @@
 
     <script src="data/species.js?v=5"></script>
     <script src="data/content.js?v=11"></script>
-    <script src="core/state.js?v=32"></script>
-    <script src="world/stage.js?v=29"></script>
+    <script src="core/state.js?v=33"></script>
+    <script src="world/stage.js?v=30"></script>
     <script src="world/ambience.js?v=11"></script>
     <script src="world/ocean.js?v=8"></script>
     <script src="world/lantern.js?v=6"></script>
     <script src="world/audio.js?v=9"></script>
-    <script src="ui/tut.js?v=6"></script>
-    <script src="ui/panel.js?v=26"></script>
+    <script src="ui/tut.js?v=7"></script>
+    <script src="ui/panel.js?v=27"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
     <script src="ui/obj.js?v=21"></script>
-    <script src="ui/soul.js?v=26"></script>
+    <script src="ui/soul.js?v=27"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=18"></script>
+    <script src="ui/detail.js?v=19"></script>
     <script src="ui/dev.js?v=5"></script>
     <script src="ui/front.js?v=8"></script>
-    <script src="core/sim.js?v=18"></script>
+    <script src="core/sim.js?v=19"></script>
     <script src="core/main.js?v=15"></script>
-    <script src="ui/corner.js?v=5"></script>
+    <script src="ui/corner.js?v=6"></script>
   </body>
 </html>

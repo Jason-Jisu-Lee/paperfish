@@ -2,6 +2,7 @@ const Stage = (() => {
   const canvas = document.getElementById('sea');
   const ctx = canvas.getContext('2d');
   const plants = [];
+  const pellets = [];
   const SLICES = 18;
   let W = 0, H = 0, bounds = { l: 60, r: 600, t: 80, b: 500 }, open = { l: 60, r: 600, t: 80, b: 500 }, goldZone = null;
 
@@ -121,7 +122,7 @@ const Stage = (() => {
     if (!f.egg) {
       if (f.age === undefined) f.age = 0;
       f.adult = f.age >= adultAtOf();
-      if (!f.hungerAt) f.hungerAt = f.age + HUNGER_AT;
+      if (f.hunger === undefined) f.hunger = HUNGER_HATCH;
       initMotion(f);
       f.birth = idx === undefined ? 1 : -idx * 0.26;
     }
@@ -138,7 +139,7 @@ const Stage = (() => {
     f.age = 0;
     f.adult = false;
     f.hstate = 0;
-    f.hungerAt = HUNGER_AT;
+    f.hunger = HUNGER_HATCH;
     initMotion(f);
     f.birth = 0;
   };
@@ -160,13 +161,32 @@ const Stage = (() => {
     });
   };
 
-  const resetPlants = () => { plants.length = 0; };
+  const resetPlants = () => { plants.length = 0; pellets.length = 0; };
 
-  const nearestPlant = (x, y) => {
+  const spawnPellet = (x, y) => {
+    if (pellets.length >= 30) pellets.shift();
+    pellets.push({
+      x: Math.min(Math.max(x, bounds.l + 8), bounds.r - 8),
+      y: Math.max(y, bounds.t + 8),
+      hx: 0, hy: 0, ph: rand(0, Math.PI * 2), kind: 1
+    });
+  };
+
+  const eatPellet = p => {
+    const i = pellets.indexOf(p);
+    if (i >= 0) pellets.splice(i, 1);
+  };
+
+  const nearestFood = (x, y) => {
     let best = null, bd = Infinity;
     for (const p of plants) {
       if (p.bites <= 0) continue;
       const dx = p.x + p.hx - x, dy = p.y + p.hy - y;
+      const d = dx * dx + dy * dy;
+      if (d < bd) { bd = d; best = p; }
+    }
+    for (const p of pellets) {
+      const dx = p.x - x, dy = p.y - y;
       const d = dx * dx + dy * dy;
       if (d < bd) { bd = d; best = p; }
     }
@@ -322,7 +342,7 @@ const Stage = (() => {
         }
         f.vyT = rand(-1, 1) * (9 + f.spd * 0.22) * (Math.random() < 0.3 ? 1.9 : 1);
       }
-      if (f.hstate && plants.length) {
+      if (f.hstate && (plants.length || pellets.length)) {
         if (f.hstate === 2) f.dT = 0;
         else if (f.dT === undefined) f.dT = Math.random() * 1.5;
         else if (f.dT > 0) f.dT -= mdt;
@@ -330,7 +350,7 @@ const Stage = (() => {
         f.dT = undefined;
       }
       let seeking = false;
-      const target = f.hstate && f.dT !== undefined && f.dT <= 0 && !(f.fleeT > 0) ? nearestPlant(f.x, f.y) : null;
+      const target = f.hstate && f.dT !== undefined && f.dT <= 0 && !(f.fleeT > 0) ? nearestFood(f.x, f.y) : null;
       if (target) {
         seeking = true;
         const px = Math.min(Math.max(target.x + target.hx, bounds.l + 20), bounds.r - 20);
@@ -439,6 +459,17 @@ const Stage = (() => {
       p.dph += mdt * 0.11;
       p.hx = Math.sin(p.dph) * 26;
       p.hy = Math.sin(p.dph * 1.7 + 1.3) * 12;
+    }
+    for (let i = pellets.length - 1; i >= 0; i--) {
+      const p = pellets[i];
+      p.ph += mdt * 3;
+      if (p.y < bounds.b - 10) {
+        p.y += 15 * mdt;
+        p.x += Math.sin(p.ph) * 4 * mdt;
+      } else {
+        p.rest = (p.rest || 0) + mdt;
+        if (p.rest > 8) pellets.splice(i, 1);
+      }
     }
     updatePops(mdt);
   };
@@ -718,6 +749,12 @@ const Stage = (() => {
   const clear = () => ctx.clearRect(0, 0, W, H);
 
   const drawScene = () => {
+    for (const p of pellets) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2.4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(28,27,24,' + (p.rest ? Math.max(1 - p.rest / 8, 0) * 0.7 : 0.7) + ')';
+      ctx.fill();
+    }
     for (const p of plants) drawPlant(p);
     for (const f of Game.fish) if (f.egg) drawEgg(f);
     for (const f of Game.fish) if (!f.egg) drawFish(f);
@@ -725,7 +762,7 @@ const Stage = (() => {
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, resetPlants, nearestPlant, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize, uiBlocked,
+    ctx, materialize, hatch, spawnPlant, resetPlants, nearestFood, spawnPellet, eatPellet, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize, uiBlocked,
     get bounds() { return bounds; },
     get open() { return open; },
     get size() { return { W, H }; }

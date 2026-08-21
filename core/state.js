@@ -14,6 +14,8 @@ const Game = {
   pLantRate: 0,
   pLantFish: 0,
   pAutoEgg: 0,
+  pBurn: 0,
+  burnUsed: 0,
   eggsBought: 0,
   incomeUp: 0,
   eggUp: 0,
@@ -55,7 +57,12 @@ const soulYieldOf = s => (tierOf(s) === 2 ? 2 : 1) + Game.soulUp;
 const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
-const HUNGER_AT = 20 / 60;
+const HUNGER_FULL = 30;
+const HUNGER_HATCH = 18;
+const HUNGRY_AT = 0.3;
+const STARVE_AT = 0.05;
+const PELLET_SAT = 5;
+const KELP_SAT = 20;
 const hatchTime = () => TIER_HATCH[0];
 
 const soulUpCost = () => 20 * 2 ** Game.soulUp;
@@ -92,6 +99,16 @@ const pLantGoldCost = () => 3 * 2 ** Game.pLantGold;
 const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
 const pLantFishCost = () => 10 * 2 ** Game.pLantFish;
 const pAutoEggCost = () => 20;
+const pBurnCost = () => 500;
+const KELP_UNLOCK_COST = 100;
+
+const doBurn = () => {
+  if (!Game.pBurn || Game.burnUsed || !Game.started) return false;
+  Game.burnUsed = 1;
+  for (const f of Game.fish) if (!f.egg && f.dying === undefined) f.age = (f.age || 0) + 1;
+  saveGame();
+  return true;
+};
 
 const fmtG = n => {
   n = Math.floor(n);
@@ -133,6 +150,8 @@ const saveGame = () => {
       plr: Game.pLantRate,
       plf: Game.pLantFish,
       pae: Game.pAutoEgg,
+      pb: Game.pBurn,
+      bu: Game.burnUsed,
       eggs: Game.eggsBought,
       iu: Game.incomeUp,
       eu: Game.eggUp,
@@ -145,7 +164,7 @@ const saveGame = () => {
       fish: Game.fish.map(f => ({
         s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
         a: Math.round((f.age || 0) * 100) / 100,
-        h: f.hstate || 0, ha: Math.round((f.hungerAt || 0) * 100) / 100,
+        h: f.hstate || 0, hu: Math.round((f.hunger ?? HUNGER_FULL) * 100) / 100,
         d: f.dying !== undefined ? 1 : 0, ns: f.nosoul ? 1 : 0
       }))
     }));
@@ -171,6 +190,8 @@ const loadGame = () => {
     Game.pLantRate = d.plr || 0;
     Game.pLantFish = d.plf || 0;
     Game.pAutoEgg = d.pae || 0;
+    Game.pBurn = d.pb || 0;
+    Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
     Game.eggUp = d.eu || 0;
@@ -183,7 +204,7 @@ const loadGame = () => {
     Game.fish = (d.fish || [])
       .filter(f => f && tierOf(f.s) > 0)
       .map(f => {
-        const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hungerAt: f.ha || 0 };
+        const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hunger: f.hu ?? HUNGER_FULL };
         if (f.d) o.dying = 0;
         if (f.ns) o.nosoul = true;
         return o;

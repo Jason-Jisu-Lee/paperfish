@@ -32,6 +32,9 @@ const Soul = (() => {
       max: () => Game.pKelp >= PKELP_MAX, gate: () => Game.pLife > 0 },
     { key: 'soulUp', ico: 'soul', name: 'Extra Soul', desc: 'Every fish leaves 1 more soul when it dies.',
       lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++ },
+    { key: 'pBurn', ico: 'soul', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
+      lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
+      max: () => Game.pBurn >= 1 },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
       max: () => Game.pLantGold >= PLANTGOLD_MAX },
@@ -67,7 +70,7 @@ const Soul = (() => {
       lvl: () => Game.unlocks.income, cost: () => UNLOCK_COST, buy: () => Game.unlocks.income = 1,
       max: () => !!Game.unlocks.income },
     { key: 'u_kelp', ico: 'kelp', name: 'Kelp', desc: 'Unlock buying kelp during a run.',
-      lvl: () => Game.unlocks.kelp, cost: () => UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
+      lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
       max: () => !!Game.unlocks.kelp },
     { key: 'u_eggup', ico: 'egg', name: 'Fish Tier', desc: 'Unlock the in-run Fish Tier upgrade.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
@@ -88,7 +91,7 @@ const Soul = (() => {
     ['Fish', 'fish', ['autoEgg']],
     ['Income', 'income', ['startGold', 'pIncome']],
     ['Food', 'kelp', ['pKelp']],
-    ['Soul', 'soul', ['soulUp']],
+    ['Soul', 'soul', ['soulUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
 
@@ -256,6 +259,7 @@ const Soul = (() => {
     Game.incomeUp = 0;
     Game.eggUp = 0;
     Game.lifeUp = 0;
+    Game.burnUsed = 0;
     Game.plants = Game.pKelp;
     Game.fish = [{ s: 0, egg: false, t: 0 }];
     Stage.resetPlants();

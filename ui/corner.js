@@ -41,6 +41,10 @@
     else document.documentElement.requestFullscreen().catch(() => {});
   };
 
+  const burnBtn = document.getElementById('burn');
+  burnBtn.addEventListener('click', () => {
+    if (doBurn()) burnBtn.setAttribute('hidden', '');
+  });
   document.getElementById('music').addEventListener('click', toggleSound);
   document.getElementById('front-music').addEventListener('click', toggleSound);
   document.getElementById('screen').addEventListener('click', toggleScreen);
