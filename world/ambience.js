@@ -3,7 +3,7 @@ const Ambience = (() => {
   const bubbles = [];
   const motes = [];
   const vents = [];
-  let nextVent = rand(10, 24);
+  let nextVent = rand(7, 17);
   let nextSil = rand(35, 80);
   let sil = null;
   let school = null;
@@ -115,7 +115,7 @@ const Ambience = (() => {
         }
         if (v.t >= v.dur) vents.splice(i, 1);
       }
-      if (!vents.length) nextVent = rand(19, 42);
+      if (!vents.length) nextVent = rand(14, 30);
     } else {
       nextVent -= mdt;
       if (nextVent <= 0) startVent();
