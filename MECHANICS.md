@@ -42,6 +42,12 @@ grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
 - cost 25 x 1.25^lvl G, resets each run
 - all 4 tiers open, no gates; landed-tier odds: T1 (1-p), T2 p(1-p), T3 p^2(1-p), T4 p^3
 
+## Soul yield (2026-08-22)
+
+- base 3^(tier-1): T1 = 1, T2 = 3, T3 = 9, T4 = 27
+- Extra Soul prestige adds flat +1 per lvl on top
+- hungry/starving death still pays 0
+
 ## Prestige costs (souls)
 
 | upgrade | cost |

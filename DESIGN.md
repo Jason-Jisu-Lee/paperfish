@@ -287,9 +287,11 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Retier (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
   fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF (3 fish,
   seventhF cut from the roster); Tier 4 unchanged.
-- Tier 2 fish earn base 2 G/5s (vs 1) and pay +2 souls on death
-  (vs 1); income and soul upgrades stack on top (fishIncome /
-  soulYieldOf in state.js).
+- Tier 2 fish earn base 2 G/5s (vs 1); income upgrades stack on top
+  (fishIncome in state.js).
+- Souls scale x3 per tier (2026-08-22): base yield 3^(tier-1), so
+  1 / 3 / 9 / 27 for Tiers 1-4; Extra Soul adds flat on top
+  (soulYieldOf in state.js).
 - In-game Fish Tier (2026-08-18, renamed from Egg Chance, fish tab):
   cascading tier-up roll, the standard gacha rarity ladder. Each egg
   starts at Tier 1 and climbs one tier per success at chance p, rolled

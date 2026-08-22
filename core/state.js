@@ -53,10 +53,9 @@ const eggCost = () => {
   const mag = 10 ** Math.floor(Math.log10(raw) - 1);
   return Math.round(raw / mag) * mag;
 };
-const soulYield = () => 1 + Game.soulUp;
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
 const fishIncome = s => (tierOf(s) === 2 ? 2 : 1) + Game.incomeUp + Game.pIncome;
-const soulYieldOf = s => (tierOf(s) === 2 ? 2 : 1) + Game.soulUp;
+const soulYieldOf = s => 3 ** (tierOf(s) - 1) + Game.soulUp;
 const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
