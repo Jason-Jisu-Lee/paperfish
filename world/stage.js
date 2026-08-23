@@ -177,6 +177,8 @@ const Stage = (() => {
     if (i >= 0) pellets.splice(i, 1);
   };
 
+  const seekR = f => (f.hunger ?? HUNGER_FULL) / HUNGER_FULL >= 0.8 ? EAT_R * 0.2 : EAT_R;
+
   const nearestFood = (x, y) => {
     let best = null, bd = Infinity;
     for (const p of plants) {
@@ -346,7 +348,8 @@ const Stage = (() => {
       let target = null;
       if (!(f.fleeT > 0) && (plants.length || pellets.length)) {
         const t = nearestFood(f.x, f.y);
-        if (t && (f.hstate || (t.x + t.hx - f.x) ** 2 + (t.y + t.hy - f.y) ** 2 < EAT_R * EAT_R)) target = t;
+        const r = seekR(f);
+        if (t && (f.hstate || (t.x + t.hx - f.x) ** 2 + (t.y + t.hy - f.y) ** 2 < r * r)) target = t;
       }
       if (target) {
         seeking = true;
@@ -764,7 +767,7 @@ const Stage = (() => {
       for (const f of Game.fish) {
         if (f.egg || f.dying !== undefined || f.birth < 1) continue;
         ctx.beginPath();
-        ctx.arc(f.x, f.y, EAT_R, 0, Math.PI * 2);
+        ctx.arc(f.x, f.y, seekR(f), 0, Math.PI * 2);
         ctx.stroke();
       }
     }

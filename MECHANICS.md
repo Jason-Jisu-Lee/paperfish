@@ -15,6 +15,7 @@ Backend keeps 2 decimals; players only ever see bars, never these numbers.
 | starving threshold | 5% (1.50s left): urgent seek, exclamation mark |
 | empty meter | 10.00s at zero kills the fish, no soul |
 | death while starving | no soul (any cause); merely hungry pays full soul (2026-08-23) |
+| forfeit timing | judged the instant life runs out, not after the 0.4-3.4s death stagger (hunger kept draining during it and could flip hungry into starving unfairly) |
 | pellet | free, click open water, +5.00s, one fish, sinks then fades 12.00s after resting on the floor |
 | pellet eat trigger | mouth tip within 14px; eat anim anchors mouth to the pellet |
 | feeding unlock | pellet clicks do nothing until the intro tutorial is confirmed (dev mode exempt) |
@@ -31,6 +32,7 @@ the moment the first fish finishes swimming in.
 | state | radius | speed |
 |---|---|---|
 | normal | 234px | gentle, 35-90 |
+| ≥80% full | 20% radius (46.80px), 2026-08-23 | gentle, 35-90 |
 | hungry (≤30%) | unlimited, immediate | 45-130 |
 | starving (≤5%) | unlimited | 180-320, fast vertical |
 

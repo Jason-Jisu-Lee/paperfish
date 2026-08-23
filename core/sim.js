@@ -109,10 +109,12 @@ const Sim = (() => {
           }
         }
         if (f.age >= life && f.birth >= 1) {
-          if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
+          if (f.deathWait === undefined) {
+            f.deathWait = 0.4 + Math.random() * 3;
+            f.nosoul = f.hstate >= 2 && !f.eating;
+          }
           f.deathWait -= sdt;
           if (f.deathWait <= 0) {
-            f.nosoul = f.hstate >= 2 && !f.eating;
             f.dying = 0;
             firstDeath();
             if (!f.nosoul) {
