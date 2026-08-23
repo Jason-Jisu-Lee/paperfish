@@ -104,16 +104,19 @@ Exact numbers live in core/state.js.
   "none, hungry" while it would forfeit. A held (selected) fish keeps
   aging, hungering, and earning while the card is open (confirmed
   2026-08-15); it just can't swim to food while held.
-- Hunger tutorial (first hunger EVER, flag in save): world freezes, box
-  points at the fish: "Fish is hungry. Hungry fish do not generate soul
-  when deceased" -> Next -> the food rail icon (hidden until now)
-  appears flashing red: "Buy food for your fish" -> clicking the food
-  icon ends the tutorial; the player buys kelp themselves.
-  Explicitly gated: never fires unless a lifespan upgrade has pushed
-  life past the 20s hunger point AND the fish has lived past 20s. During any tutorial box an
+- Intro tutorial (2026-08-23, replaces the hungry-fish tutorial): fires
+  once per save the moment the first fish finishes swimming in. The
+  world freezes and the fish is auto-selected with its card open.
+  Step 1 spotlights the card's life bar: "A fish dies when its life
+  timer reaches 0 / Death gives Soul, spent on Research" -> Next.
+  Step 2 spotlights the card's hunger bar: "Hungry fish do not release
+  Soul / Click empty space to feed" -> Sure, and the game resumes.
+  Feeding stays locked until Sure. During any tutorial box an
   ink scrim dims the whole screen; a soft spotlight hole stays on the
-  subject (the fish, then the food icon) and glides between steps
-  (2026-08-16).
+  subject and glides between steps (2026-08-16). Soul spends are called
+  Research; the word upgrade is banned from player copy (the old
+  prestige Upgrades tab is now Unlocks). The fish card carries a hunger
+  meter (pellet icon, seal red when hungry) under the life bar.
 - Souls: each soulful death pays 1 + Extra Soul level the instant the
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.

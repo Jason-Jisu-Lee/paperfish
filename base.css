@@ -484,6 +484,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fc-age{ font-size:15px; font-weight:500; font-feature-settings:'tnum'; color:rgba(28,27,24,.85); }
 .fc-bar{ height:4px; background:rgba(28,27,24,.13); border-radius:99px; margin:10px 0 4px; overflow:hidden; }
 .fc-bar i{ display:block; height:100%; width:0; background:rgba(28,27,24,.45); border-radius:99px; transition:width .3s linear; }
+.fc-meter{ display:flex; align-items:center; gap:6px; margin:6px 0 8px; }
+.fc-meter svg{ width:11px; height:11px; flex:none; }
+.fc-meter circle{ fill:rgba(28,27,24,.5); }
+.fc-meter .mtrack b{ background:rgba(28,27,24,.45); transition:width .3s linear; }
+.fc-meter.low .mtrack b{ background:var(--seal); }
 .fc-row{
   display:flex; align-items:center; gap:10px;
   padding:8px 0; font-size:13.5px;

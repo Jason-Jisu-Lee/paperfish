@@ -17,13 +17,14 @@ Backend keeps 2 decimals; players only ever see bars, never these numbers.
 | death while hungry/starving | no soul (any cause) |
 | pellet | free, click open water, +5.00s, one fish, sinks then fades 12.00s after resting on the floor |
 | pellet eat trigger | mouth tip within 14px; eat anim anchors mouth to the pellet |
-| feeding unlock | pellet clicks do nothing until the hungry tutorial is confirmed (dev mode exempt) |
+| feeding unlock | pellet clicks do nothing until the intro tutorial is confirmed (dev mode exempt) |
 | kelp bite | +20.00s, 2 bites per kelp, 2 G, 70px body contact |
 
 Early loop: base life 20s + hatch fill 18.00s means an unfed Tier 1 fish
 goes hungry at ~9s and dies soulless; feeding is what keeps souls flowing.
 By design: fish die of old age long before hunger death until lifespan
-grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
+grows (a run or two in). The intro tutorial teaches feeding up front,
+the moment the first fish finishes swimming in.
 
 ## Food seeking (2026-08-21)
 

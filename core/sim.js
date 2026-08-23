@@ -34,6 +34,7 @@ const Sim = (() => {
           refresh = true;
         }
       } else {
+        if (f.birth >= 1 && !Game.tuts.introTut && !Tut.active && !Game.devMode) Tut.intro(f);
         const life = lifeOf();
         f.age = Math.min((f.age || 0) + sdt / 60, life);
         const aAt = adultAtOf();
@@ -57,7 +58,6 @@ const Sim = (() => {
           f.hunger = Math.max((f.hunger ?? HUNGER_FULL) - sdt, 0);
           const pct = f.hunger / HUNGER_FULL;
           f.hstate = pct <= STARVE_AT ? 2 : pct <= HUNGRY_AT ? 1 : 0;
-          if (f.hstate === 1 && f.birth >= 1 && !Game.tuts.hungryTut && !Tut.active && !Game.devMode) Tut.hungry(f);
           if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hT >= 10) {

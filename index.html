@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=89" />
+    <link rel="stylesheet" href="base.css?v=90" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -148,7 +148,7 @@
         <div class="pr-souls"><span id="p-bank">0</span><span class="pr-lab">SOUL</span></div>
         <nav class="pr-tabs" id="p-tabs">
           <button data-tab="up" class="on">Main</button>
-          <button data-tab="unlock">Upgrades</button>
+          <button data-tab="unlock">Unlocks</button>
           <button data-tab="tier">Tiers</button>
           <button data-tab="index">Fish Index</button>
         </nav>
@@ -210,7 +210,8 @@
           <span class="fc-stage" id="fc-stage"></span>
           <span class="fc-age" id="fc-age"></span>
         </div>
-        <div class="fc-bar"><i id="fc-fill"></i></div>
+        <div class="fc-bar" id="fc-lbar"><i id="fc-fill"></i></div>
+        <div class="fc-meter" id="fc-hun"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/></svg><i class="mtrack"><b id="fc-hfill"></b></i></div>
         <div class="fc-row" id="fc-freq-row">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></svg>
           <span>Income</span><b class="fcg" id="fc-freq"></b>
@@ -342,17 +343,17 @@
     <script src="world/ocean.js?v=8"></script>
     <script src="world/lantern.js?v=7"></script>
     <script src="world/audio.js?v=9"></script>
-    <script src="ui/tut.js?v=8"></script>
+    <script src="ui/tut.js?v=9"></script>
     <script src="ui/panel.js?v=28"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
     <script src="ui/obj.js?v=21"></script>
-    <script src="ui/soul.js?v=30"></script>
+    <script src="ui/soul.js?v=31"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=20"></script>
+    <script src="ui/detail.js?v=21"></script>
     <script src="ui/dev.js?v=6"></script>
     <script src="ui/front.js?v=8"></script>
-    <script src="core/sim.js?v=22"></script>
+    <script src="core/sim.js?v=23"></script>
     <script src="core/main.js?v=16"></script>
     <script src="ui/corner.js?v=6"></script>
   </body>

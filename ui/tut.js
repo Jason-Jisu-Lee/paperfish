@@ -3,7 +3,7 @@ const Tut = (() => {
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-next');
   const dim = document.getElementById('tut-dim');
-  let active = false, step = 0;
+  let active = false;
 
   const spot = (x, y, r) => {
     dim.style.setProperty('--hx', Math.round(x) + 'px');
@@ -11,54 +11,68 @@ const Tut = (() => {
     dim.style.setProperty('--hr', Math.round(r) + 'px');
   };
 
-  const pointAt = f => {
-    spot(f.x, f.y, SPECIES[f.s].len * 0.9);
-    dim.removeAttribute('hidden');
-    btn.removeAttribute('hidden');
+  const show = (el, text, label, k) => {
+    const r = el.getBoundingClientRect();
+    spot(r.left + r.width / 2, r.top + r.height / 2, Math.max(r.width * k, 54));
+    txt.innerHTML = text;
+    btn.textContent = label;
     box.classList.remove('side');
-    box.style.left = Math.min(Math.max(f.x, 210), innerWidth - 210) + 'px';
-    box.style.top = Math.max(f.y - SPECIES[f.s].len * 0.3 - 18, 156) + 'px';
-    box.removeAttribute('hidden');
-  };
-
-  const hungry = f => {
-    if (Game.devMode) return;
-    active = true;
-    step = 1;
-    txt.innerHTML = 'A fish is hungry<br>Click the water to drop food';
-    btn.textContent = 'Got it';
-    pointAt(f);
-  };
-
-  const P_STEPS = [
-    ['up', 'You can find universal upgrades here.'],
-    ['tier', 'Tier upgrades improve every fish in that tier.'],
-    ['index', 'Each fish is unique. You can view them here.']
-  ];
-  let pstep = -1;
-
-  const pShow = () => {
-    const [key, text] = P_STEPS[pstep];
-    const r = document.querySelector(`#p-tabs [data-tab="${key}"]`).getBoundingClientRect();
-    spot(r.left + r.width / 2, r.top + r.height / 2, Math.max(r.width * 0.75, 54));
-    txt.textContent = text;
-    btn.textContent = pstep === P_STEPS.length - 1 ? 'Got it' : 'Next';
-    box.classList.remove('side');
-    box.style.left = (r.left + r.width / 2) + 'px';
+    box.style.left = Math.min(Math.max(r.left + r.width / 2, 170), innerWidth - 170) + 'px';
     box.style.top = (r.top - 14) + 'px';
     dim.removeAttribute('hidden');
     btn.removeAttribute('hidden');
     box.removeAttribute('hidden');
   };
 
-  const pEnd = () => {
-    pstep = -1;
+  const hide = () => {
     active = false;
-    Game.tuts.pIntro = 1;
     btn.textContent = 'Next';
     box.setAttribute('hidden', '');
     dim.setAttribute('hidden', '');
     saveGame();
+  };
+
+  const I_STEPS = [
+    ['fc-lbar', 'A fish dies when its life timer reaches 0<br>Death gives Soul, spent on Research', 'Next'],
+    ['fc-hun', 'Hungry fish do not release Soul<br>Click empty space to feed', 'Sure']
+  ];
+  let istep = -1;
+
+  const iShow = () => {
+    const [id, text, label] = I_STEPS[istep];
+    show(document.getElementById(id), text, label, 0.62);
+  };
+
+  const iEnd = () => {
+    istep = -1;
+    Game.tuts.introTut = 1;
+    hide();
+  };
+
+  const intro = f => {
+    if (Game.devMode || Game.tuts.introTut || istep >= 0) return;
+    active = true;
+    Detail.select(f);
+    istep = 0;
+    iShow();
+  };
+
+  const P_STEPS = [
+    ['up', 'You can find universal Research here.'],
+    ['tier', 'Tier Research improves every fish in that tier.'],
+    ['index', 'Each fish is unique. You can view them here.']
+  ];
+  let pstep = -1;
+
+  const pShow = () => {
+    const [key, text] = P_STEPS[pstep];
+    show(document.querySelector(`#p-tabs [data-tab="${key}"]`), text, pstep === P_STEPS.length - 1 ? 'Got it' : 'Next', 0.75);
+  };
+
+  const pEnd = () => {
+    pstep = -1;
+    Game.tuts.pIntro = 1;
+    hide();
   };
 
   const prestige = () => {
@@ -69,30 +83,24 @@ const Tut = (() => {
   };
 
   btn.addEventListener('click', () => {
+    if (istep >= 0) {
+      istep += 1;
+      if (istep < I_STEPS.length) iShow();
+      else iEnd();
+      return;
+    }
     if (pstep >= 0) {
       pstep += 1;
       if (pstep < P_STEPS.length) pShow();
       else pEnd();
-      return;
     }
-    if (step !== 1) return;
-    active = false;
-    step = 0;
-    Game.tuts.hungryTut = 1;
-    btn.textContent = 'Next';
-    box.setAttribute('hidden', '');
-    dim.setAttribute('hidden', '');
-    saveGame();
   });
 
   const abort = () => {
     if (!active) return;
+    if (istep >= 0) return iEnd();
     if (pstep >= 0) return pEnd();
-    active = false;
-    step = 0;
-    box.setAttribute('hidden', '');
-    dim.setAttribute('hidden', '');
   };
 
-  return { hungry, abort, prestige, get active() { return active; } };
+  return { intro, abort, prestige, get active() { return active; } };
 })();

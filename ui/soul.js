@@ -61,16 +61,16 @@ const Soul = (() => {
   ];
 
   const UNLOCKS = [
-    { key: 'u_income', ico: 'income', name: 'Unlock Income', desc: 'Unlock the in-run Income upgrade.',
+    { key: 'u_income', ico: 'income', name: 'Unlock Income', desc: 'Unlock in-run Income.',
       lvl: () => Game.unlocks.income, cost: () => UNLOCK_COST, buy: () => Game.unlocks.income = 1,
       max: () => !!Game.unlocks.income },
     { key: 'u_kelp', ico: 'kelp', name: 'Unlock Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
       max: () => !!Game.unlocks.kelp },
-    { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock the in-run Fish Tier upgrade.',
+    { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup },
-    { key: 'u_life', ico: 'life', name: 'Unlock Lifespan', desc: 'Unlock the in-run Lifespan upgrade.',
+    { key: 'u_life', ico: 'life', name: 'Unlock Lifespan', desc: 'Unlock in-run Lifespan.',
       lvl: () => Game.unlocks.life, cost: () => UNLOCK_COST, buy: () => Game.unlocks.life = 1,
       max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp }
   ];

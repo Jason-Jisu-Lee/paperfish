@@ -18,7 +18,9 @@ const Detail = (() => {
   const elDeath = document.getElementById('fc-death');
   const hatchRow = document.getElementById('fc-hatch-row');
   const elHatch = document.getElementById('fc-hatch');
-  const fishRows = ['fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+  const elHun = document.getElementById('fc-hun');
+  const elHFill = document.getElementById('fc-hfill');
+  const fishRows = ['fc-hun', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
 
   const EGGART = '<svg viewBox="-26 -32 52 64" class="eggart"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>';
   const fishArt = s => {
@@ -66,23 +68,27 @@ const Detail = (() => {
   canvas.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
 
+  const select = f => {
+    releaseSel();
+    sel = f;
+    if (!f.egg) Stage.hold(f);
+    placeCard(f.x, f.y, f);
+    card.removeAttribute('hidden');
+  };
+
   canvas.addEventListener('click', e => {
     if (Tut.active) return;
     if (hover) {
       if (hover === sel) return;
-      releaseSel();
-      sel = hover;
-      if (!hover.egg) Stage.hold(hover);
-      placeCard(hover.x, hover.y, hover);
-      card.removeAttribute('hidden');
+      select(hover);
     } else {
       if (Lantern.clickAt(e.clientX, e.clientY) || Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
-      else if (!Pause.paused && !Soul.shopOpen && (Game.tuts.hungryTut || Game.devMode)) Stage.spawnPellet(e.clientX, e.clientY);
+      else if (!Pause.paused && !Soul.shopOpen && (Game.tuts.introTut || Game.devMode)) Stage.spawnPellet(e.clientX, e.clientY);
       close();
     }
   });
 
-  document.getElementById('fc-x').addEventListener('click', close);
+  document.getElementById('fc-x').addEventListener('click', () => { if (!Tut.active) close(); });
 
   canvas.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -188,10 +194,12 @@ const Detail = (() => {
       elStage.textContent = sel.hstate === 2 ? 'Starving' : sel.hstate === 1 ? 'Hungry' : sel.adult ? 'Adult' : 'Baby';
       elAge.textContent = ageFmt(age);
       elFill.style.width = (1 - age / life) * 100 + '%';
+      elHFill.style.width = Math.min(Math.max((sel.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
+      elHun.classList.toggle('low', sel.hstate >= 1);
       elFreq.textContent = fmt(fishIncome(sel.s)) + ' G / ' + TICK + 's';
       elDeath.textContent = sel.hstate >= 1 ? '0' : '+' + soulYieldOf(sel.s);
     }
   };
 
-  return { tick };
+  return { tick, select };
 })();
