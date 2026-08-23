@@ -3,32 +3,45 @@ const Tut = (() => {
   const txt = document.getElementById('tut-text');
   const btn = document.getElementById('tut-next');
   const dim = document.getElementById('tut-dim');
+  const line = document.getElementById('tut-line');
   let active = false;
 
-  const spot = (x, y, r) => {
-    dim.style.setProperty('--hx', Math.round(x) + 'px');
-    dim.style.setProperty('--hy', Math.round(y) + 'px');
-    dim.style.setProperty('--hr', Math.round(r) + 'px');
-  };
+  const PAD = 6, GAP = 24;
 
-  const show = (el, text, label, k) => {
+  const show = (el, text, label, side, edge) => {
     const r = el.getBoundingClientRect();
-    spot(r.left + r.width / 2, r.top + r.height / 2, Math.max(r.width * k, 54));
+    const hx = r.left - PAD, hy = r.top - PAD, hw = r.width + PAD * 2, hh = r.height + PAD * 2;
+    Object.assign(dim.style, { left: hx + 'px', top: hy + 'px', width: hw + 'px', height: hh + 'px' });
+    const cx = hx + hw / 2, cy = hy + hh / 2;
+    if (side === 'up') {
+      Object.assign(line.style, { left: cx - 1 + 'px', top: hy - GAP + 'px', width: '2px', height: GAP + 'px' });
+      box.style.left = cx + 'px';
+      box.style.top = hy - GAP + 'px';
+    } else if (side === 'right') {
+      const bx = edge.right + GAP;
+      Object.assign(line.style, { left: hx + hw + 'px', top: cy - 1 + 'px', width: bx - hx - hw + 'px', height: '2px' });
+      box.style.left = bx + 'px';
+      box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
+    } else {
+      const bx = edge.left - GAP;
+      Object.assign(line.style, { left: bx + 'px', top: cy - 1 + 'px', width: hx - bx + 'px', height: '2px' });
+      box.style.left = bx + 'px';
+      box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
+    }
+    box.classList.remove('up', 'right', 'left');
+    box.classList.add(side);
     txt.innerHTML = text;
     btn.textContent = label;
-    box.classList.remove('side');
-    box.style.left = Math.min(Math.max(r.left + r.width / 2, 170), innerWidth - 170) + 'px';
-    box.style.top = (r.top - 14) + 'px';
     dim.removeAttribute('hidden');
-    btn.removeAttribute('hidden');
+    line.removeAttribute('hidden');
     box.removeAttribute('hidden');
   };
 
   const hide = () => {
     active = false;
-    btn.textContent = 'Next';
     box.setAttribute('hidden', '');
     dim.setAttribute('hidden', '');
+    line.setAttribute('hidden', '');
     saveGame();
   };
 
@@ -40,7 +53,9 @@ const Tut = (() => {
 
   const iShow = () => {
     const [id, text, label] = I_STEPS[istep];
-    show(document.getElementById(id), text, label, 0.62);
+    const card = document.getElementById('fishcard').getBoundingClientRect();
+    const side = card.right + 380 < innerWidth ? 'right' : 'left';
+    show(document.getElementById(id), text, label, side, card);
   };
 
   const iEnd = () => {
@@ -53,6 +68,7 @@ const Tut = (() => {
     if (Game.devMode || Game.tuts.introTut || istep >= 0) return;
     active = true;
     Detail.select(f);
+    Detail.tick();
     istep = 0;
     iShow();
   };
@@ -66,7 +82,7 @@ const Tut = (() => {
 
   const pShow = () => {
     const [key, text] = P_STEPS[pstep];
-    show(document.querySelector(`#p-tabs [data-tab="${key}"]`), text, pstep === P_STEPS.length - 1 ? 'Got it' : 'Next', 0.75);
+    show(document.querySelector(`#p-tabs [data-tab="${key}"]`), text, pstep === P_STEPS.length - 1 ? 'Got it' : 'Next', 'up');
   };
 
   const pEnd = () => {

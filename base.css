@@ -841,45 +841,52 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ei-row .thumb path{ fill:none; stroke:rgba(28,27,24,.75); stroke-width:1.2; vector-effect:non-scaling-stroke; stroke-linecap:round; }
 .ei-pct{ margin-left:auto; font-feature-settings:'tnum'; color:#7a5800; font-weight:500; }
 
-@property --hx{ syntax:'<length>'; inherits:false; initial-value:-999px; }
-@property --hy{ syntax:'<length>'; inherits:false; initial-value:-999px; }
-@property --hr{ syntax:'<length>'; inherits:false; initial-value:0px; }
 .tutdim{
-  position:fixed; inset:0; z-index:65;
-  background:rgba(28,27,24,.44);
+  position:fixed; z-index:65;
+  border:2px solid var(--seal);
+  border-radius:4px;
+  box-shadow:0 0 0 200vmax rgba(28,27,24,.44);
   pointer-events:none;
-  -webkit-mask:radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 55%, #000 100%);
-  mask:radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 55%, #000 100%);
-  transition:--hx .5s ease, --hy .5s ease, --hr .5s ease;
+  transition:left .5s ease, top .5s ease, width .5s ease, height .5s ease;
   animation:dimin .45s ease;
 }
 @keyframes dimin{ from{ opacity:0; } }
+.tutline{
+  position:fixed; z-index:65;
+  background:var(--seal);
+  pointer-events:none;
+  transition:left .5s ease, top .5s ease, width .5s ease, height .5s ease;
+}
 .tutbox{
   position:fixed; z-index:70;
-  transform:translate(-50%, -100%);
   background:var(--paper);
-  box-shadow:0 0 0 1px rgba(28,27,24,.25), 0 6px 18px rgba(28,27,24,.14);
-  padding:14px 18px;
-  max-width:300px;
+  border:1px solid rgba(180,58,43,.6);
+  box-shadow:0 8px 24px rgba(28,27,24,.18);
+  padding:18px 24px;
+  width:max-content;
+  max-width:340px;
   text-align:center;
+  transition:left .5s ease, top .5s ease;
 }
-.tutbox::after{
-  content:''; position:absolute; left:50%; bottom:-7px;
-  width:12px; height:12px; background:var(--paper);
-  transform:translateX(-50%) rotate(45deg);
-  box-shadow:1px 1px 0 0 rgba(28,27,24,.25);
+.tutbox.up{ transform:translate(-50%, -100%); }
+.tutbox.right{ transform:translate(0, -50%); }
+.tutbox.left{ transform:translate(-100%, -50%); }
+.tut-text{ font-size:14px; letter-spacing:.03em; line-height:1.8; }
+#tut-next{
+  margin-top:14px;
+  padding:9px 32px;
+  background:var(--ink);
+  color:var(--paper);
+  border:0;
+  border-radius:999px;
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:12.5px;
+  letter-spacing:.18em;
+  cursor:pointer;
+  transition:background .18s ease, transform .12s ease, box-shadow .18s ease;
 }
-.tutbox.side{
-  transform:translate(0, -50%);
-  text-align:left;
-}
-.tutbox.side::after{
-  left:-7px; bottom:auto; top:50%;
-  transform:translateY(-50%) rotate(45deg);
-  box-shadow:-1px 1px 0 0 rgba(28,27,24,.25);
-}
-.tut-text{ font-size:14px; letter-spacing:.03em; line-height:1.7; }
-#tut-next{ margin-top:10px; }
+#tut-next:hover{ background:var(--seal); box-shadow:0 4px 14px rgba(180,58,43,.35); }
+#tut-next:active{ transform:scale(.96); }
 
 .ubtn-icon.eggicon svg{ width:38px; height:48px; overflow:visible; }
 .ubtn-icon.eggicon path{ fill:#fdfaf1; stroke:rgba(28,27,24,.9); stroke-width:2.6; stroke-linecap:round; }
