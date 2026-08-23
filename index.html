@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=93" />
+    <link rel="stylesheet" href="base.css?v=94" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -194,8 +194,8 @@
     <div class="tip" id="fishtip" hidden>
       <span class="tip-name" id="fishtip-name"></span>
       <span class="tip-stage" id="fishtip-stage"></span>
-      <span class="tip-meter" id="fishtip-hunger" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/></svg><i class="mtrack"><b id="fishtip-hfill"></b></i></span>
       <span class="tip-meter" id="fishtip-life" hidden><svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5"/><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z"/><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z"/></svg><i class="mtrack"><b id="fishtip-lfill"></b></i></span>
+      <span class="tip-meter" id="fishtip-hunger" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/></svg><i class="mtrack"><b id="fishtip-hfill"></b></i></span>
     </div>
     <div class="tip" id="uptip" hidden></div>
 
@@ -211,7 +211,8 @@
           <span class="fc-stage" id="fc-stage"></span>
           <span class="fc-age" id="fc-age"></span>
         </div>
-        <div class="fc-bar" id="fc-lbar"><i id="fc-fill"></i></div>
+        <div class="fc-bar" id="fc-ebar" hidden><i id="fc-efill"></i></div>
+        <div class="fc-meter" id="fc-lbar"><svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5"/><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z"/><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z"/></svg><i class="mtrack"><b id="fc-fill"></b></i></div>
         <div class="fc-meter" id="fc-hun"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/></svg><i class="mtrack"><b id="fc-hfill"></b></i></div>
         <div class="fc-row" id="fc-freq-row">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></svg>
@@ -351,7 +352,7 @@
     <script src="ui/obj.js?v=21"></script>
     <script src="ui/soul.js?v=31"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=24"></script>
+    <script src="ui/detail.js?v=25"></script>
     <script src="ui/dev.js?v=6"></script>
     <script src="ui/front.js?v=8"></script>
     <script src="core/sim.js?v=25"></script>

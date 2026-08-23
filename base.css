@@ -485,10 +485,15 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fc-age{ font-size:15px; font-weight:500; font-feature-settings:'tnum'; color:rgba(28,27,24,.85); }
 .fc-bar{ height:4px; background:rgba(28,27,24,.13); border-radius:99px; margin:10px 0 4px; overflow:hidden; }
 .fc-bar i{ display:block; height:100%; width:0; background:rgba(28,27,24,.45); border-radius:99px; transition:width .3s linear; }
-.fc-meter{ display:flex; align-items:center; gap:6px; margin:6px 0 8px; }
-.fc-meter svg{ width:11px; height:11px; flex:none; }
+.fc-meter{ display:flex; align-items:center; gap:10px; margin:8px 0 0; }
+#fc-lbar{ margin-top:12px; }
+#fc-hun{ margin-bottom:8px; }
+.fc-meter svg{ width:20px; height:20px; flex:none; }
+.fc-meter path{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:2; stroke-linecap:round; }
 .fc-meter circle{ fill:rgba(28,27,24,.5); }
-.fc-meter .mtrack b{ background:rgba(28,27,24,.45); transition:width .3s linear; }
+.fc-meter .mtrack{ height:8px; border-radius:4px; }
+.fc-meter .mtrack b{ transition:width .3s linear; }
+#fc-lbar .mtrack b{ background:#3e546e; }
 .fc-meter.low .mtrack b{ background:var(--seal); }
 .fc-row{
   display:flex; align-items:center; gap:10px;

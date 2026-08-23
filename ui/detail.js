@@ -20,7 +20,9 @@ const Detail = (() => {
   const elHatch = document.getElementById('fc-hatch');
   const elHun = document.getElementById('fc-hun');
   const elHFill = document.getElementById('fc-hfill');
-  const fishRows = ['fc-hun', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
+  const ebar = document.getElementById('fc-ebar');
+  const elEFill = document.getElementById('fc-efill');
+  const fishRows = ['fc-lbar', 'fc-hun', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
 
   const EGGART = '<svg viewBox="-26 -32 52 64" class="eggart"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>';
   const fishArt = s => {
@@ -169,6 +171,7 @@ const Detail = (() => {
         cardMode = 'egg';
         for (const r of fishRows) r.setAttribute('hidden', '');
         hatchRow.removeAttribute('hidden');
+        ebar.removeAttribute('hidden');
         elPic.innerHTML = EGGART;
         elTier.textContent = tierOf(sel.s);
         elName.textContent = 'Egg';
@@ -177,7 +180,7 @@ const Detail = (() => {
       const total = hatchTime();
       const left = Math.max(Math.ceil(total - (sel.t || 0)), 0);
       elAge.textContent = left + 's';
-      elFill.style.width = Math.min((sel.t || 0) / total, 1) * 100 + '%';
+      elEFill.style.width = Math.min((sel.t || 0) / total, 1) * 100 + '%';
       elHatch.textContent = left + ' sec';
       return;
     }
@@ -186,6 +189,7 @@ const Detail = (() => {
         cardMode = 'fish';
         for (const r of fishRows) r.removeAttribute('hidden');
         hatchRow.setAttribute('hidden', '');
+        ebar.setAttribute('hidden', '');
         elPic.innerHTML = fishArt(sel.s);
         elTier.textContent = tierOf(sel.s);
         elName.textContent = SPECIES[sel.s].name;
