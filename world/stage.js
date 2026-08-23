@@ -167,7 +167,7 @@ const Stage = (() => {
     if (pellets.length >= 30) pellets.shift();
     pellets.push({
       x: Math.min(Math.max(x, bounds.l + 8), bounds.r - 8),
-      y: Math.max(y, bounds.t + 8),
+      y: Math.min(Math.max(y, bounds.t + 8), bounds.b - 10),
       hx: 0, hy: 0, ph: rand(0, Math.PI * 2), kind: 1
     });
   };
@@ -351,9 +351,9 @@ const Stage = (() => {
       if (target) {
         seeking = true;
         const px = Math.min(Math.max(target.x + target.hx, bounds.l + 20), bounds.r - 20);
-        const pyy = Math.min(Math.max(target.y + target.hy, bounds.t + 20), bounds.b - 20);
+        const pyy = Math.min(Math.max(target.y + target.hy, bounds.t + 20), bounds.b - (target.kind ? 10 : 20));
         const dx = px - f.x;
-        const dz = Math.max(18, Math.abs(pyy - f.y) * 0.35);
+        const dz = target.kind ? SPECIES[f.s].len * 0.45 + 20 : Math.max(18, Math.abs(pyy - f.y) * 0.35);
         if (Math.abs(dx) > dz && Math.sign(dx) !== f.dir) f.dir = Math.sign(dx);
         f.kick = 0;
         const urgent = f.hstate === 2;
@@ -366,6 +366,7 @@ const Stage = (() => {
         f.vyT = urgent
           ? Math.min(Math.max((pyy - f.y) * 1.2, -150), 150)
           : Math.min(Math.max((pyy - f.y) * 0.6, -70), 70);
+        if (target.kind && pyy > f.y + 4 && f.vyT < 26) f.vyT = 26;
       } else {
         f.schoolT = (f.schoolT || 0) - mdt;
         if (f.schoolT <= 0) {
@@ -398,7 +399,7 @@ const Stage = (() => {
       }
 
       if (f.y < bounds.t + 26) f.vyT = Math.abs(f.vyT) || 6;
-      if (f.y > bounds.b - 26) f.vyT = -Math.abs(f.vyT) || -6;
+      if (f.y > bounds.b - (seeking ? 12 : 26)) f.vyT = -Math.abs(f.vyT) || -6;
       if (topZone && !seeking && f.y < topZone.b) {
         const zm = 20 + f.spd * 0.3;
         if (f.dir > 0 && f.x > topZone.l - zm && f.x < topZone.l) { f.dir = -1; flipKick(f); }
@@ -467,7 +468,7 @@ const Stage = (() => {
         p.x += Math.sin(p.ph) * 4 * mdt;
       } else {
         p.rest = (p.rest || 0) + mdt;
-        if (p.rest > 8) pellets.splice(i, 1);
+        if (p.rest > 12) pellets.splice(i, 1);
       }
     }
     updatePops(mdt);

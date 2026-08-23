@@ -77,7 +77,7 @@ const Detail = (() => {
       card.removeAttribute('hidden');
     } else {
       if (Lantern.clickAt(e.clientX, e.clientY) || Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
-      else if (!Pause.paused && !Soul.shopOpen) Stage.spawnPellet(e.clientX, e.clientY);
+      else if (!Pause.paused && !Soul.shopOpen && (Game.tuts.hungryTut || Game.devMode)) Stage.spawnPellet(e.clientX, e.clientY);
       close();
     }
   });

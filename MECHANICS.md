@@ -15,8 +15,9 @@ Backend keeps 2 decimals; players only ever see bars, never these numbers.
 | starving threshold | 5% (1.50s left): urgent seek, exclamation mark |
 | empty meter | 10.00s at zero kills the fish, no soul |
 | death while hungry/starving | no soul (any cause) |
-| pellet | free, click open water, +5.00s, one fish, sinks then fades ~8s on the floor |
-| pellet eat trigger | mouth tip within 10px, an actual touch; eat anim anchors mouth to the pellet |
+| pellet | free, click open water, +5.00s, one fish, sinks then fades 12.00s after resting on the floor |
+| pellet eat trigger | mouth tip within 14px; eat anim anchors mouth to the pellet |
+| feeding unlock | pellet clicks do nothing until the hungry tutorial is confirmed (dev mode exempt) |
 | kelp bite | +20.00s, 2 bites per kelp, 2 G, 70px body contact |
 
 Early loop: base life 20s + hatch fill 18.00s means an unfed Tier 1 fish
@@ -34,6 +35,15 @@ grows (a run or two in). First-ever hungry fish triggers the feed tutorial.
 
 - any fish eats food it reaches, even when full
 - dev mode draws the 234px radius ring around every fish
+
+Pellet chase fixes (2026-08-22): pellets dropped at the screen bottom
+clamp to the floor line instead of burying in the sand; seek targets a
+floor pellet at its true rest depth (was clamped 10px short, which made
+rested pellets uneatable); fish may dip to 12px above the sand while
+seeking (was 26); a pellet below a fish adds a 26px/s down-drive so fish
+catch sinkers instead of hovering above them; within a nose-length of a
+pellet fish hold course and swim through it so the mouth crosses the
+food instead of orbiting it.
 
 ## Fish Tier, in-run (2026-08-20)
 
