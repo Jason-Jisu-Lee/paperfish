@@ -116,7 +116,7 @@ const Detail = (() => {
     const row = e.target.closest('[data-hint]');
     if (!row) return;
     uptip.classList.remove('cap');
-    uptip.textContent = 'soul granted on death, none while hungry';
+    uptip.textContent = 'soul granted on death, none while starving';
     const r = row.getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.left = r.left + 'px';
@@ -197,7 +197,7 @@ const Detail = (() => {
       elHFill.style.width = Math.min(Math.max((sel.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
       elHun.classList.toggle('low', sel.hstate >= 1);
       elFreq.textContent = fmt(fishIncome(sel.s)) + ' G / ' + TICK + 's';
-      elDeath.textContent = sel.hstate >= 1 ? '0' : '+' + soulYieldOf(sel.s);
+      elDeath.textContent = sel.hstate >= 2 ? '0' : '+' + soulYieldOf(sel.s);
     }
   };
 

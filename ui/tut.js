@@ -47,7 +47,7 @@ const Tut = (() => {
 
   const I_STEPS = [
     ['fc-lbar', 'Fish dies when the life timer reaches 0, and grants Soul which is used for Research', 'Next'],
-    ['fc-hun', 'Hungry fish do not release Soul.<br>Click empty space to feed fish', 'Sure']
+    ['fc-hun', 'Fish gets Hungry, and then Starving as hunger bar drops.<br>Starving fish do not grant soul.<br>Click empty space to feed the fish', 'Sure']
   ];
   let istep = -1;
 

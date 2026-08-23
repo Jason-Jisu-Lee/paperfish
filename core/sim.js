@@ -112,7 +112,7 @@ const Sim = (() => {
           if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
           f.deathWait -= sdt;
           if (f.deathWait <= 0) {
-            f.nosoul = f.hstate >= 1 && !f.eating;
+            f.nosoul = f.hstate >= 2 && !f.eating;
             f.dying = 0;
             firstDeath();
             if (!f.nosoul) {

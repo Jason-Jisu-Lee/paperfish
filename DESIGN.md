@@ -99,18 +99,20 @@ Exact numbers live in core/state.js.
   bite. A fish only becomes hungry if that moment lands before its death
   age, so base-life (20s) fish never hunger; the system wakes with the
   first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 20s
-  (2s eating pause). Hungry or starving fish forfeit their souls when
-  they die (mid-bite eaters don't); the fish card death row shows
-  "none, hungry" while it would forfeit. A held (selected) fish keeps
+  (2s eating pause). Only starving fish forfeit their souls when they
+  die (mid-bite eaters don't; merely hungry pays full, 2026-08-23); the
+  fish card death row shows 0 while it would forfeit. A held (selected) fish keeps
   aging, hungering, and earning while the card is open (confirmed
   2026-08-15); it just can't swim to food while held.
 - Intro tutorial (2026-08-23, replaces the hungry-fish tutorial): fires
   once per save the moment the first fish finishes swimming in. The
   world freezes and the fish is auto-selected with its card open.
-  Step 1 spotlights the card's life bar: "A fish dies when its life
-  timer reaches 0 / Death gives Soul, spent on Research" -> Next.
-  Step 2 spotlights the card's hunger bar: "Hungry fish do not release
-  Soul / Click empty space to feed" -> Sure, and the game resumes.
+  Step 1 spotlights the card's life bar: "Fish dies when the life
+  timer reaches 0, and grants Soul which is used for Research" -> Next.
+  Step 2 spotlights the card's hunger bar: "Fish gets Hungry, and then
+  Starving as hunger bar drops. Starving fish do not grant soul. Click
+  empty space to feed the fish" -> Sure, and the game resumes. Both
+  lines are CEO-dictated copy, verbatim.
   Feeding stays locked until Sure. During any tutorial an ink scrim
   dims the screen with an exact rectangular cutout on the subject,
   framed by a seal-red hairline; a red leader line runs from the frame

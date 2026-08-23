@@ -24,7 +24,7 @@ const Lantern = (() => {
       x = rand(o.l + 60, o.r - 60);
       if (!Stage.uiBlocked(x, o.t + 40)) break;
     }
-    lan = { id: ++idSeq, x, y: o.t + 26, charges: 3, ph: rand(0, 7), fade: 0, gone: false };
+    lan = { id: ++idSeq, x, y: o.t + 26, charges: 2, ph: rand(0, 7), fade: 0, gone: false };
   };
 
   const pay = () => {
@@ -95,7 +95,7 @@ const Lantern = (() => {
     if (!Game.started || !lan) return;
     const a = lan.gone ? Math.max(1 - lan.fade, 0) : 1;
     if (a <= 0) return;
-    const lit = lan.charges / 3;
+    const lit = lan.charges / 2;
     const x = lan.x, y = lan.y + Math.sin(lan.ph * 1.4) * 4 + (lan.jolt || 0) * 3;
     ctx.save();
     ctx.globalAlpha = a;

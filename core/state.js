@@ -90,7 +90,7 @@ const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
 const PLANTGOLD_MAX = 10;
 const PLANTRATE_MAX = 5;
 const PLANTFISH_MAX = 5;
-const lantGold = () => 1 + Game.pLantGold;
+const lantGold = () => 2 + Game.pLantGold;
 const lantMin = () => 15 - Game.pLantRate;
 const lantMax = () => 17 - Game.pLantRate;
 const lantTapChance = () => 0.04 * Game.pLantFish;
