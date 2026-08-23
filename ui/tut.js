@@ -6,7 +6,7 @@ const Tut = (() => {
   const line = document.getElementById('tut-line');
   let active = false;
 
-  const PAD = 6, GAP = 24;
+  const PAD = 6, GAP = 48;
 
   const show = (el, text, label, side, edge) => {
     const r = el.getBoundingClientRect();
@@ -46,8 +46,8 @@ const Tut = (() => {
   };
 
   const I_STEPS = [
-    ['fc-lbar', 'A fish dies when its life timer reaches 0<br>Death gives Soul, spent on Research', 'Next'],
-    ['fc-hun', 'Hungry fish do not release Soul<br>Click empty space to feed', 'Sure']
+    ['fc-lbar', 'Fish dies when the life timer reaches 0, and grants Soul which is used for Research', 'Next'],
+    ['fc-hun', 'Hungry fish do not release Soul.<br>Click empty space to feed fish', 'Sure']
   ];
   let istep = -1;
 
