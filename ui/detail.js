@@ -54,11 +54,11 @@ const Detail = (() => {
     uptip.setAttribute('hidden', '');
   };
 
-  const placeCard = (x, y, f) => {
+  const placeCard = (x, y, f, side) => {
     const w = 292, h = 340, m = 14;
     const fr = SPECIES[f.s].len * 0.65;
-    let left = f.x + fr + 18;
-    if (left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
+    let left = side === 'left' ? f.x - fr - 18 - w : f.x + fr + 18;
+    if (!side && left + w > window.innerWidth - m) left = f.x - fr - 18 - w;
     if (left < m) left = Math.max(m, Math.min(x + 20, window.innerWidth - w - m));
     const top = Math.max(m, Math.min(y - h / 2, window.innerHeight - h - m));
     card.style.left = left + 'px';
@@ -68,11 +68,13 @@ const Detail = (() => {
   canvas.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   canvas.addEventListener('mouseleave', () => { mx = null; my = null; });
 
-  const select = f => {
-    releaseSel();
-    sel = f;
-    if (!f.egg) Stage.hold(f);
-    placeCard(f.x, f.y, f);
+  const select = (f, side) => {
+    if (sel !== f) {
+      releaseSel();
+      sel = f;
+      if (!f.egg) Stage.hold(f);
+    }
+    placeCard(f.x, f.y, f, side);
     card.removeAttribute('hidden');
   };
 

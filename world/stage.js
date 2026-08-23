@@ -109,11 +109,11 @@ const Stage = (() => {
     return false;
   };
 
-  const materialize = (f, idx) => {
+  const materialize = (f, idx, mid) => {
     let x = 0, y = 0;
     for (let i = 0; i < 30; i++) {
-      x = rand(open.l + 50, open.r - 50);
-      y = rand(open.t + 30, open.b - 30);
+      x = mid ? rand(0.4, 0.6) * (open.r - open.l) + open.l : rand(open.l + 50, open.r - 50);
+      y = mid ? rand(0.4, 0.6) * (open.b - open.t) + open.t : rand(open.t + 30, open.b - 30);
       if (!uiBlocked(x, y)) break;
     }
     f.x = x;

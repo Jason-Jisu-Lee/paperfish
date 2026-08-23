@@ -6,9 +6,9 @@ const Tut = (() => {
   const line = document.getElementById('tut-line');
   let active = false;
 
-  const PAD = 6, GAP = 48;
+  const PAD = 6, GAP = 48, HGAP = 130;
 
-  const show = (el, text, label, side, edge) => {
+  const show = (el, text, label, side, edge, gap) => {
     const r = el.getBoundingClientRect();
     const hx = r.left - PAD, hy = r.top - PAD, hw = r.width + PAD * 2, hh = r.height + PAD * 2;
     Object.assign(dim.style, { left: hx + 'px', top: hy + 'px', width: hw + 'px', height: hh + 'px' });
@@ -18,12 +18,12 @@ const Tut = (() => {
       box.style.left = cx + 'px';
       box.style.top = hy - GAP + 'px';
     } else if (side === 'right') {
-      const bx = edge.right + GAP;
+      const bx = edge.right + (gap || HGAP);
       Object.assign(line.style, { left: hx + hw + 'px', top: cy - 1 + 'px', width: bx - hx - hw + 'px', height: '2px' });
       box.style.left = bx + 'px';
       box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
     } else {
-      const bx = edge.left - GAP;
+      const bx = edge.left - (gap || HGAP);
       Object.assign(line.style, { left: bx + 'px', top: cy - 1 + 'px', width: hx - bx + 'px', height: '2px' });
       box.style.left = bx + 'px';
       box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
@@ -51,11 +51,14 @@ const Tut = (() => {
   ];
   let istep = -1;
 
+  let iside = 'right', ifish = null;
+
   const iShow = () => {
     const [id, text, label] = I_STEPS[istep];
     const card = document.getElementById('fishcard').getBoundingClientRect();
-    const side = card.right + 380 < innerWidth ? 'right' : 'left';
-    show(document.getElementById(id), text, label, side, card);
+    const avail = iside === 'right' ? innerWidth - card.right : card.left;
+    const gap = Math.min(HGAP, Math.max(56, avail - 354));
+    show(document.getElementById(id), text, label, iside, card, gap);
   };
 
   const iEnd = () => {
@@ -67,7 +70,9 @@ const Tut = (() => {
   const intro = f => {
     if (Game.devMode || Game.tuts.introTut || istep >= 0) return;
     active = true;
-    Detail.select(f);
+    ifish = f;
+    iside = f.x > innerWidth / 2 ? 'left' : 'right';
+    Detail.select(f, iside);
     Detail.tick();
     istep = 0;
     iShow();
@@ -117,6 +122,15 @@ const Tut = (() => {
     if (istep >= 0) return iEnd();
     if (pstep >= 0) return pEnd();
   };
+
+  window.addEventListener('resize', () => {
+    if (istep >= 0 && ifish) {
+      iside = ifish.x > innerWidth / 2 ? 'left' : 'right';
+      Detail.select(ifish, iside);
+      Detail.tick();
+      iShow();
+    } else if (pstep >= 0) pShow();
+  });
 
   return { intro, abort, prestige, get active() { return active; } };
 })();

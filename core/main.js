@@ -10,7 +10,7 @@ const startGame = () => {
   document.getElementById('goldbox').removeAttribute('hidden');
   Stage.resize();
   Stage.resetPlants();
-  Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined));
+  Game.fish.forEach((f, i) => Stage.materialize(f, fresh ? i : undefined, fresh && i === 0));
   if (fresh) Game.fish[0].hunger = HUNGER_FIRST;
   for (let i = 0; i < Game.plants; i++) Stage.spawnPlant(i === 0);
   Game.started = true;

@@ -105,8 +105,14 @@ Exact numbers live in core/state.js.
   aging, hungering, and earning while the card is open (confirmed
   2026-08-15); it just can't swim to food while held.
 - Intro tutorial (2026-08-23, replaces the hungry-fish tutorial): fires
-  once per save the moment the first fish finishes swimming in. The
-  world freezes and the fish is auto-selected with its card open.
+  once per save the moment the first fish finishes swimming in. A
+  fresh save spawns its first fish in the middle 20% band of open water
+  so the tutorial layout is consistent. The world freezes and the fish
+  is auto-selected with its card open, card placed on the fish's
+  screen-center side; the tutorial box sits beyond the card on that
+  same side (fish, card, leader line, box in one row, ~130px gap,
+  compressing on narrow windows), so nothing covers the fish. The
+  whole arrangement re-anchors on window resize.
   Step 1 spotlights the card's life bar: "Fish dies when the life
   timer reaches 0, and grants Soul which is used for Research" -> Next.
   Step 2 spotlights the card's hunger bar: "Fish gets Hungry, and then
