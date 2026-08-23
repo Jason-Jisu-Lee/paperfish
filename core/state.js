@@ -36,7 +36,7 @@ let skipSave = false;
 const EGG_COSTS = [2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
 const EGG_CD = 500;
 let eggCdUntil = 0;
-const eggCd = () => Math.max(eggCdUntil - Date.now(), 0);
+const eggCd = () => Game.devMode ? 0 : Math.max(eggCdUntil - Date.now(), 0);
 const TIER_HATCH = [8, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
