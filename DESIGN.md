@@ -100,35 +100,32 @@ Exact numbers live in core/state.js.
   age, so base-life (20s) fish never hunger; the system wakes with the
   first Lifespan level. Kelp costs 2 G, 2 bites, one bite satisfies 20s
   (2s eating pause). Only starving fish forfeit their souls when they
-  die (mid-bite eaters don't; merely hungry pays full, 2026-08-23); the
+  die (mid-bite eaters don't; merely hungry pays full); the
   fish card death row shows 0 while it would forfeit. A held (selected) fish keeps
   aging, hungering, and earning while the card is open (confirmed
   2026-08-15); it just can't swim to food while held.
-- Intro tutorial (2026-08-23, replaces the hungry-fish tutorial): fires
-  once per save the moment the first fish finishes swimming in. A
-  fresh save spawns its first fish in the middle 20% band of open water
-  so the tutorial layout is consistent. The world freezes and the fish
-  is auto-selected with its card open, card placed on the fish's
-  screen-center side; the tutorial box sits beyond the card on that
-  same side (fish, card, leader line, box in one row, ~130px gap,
-  compressing on narrow windows), so nothing covers the fish. The
-  whole arrangement re-anchors on window resize.
+- Intro tutorial: fires once per save the moment the first fish
+  finishes swimming in. A fresh save spawns its first fish in the
+  middle 20% band of open water so the tutorial layout is consistent.
+  The world freezes and the fish is auto-selected with its card open,
+  card placed on the fish's screen-center side; the tutorial box sits
+  beyond the card on that same side (fish, card, leader line, box in
+  one row, ~130px gap, compressing on narrow windows), so nothing
+  covers the fish. The whole arrangement re-anchors on window resize.
   Step 1 spotlights the card's life bar: "Fish dies when the life
   timer reaches 0, and grants Soul which is used for Research" -> Next.
   Step 2 spotlights the card's hunger bar: "Fish gets Hungry, and then
   Starving as hunger bar drops. Starving fish do not grant soul. Click
   empty space to feed the fish" -> Sure, and the game resumes. Both
-  lines are CEO-dictated copy, verbatim.
-  Feeding stays locked until Sure. During any tutorial an ink scrim
-  dims the screen with an exact rectangular cutout on the subject,
-  framed by a seal-red hairline; a red leader line runs from the frame
-  to a detached tutorial box that never covers the subject (beside the
-  fish card, above the prestige tabs), and frame, line, and box glide
-  between steps (2026-08-23). The tutorial button is an ink pill with
+  lines are CEO-dictated copy, verbatim. Feeding stays locked until
+  Sure. During any tutorial an ink scrim dims the screen with an exact
+  rectangular cutout on the subject, framed by a seal-red hairline; a
+  red leader line runs from the frame to the box, and frame, line, and
+  box glide between steps. The tutorial button is an ink pill with
   seal hover, matching the game's CTA language. Soul spends are called
-  Research; the word upgrade is banned from player copy (the old
-  prestige Upgrades tab is now Unlocks). The fish card carries a hunger
-  meter (pellet icon, seal red when hungry) under the life bar.
+  Research; the word upgrade is banned from player copy (the prestige
+  tab is Unlocks). The fish card carries life and hunger meters styled
+  like the hover tip (leaf and pellet icons, hunger seal red when low).
 - Souls: each soulful death pays 1 + Extra Soul level the instant the
   fish dies (not when the body finishes sinking), shown as a big
   blue +N pop (21px, ~1.8s, slow rise) so the reward is unmissable.
@@ -211,7 +208,7 @@ Exact numbers live in core/state.js.
   own small exclusion box (12px pad): a fish inside gets pushed out
   the nearest edge, so fish still roam the panel area and slip
   between buttons but never sit directly behind one, keeping both
-  the UI readable and the fish clickable (2026-08-17). SPAWNS (eggs, kelp, clam) stay in the old open
+  the UI readable and the fish clickable (2026-08-17). SPAWNS (eggs, kelp, clam) stay in the open
   water right of the panel; eggs and kelp also reroll their spot until
   clear of visible UI overlays (gold, soul counter, objective, corner
   icons).
@@ -299,55 +296,42 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - objectives rework; collect-flow polish (confirm? dissolve animation?).
 
 ## gacha groundwork (2026-08-17)
-- Retier (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
-  fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF (3 fish,
-  seventhF cut from the roster); Tier 4 unchanged.
-- Tier 2 fish earn base 2 G/5s (vs 1); income upgrades stack on top
-  (fishIncome in state.js).
+- Tiers (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
+  fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF; Tier 4
+  holds species 10-11 (TIER_FISH in state.js).
+- Tier 2 fish earn base 2 G/5s (Tier 1 base 1); income upgrades stack
+  on top (fishIncome in state.js).
 - Souls scale x3 per tier (2026-08-22): base yield 3^(tier-1), so
   1 / 3 / 9 / 27 for Tiers 1-4; Extra Soul adds flat on top
   (soulYieldOf in state.js).
-- In-game Fish Tier (2026-08-18, renamed from Egg Chance, fish tab):
+- In-game Fish Tier (2026-08-18, fish tab):
   cascading tier-up roll, the standard gacha rarity ladder. Each egg
   starts at Tier 1 and climbs one tier per success at chance p, rolled
   tier by tier. Species within the landed tier is a uniform pick.
   Cost 25·1.25^lvl G, resets each run.
-- Curve retuned again (2026-08-20): p = 50% - 30%·0.9^(lvl-1), 0% at
+- Curve (2026-08-20): p = 50% - 30%·0.9^(lvl-1), 0% at
   Lv 0, max 50 levels. Lv 1 = 20%, Lv 2 = 23%, Lv 5 = 30%, Lv 10 =
   38%, Lv 20 = 46%, cap 50%. First buy is the big unlock moment;
-  the rest is diminishing polish. Replaces the 5%-first-level curve
-  whose opening buys felt dead.
-- Tier gate rebased (2026-08-20): tiers 1-3 are open in every run;
-  the first buy of in-run Fish Tier immediately exposes Tier 2 (20%)
-  and Tier 3 (p² = 4%). Prestige Hatch Chance now starts at Tier 4
-  (30·10^(tier-4) souls: 30, 300, 3k), one-time buy per tier; its
-  Tiers-tab entries for tiers 2-3 are gone and the Tier 3 group
-  vanished with them. Locked tiers still show "Locked" in the egg
-  modal and 0% rarity. Prestige opens the ceiling, in-run Fish Tier
-  buys the odds.
+  the rest is diminishing polish.
 - Egg info modal lists every tier with live hatch odds; unseen species
   show their silhouette with ??? for the name; sub-1% odds display as
   "<1%", never decimals (fmtPct in state.js).
 - Fish Index cards show a rarity line under the name: the live chance
   an egg hatches that fish's tier. Index tooltip fixed to per-species
-  stats (fishIncome / soulYieldOf, was flat tier-1 numbers).
-- Game track trimmed at the file level (2026-08-19): re-encoded from
-  audio/original with the first 13.000s cut, saved under a NEW name
-  (audio/Two Harps from 13s.mp3) so no cache layer can serve the old
-  bytes; the old filename is deleted, so a stale page plays silence
-  instead of the intro. No runtime seeking (currentTime seeks can
-  stall or fall back to 0 on servers without Range support).
+  stats (fishIncome / soulYieldOf).
+- Game track: audio/Two Harps from 13s.mp3, trimmed at the file level
+  (first 13.000s cut, re-encoded from audio/original). No runtime
+  seeking (currentTime seeks can stall or fall back to 0 on servers
+  without Range support).
 - In-game Lifespan (life tab): +5s fish life per level, 40·2^lvl G,
   resets each run; stacks with prestige Lifespans.
-- Hunger rewrite (2026-08-21): continuous hunger meter replaces the
-  age-based hungerAt timer. Numbers live in MECHANICS.md. Feeding is
+- Hunger (2026-08-21): continuous hunger meter; numbers live in
+  MECHANICS.md. Feeding is
   the core early loop: click open water to drop a free pellet, one
   fish eats it. Hover a fish to see its hunger bar (seal red when
   hungry); no numbers shown, ever. Hungry fish seek the nearest food
-  (pellet or kelp). The old "hungry fish" tutorial is replaced by a
-  first-hunger message teaching the click-to-feed. Kelp becomes an
-  advanced tool (unlock now 100 souls, moving further back later);
-  bigger plant roles planned.
+  (pellet or kelp). Kelp is an advanced tool (unlock 100 souls,
+  moving further back later); bigger plant roles planned.
 - Life Burn (2026-08-21): prestige one-time buy, 500 souls, Soul
   section. Grants a flame button in the corner nav (leftmost slot, no
   reflow) usable once per dive: every living fish ages one minute.
@@ -363,13 +347,11 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
   lantern debug overlay, eat-radius rings drawn, and ALL tutorials
   suppressed (any active tutorial aborts). Tutorials stay in the
   real game.
-- First egg cheaper (2026-08-21): egg ladder now opens 2, 3, 5, 8
-  before easing into the old curve; Starting Gold prestige upgrade
-  unchanged (+5 per level, 4 souls doubling), run starts at 10 G.
+- Egg ladder (2026-08-21): opens 2, 3, 5, 8, then eases into the
+  standard curve; Starting Gold prestige +5 per level, 4 souls
+  doubling; run starts at 10 G.
 - Bite tightened (2026-08-21): pellet vanishes only when the mouth
-  tip actually touches it (10px, was a 26px sphere that could even
-  trigger on food behind the mouth); casual eat radius up 20% to
-  234px.
+  tip actually touches it (10px); casual eat radius 234px.
 - Egg buy cooldown (2026-08-21): 0.5s real-time between egg buys;
   the button disables and a translucent wipe drains across it, the
   standard action-cooldown pattern. Auto Egg respects it too (max 2
@@ -377,8 +359,8 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Tier gates deleted (2026-08-21): the prestige Hatch Chance buys are
   gone entirely; the in-run Fish Tier upgrade is the only tier lever
   and all 4 tiers are open. Tiers tab now holds only the two
-  Lifespan upgrades. Fish Index rarity % removed (was misleading,
-  changes in-run anyway).
+  Lifespan upgrades. Fish Index shows no rarity % (it changes in-run
+  anyway).
 - Unlock cards renamed Unlock Income / Unlock Kelp / Unlock Fish
   Tier / Unlock Lifespan (2026-08-21).
 - Hunger tweaks (2026-08-21): hatch fill 80%; the single starting
