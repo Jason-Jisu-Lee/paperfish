@@ -111,9 +111,13 @@ Exact numbers live in core/state.js.
   timer reaches 0 / Death gives Soul, spent on Research" -> Next.
   Step 2 spotlights the card's hunger bar: "Hungry fish do not release
   Soul / Click empty space to feed" -> Sure, and the game resumes.
-  Feeding stays locked until Sure. During any tutorial box an
-  ink scrim dims the whole screen; a soft spotlight hole stays on the
-  subject and glides between steps (2026-08-16). Soul spends are called
+  Feeding stays locked until Sure. During any tutorial an ink scrim
+  dims the screen with an exact rectangular cutout on the subject,
+  framed by a seal-red hairline; a red leader line runs from the frame
+  to a detached tutorial box that never covers the subject (beside the
+  fish card, above the prestige tabs), and frame, line, and box glide
+  between steps (2026-08-23). The tutorial button is an ink pill with
+  seal hover, matching the game's CTA language. Soul spends are called
   Research; the word upgrade is banned from player copy (the old
   prestige Upgrades tab is now Unlocks). The fish card carries a hunger
   meter (pellet icon, seal red when hungry) under the life bar.
