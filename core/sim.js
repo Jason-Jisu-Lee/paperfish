@@ -57,7 +57,7 @@ const Sim = (() => {
         } else {
           f.hunger = Math.max((f.hunger ?? HUNGER_FULL) - sdt, 0);
           const pct = f.hunger / HUNGER_FULL;
-          f.hstate = pct <= STARVE_AT ? 2 : pct <= HUNGRY_AT ? 1 : 0;
+          f.hstate = f.hunger <= Math.min(HUNGER_FULL * STARVE_AT, STARVE_CAP) ? 2 : pct <= HUNGRY_AT ? 1 : 0;
           if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hT >= 10) {
@@ -71,7 +71,7 @@ const Sim = (() => {
           } else {
             f.hT = 0;
           }
-          if (f.birth >= 1) {
+          if (f.birth >= 1 && f.hunger <= HUNGER_FULL * EAT_LOCK) {
             const p = Stage.nearestFood(f.x, f.y);
             if (p) {
               const px = p.x + p.hx, pyy = p.y + p.hy;

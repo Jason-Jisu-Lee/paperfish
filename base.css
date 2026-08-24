@@ -348,6 +348,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .toggle.on{ background:rgba(28,27,24,.75); }
 .toggle.on .tknob{ left:22px; }
+.ubtn.autoegg .toggle{ display:inline-block; margin:6px auto 0; }
 .btn{
   padding:9px 18px;
   border:1px solid rgba(28,27,24,.4);

@@ -347,7 +347,7 @@ const Stage = (() => {
       let seeking = false;
       let target = null;
       if (!(f.fleeT > 0) && (plants.length || pellets.length)) {
-        const t = nearestFood(f.x, f.y);
+        const t = f.hunger <= HUNGER_FULL * EAT_LOCK ? nearestFood(f.x, f.y) : null;
         const r = seekR(f);
         if (t && (f.hstate || (t.x + t.hx - f.x) ** 2 + (t.y + t.hy - f.y) ** 2 < r * r)) target = t;
       }

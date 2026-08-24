@@ -46,7 +46,7 @@ const Soul = (() => {
     { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
       lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
       max: () => Game.pLantRate >= PLANTRATE_MAX },
-    { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.',
+    { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1 }
   ];

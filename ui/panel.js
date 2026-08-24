@@ -75,7 +75,11 @@ const Panel = (() => {
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
         <i class="eggcd" hidden></i>
-      </button>` + UPS.filter(u => u.cat === 'fish' && owned(u)).map(ucard).join('');
+      </button>` + (Game.pAutoEgg ? `
+      <button class="ubtn autoegg" data-autoegg>
+        <span class="ubtn-name">Auto Egg</span>
+        <span class="toggle${Game.autoEggOn ? ' on' : ''}"><span class="tknob"></span></span>
+      </button>` : '') + UPS.filter(u => u.cat === 'fish' && owned(u)).map(ucard).join('');
     tick();
   };
 
@@ -132,6 +136,12 @@ const Panel = (() => {
   });
 
   fishGrid.addEventListener('click', e => {
+    if (e.target.closest('[data-autoegg]')) {
+      Game.autoEggOn = Game.autoEggOn ? 0 : 1;
+      saveGame();
+      refresh();
+      return;
+    }
     const uk = e.target.closest('[data-key]');
     if (uk) {
       const u = UPS.find(x => x.key === uk.dataset.key);

@@ -14,6 +14,7 @@ const Game = {
   pLantRate: 0,
   pLantFish: 0,
   pAutoEgg: 0,
+  autoEggOn: 1,
   pBurn: 0,
   burnUsed: 0,
   eggsBought: 0,
@@ -65,8 +66,10 @@ const adultAtOf = () => 30 / 60;
 const HUNGER_FULL = 30;
 const HUNGER_HATCH = 24;
 const HUNGER_FIRST = 18;
-const HUNGRY_AT = 0.3;
+const HUNGRY_AT = 0.2;
 const STARVE_AT = 0.05;
+const STARVE_CAP = 20;
+const EAT_LOCK = 0.95;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
 const EAT_R = 234;
@@ -78,7 +81,7 @@ const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;
 const pLifeCost = () => 10 * 2 ** Game.pLife;
-const pLife2Cost = () => 15 * 2 ** Game.pLife2;
+const pLife2Cost = () => 50 * 2 ** Game.pLife2;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const EGGUP_MAX = 50;
 const tierUpChance = () => Game.eggUp ? 0.5 - 0.3 * 0.9 ** (Game.eggUp - 1) : 0;
@@ -100,7 +103,7 @@ const lantTapChance = () => 0.04 * Game.pLantFish;
 const pLantGoldCost = () => 12 * 2 ** Game.pLantGold;
 const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
 const pLantFishCost = () => 200 * 2 ** Game.pLantFish;
-const pAutoEggCost = () => 20;
+const pAutoEggCost = () => 50;
 const pBurnCost = () => 500;
 const KELP_UNLOCK_COST = 100;
 
@@ -152,6 +155,7 @@ const saveGame = () => {
       plr: Game.pLantRate,
       plf: Game.pLantFish,
       pae: Game.pAutoEgg,
+      aeo: Game.autoEggOn ? 1 : 0,
       pb: Game.pBurn,
       bu: Game.burnUsed,
       eggs: Game.eggsBought,
@@ -192,6 +196,7 @@ const loadGame = () => {
     Game.pLantRate = d.plr || 0;
     Game.pLantFish = d.plf || 0;
     Game.pAutoEgg = d.pae || 0;
+    Game.autoEggOn = d.aeo ?? 1;
     Game.pBurn = d.pb || 0;
     Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;

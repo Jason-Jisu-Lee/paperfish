@@ -30,10 +30,11 @@ until a number lands here.
 
 | stat | value |
 |---|---|
-| fill at hatch | 80% (24.00s) |
-| fill for the first fish of a brand-new save | 60% (18.00s), teaches feeding fast |
-| hungry threshold | 30% (9.00s left): seeks food, bar turns seal red |
-| starving threshold | 5% (1.50s left): urgent seek, exclamation mark |
+| fill at hatch | 80% |
+| fill for the first fish of a brand-new save | 60%, teaches feeding fast |
+| eat lock | above 95% a fish refuses all food and never seeks |
+| hungry threshold | 20%: seeks food, bar turns seal red; no absolute cap |
+| starving threshold | 5% of the meter or 20.00s left, whichever is smaller: urgent seek, exclamation mark |
 | empty meter | 10.00s at zero kills the fish, no soul |
 | death while starving | no soul (any cause); merely hungry pays full soul |
 | forfeit timing | judged the instant life runs out; the 0.4-3.4s death stagger cannot change it |
@@ -42,8 +43,9 @@ until a number lands here.
 | feeding unlock | pellet clicks do nothing until the intro tutorial is confirmed (dev mode exempt) |
 | kelp bite | +20.00s, 2 bites per kelp, 2 G, 70px body contact |
 
-Early loop: base life 20s + hatch fill 18.00s means an unfed Tier 1 fish
-goes hungry at ~9s and dies soulless; feeding is what keeps souls flowing.
+Early loop: a Tier 1 fish at base life with the 60% first fill goes
+hungry at ~12s and starving at ~16.5s; unfed it dies soulless, so
+feeding is what keeps souls flowing.
 By design: fish die of old age long before hunger death until lifespan
 grows (a run or two in). The intro tutorial teaches feeding up front,
 the moment the first fish finishes swimming in.
@@ -54,10 +56,11 @@ the moment the first fish finishes swimming in.
 |---|---|---|
 | normal | 234px | gentle, 35-90 |
 | ≥80% full | 20% radius (46.80px) | gentle, 35-90 |
-| hungry (≤30%) | unlimited, immediate | 45-130 |
-| starving (≤5%) | unlimited | 180-320, fast vertical |
+| >95% full | none; refuses all food | gentle, 35-90 |
+| hungry (≤20%) | unlimited, immediate | 45-130 |
+| starving | unlimited | 180-320, fast vertical |
 
-- any fish eats food it reaches, even when full
+- a fish at 95% or below eats food it reaches, even outside its radius
 - dev mode draws the 234px radius ring around every fish
 
 Pellet chase: pellets dropped at the screen bottom clamp to the floor
@@ -95,8 +98,8 @@ food.
 | Base Income | 3 x 2^lvl |
 | Starting Kelp | 20 flat, max 5 |
 | Tier 1 Lifespan | 10 x 2^lvl |
-| Tier 2 Lifespan | 15 x 2^lvl |
-| Auto Egg | 20 one-time |
+| Tier 2 Lifespan | 50 x 2^lvl |
+| Auto Egg | 50 one-time; adds an in-run on/off toggle next to the egg card |
 | Lantern Gold | 12 x 2^lvl |
 | Lantern Tide | 150 x 2^lvl, max 5 |
 | Curious Fish | 200 x 2^lvl, max 5 |
