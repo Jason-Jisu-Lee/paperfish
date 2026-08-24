@@ -23,8 +23,10 @@ const Soul = (() => {
   };
 
   const CORE = [
-    { key: 'startGold', ico: 'gold', name: 'Starting Gold', desc: 'Begin every dive with 5 more gold.',
-      lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++ },
+    { key: 'startGold', ico: 'gold', name: 'Starting Gold',
+      desc: () => Game.pStartGold >= SG_MAX ? 'Dives start with 100 gold.' : 'Begin every dive with ' + SG_GAIN[Game.pStartGold] + ' more gold.',
+      lvl: () => Game.pStartGold, cost: startGoldCost, buy: () => Game.pStartGold++,
+      max: () => Game.pStartGold >= SG_MAX },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
     { key: 'pKelp', ico: 'kelp', name: 'Starting Kelp', desc: 'Begin every dive with 1 more kelp already floating.',
@@ -209,7 +211,7 @@ const Soul = (() => {
     const locked = el.classList.contains('locked');
     tip.innerHTML = locked
       ? '<span class="pct-name">Locked</span>Own the tier before this one to unlock it.'
-      : `<span class="pct-name">${u.name}</span>${u.desc}`;
+      : `<span class="pct-name">${u.name}</span>${typeof u.desc === 'function' ? u.desc() : u.desc}`;
     placeTip(el);
   });
   list.addEventListener('mouseout', e => {

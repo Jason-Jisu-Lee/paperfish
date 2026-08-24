@@ -45,7 +45,10 @@ const FIRSTF_CAP = 20;
 const TIER_FISH = [[0], [1, 3, 4, 2], [7, 8, 9], [10, 11]];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
-const startGold = () => 10 + Game.pStartGold * 5;
+const SG_GAIN = [10, 20, 30, 30];
+const SG_TOTAL = [0, 10, 30, 60, 90];
+const SG_MAX = 4;
+const startGold = () => 10 + SG_TOTAL[Math.min(Game.pStartGold, SG_MAX)];
 const eggCost = () => {
   const n = Game.eggsBought;
   if (n < EGG_COSTS.length) return EGG_COSTS[n];
@@ -74,7 +77,7 @@ const startGoldCost = () => 4 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;
-const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3);
+const pLifeCost = () => 10 * 2 ** Game.pLife;
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const EGGUP_MAX = 50;

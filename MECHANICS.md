@@ -91,10 +91,10 @@ food.
 | Unlock Kelp | 100 (slated to move later into late game) |
 | Unlock Income / Fish Tier / Lifespan | 5 each |
 | Extra Soul | 20 x 2^lvl |
-| Starting Gold | +5 gold per lvl, 4 x 2^lvl |
+| Starting Gold | +10/+20/+30/+30 gold per lvl to 100 G total, 4 x 2^lvl, max 4 |
 | Base Income | 3 x 2^lvl |
 | Starting Kelp | 20 flat, max 5 |
-| Tier 1 Lifespan | 2, 5, 10, 20, then 20 x 2^(lvl-3) |
+| Tier 1 Lifespan | 10 x 2^lvl |
 | Tier 2 Lifespan | 15 x 2^lvl |
 | Auto Egg | 20 one-time |
 | Lantern Gold | 12 x 2^lvl |
