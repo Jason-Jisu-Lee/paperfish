@@ -36,7 +36,7 @@ const Soul = (() => {
       lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++ },
     { key: 'pBurn', ico: 'soul', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
       lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
-      max: () => Game.pBurn >= 1 },
+      max: () => Game.pBurn >= 1, once: 1 },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
       max: () => Game.pLantGold >= PLANTGOLD_MAX },
@@ -48,7 +48,7 @@ const Soul = (() => {
       max: () => Game.pLantRate >= PLANTRATE_MAX },
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
-      max: () => Game.pAutoEgg >= 1 }
+      max: () => Game.pAutoEgg >= 1, once: 1 }
   ];
 
   const TIERS = [
@@ -65,16 +65,16 @@ const Soul = (() => {
   const UNLOCKS = [
     { key: 'u_income', ico: 'income', name: 'Unlock Income', desc: 'Unlock in-run Income.',
       lvl: () => Game.unlocks.income, cost: () => UNLOCK_COST, buy: () => Game.unlocks.income = 1,
-      max: () => !!Game.unlocks.income },
+      max: () => !!Game.unlocks.income, once: 1 },
     { key: 'u_kelp', ico: 'kelp', name: 'Unlock Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
-      max: () => !!Game.unlocks.kelp },
+      max: () => !!Game.unlocks.kelp, once: 1 },
     { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
-      max: () => !!Game.unlocks.eggup },
+      max: () => !!Game.unlocks.eggup, once: 1 },
     { key: 'u_life', ico: 'life', name: 'Unlock Lifespan', desc: 'Unlock in-run Lifespan.',
       lvl: () => Game.unlocks.life, cost: () => UNLOCK_COST, buy: () => Game.unlocks.life = 1,
-      max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp }
+      max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp, once: 1 }
   ];
 
   const U_SECTS = [
@@ -103,10 +103,10 @@ const Soul = (() => {
       <button class="pcard${off ? ' off' : ''}${locked ? ' locked' : ''}${lv > 0 ? ' owned' : ''}" data-p="${u.key}">
         ${u.dev ? '<span class="devtag">dev</span>' : ''}
         ${gated ? '<span class="hidtag">hidden</span>' : ''}
-        ${lv > 0 ? `<span class="pc-lv">${lv}</span>` : ''}
+        ${lv > 0 && !u.once ? `<span class="pc-lv">${lv}</span>` : ''}
         <span class="pc-ico">${locked ? ICO.lock : ICO[u.ico]}</span>
         <span class="pc-name">${locked ? 'Locked' : u.name}</span>
-        <span class="pc-cost">${locked ? '&mdash;' : maxed ? 'Max' : fmtG(u.cost()) + ' Soul'}</span>
+        <span class="pc-cost">${locked ? '&mdash;' : maxed ? (u.once ? '<svg class="pc-done" viewBox="0 0 24 24"><path d="M5.5 12.5 L10 17 L18.5 7.5"/></svg>' : 'Max') : fmtG(u.cost()) + ' Soul'}</span>
       </button>`;
   };
 
@@ -125,25 +125,39 @@ const Soul = (() => {
       </div>`;
   };
 
+  const complete = u => !!(u.max && u.max());
+  const shown = u => !(Game.hideDone && complete(u));
+  const hideBtn = document.getElementById('p-hidedone');
+
+  const syncHide = () => {
+    hideBtn.toggleAttribute('hidden', !ALL.some(complete));
+    hideBtn.querySelector('.toggle').classList.toggle('on', !!Game.hideDone);
+  };
+
   const render = () => {
     bankEl.textContent = fmtG(Game.bank);
+    syncHide();
     let h = '';
     if (tab === 'up') {
       for (const [label, ico, keys] of M_SECTS) {
-        const ups = CORE.filter(u => keys.includes(u.key));
+        const ups = CORE.filter(u => keys.includes(u.key) && shown(u));
+        if (!ups.length) continue;
         h += `<div class="p-cat">${ICO[ico]}${label}</div>` +
           `<div class="p-grid">${ups.map(u => card(u, false)).join('')}</div>`;
       }
     } else if (tab === 'unlock') {
       for (const [label, ico, keys] of U_SECTS) {
-        const ups = UNLOCKS.filter(u => keys.includes(u.key));
+        const ups = UNLOCKS.filter(u => keys.includes(u.key) && shown(u));
+        if (!ups.length) continue;
         h += `<div class="p-cat">${ICO[ico]}${label}</div>` +
           `<div class="p-grid">${ups.map(u => card(u, u.req && !u.req())).join('')}</div>`;
       }
     } else if (tab === 'tier') {
       for (const t of TIERS) {
+        const ups = t.ups.filter(shown);
+        if (!ups.length) continue;
         h += `<div class="p-cat">Tier ${t.tier}</div>` +
-          `<div class="p-grid">${t.ups.map(u => card(u, false)).join('')}</div>`;
+          `<div class="p-grid">${ups.map(u => card(u, false)).join('')}</div>`;
       }
     } else {
       TIER_FISH.forEach((arr, i) => {
@@ -182,9 +196,32 @@ const Soul = (() => {
     if (!u || Game.bank < u.cost() || (u.max && u.max())) return;
     Game.bank -= u.cost();
     u.buy();
-    render();
     tip.setAttribute('hidden', '');
     saveGame();
+    if (Game.hideDone && complete(u)) {
+      bankEl.textContent = fmtG(Game.bank);
+      syncHide();
+      el.classList.add('hiding');
+      setTimeout(render, 200);
+    } else render();
+  });
+
+  hideBtn.addEventListener('click', () => {
+    Game.hideDone = Game.hideDone ? 0 : 1;
+    saveGame();
+    syncHide();
+    if (Game.hideDone) {
+      let any = false;
+      for (const el of list.querySelectorAll('[data-p]')) {
+        const u = ALL.find(x => x.key === el.dataset.p);
+        if (u && complete(u)) {
+          el.classList.add('hiding');
+          any = true;
+        }
+      }
+      if (any) setTimeout(render, 200);
+      else render();
+    } else render();
   });
 
   const placeTip = el => {

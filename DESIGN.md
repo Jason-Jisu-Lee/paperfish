@@ -144,13 +144,13 @@ Exact numbers live in core/state.js.
   hover-lift cards: name + cost always visible, one-line gamer-speak
   description reveals on hover in a reserved slot (no reflow), level
   shows as "Lv N" only when above 0 (never ×0). Scrollable, categories
-  with wide spacing: BASICS (Starting Gold +5 at 4·2^lvl, Base Income
-  +1 G/5s at 3·2^lvl, Starting Kelp +1 kelp each run at flat 5 souls
-  capped at Lv 5, Extra Soul +1 at 20·2^lvl) then TIER 2-6 chance
-  cards (dev-tagged, purchasable, no effect yet: +10%/+5, +5%/+2.5,
-  +3%/+1.5, +1.5%/+0.75, +0.5%/+0.25) at 30·10^(tier-2)·2^lvl souls:
-  bases 30, 300, 3k, 30k, 300k, incremental-style exponential across
-  tiers.
+  with wide spacing; all costs live in MECHANICS.md. Single-purchase
+  cards (Life Burn, Auto Egg, the Unlocks) show a seal-red check when
+  owned, never "Max" and never a level badge; only multi-level cards
+  say Max. A "Hide Complete Upgrades" toggle sits right of the Fish
+  Index tab: it appears the first time anything completes, defaults
+  on, and completed cards shrink away in 0.2s (empty sections hide
+  with them); the toggle state saves.
 - Card indicator language: red "dev" tag = not functional yet; grey
   "hidden" tag + dashed border = functional but not yet visible to
   players (reveal gate unmet), dev-only during playtests. Starting

@@ -15,6 +15,7 @@ const Game = {
   pLantFish: 0,
   pAutoEgg: 0,
   autoEggOn: 1,
+  hideDone: 1,
   pBurn: 0,
   burnUsed: 0,
   eggsBought: 0,
@@ -157,6 +158,7 @@ const saveGame = () => {
       plf: Game.pLantFish,
       pae: Game.pAutoEgg,
       aeo: Game.autoEggOn ? 1 : 0,
+      hd: Game.hideDone ? 1 : 0,
       pb: Game.pBurn,
       bu: Game.burnUsed,
       eggs: Game.eggsBought,
@@ -198,6 +200,7 @@ const loadGame = () => {
     Game.pLantFish = d.plf || 0;
     Game.pAutoEgg = d.pae || 0;
     Game.autoEggOn = d.aeo ?? 1;
+    Game.hideDone = d.hd ?? 1;
     Game.pBurn = d.pb || 0;
     Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;
