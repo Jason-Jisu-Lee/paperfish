@@ -299,8 +299,9 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Tiers (2026-08-17): Tier 1 is firstF alone; Tier 2 is secondF,
   fourthF, fifthF, thirdF; Tier 3 is eighthF, ninthF, tenthF; Tier 4
   holds species 10-11 (TIER_FISH in state.js).
-- Tier 2 fish earn base 2 G/5s (Tier 1 base 1); income upgrades stack
-  on top (fishIncome in state.js).
+- Fish gold scales 3x per tier: base 3^(tier-1) G/5s (fishIncome in
+  state.js); income upgrades stack on top. Placeholder base, per-fish
+  tuning later.
 - Souls scale x3 per tier (2026-08-22): base yield 3^(tier-1), so
   1 / 3 / 9 / 27 for Tiers 1-4; Extra Soul adds flat on top
   (soulYieldOf in state.js).

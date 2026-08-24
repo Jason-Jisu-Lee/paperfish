@@ -3,12 +3,33 @@
 Claude-owned. Every tunable stat lives here with its current value.
 Backend keeps 2 decimals; players only ever see bars, never these numbers.
 
+## Tier chart
+
+Blank cells are undecided; the build falls back to the Tier 1 value
+until a number lands here.
+
+| metric | T1 | T2 | T3 | T4 |
+|---|---|---|---|---|
+| species | firstF | secondF, fourthF, fifthF, thirdF | eighthF, ninthF, tenthF | eleventhF, twelfthF |
+| base gold / 5s | 1 | 3 | 9 | 27 |
+| base soul on death | 1 | 3 | 9 | 27 |
+| lifespan | 20.00s | | | |
+| hunger meter full | 30.00s | | | |
+| egg hatch time | 8.00s | | | |
+| adult at | 30.00s | | | |
+
+- gold: base 3^(tier-1) per 5s (fishIncome in state.js); income
+  upgrades add flat on top; the 3x base is a placeholder, per-fish
+  tuning comes later
+- soul: base 3^(tier-1); Extra Soul prestige adds flat +1 per lvl;
+  starving death pays 0, hungry-but-not-starving pays full
+- lifespan: in-run Lifespan +5s per lvl (40 x 2^lvl G); prestige
+  Tier 1 Lifespan +5s per lvl, Tier 2 Lifespan +10s per lvl (all fish)
+
 ## Hunger (2026-08-21)
 
 | stat | value |
 |---|---|
-| meter full, Tier 1 | 30.00s |
-| meter full, Tiers 2-4 | 30.00s (untuned, same as T1 for now) |
 | fill at hatch | 80% (24.00s) |
 | fill for the first fish of a brand-new save | 60% (18.00s), teaches feeding fast |
 | hungry threshold | 30% (9.00s left): seeks food, bar turns seal red |
@@ -62,12 +83,6 @@ food.
 - cost 25 x 1.25^lvl G, resets each run
 - all 4 tiers open, no gates; landed-tier odds: T1 (1-p), T2 p(1-p), T3 p^2(1-p), T4 p^3
 
-## Soul yield (2026-08-22)
-
-- base 3^(tier-1): T1 = 1, T2 = 3, T3 = 9, T4 = 27
-- Extra Soul prestige adds flat +1 per lvl on top
-- starving death pays 0; hungry-but-not-starving death pays full
-
 ## Prestige costs (souls)
 
 | upgrade | cost |
@@ -83,9 +98,3 @@ food.
 - run starts with 10 G base
 - cost ladder: 2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300, then 300 x 1.3^n rounded
 - buy cooldown 0.50s real time; button disables and a wipe drains across it
-
-## Lifespan
-
-- Tier 1 base 20s
-- in-run Lifespan +5s per lvl (40 x 2^lvl G)
-- prestige: Tier 1 Lifespan +5s per lvl; Tier 2 Lifespan +10s per lvl (all fish)
