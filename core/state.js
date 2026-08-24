@@ -76,7 +76,7 @@ const PKELP_MAX = 5;
 const pKelpCost = () => 5;
 const pLifeCost = () => [2, 5, 10, 20][Game.pLife] ?? 20 * 2 ** (Game.pLife - 3);
 const pLife2Cost = () => 15 * 2 ** Game.pLife2;
-const incomeUpCost = () => 25 * 2 ** Game.incomeUp;
+const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const EGGUP_MAX = 50;
 const tierUpChance = () => Game.eggUp ? 0.5 - 0.3 * 0.9 ** (Game.eggUp - 1) : 0;
 const maxTier = () => TIER_FISH.length;

@@ -286,7 +286,7 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Souls: Extra Soul 20·2^lvl, Starting Gold 4·2^lvl, Base Income
   3·2^lvl, Lifespan [2,5,10,20] then 20·2^(lvl-3), Lifespan II
   15·2^lvl, Tier Chance 30·10^(tier-2)·2^lvl, Starting Kelp flat 5.
-  In-game gold: Income 25·2^lvl, kelp 2. Hatch 8s; hungry window
+  In-game gold: Income 5 first, then 25·2^(lvl-1); kelp 2. Hatch 8s; hungry window
   20s -> starving 10s -> death.
 
 ## to decide (soul era)
