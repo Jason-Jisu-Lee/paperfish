@@ -12,7 +12,7 @@ until a number lands here.
 |---|---|---|---|---|
 | species | firstF | secondF, fourthF, fifthF, thirdF | eighthF, ninthF, tenthF | eleventhF, twelfthF |
 | base gold / 5s | 1 | 3 | 9 | 27 |
-| base soul on death | 1 | 3 | 9 | 27 |
+| base soul on death | 1 | 3 | 12 | 60 |
 | lifespan | 20.00s | | | |
 | hunger meter full | 30.00s | | | |
 | egg hatch time | 8.00s | | | |
@@ -21,7 +21,8 @@ until a number lands here.
 - gold: base 3^(tier-1) per 5s (fishIncome in state.js); income
   upgrades add flat on top; the 3x base is a placeholder, per-fish
   tuning comes later
-- soul: base 3^(tier-1); Extra Soul prestige adds flat +1 per lvl;
+- soul: the tier-to-tier ratio grows slowly, x3 then x4 then x5
+  (SOUL_BASE in state.js); Extra Soul prestige adds flat +1 per lvl;
   starving death pays 0, hungry-but-not-starving pays full
 - lifespan: in-run Lifespan +5s per lvl (40 x 2^lvl G); prestige
   Tier 1 Lifespan +5s per lvl, Tier 2 Lifespan +10s per lvl (all fish)

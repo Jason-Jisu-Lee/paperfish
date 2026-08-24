@@ -302,9 +302,9 @@ hunger ever, which now happens only after Tier 1 Lifespan Lv 1.
 - Fish gold scales 3x per tier: base 3^(tier-1) G/5s (fishIncome in
   state.js); income upgrades stack on top. Placeholder base, per-fish
   tuning later.
-- Souls scale x3 per tier (2026-08-22): base yield 3^(tier-1), so
-  1 / 3 / 9 / 27 for Tiers 1-4; Extra Soul adds flat on top
-  (soulYieldOf in state.js).
+- Soul yield accelerates by tier: 1 / 3 / 12 / 60 for Tiers 1-4, the
+  ratio growing x3, x4, x5 so high tiers feel worth chasing; Extra
+  Soul adds flat on top (soulYieldOf in state.js).
 - In-game Fish Tier (2026-08-18, fish tab):
   cascading tier-up roll, the standard gacha rarity ladder. Each egg
   starts at Tier 1 and climbs one tier per success at chance p, rolled
