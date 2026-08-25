@@ -21,7 +21,10 @@
       Panel.refresh();
       saveGame();
     }
-    if (b.dataset.act === 'soul') Game.souls += 1;
+    if (b.dataset.act === 'soul') {
+      Game.souls += 1;
+      Game.soulsEarned += 1;
+    }
     if (b.dataset.act === 'shop' && Game.started && !Soul.shopOpen) {
       Game.shop = 1;
       Soul.resume();

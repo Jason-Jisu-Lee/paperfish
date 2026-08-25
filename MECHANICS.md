@@ -23,7 +23,8 @@ until a number lands here.
   in the tier color (firstF2-4), carrying the tier's base stats
 - gold: base 3^(tier-1) per 5s (fishIncome in state.js); income
   upgrades add flat on top; the 3x base is a placeholder, per-fish
-  tuning comes later
+  tuning comes later. With Adult Gold owned, Tier 3+ adults earn 1.2x
+  the total
 - soul: the tier-to-tier ratio grows slowly, x3 then x4 then x5
   (SOUL_BASE in state.js); Extra Soul prestige adds flat +1 per lvl;
   starving death pays 0, hungry-but-not-starving pays full
@@ -107,6 +108,22 @@ food.
 | Lantern Gold | 12 x 2^lvl |
 | Lantern Tide | 150 x 2^lvl, max 5 |
 | Curious Fish | 200 x 2^lvl, max 5 |
+| Adult Gold | 100 one-time (placeholder cost); Tier 3+ adults earn 1.2x gold |
+
+## Prestige reveals
+
+Soul collected = lifetime accumulated souls (soulsEarned), shown top
+left of the prestige shop for everyone. Unrevealed cards are invisible
+to players; dev mode shows them tinted light red and their hover lists
+the reveal requirement.
+
+| upgrade | revealed when |
+|---|---|
+| Starting Kelp | Unlock Kelp owned |
+| Extra Soul, Life Burn (the Soul category) | 100 Soul collected |
+| Lantern Gold, Lantern Tide | 100 Soul collected |
+| Curious Fish | 200 Soul collected |
+| Adult Gold | 200 Soul collected |
 
 ## Eggs
 

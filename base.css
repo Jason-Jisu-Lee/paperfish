@@ -725,10 +725,22 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   display:flex; align-items:center; justify-content:center;
 }
 .pcard .devtag{ position:absolute; top:9px; left:11px; }
-.hidtag{
-  position:absolute; top:9px; left:11px;
-  font-size:9px; letter-spacing:.18em; text-transform:uppercase;
-  color:rgba(28,27,24,.45);
+.pcard.unrevealed{
+  background:rgba(180,58,43,.09);
+  border-color:rgba(180,58,43,.45);
+}
+.pr-metric{
+  position:fixed; top:26px; left:32px; z-index:1;
+  text-align:left; color:#3e546e;
+}
+.pr-metric b{
+  display:block;
+  font-family:'Shippori Mincho',serif; font-weight:500;
+  font-size:27px; letter-spacing:.03em;
+}
+.pr-metric span{
+  font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(28,27,24,.55);
 }
 .pctip{
   position:fixed; z-index:60;

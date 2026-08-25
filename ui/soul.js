@@ -29,23 +29,33 @@ const Soul = (() => {
       max: () => Game.pStartGold >= SG_MAX },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
+    { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'Tier 3 and higher adults earn 1.2x the gold of a baby.',
+      lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
+      max: () => Game.pAdultGold >= 1, once: 1,
+      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Soul collected' },
     { key: 'pKelp', ico: 'kelp', name: 'Starting Kelp', desc: 'Begin every dive with 1 more kelp already floating.',
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
-      max: () => Game.pKelp >= PKELP_MAX, gate: () => Game.pLife > 0 },
+      max: () => Game.pKelp >= PKELP_MAX,
+      reveal: () => !!Game.unlocks.kelp, revealText: 'Own Unlock Kelp' },
     { key: 'soulUp', ico: 'soul', name: 'Extra Soul', desc: 'Every fish leaves 1 more soul when it dies.',
-      lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++ },
+      lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++,
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
     { key: 'pBurn', ico: 'soul', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
       lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
-      max: () => Game.pBurn >= 1, once: 1 },
+      max: () => Game.pBurn >= 1, once: 1,
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
-      max: () => Game.pLantGold >= PLANTGOLD_MAX },
+      max: () => Game.pLantGold >= PLANTGOLD_MAX,
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
     { key: 'lantFish', ico: 'curious', name: 'Curious Fish', desc: 'Tier 1 fish may tap a passing lantern once themselves, 4% more likely per level.',
       lvl: () => Game.pLantFish, cost: pLantFishCost, buy: () => Game.pLantFish++,
-      max: () => Game.pLantFish >= PLANTFISH_MAX },
+      max: () => Game.pLantFish >= PLANTFISH_MAX,
+      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Soul collected' },
     { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
       lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
-      max: () => Game.pLantRate >= PLANTRATE_MAX },
+      max: () => Game.pLantRate >= PLANTRATE_MAX,
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1, once: 1 }
@@ -86,7 +96,7 @@ const Soul = (() => {
 
   const M_SECTS = [
     ['Fish', 'fish', ['autoEgg']],
-    ['Income', 'income', ['startGold', 'pIncome']],
+    ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
     ['Soul', 'soul', ['soulUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
@@ -96,13 +106,12 @@ const Soul = (() => {
 
   const card = (u, locked) => {
     const maxed = u.max && u.max();
-    const gated = u.gate && !u.gate();
+    const unrev = u.reveal && !u.reveal();
     const lv = u.lvl();
     const off = locked || maxed || Game.bank < u.cost();
     return `
-      <button class="pcard${off ? ' off' : ''}${locked ? ' locked' : ''}${lv > 0 ? ' owned' : ''}" data-p="${u.key}">
+      <button class="pcard${off ? ' off' : ''}${locked ? ' locked' : ''}${lv > 0 ? ' owned' : ''}${unrev ? ' unrevealed' : ''}" data-p="${u.key}">
         ${u.dev ? '<span class="devtag">dev</span>' : ''}
-        ${gated ? '<span class="hidtag">hidden</span>' : ''}
         ${lv > 0 && !u.once ? `<span class="pc-lv">${lv}</span>` : ''}
         <span class="pc-ico">${locked ? ICO.lock : ICO[u.ico]}</span>
         <span class="pc-name">${locked ? 'Locked' : u.name}</span>
@@ -127,7 +136,7 @@ const Soul = (() => {
   };
 
   const complete = u => !!(u.max && u.max());
-  const shown = u => !(Game.hideDone && complete(u));
+  const shown = u => (Game.devMode || !u.reveal || u.reveal()) && !(Game.hideDone && complete(u));
   const hideBtn = document.getElementById('p-hidedone');
 
   const syncHide = () => {
@@ -137,6 +146,7 @@ const Soul = (() => {
 
   const render = () => {
     bankEl.textContent = fmtG(Game.bank);
+    document.getElementById('p-total-n').textContent = fmtG(Game.soulsEarned);
     syncHide();
     let h = '';
     if (tab === 'up') {
@@ -249,7 +259,7 @@ const Soul = (() => {
     const locked = el.classList.contains('locked');
     tip.innerHTML = locked
       ? '<span class="pct-name">Locked</span>Own the tier before this one to unlock it.'
-      : `<span class="pct-name">${u.name}</span>${typeof u.desc === 'function' ? u.desc() : u.desc}`;
+      : `<span class="pct-name">${u.name}</span>${typeof u.desc === 'function' ? u.desc() : u.desc}${u.reveal && !u.reveal() ? '<br>Revealed: ' + u.revealText : ''}`;
     placeTip(el);
   });
   list.addEventListener('mouseout', e => {

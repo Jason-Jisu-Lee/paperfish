@@ -154,11 +154,12 @@ Exact numbers live in core/state.js.
   Index tab: it appears the first time anything completes, defaults
   on, and completed cards shrink away in 0.2s (empty sections hide
   with them); the toggle state saves.
-- Card indicator language: red "dev" tag = not functional yet; grey
-  "hidden" tag + dashed border = functional but not yet visible to
-  players (reveal gate unmet), dev-only during playtests. Starting
-  Kelp is gated behind the first Tier 1 Lifespan prestige level
-  (Game.pLife > 0).
+- Card indicator language: red "dev" tag = not functional yet.
+  Unrevealed cards (reveal gate unmet, see MECHANICS.md) are invisible
+  to players; dev mode shows them tinted light red and their hover
+  tip names the reveal requirement. Lifetime Soul collected shows top
+  left of the shop for everyone. Starting Kelp reveals once Unlock
+  Kelp is owned.
 - In-game upgrades: Income +1 G/5s (income icon), Kelp (food icon,
   revealed by the tutorial). Income icon is live from the start.
 - Whispers, each once ever: "This fish doesn't live very long" on the

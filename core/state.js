@@ -14,8 +14,10 @@ const Game = {
   pLantRate: 0,
   pLantFish: 0,
   pAutoEgg: 0,
+  pAdultGold: 0,
   autoEggOn: 1,
   hideDone: 1,
+  soulsEarned: 0,
   pBurn: 0,
   burnUsed: 0,
   eggsBought: 0,
@@ -59,7 +61,11 @@ const eggCost = () => {
   return Math.round(raw / mag) * mag;
 };
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
-const fishIncome = s => 3 ** (tierOf(s) - 1) + Game.incomeUp + Game.pIncome;
+const ADULT_GOLD = 1.2;
+const fishIncome = (s, adult) => {
+  const g = 3 ** (tierOf(s) - 1) + Game.incomeUp + Game.pIncome;
+  return Game.pAdultGold && adult && tierOf(s) >= 3 ? g * ADULT_GOLD : g;
+};
 const SOUL_BASE = [1, 3, 12, 60];
 const soulYieldOf = s => SOUL_BASE[tierOf(s) - 1] + Game.soulUp;
 const UNLOCK_COST = 5;
@@ -106,6 +112,7 @@ const pLantGoldCost = () => 12 * 2 ** Game.pLantGold;
 const pLantRateCost = () => 150 * 2 ** Game.pLantRate;
 const pLantFishCost = () => 200 * 2 ** Game.pLantFish;
 const pAutoEggCost = () => 50;
+const pAdultGoldCost = () => 100;
 const pBurnCost = () => 500;
 const KELP_UNLOCK_COST = 100;
 
@@ -133,7 +140,7 @@ const fmtPct = c => c >= 0.995 ? '100%' : c >= 0.01 ? Math.round(c * 100) + '%' 
 
 const ratePerMin = () => {
   let r = 0;
-  for (const f of Game.fish) if (!f.egg && f.dying === undefined) r += fishIncome(f.s);
+  for (const f of Game.fish) if (!f.egg && f.dying === undefined) r += fishIncome(f.s, f.adult);
   return r * (60 / TICK);
 };
 
@@ -157,8 +164,10 @@ const saveGame = () => {
       plr: Game.pLantRate,
       plf: Game.pLantFish,
       pae: Game.pAutoEgg,
+      pag: Game.pAdultGold,
       aeo: Game.autoEggOn ? 1 : 0,
       hd: Game.hideDone ? 1 : 0,
+      se: Math.round(Game.soulsEarned),
       pb: Game.pBurn,
       bu: Game.burnUsed,
       eggs: Game.eggsBought,
@@ -199,8 +208,10 @@ const loadGame = () => {
     Game.pLantRate = d.plr || 0;
     Game.pLantFish = d.plf || 0;
     Game.pAutoEgg = d.pae || 0;
+    Game.pAdultGold = d.pag || 0;
     Game.autoEggOn = d.aeo ?? 1;
     Game.hideDone = d.hd ?? 1;
+    Game.soulsEarned = d.se ?? (d.souls || 0) + (d.bank || 0);
     Game.pBurn = d.pb || 0;
     Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;

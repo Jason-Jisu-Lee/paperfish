@@ -203,7 +203,7 @@ const Detail = (() => {
       elFill.style.width = (1 - age / life) * 100 + '%';
       elHFill.style.width = Math.min(Math.max((sel.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
       elHun.classList.toggle('low', sel.hstate >= 1);
-      elFreq.textContent = fmt(fishIncome(sel.s)) + ' G / ' + TICK + 's';
+      elFreq.textContent = fmt(fishIncome(sel.s, sel.adult)) + ' G / ' + TICK + 's';
       elDeath.textContent = sel.hstate >= 2 ? '0' : '+' + soulYieldOf(sel.s);
     }
   };
