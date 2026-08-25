@@ -138,8 +138,8 @@ Exact numbers live in core/state.js.
   The open shop persists in the save: refreshing mid-prestige returns
   to the shop, never back to the collected run.
 - Prestige is a fullscreen animated screen (the reward heart of the
-  game): blue-washed paper takeover, Prestige title, giant glowing
-  serif soul count, background soul wisps rising, staggered card
+  game): blue-washed paper takeover, giant glowing serif soul count
+  leading the screen (no title text), background soul wisps rising, staggered card
   entrance on open, fixed Start pill at the bottom. Upgrades are
   hover-lift cards: name + cost always visible, one-line gamer-speak
   description reveals on hover in a reserved slot (no reflow), level
