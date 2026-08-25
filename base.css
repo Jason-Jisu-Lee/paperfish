@@ -795,16 +795,22 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fi-card.unknown .fi-name{ color:rgba(28,27,24,.38); letter-spacing:.24em; }
 
 .pr-dive{
-  position:fixed; left:50%; bottom:36px; transform:translateX(-50%);
-  min-width:240px; padding:14px 38px;
-  font-family:'Zen Maru Gothic',sans-serif; font-size:14px; letter-spacing:.18em;
-  background:#3e546e; color:#f2efe6;
-  border-radius:999px;
-  box-shadow:0 6px 20px rgba(62,84,110,.4);
-  transition:transform .18s ease, box-shadow .18s ease;
+  position:fixed; right:clamp(24px, 4vw, 64px); top:50%; transform:translateY(-50%);
+  width:200px; padding:14px 0; z-index:51;
+  background:none; border:0; cursor:pointer;
+  text-align:center;
 }
-.pr-dive:hover{ transform:translateX(-50%) translateY(-2px); box-shadow:0 10px 26px rgba(62,84,110,.5); }
-.pr-dive:active{ transform:translateX(-50%) scale(.97); }
+.pr-dive svg{ width:120px; height:70px; overflow:visible; display:block; margin:0 auto; transition:transform .3s ease; }
+.pr-dive path{ fill:none; stroke:var(--ink); stroke-width:6.5; stroke-linecap:round; }
+.pr-dive span{
+  display:block; margin-top:8px;
+  font-family:'Shippori Mincho',serif; font-size:22px; letter-spacing:.34em; text-indent:.34em;
+  color:var(--ink);
+  transition:color .2s ease;
+}
+.pr-dive:hover svg{ transform:rotate(18deg) translate(10px, 10px); }
+.pr-dive:hover span{ color:var(--seal); }
+.pr-dive:active svg{ transform:rotate(24deg) translate(16px, 18px) scale(.96); }
 .pr-wisps i{
   position:fixed; bottom:-46px;
   width:5px; height:5px; border-radius:50%;
