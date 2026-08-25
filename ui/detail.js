@@ -88,7 +88,7 @@ const Detail = (() => {
       select(hover);
     } else {
       if (Lantern.clickAt(e.clientX, e.clientY) || Ocean.clickAt(e.clientX, e.clientY)) Panel.tick();
-      else if (!Pause.paused && !Soul.shopOpen && (Game.tuts.introTut || Game.devMode)) Stage.spawnPellet(e.clientX, e.clientY);
+      else if (!Pause.paused && !Paper.shopOpen && (Game.tuts.introTut || Game.devMode)) Stage.spawnPellet(e.clientX, e.clientY);
       close();
     }
   });
@@ -204,7 +204,7 @@ const Detail = (() => {
       elHFill.style.width = Math.min(Math.max((sel.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
       elHun.classList.toggle('low', sel.hstate >= 1);
       elFreq.textContent = fmt(fishIncome(sel.s, sel.adult)) + ' G / ' + TICK + 's';
-      elDeath.textContent = sel.hstate >= 2 ? '0' : '+' + soulYieldOf(sel.s);
+      elDeath.textContent = sel.hstate >= 2 ? '0' : '+' + paperYieldOf(sel.s);
     }
   };
 

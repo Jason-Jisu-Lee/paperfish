@@ -1,9 +1,9 @@
 const Game = {
   gold: 0,
-  souls: 0,
+  paper: 0,
   bank: 0,
   shop: 0,
-  soulUp: 0,
+  paperUp: 0,
   pStartGold: 0,
   pIncome: 0,
   pKelp: 0,
@@ -17,7 +17,7 @@ const Game = {
   pAdultGold: 0,
   autoEggOn: 1,
   hideDone: 1,
-  soulsEarned: 0,
+  paperEarned: 0,
   pBurn: 0,
   burnUsed: 0,
   eggsBought: 0,
@@ -66,8 +66,8 @@ const fishIncome = (s, adult) => {
   const g = 3 ** (tierOf(s) - 1) + Game.incomeUp + Game.pIncome;
   return Game.pAdultGold && adult && tierOf(s) >= 3 ? g * ADULT_GOLD : g;
 };
-const SOUL_BASE = [1, 3, 12, 60];
-const soulYieldOf = s => SOUL_BASE[tierOf(s) - 1] + Game.soulUp;
+const PAPER_BASE = [1, 3, 12, 60];
+const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
 const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 / 60;
@@ -83,7 +83,7 @@ const KELP_SAT = 20;
 const EAT_R = 234;
 const hatchTime = () => TIER_HATCH[0];
 
-const soulUpCost = () => 20 * 2 ** Game.soulUp;
+const paperUpCost = () => 20 * 2 ** Game.paperUp;
 const startGoldCost = () => 4 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
@@ -148,12 +148,12 @@ const saveGame = () => {
   if (skipSave || !Game.started) return;
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({
-      v: 3,
+      v: 4,
       gold: Game.gold,
-      souls: Game.souls,
+      paper: Game.paper,
       bank: Game.bank,
       shop: Game.shop ? 1 : 0,
-      su: Game.soulUp,
+      su: Game.paperUp,
       psg: Game.pStartGold,
       pin: Game.pIncome,
       pkl: Game.pKelp,
@@ -167,7 +167,7 @@ const saveGame = () => {
       pag: Game.pAdultGold,
       aeo: Game.autoEggOn ? 1 : 0,
       hd: Game.hideDone ? 1 : 0,
-      se: Math.round(Game.soulsEarned),
+      se: Math.round(Game.paperEarned),
       pb: Game.pBurn,
       bu: Game.burnUsed,
       eggs: Game.eggsBought,
@@ -183,7 +183,7 @@ const saveGame = () => {
         s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
         a: Math.round((f.age || 0) * 100) / 100,
         h: f.hstate || 0, hu: Math.round((f.hunger ?? HUNGER_FULL) * 100) / 100,
-        d: f.dying !== undefined ? 1 : 0, ns: f.nosoul ? 1 : 0
+        d: f.dying !== undefined ? 1 : 0, ns: f.nopaper ? 1 : 0
       }))
     }));
   } catch (e) {}
@@ -192,12 +192,12 @@ const saveGame = () => {
 const loadGame = () => {
   try {
     const d = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (!d || d.v !== 3) return false;
+    if (!d || d.v !== 4) return false;
     Game.gold = d.gold || 0;
-    Game.souls = d.souls || 0;
+    Game.paper = d.paper || 0;
     Game.bank = d.bank || 0;
     Game.shop = d.shop || 0;
-    Game.soulUp = d.su || 0;
+    Game.paperUp = d.su || 0;
     Game.pStartGold = d.psg || 0;
     Game.pIncome = d.pin || 0;
     Game.pKelp = d.pkl || 0;
@@ -211,7 +211,7 @@ const loadGame = () => {
     Game.pAdultGold = d.pag || 0;
     Game.autoEggOn = d.aeo ?? 1;
     Game.hideDone = d.hd ?? 1;
-    Game.soulsEarned = d.se ?? (d.souls || 0) + (d.bank || 0);
+    Game.paperEarned = d.se ?? (d.paper || 0) + (d.bank || 0);
     Game.pBurn = d.pb || 0;
     Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;
@@ -228,7 +228,7 @@ const loadGame = () => {
       .map(f => {
         const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hunger: f.hu ?? HUNGER_FULL };
         if (f.d) o.dying = 0;
-        if (f.ns) o.nosoul = true;
+        if (f.ns) o.nopaper = true;
         return o;
       });
     return true;

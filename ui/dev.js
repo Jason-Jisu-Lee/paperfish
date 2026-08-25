@@ -21,21 +21,21 @@
       Panel.refresh();
       saveGame();
     }
-    if (b.dataset.soul) {
-      Game.souls += +b.dataset.soul;
-      Game.soulsEarned += +b.dataset.soul;
-      if (Soul.shopOpen) Soul.render();
+    if (b.dataset.paper) {
+      Game.paper += +b.dataset.paper;
+      Game.paperEarned += +b.dataset.paper;
+      if (Paper.shopOpen) Paper.render();
     }
-    if (b.dataset.act === 'shop' && Game.started && !Soul.shopOpen) {
+    if (b.dataset.act === 'shop' && Game.started && !Paper.shopOpen) {
       Game.shop = 1;
-      Soul.resume();
+      Paper.resume();
     }
     if (b.dataset.act === 'devmode') {
       Game.devMode = !Game.devMode;
       b.classList.toggle('on', Game.devMode);
       b.textContent = Game.devMode ? 'on' : 'off';
       if (Game.devMode) Tut.abort();
-      if (Soul.shopOpen) Soul.render();
+      if (Paper.shopOpen) Paper.render();
     }
     if (b.dataset.act === 'reset') resetGame();
   });

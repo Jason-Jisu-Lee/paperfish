@@ -1,7 +1,7 @@
-const Soul = (() => {
-  const box = document.getElementById('soulbox');
-  const num = document.getElementById('soul-num');
-  const btn = document.getElementById('collect-soul');
+const Paper = (() => {
+  const box = document.getElementById('paperbox');
+  const num = document.getElementById('paper-num');
+  const btn = document.getElementById('collect-paper');
   const screen = document.getElementById('prestige');
   const bankEl = document.getElementById('p-bank');
   const list = document.getElementById('p-list');
@@ -13,7 +13,7 @@ const Soul = (() => {
     gold: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></svg>',
     income: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.2"/><path d="M12 8 V16"/><path d="M8 12 H16"/></svg>',
     kelp: '<svg viewBox="0 0 24 24"><path d="M12 21.5 C8.6 17.4 8.4 13.2 9.6 9.6 C10.3 7.1 11.3 4.9 12.8 2.9 C14.5 5.2 15.1 8 14.6 10.9 C14.1 14.2 13.9 17.9 12 21.5 Z"/><path d="M12.1 19 C11.7 15.4 11.9 11.6 12.6 5.8"/></svg>',
-    soul: '<svg viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg>',
+    paper: '<svg viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg>',
     life: '<svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5"/><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z"/><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z"/></svg>',
     egg: '<svg viewBox="-23 -29 46 58"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>',
     lock: '<svg viewBox="0 0 24 24"><rect x="5.5" y="10.8" width="13" height="8.7" rx="2"/><path d="M8.6 10.8 V8.4 a3.4 3.4 0 0 1 6.8 0 V10.8"/></svg>',
@@ -32,30 +32,30 @@ const Soul = (() => {
     { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'Tier 3 and higher adults earn 1.2x the gold of a baby.',
       lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
       max: () => Game.pAdultGold >= 1, once: 1,
-      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Paper collected' },
+      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
     { key: 'pKelp', ico: 'kelp', name: 'Starting Kelp', desc: 'Begin every dive with 1 more kelp already floating.',
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
       max: () => Game.pKelp >= PKELP_MAX,
       reveal: () => !!Game.unlocks.kelp, revealText: 'Own Unlock Kelp' },
-    { key: 'soulUp', ico: 'soul', name: 'Extra Paper', desc: 'Every fish leaves 1 more paper when it dies.',
-      lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
-    { key: 'pBurn', ico: 'soul', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
+    { key: 'paperUp', ico: 'paper', name: 'Extra Paper', desc: 'Every fish leaves 1 more paper when it dies.',
+      lvl: () => Game.paperUp, cost: paperUpCost, buy: () => Game.paperUp++,
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
+    { key: 'pBurn', ico: 'paper', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
       lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
       max: () => Game.pBurn >= 1, once: 1,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
       max: () => Game.pLantGold >= PLANTGOLD_MAX,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'lantFish', ico: 'curious', name: 'Curious Fish', desc: 'Tier 1 fish may tap a passing lantern once themselves, 4% more likely per level.',
       lvl: () => Game.pLantFish, cost: pLantFishCost, buy: () => Game.pLantFish++,
       max: () => Game.pLantFish >= PLANTFISH_MAX,
-      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Paper collected' },
+      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
     { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
       lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
       max: () => Game.pLantRate >= PLANTRATE_MAX,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1, once: 1 }
@@ -98,7 +98,7 @@ const Soul = (() => {
     ['Fish', 'fish', ['autoEgg']],
     ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
-    ['Paper', 'soul', ['soulUp', 'pBurn']],
+    ['Paper', 'paper', ['paperUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
 
@@ -146,7 +146,7 @@ const Soul = (() => {
 
   const render = () => {
     bankEl.textContent = fmtG(Game.bank);
-    document.getElementById('p-total-n').textContent = fmtG(Game.soulsEarned);
+    document.getElementById('p-total-n').textContent = fmtG(Game.paperEarned);
     syncHide();
     let h = '';
     if (tab === 'up') {
@@ -248,7 +248,7 @@ const Soul = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} paper`;
+        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${paperYieldOf(s)} paper`;
       placeTip(fi);
       return;
     }
@@ -277,8 +277,8 @@ const Soul = (() => {
   };
 
   const bankAndOpen = () => {
-    Game.bank += Game.souls;
-    Game.souls = 0;
+    Game.bank += Game.paper;
+    Game.paper = 0;
     open();
     saveGame();
   };
@@ -296,7 +296,7 @@ const Soul = (() => {
     Game.shop = 0;
     Game.tuts.prestiged = 1;
     Game.gold = startGold();
-    Game.souls = 0;
+    Game.paper = 0;
     Game.eggsBought = 0;
     Game.incomeUp = 0;
     Game.eggUp = 0;
@@ -324,13 +324,13 @@ const Soul = (() => {
       return;
     }
     box.removeAttribute('hidden');
-    num.textContent = fmtG(Game.souls);
-    if (!Game.tuts.soulOpen && Game.souls >= 3) {
-      Game.tuts.soulOpen = 1;
+    num.textContent = fmtG(Game.paper);
+    if (!Game.tuts.paperOpen && Game.paper >= 3) {
+      Game.tuts.paperOpen = 1;
       btn.removeAttribute('hidden');
       saveGame();
     }
-    if (Game.tuts.soulOpen) btn.removeAttribute('hidden');
+    if (Game.tuts.paperOpen) btn.removeAttribute('hidden');
   };
 
   const resume = () => {

@@ -18,7 +18,7 @@ const startGame = () => {
   Ocean.start();
   Lantern.start();
   if (Game.tuts.obj1) Obj.start();
-  Soul.resume();
+  Paper.resume();
 };
 
 (() => {
@@ -33,7 +33,7 @@ const startGame = () => {
     let dt = raw;
     if (!(dt > 0)) dt = 0;
     if (dt > 0.06) dt = 0.06;
-    const mdt = Pause.paused || Soul.shopOpen || Tut.active ? 0 : dt;
+    const mdt = Pause.paused || Paper.shopOpen || Tut.active ? 0 : dt;
     const sdt = mdt * Game.speed;
 
     const refresh = Sim.step(sdt);
@@ -56,7 +56,7 @@ const startGame = () => {
     } else {
       Panel.tick();
     }
-    Soul.tick();
+    Paper.tick();
     Detail.tick();
     saveT += mdt;
     if (saveT >= 5) {

@@ -219,7 +219,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   border-radius:999px; padding:4px 14px;
   transition:transform .8s cubic-bezier(.4,0,.2,1), opacity .8s ease;
 }
-.obj-reward.objsoul{ color:#3e546e; background:rgba(62,84,110,.11); }
+.obj-reward.objpaper{ color:#3e546e; background:rgba(62,84,110,.11); }
 
 .saybox{
   position:absolute; z-index:12;
@@ -578,18 +578,18 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   .hero{ width:min(64vw, 460px); }
 }
 
-.soulbox{
+.paperbox{
   position:fixed; top:10px; left:50%; transform:translateX(-50%);
   text-align:center; z-index:40; pointer-events:none;
 }
-.soul{
+.paper{
   position:relative; display:inline-block;
   font-family:'Shippori Mincho',serif; font-weight:500;
   font-size:clamp(56px, 6vw, 80px); letter-spacing:.03em;
   line-height:1.05;
   font-feature-settings:'tnum'; color:#3e546e; white-space:nowrap;
 }
-.soul-lab{
+.paper-lab{
   position:absolute; left:100%; top:50%;
   transform:translateY(-50%);
   margin-left:13px;
@@ -644,14 +644,14 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   padding:3vh 26px 150px;
   text-align:center;
 }
-.pr-souls{
+.pr-paper{
   font-family:'Shippori Mincho',serif; font-weight:500;
   font-size:clamp(58px, 7vw, 86px); letter-spacing:.03em;
   color:#3e546e;
   text-shadow:0 0 26px rgba(62,84,110,.25);
-  animation:soulglow 3.2s ease-in-out infinite;
+  animation:paperglow 3.2s ease-in-out infinite;
 }
-@keyframes soulglow{
+@keyframes paperglow{
   0%,100%{ text-shadow:0 0 18px rgba(62,84,110,.15); }
   50%{ text-shadow:0 0 30px rgba(62,84,110,.35); }
 }

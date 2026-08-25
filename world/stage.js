@@ -100,7 +100,7 @@ const Stage = (() => {
   };
 
   const uiBlocked = (x, y) => {
-    for (const id of ['goldbox', 'soulbox', 'objbox', 'corner']) {
+    for (const id of ['goldbox', 'paperbox', 'objbox', 'corner']) {
       const el = document.getElementById(id);
       if (!el || el.hidden) continue;
       const r = el.getBoundingClientRect();
@@ -238,7 +238,7 @@ const Stage = (() => {
 
   const topBoxes = () => {
     let l = Infinity, r = -Infinity, b = -Infinity;
-    for (const id of ['soulbox', 'objbox']) {
+    for (const id of ['paperbox', 'objbox']) {
       const el = document.getElementById(id);
       if (!el || el.hidden) continue;
       const rc = el.getBoundingClientRect();
@@ -719,7 +719,7 @@ const Stage = (() => {
   const POPS = {
     gold: { font: '500 17px "Zen Maru Gothic", sans-serif', fill: 'rgba(122,88,0,1)', a: 0.95, life: 1.5, rise: 15 },
     big: { font: '500 19px "Zen Maru Gothic", sans-serif', fill: 'rgba(122,88,0,1)', a: 0.95, life: 1.6, rise: 14 },
-    soul: { font: '500 21px "Zen Maru Gothic", sans-serif', fill: 'rgba(62,84,110,1)', a: 0.95, life: 1.8, rise: 10 }
+    paper: { font: '500 21px "Zen Maru Gothic", sans-serif', fill: 'rgba(62,84,110,1)', a: 0.95, life: 1.8, rise: 10 }
   };
 
   const pops = [];

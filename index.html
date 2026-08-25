@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>paperfish</title>
     <link rel="stylesheet" href="fonts/fonts.css?v=1" />
-    <link rel="stylesheet" href="base.css?v=103" />
+    <link rel="stylesheet" href="base.css?v=104" />
   </head>
   <body>
     <canvas id="sea"></canvas>
@@ -16,9 +16,9 @@
       <div class="goldsrc" id="goldsrc" hidden></div>
     </div>
 
-    <div class="soulbox" id="soulbox" hidden>
-      <div class="soul"><span id="soul-num">0</span><span class="soul-lab">PAPER</span></div>
-      <button class="collect" id="collect-soul" hidden><i class="wisp"></i><i class="wisp"></i><i class="wisp"></i>Collect Paper</button>
+    <div class="paperbox" id="paperbox" hidden>
+      <div class="paper"><span id="paper-num">0</span><span class="paper-lab">PAPER</span></div>
+      <button class="collect" id="collect-paper" hidden><i class="wisp"></i><i class="wisp"></i><i class="wisp"></i>Collect Paper</button>
     </div>
 
     <aside class="hud" id="hud" hidden>
@@ -148,7 +148,7 @@
         <span>Paper collected</span>
       </div>
       <div class="pr-inner">
-        <div class="pr-souls"><svg class="pr-drop" viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg><span id="p-bank">0</span></div>
+        <div class="pr-paper"><svg class="pr-drop" viewBox="0 0 24 24"><path d="M12 3.4 C15.6 8.2 18.2 11.2 18.2 14.4 C18.2 17.8 15.4 20.4 12 20.4 C8.6 20.4 5.8 17.8 5.8 14.4 C5.8 11.2 8.4 8.2 12 3.4 Z"/></svg><span id="p-bank">0</span></div>
         <nav class="pr-tabs" id="p-tabs">
           <button data-tab="up" class="on">Main</button>
           <button data-tab="unlock">Unlocks</button>
@@ -326,11 +326,11 @@
         <button data-act="hatch">hatch</button>
       </div>
       <div class="dev-row">
-        <span class="dev-tag">soul</span>
-        <button data-soul="1">+1</button>
-        <button data-soul="50">+50</button>
-        <button data-soul="100">+100</button>
-        <button data-soul="1000">+1k</button>
+        <span class="dev-tag">paper</span>
+        <button data-paper="1">+1</button>
+        <button data-paper="50">+50</button>
+        <button data-paper="100">+100</button>
+        <button data-paper="1000">+1k</button>
       </div>
       <div class="dev-row">
         <span class="dev-tag">shop</span>
@@ -347,9 +347,9 @@
     </div>
 
     <script src="data/species.js?v=6"></script>
-    <script src="data/content.js?v=12"></script>
-    <script src="core/state.js?v=48"></script>
-    <script src="world/stage.js?v=35"></script>
+    <script src="data/content.js?v=13"></script>
+    <script src="core/state.js?v=49"></script>
+    <script src="world/stage.js?v=36"></script>
     <script src="world/ambience.js?v=11"></script>
     <script src="world/ocean.js?v=8"></script>
     <script src="world/lantern.js?v=8"></script>
@@ -358,14 +358,14 @@
     <script src="ui/panel.js?v=30"></script>
     <script src="ui/pause.js?v=1"></script>
     <script src="ui/confirm.js?v=1"></script>
-    <script src="ui/obj.js?v=22"></script>
-    <script src="ui/soul.js?v=37"></script>
+    <script src="ui/obj.js?v=23"></script>
+    <script src="ui/paper.js?v=38"></script>
     <script src="ui/say.js?v=1"></script>
-    <script src="ui/detail.js?v=28"></script>
-    <script src="ui/dev.js?v=8"></script>
-    <script src="ui/front.js?v=8"></script>
-    <script src="core/sim.js?v=27"></script>
-    <script src="core/main.js?v=18"></script>
+    <script src="ui/detail.js?v=29"></script>
+    <script src="ui/dev.js?v=9"></script>
+    <script src="ui/front.js?v=9"></script>
+    <script src="core/sim.js?v=28"></script>
+    <script src="core/main.js?v=19"></script>
     <script src="ui/corner.js?v=6"></script>
   </body>
 </html>

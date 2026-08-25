@@ -24,8 +24,8 @@ const Obj = (() => {
     }
     txt.textContent = cur.text;
     showCount();
-    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.soul ? ' Paper' : ' G');
-    rewardEl.classList.toggle('objsoul', !!cur.soul);
+    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.paper ? ' Paper' : ' G');
+    rewardEl.classList.toggle('objpaper', !!cur.paper);
     rewardEl.style.transform = '';
     rewardEl.style.opacity = '';
     box.classList.remove('done', 'fade', 'in');
@@ -34,8 +34,8 @@ const Obj = (() => {
     box.removeAttribute('hidden');
   };
 
-  const fly = soul => {
-    const target = document.querySelector(soul ? '.soul' : '.gold');
+  const fly = paper => {
+    const target = document.querySelector(paper ? '.paper' : '.gold');
     if (!target) return;
     const a = rewardEl.getBoundingClientRect();
     const b = target.getBoundingClientRect();
@@ -57,9 +57,9 @@ const Obj = (() => {
     showCount();
     box.classList.remove('in');
     box.classList.add('done');
-    setTimeout(() => fly(o.soul), 430);
+    setTimeout(() => fly(o.paper), 430);
     setTimeout(() => {
-      if (o.soul) Game.souls += o.reward;
+      if (o.paper) Game.paper += o.reward;
       else Game.gold += o.reward;
       saveGame();
     }, 1180);

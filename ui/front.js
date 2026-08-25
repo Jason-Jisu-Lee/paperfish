@@ -37,12 +37,12 @@
     saveGame();
     Pause.set(false);
     Tut.abort();
-    Soul.closeShop();
+    Paper.closeShop();
     Game.started = false;
     document.getElementById('hud').setAttribute('hidden', '');
     document.getElementById('corner').setAttribute('hidden', '');
     document.getElementById('goldbox').setAttribute('hidden', '');
-    document.getElementById('soulbox').setAttribute('hidden', '');
+    document.getElementById('paperbox').setAttribute('hidden', '');
     front.removeAttribute('hidden');
     replayHero();
     Music.front();

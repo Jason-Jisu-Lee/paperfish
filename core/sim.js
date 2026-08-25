@@ -7,9 +7,9 @@ const Sim = (() => {
   };
 
   const deathWhisper = () => {
-    if (!Game.tuts.saysoul) {
-      Game.tuts.saysoul = 1;
-      Say.say(WHISPER.soul);
+    if (!Game.tuts.saypaper) {
+      Game.tuts.saypaper = 1;
+      Say.say(WHISPER.paper);
     } else if (!Game.tuts.sayneed && Game.tuts.prestiged) {
       Game.tuts.sayneed = 1;
       Say.say(WHISPER.need);
@@ -61,7 +61,7 @@ const Sim = (() => {
           if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hT >= 10) {
-              f.nosoul = true;
+              f.nopaper = true;
               f.hstate = 0;
               f.dying = 0;
               firstDeath();
@@ -111,18 +111,18 @@ const Sim = (() => {
         if (f.age >= life && f.birth >= 1) {
           if (f.deathWait === undefined) {
             f.deathWait = 0.4 + Math.random() * 3;
-            f.nosoul = f.hstate >= 2 && !f.eating;
+            f.nopaper = f.hstate >= 2 && !f.eating;
           }
           f.deathWait -= sdt;
           if (f.deathWait <= 0) {
             f.dying = 0;
             firstDeath();
-            if (!f.nosoul) {
-              const n = soulYieldOf(f.s);
-              Game.souls += n;
-              Game.soulsEarned += n;
-              Stage.spawnPop(f.x, f.y - 14, '+' + n, 'soul');
-              Obj.event('souls3', n);
+            if (!f.nopaper) {
+              const n = paperYieldOf(f.s);
+              Game.paper += n;
+              Game.paperEarned += n;
+              Stage.spawnPop(f.x, f.y - 14, '+' + n, 'paper');
+              Obj.event('paper3', n);
             }
             deathWhisper();
           }
