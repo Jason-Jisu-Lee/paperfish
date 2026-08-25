@@ -850,13 +850,24 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ei-pct{ margin-left:auto; font-feature-settings:'tnum'; color:#7a5800; font-weight:500; }
 
 .tutdim{
+  position:fixed; inset:0; z-index:65;
+  background:rgba(28,27,24,.44);
+  pointer-events:none;
+  mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0),linear-gradient(#000 0 0);
+  mask-repeat:no-repeat;
+  mask-composite:subtract,subtract,add;
+  -webkit-mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0),linear-gradient(#000 0 0);
+  -webkit-mask-repeat:no-repeat;
+  -webkit-mask-composite:destination-out,destination-out,source-over;
+  transition:mask-position .5s ease, mask-size .5s ease, -webkit-mask-position .5s ease, -webkit-mask-size .5s ease;
+  animation:dimin .45s ease;
+}
+.tutframe{
   position:fixed; z-index:65;
   border:2px solid var(--seal);
   border-radius:4px;
-  box-shadow:0 0 0 200vmax rgba(28,27,24,.44);
   pointer-events:none;
   transition:left .5s ease, top .5s ease, width .5s ease, height .5s ease;
-  animation:dimin .45s ease;
 }
 @keyframes dimin{ from{ opacity:0; } }
 .tutline{

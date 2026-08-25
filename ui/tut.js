@@ -4,28 +4,46 @@ const Tut = (() => {
   const btn = document.getElementById('tut-next');
   const dim = document.getElementById('tut-dim');
   const line = document.getElementById('tut-line');
+  const frame = document.getElementById('tut-frame');
+  const frame2 = document.getElementById('tut-frame2');
   let active = false;
 
   const PAD = 6, GAP = 48, HGAP = 130;
 
-  const show = (el, text, label, side, edge, gap) => {
+  const rectOf = el => {
     const r = el.getBoundingClientRect();
-    const hx = r.left - PAD, hy = r.top - PAD, hw = r.width + PAD * 2, hh = r.height + PAD * 2;
-    Object.assign(dim.style, { left: hx + 'px', top: hy + 'px', width: hw + 'px', height: hh + 'px' });
-    const cx = hx + hw / 2, cy = hy + hh / 2;
+    return { x: r.left - PAD, y: r.top - PAD, w: r.width + PAD * 2, h: r.height + PAD * 2 };
+  };
+
+  const fishRect = f => {
+    const hw = SPECIES[f.s].len * 0.62 + 10, hh = SPECIES[f.s].len * 0.38 + 10;
+    return { x: f.x - hw, y: f.y - hh, w: hw * 2, h: hh * 2 };
+  };
+
+  const place = (el, r) => Object.assign(el.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' });
+
+  const show = (a, b, text, label, side, edgeX) => {
+    const fx = b ? b.x : -999, fy = b ? b.y : -999, fw = b ? b.w : 0, fh = b ? b.h : 0;
+    dim.style.maskPosition = dim.style.webkitMaskPosition = `${a.x}px ${a.y}px, ${fx}px ${fy}px, 0 0`;
+    dim.style.maskSize = dim.style.webkitMaskSize = `${a.w}px ${a.h}px, ${fw}px ${fh}px, 100% 100%`;
+    place(frame, a);
+    frame.removeAttribute('hidden');
+    if (b) {
+      place(frame2, b);
+      frame2.removeAttribute('hidden');
+    } else frame2.setAttribute('hidden', '');
+    const cx = a.x + a.w / 2, cy = a.y + a.h / 2;
     if (side === 'up') {
-      Object.assign(line.style, { left: cx - 1 + 'px', top: hy - GAP + 'px', width: '2px', height: GAP + 'px' });
+      Object.assign(line.style, { left: cx - 1 + 'px', top: a.y - GAP + 'px', width: '2px', height: GAP + 'px' });
       box.style.left = cx + 'px';
-      box.style.top = hy - GAP + 'px';
+      box.style.top = a.y - GAP + 'px';
     } else if (side === 'right') {
-      const bx = edge.right + (gap || HGAP);
-      Object.assign(line.style, { left: hx + hw + 'px', top: cy - 1 + 'px', width: bx - hx - hw + 'px', height: '2px' });
-      box.style.left = bx + 'px';
+      Object.assign(line.style, { left: a.x + a.w + 'px', top: cy - 1 + 'px', width: edgeX - a.x - a.w + 'px', height: '2px' });
+      box.style.left = edgeX + 'px';
       box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
     } else {
-      const bx = edge.left - (gap || HGAP);
-      Object.assign(line.style, { left: bx + 'px', top: cy - 1 + 'px', width: hx - bx + 'px', height: '2px' });
-      box.style.left = bx + 'px';
+      Object.assign(line.style, { left: edgeX + 'px', top: cy - 1 + 'px', width: a.x - edgeX + 'px', height: '2px' });
+      box.style.left = edgeX + 'px';
       box.style.top = Math.min(Math.max(cy, 100), innerHeight - 100) + 'px';
     }
     box.classList.remove('up', 'right', 'left');
@@ -39,26 +57,32 @@ const Tut = (() => {
 
   const hide = () => {
     active = false;
-    box.setAttribute('hidden', '');
-    dim.setAttribute('hidden', '');
-    line.setAttribute('hidden', '');
+    for (const n of [box, dim, line, frame, frame2]) n.setAttribute('hidden', '');
     saveGame();
   };
 
   const I_STEPS = [
-    ['fc-lbar', 'Fish dies when the life timer reaches 0, and grants Soul which is used for Research', 'Next'],
+    ['fish', 'Paperfish do not live long.', 'Oh no'],
+    ['fc-lbar', 'But they still have a soul and will grant Soul Points once their life bar reaches 0', 'I see'],
     ['fc-hun', 'This is their hunger bar.<br>Starving fish do not grant soul.<br>Click any empty space to drop food', 'Sure']
   ];
   let istep = -1;
-
   let iside = 'right', ifish = null;
 
   const iShow = () => {
     const [id, text, label] = I_STEPS[istep];
+    const fr = fishRect(ifish);
+    if (id === 'fish') {
+      const side = iside === 'right' ? 'left' : 'right';
+      const avail = side === 'right' ? innerWidth - (fr.x + fr.w) : fr.x;
+      const gap = Math.min(HGAP, Math.max(56, avail - 354));
+      show(fr, null, text, label, side, side === 'right' ? fr.x + fr.w + gap : fr.x - gap);
+      return;
+    }
     const card = document.getElementById('fishcard').getBoundingClientRect();
     const avail = iside === 'right' ? innerWidth - card.right : card.left;
     const gap = Math.min(HGAP, Math.max(56, avail - 354));
-    show(document.getElementById(id), text, label, iside, card, gap);
+    show(rectOf(document.getElementById(id)), fr, text, label, iside, iside === 'right' ? card.right + gap : card.left - gap);
   };
 
   const iEnd = () => {
@@ -87,7 +111,7 @@ const Tut = (() => {
 
   const pShow = () => {
     const [key, text] = P_STEPS[pstep];
-    show(document.querySelector(`#p-tabs [data-tab="${key}"]`), text, pstep === P_STEPS.length - 1 ? 'Got it' : 'Next', 'up');
+    show(rectOf(document.querySelector(`#p-tabs [data-tab="${key}"]`)), null, text, pstep === P_STEPS.length - 1 ? 'Got it' : 'Next', 'up');
   };
 
   const pEnd = () => {

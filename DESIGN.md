@@ -112,11 +112,14 @@ Exact numbers live in core/state.js.
   beyond the card on that same side (fish, card, leader line, box in
   one row, ~130px gap, compressing on narrow windows), so nothing
   covers the fish. The whole arrangement re-anchors on window resize.
-  Step 1 spotlights the card's life bar: "Fish dies when the life
-  timer reaches 0, and grants Soul which is used for Research" -> Next.
-  Step 2 spotlights the card's hunger bar: "This is their hunger bar.
+  Three steps, the swimming fish itself framed and undimmed through
+  all of them (a second mask cutout).
+  Step 1 spotlights the fish: "Paperfish do not live long." -> Oh no.
+  Step 2 spotlights the card's life bar: "But they still have a soul
+  and will grant Soul Points once their life bar reaches 0" -> I see.
+  Step 3 spotlights the card's hunger bar: "This is their hunger bar.
   Starving fish do not grant soul. Click any empty space to drop
-  food" -> Sure, and the game resumes. Both
+  food" -> Sure, and the game resumes. All
   lines are CEO-dictated copy, verbatim. Feeding stays locked until
   Sure. During any tutorial an ink scrim dims the screen with an exact
   rectangular cutout on the subject, framed by a seal-red hairline; a
