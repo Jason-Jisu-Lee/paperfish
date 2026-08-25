@@ -6,8 +6,6 @@ const Panel = (() => {
   const upGrid = document.getElementById('up-grid');
   const fishGrid = document.getElementById('fish-grid');
   const uptip = document.getElementById('uptip');
-  const eiModal = document.getElementById('egginfo-modal');
-  const eiBody = document.getElementById('ei-body');
   const railFood = document.getElementById('rail-food');
   const railIncome = document.getElementById('rail-income');
   const railLife = document.getElementById('rail-life');
@@ -72,7 +70,6 @@ const Panel = (() => {
 
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
-        <span class="ubtn-info" data-info>i</span>
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
         <span class="ubtn-cost">${fmt(eggCost())} G</span>
         <i class="eggcd" hidden></i>
@@ -149,21 +146,7 @@ const Panel = (() => {
       if (u && u.buy()) refresh();
       return;
     }
-    if (e.target.closest('[data-info]')) {
-      const m = maxTier();
-      eiBody.innerHTML = TIER_FISH.map((arr, i) =>
-        `<div class="ei-tier">Tier ${i + 1}<span class="ei-pct">${i + 1 > m ? 'Locked' : fmtPct(tierChance(i + 1))}</span></div>` +
-        arr.map(s => `<div class="ei-row">${thumb(s)}<span>${Game.seen[s] ? SPECIES[s].name : '???'}</span></div>`).join('')
-      ).join('');
-      eiModal.removeAttribute('hidden');
-      return;
-    }
     if (e.target.closest('[data-egg]') && buyEgg()) refresh();
-  });
-
-  document.getElementById('ei-x').addEventListener('click', () => eiModal.setAttribute('hidden', ''));
-  eiModal.addEventListener('click', e => {
-    if (e.target === eiModal) eiModal.setAttribute('hidden', '');
   });
 
   upGrid.addEventListener('click', e => {
@@ -185,26 +168,22 @@ const Panel = (() => {
       uptip.removeAttribute('hidden');
       return;
     }
-    const info = e.target.closest('[data-info]');
-    if (info) {
-      uptip.classList.remove('cap');
-      uptip.textContent = 'Egg tier details';
-      const r = info.getBoundingClientRect();
-      uptip.style.right = 'auto';
-      uptip.style.top = (r.top - 4) + 'px';
-      uptip.style.left = (r.right + 12) + 'px';
-      uptip.removeAttribute('hidden');
-      return;
-    }
     const ub = e.target.closest('[data-key]');
     const eb = e.target.closest('[data-egg]');
     if (!ub && !eb) return;
-    uptip.classList.remove('cap');
+    uptip.classList.remove('cap', 'eggtip');
     if (ub) {
       const u = UPS.find(x => x.key === ub.dataset.key);
       uptip.innerHTML = (u.icon ? u.name + '<br>' : '') + u.desc + '<br>' + u.cur();
+    } else if (living() >= FIRSTF_CAP) {
+      uptip.textContent = 'Max ' + FIRSTF_CAP + ' fish';
     } else {
-      uptip.textContent = living() >= FIRSTF_CAP ? 'Max ' + FIRSTF_CAP + ' fish' : 'Buy an egg';
+      const m = maxTier();
+      uptip.classList.add('eggtip');
+      uptip.innerHTML = TIER_FISH.map((arr, i) =>
+        `<div class="ei-tier" style="color:rgb(${TIER_TINT[i]})">Tier ${i + 1}<span class="ei-pct">${i + 1 > m ? 'Locked' : fmtPct(tierChance(i + 1))}</span></div>` +
+        arr.map(s => `<div class="ei-row">${thumb(s)}<span>${Game.seen[s] ? SPECIES[s].name : '???'}</span></div>`).join('')
+      ).join('');
     }
     const r = (ub || eb).getBoundingClientRect();
     uptip.style.right = 'auto';

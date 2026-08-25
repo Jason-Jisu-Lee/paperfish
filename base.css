@@ -838,26 +838,13 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   100%{ transform:translate(-5px, -110vh); opacity:0; }
 }
 
-.ubtn-info{
-  position:absolute; top:7px; right:8px;
-  width:20px; height:20px; border-radius:50%;
-  border:1.5px solid rgba(28,27,24,.65);
-  background:rgba(255,255,255,.75);
-  color:rgba(28,27,24,.85);
-  font-size:12.5px; font-weight:700; font-family:'Zen Maru Gothic',sans-serif;
-  line-height:1;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  box-shadow:0 1px 3px rgba(28,27,24,.15);
-  transition:border-color .2s ease, color .2s ease, background .2s ease;
-}
-.ubtn-info:hover{ border-color:var(--seal); color:var(--seal); background:rgba(180,58,43,.07); }
-.egginfo-card{ width:340px; }
+#uptip.eggtip{ max-width:310px; }
 .ei-tier{
   display:flex; align-items:baseline;
-  font-size:11px; letter-spacing:.24em; text-transform:uppercase;
-  color:rgba(28,27,24,.55); margin:16px 2px 8px;
+  font-size:13.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  margin:14px 2px 8px;
 }
+#uptip .ei-tier:first-child{ margin-top:4px; }
 .ei-row + .ei-row{ margin-top:6px; }
 .ei-row{
   display:flex; align-items:center; gap:13px; font-size:15px;

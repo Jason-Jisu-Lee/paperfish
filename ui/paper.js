@@ -169,14 +169,14 @@ const Paper = (() => {
       for (const t of TIERS) {
         const ups = t.ups.filter(shown);
         if (!ups.length) continue;
-        h += `<div class="p-cat">Tier ${t.tier}</div>` +
+        h += `<div class="p-cat" style="color:rgb(${TIER_TINT[t.tier - 1]})">Tier ${t.tier}</div>` +
           `<div class="p-grid">${ups.map(u => card(u, false)).join('')}</div>`;
       }
     } else {
       TIER_FISH.forEach((arr, i) => {
         h += `<div class="fi-head">
             <span class="fi-seal">${i + 1}</span>
-            <span class="fi-t">Tier ${i + 1}</span>
+            <span class="fi-t" style="color:rgb(${TIER_TINT[i]})">Tier ${i + 1}</span>
             <span class="fi-count">${arr.filter(seen).length} / ${arr.length}</span>
           </div>
           <div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
