@@ -655,7 +655,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   0%,100%{ text-shadow:0 0 18px rgba(62,84,110,.15); }
   50%{ text-shadow:0 0 30px rgba(62,84,110,.35); }
 }
-.pr-drop{ width:.42em; height:.42em; margin-right:.16em; }
+.pr-paper{ display:flex; align-items:center; justify-content:center; gap:.18em; }
+.pr-drop{ width:.55em; height:.55em; flex:none; }
 .pr-drop path{ fill:none; stroke:#3e546e; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
 .pr-tabs{ display:flex; justify-content:center; gap:7px; margin:34px 0 8px; }
 .pr-tabs button{
@@ -731,7 +732,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   text-align:left;
 }
 .prm-n{ display:flex; align-items:center; gap:9px; }
-.prm-n svg{ width:16px; height:16px; flex:none; }
+.prm-n svg{ width:20px; height:20px; flex:none; }
 .prm-n path{ fill:none; stroke:#3e546e; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
 .prm-n b{
   font-family:'Shippori Mincho',serif; font-weight:500;
