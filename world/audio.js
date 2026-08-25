@@ -1,61 +1,24 @@
 const Music = (() => {
-  const SRC = {
-    front: 'audio/Canon in D Major.mp3',
-    game: 'audio/Two Harps from 13s.mp3',
-    shop: 'audio/Equatorial Complex.mp3'
-  };
-  const LEVEL = { front: 0.8, game: 0.8, shop: 0.8, duck: 0.25 };
-  const els = {};
-  for (const name of Object.keys(SRC)) {
-    const el = new Audio(SRC[name]);
-    el.loop = true;
-    el.preload = 'auto';
-    els[name] = el;
-  }
-  const tracks = {};
-  let ctx = null, master = null, mode = 'front', fadeId = 0;
-
-  const track = name => {
-    if (tracks[name]) return tracks[name];
-    const el = els[name];
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 20000;
-    const gain = ctx.createGain();
-    gain.gain.value = 0;
-    ctx.createMediaElementSource(el).connect(filter);
-    filter.connect(gain);
-    gain.connect(master);
-    tracks[name] = { el, filter, gain };
-    return tracks[name];
-  };
+  const el = new Audio('audio/original/Equatorial Complex.mp3');
+  el.loop = true;
+  el.preload = 'auto';
+  let ctx = null, master = null, gain = null, mode = 'off', fadeId = 0;
 
   const apply = () => {
     if (!ctx) return;
-    const t = ctx.currentTime;
-    const want = {
-      front: mode === 'front' ? LEVEL.front : 0,
-      game: mode === 'game' ? LEVEL.game : mode === 'shop' ? LEVEL.duck : 0,
-      shop: mode === 'shop' ? LEVEL.shop : 0
-    };
-    for (const name of Object.keys(SRC)) {
-      const tr = track(name);
-      if (want[name]) tr.el.play().catch(() => {});
-      tr.gain.gain.setTargetAtTime(want[name], t, 0.35);
-      tr.filter.frequency.setTargetAtTime(name === 'game' && mode === 'shop' ? 500 : 20000, t, 0.3);
-    }
+    const on = mode === 'shop';
+    if (on) el.play().catch(() => {});
+    gain.gain.setTargetAtTime(on ? 0.8 : 0, ctx.currentTime, 0.35);
     const id = ++fadeId;
     setTimeout(() => {
-      if (id !== fadeId) return;
-      for (const name of Object.keys(tracks)) if (!want[name]) tracks[name].el.pause();
+      if (id === fadeId && mode !== 'shop') el.pause();
     }, 1400);
   };
 
   const stilled = () => typeof Pause !== 'undefined' && Pause.paused;
   const live = () => (!window.paperfish || paperfish.sound) && !stilled();
   const sync = () => {
-    if (!ctx) return;
-    master.gain.setTargetAtTime(live() ? 1 : 0, ctx.currentTime, 0.3);
+    if (ctx) master.gain.setTargetAtTime(live() ? 1 : 0, ctx.currentTime, 0.3);
   };
   document.addEventListener('pausechange', sync);
 
@@ -66,6 +29,10 @@ const Music = (() => {
     master.connect(ctx.destination);
     master.gain.value = 0;
     master.gain.setTargetAtTime(live() ? 1 : 0, ctx.currentTime, 1.1);
+    gain = ctx.createGain();
+    gain.gain.value = 0;
+    ctx.createMediaElementSource(el).connect(gain);
+    gain.connect(master);
     apply();
   };
   for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown']) {
@@ -79,14 +46,5 @@ const Music = (() => {
     apply();
   };
 
-  let gameHold = 0;
-  const game = () => {
-    clearTimeout(gameHold);
-    set('gamewait');
-    gameHold = setTimeout(() => {
-      if (mode === 'gamewait') set('game');
-    }, 3000);
-  };
-
-  return { front: () => set('front'), game, shop: () => set('shop'), sync };
+  return { front: () => set('off'), game: () => set('off'), shop: () => set('shop'), sync };
 })();
