@@ -224,7 +224,7 @@ const Stage = (() => {
     f.kickTop = Math.max(f.target, f.spd) * 1.05;
   };
 
-  let tNow = 0, topZone = null, zoneT = 0, btnZones = [];
+  let tNow = 0, topZone = null, zoneT = 0, btnZones = [], btnUnion = null;
 
   const btnBoxes = () => {
     const out = [];
@@ -254,7 +254,14 @@ const Stage = (() => {
     if (!mdt) return;
     tNow += mdt;
     zoneT -= mdt;
-    if (zoneT <= 0) { zoneT = 0.5; topZone = topBoxes(); btnZones = btnBoxes(); }
+    if (zoneT <= 0) {
+      zoneT = 0.5;
+      topZone = topBoxes();
+      btnZones = btnBoxes();
+      btnUnion = btnZones.length
+        ? btnZones.reduce((a, z) => ({ l: Math.min(a.l, z.l), r: Math.max(a.r, z.r), t: Math.min(a.t, z.t), b: Math.max(a.b, z.b) }), { l: 1e9, r: -1e9, t: 1e9, b: -1e9 })
+        : null;
+    }
     for (const f of Game.fish) {
       if (f.pop) f.pop = Math.max(f.pop - mdt, 0);
       if (f.egg) { f.ph += mdt * 2.6; continue; }
@@ -472,6 +479,10 @@ const Stage = (() => {
       } else {
         p.rest = (p.rest || 0) + mdt;
         if (p.rest > 12) pellets.splice(i, 1);
+      }
+      if (btnUnion && p.x > btnUnion.l && p.x < btnUnion.r && p.y > btnUnion.t && p.y < btnUnion.b) {
+        p.x = Math.min(p.x + 120 * mdt, bounds.r - 8);
+        p.rest = 0;
       }
     }
     updatePops(mdt);
