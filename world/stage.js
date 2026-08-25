@@ -574,8 +574,9 @@ const Stage = (() => {
     ctx.lineWidth = (1.55 * (sp.swf || 1)) / sc;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = 'rgba(28,27,24,' + alpha + ')';
-    ctx.fillStyle = 'rgba(28,27,24,' + alpha + ')';
+    const tc = sp.tint || '28,27,24';
+    ctx.strokeStyle = 'rgba(' + tc + ',' + alpha + ')';
+    ctx.fillStyle = 'rgba(' + tc + ',' + alpha + ')';
 
     if (dying) {
       if (sp.mirror) {

@@ -47,5 +47,17 @@ const SPECIES = [
     file: 'angler', name: 'twelfthF', vb: [112, 70], sw: 4.5, len: 96, mirror: true,
     paths: ['M60 14 C84 12 102 26 100 42 C98 56 82 64 62 62 C46 60 32 52 26 42 L8 50 C12 58 24 60 34 58 C42 62 52 63 62 62', 'M14 50 L18 54 L22 48 L27 53', 'M52 15 C42 6 28 2 16 7'],
     dots: [{ cx: 13, cy: 9, r: 5.5 }]
+  },
+  {
+    file: 'paperminnow', name: 'firstF2', vb: [340, 200], sw: 6.5, len: 74, tint: '62,84,110',
+    paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
+  },
+  {
+    file: 'paperminnow', name: 'firstF3', vb: [340, 200], sw: 6.5, len: 74, tint: '180,58,43',
+    paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
+  },
+  {
+    file: 'paperminnow', name: 'firstF4', vb: [340, 200], sw: 6.5, len: 74, tint: '138,109,31',
+    paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
   }
 ];

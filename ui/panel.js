@@ -47,8 +47,9 @@ const Panel = (() => {
 
   const thumb = s => {
     const sp = SPECIES[s];
-    let inner = sp.paths.map(d => `<path d="${d}" vector-effect="non-scaling-stroke"/>`).join('');
-    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    const st = sp.tint ? ` style="stroke:rgb(${sp.tint})"` : '';
+    let inner = sp.paths.map(d => `<path d="${d}" vector-effect="non-scaling-stroke"${st}/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"${sp.tint ? ` style="fill:rgb(${sp.tint})"` : ''}/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
     return `<span class="thumb"><svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg></span>`;
   };

@@ -10,7 +10,8 @@ until a number lands here.
 
 | metric | T1 | T2 | T3 | T4 |
 |---|---|---|---|---|
-| species | firstF | secondF, fourthF, fifthF, thirdF | eighthF, ninthF, tenthF | eleventhF, twelfthF |
+| species | firstF | firstF2, secondF, fourthF, fifthF, thirdF | firstF3, eighthF, ninthF, tenthF | firstF4, eleventhF, twelfthF |
+| tier color | ink | indigo (62,84,110) | seal (180,58,43) | gold (138,109,31) |
 | base gold / 5s | 1 | 3 | 9 | 27 |
 | base soul on death | 1 | 3 | 12 | 60 |
 | lifespan | 20.00s | | | |
@@ -18,6 +19,8 @@ until a number lands here.
 | egg hatch time | 8.00s | | | |
 | adult at | 30.00s | | | |
 
+- every tier opens with a basic fish: the paperminnow shape recolored
+  in the tier color (firstF2-4), carrying the tier's base stats
 - gold: base 3^(tier-1) per 5s (fishIncome in state.js); income
   upgrades add flat on top; the 3x base is a placeholder, per-fish
   tuning comes later

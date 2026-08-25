@@ -27,8 +27,9 @@ const Detail = (() => {
   const EGGART = '<svg viewBox="-26 -32 52 64" class="eggart"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>';
   const fishArt = s => {
     const sp = SPECIES[s];
-    let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
-    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    const st = sp.tint ? ` style="stroke:rgb(${sp.tint})"` : '';
+    let inner = sp.paths.map(d => `<path d="${d}"${st}/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"${sp.tint ? ` style="fill:rgb(${sp.tint})"` : ''}/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
     return `<svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg>`;
   };

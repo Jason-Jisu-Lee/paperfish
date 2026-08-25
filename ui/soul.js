@@ -115,8 +115,9 @@ const Soul = (() => {
   const fiCard = s => {
     const sp = SPECIES[s];
     const known = seen(s);
-    let inner = sp.paths.map(d => `<path d="${d}"/>`).join('');
-    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"/>`).join('');
+    const st = known && sp.tint ? ` style="stroke:rgb(${sp.tint})"` : '';
+    let inner = sp.paths.map(d => `<path d="${d}"${st}/>`).join('');
+    if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"${known && sp.tint ? ` style="fill:rgb(${sp.tint})"` : ''}/>`).join('');
     if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
     return `
       <div class="fi-card${known ? '' : ' unknown'}"${known ? ` data-fi="${s}"` : ''}>
