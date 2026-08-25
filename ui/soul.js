@@ -32,30 +32,30 @@ const Soul = (() => {
     { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'Tier 3 and higher adults earn 1.2x the gold of a baby.',
       lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
       max: () => Game.pAdultGold >= 1, once: 1,
-      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Soul collected' },
+      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Paper collected' },
     { key: 'pKelp', ico: 'kelp', name: 'Starting Kelp', desc: 'Begin every dive with 1 more kelp already floating.',
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
       max: () => Game.pKelp >= PKELP_MAX,
       reveal: () => !!Game.unlocks.kelp, revealText: 'Own Unlock Kelp' },
-    { key: 'soulUp', ico: 'soul', name: 'Extra Soul', desc: 'Every fish leaves 1 more soul when it dies.',
+    { key: 'soulUp', ico: 'soul', name: 'Extra Paper', desc: 'Every fish leaves 1 more paper when it dies.',
       lvl: () => Game.soulUp, cost: soulUpCost, buy: () => Game.soulUp++,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'pBurn', ico: 'soul', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
       lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
       max: () => Game.pBurn >= 1, once: 1,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
       max: () => Game.pLantGold >= PLANTGOLD_MAX,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'lantFish', ico: 'curious', name: 'Curious Fish', desc: 'Tier 1 fish may tap a passing lantern once themselves, 4% more likely per level.',
       lvl: () => Game.pLantFish, cost: pLantFishCost, buy: () => Game.pLantFish++,
       max: () => Game.pLantFish >= PLANTFISH_MAX,
-      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Soul collected' },
+      reveal: () => Game.soulsEarned >= 200, revealText: 'Reach 200 Paper collected' },
     { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
       lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
       max: () => Game.pLantRate >= PLANTRATE_MAX,
-      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Soul collected' },
+      reveal: () => Game.soulsEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1, once: 1 }
@@ -98,7 +98,7 @@ const Soul = (() => {
     ['Fish', 'fish', ['autoEgg']],
     ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
-    ['Soul', 'soul', ['soulUp', 'pBurn']],
+    ['Paper', 'soul', ['soulUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
 
@@ -115,7 +115,7 @@ const Soul = (() => {
         ${lv > 0 && !u.once ? `<span class="pc-lv">${lv}</span>` : ''}
         <span class="pc-ico">${locked ? ICO.lock : ICO[u.ico]}</span>
         <span class="pc-name">${locked ? 'Locked' : u.name}</span>
-        <span class="pc-cost">${locked ? '&mdash;' : maxed ? (u.once ? '<svg class="pc-done" viewBox="0 0 24 24"><path d="M5.5 12.5 L10 17 L18.5 7.5"/></svg>' : 'Max') : fmtG(u.cost()) + ' Soul'}</span>
+        <span class="pc-cost">${locked ? '&mdash;' : maxed ? (u.once ? '<svg class="pc-done" viewBox="0 0 24 24"><path d="M5.5 12.5 L10 17 L18.5 7.5"/></svg>' : 'Max') : fmtG(u.cost()) + ' Paper'}</span>
       </button>`;
   };
 
@@ -248,7 +248,7 @@ const Soul = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} soul`;
+        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${soulYieldOf(s)} paper`;
       placeTip(fi);
       return;
     }

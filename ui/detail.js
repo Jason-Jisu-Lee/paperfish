@@ -121,7 +121,7 @@ const Detail = (() => {
     const row = e.target.closest('[data-hint]');
     if (!row) return;
     uptip.classList.remove('cap');
-    uptip.textContent = 'soul granted on death, none while starving';
+    uptip.textContent = 'paper granted on death, none while starving';
     const r = row.getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.left = r.left + 'px';

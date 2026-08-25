@@ -24,7 +24,7 @@ const Obj = (() => {
     }
     txt.textContent = cur.text;
     showCount();
-    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.soul ? ' Soul' : ' G');
+    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.soul ? ' Paper' : ' G');
     rewardEl.classList.toggle('objsoul', !!cur.soul);
     rewardEl.style.transform = '';
     rewardEl.style.opacity = '';

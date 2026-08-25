@@ -63,8 +63,8 @@ const Tut = (() => {
 
   const I_STEPS = [
     ['fish', 'Paperfish do not live long.', 'Oh no'],
-    ['fc-lbar', 'But they still have a soul and will grant Soul Points once their life bar reaches 0', 'I see'],
-    ['fc-hun', 'This is their hunger bar.<br>Starving fish do not grant soul.<br>Click any empty space to drop food', 'Sure']
+    ['fc-lbar', 'But they still have a soul and will grant Paper Points once their life bar reaches 0', 'I see'],
+    ['fc-hun', 'This is their hunger bar.<br>Starving fish do not grant paper.<br>Click any empty space to drop food', 'Sure']
   ];
   let istep = -1;
   let iside = 'right', ifish = null;
