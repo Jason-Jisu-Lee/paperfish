@@ -78,20 +78,22 @@ const Paper = (() => {
       max: () => !!Game.unlocks.income, once: 1 },
     { key: 'u_kelp', ico: 'kelp', name: 'Unlock Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
-      max: () => !!Game.unlocks.kelp, once: 1 },
+      max: () => !!Game.unlocks.kelp, once: 1,
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
       lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup, once: 1 },
-    { key: 'u_life', ico: 'life', name: 'Unlock Lifespan', desc: 'Unlock in-run Lifespan.',
-      lvl: () => Game.unlocks.life, cost: () => UNLOCK_COST, buy: () => Game.unlocks.life = 1,
-      max: () => !!Game.unlocks.life, req: () => !!Game.unlocks.kelp, once: 1 }
+    { key: 'u_mature', ico: 'life', name: 'Unlock Maturity', desc: 'Fish mature 5% faster.',
+      lvl: () => Game.pMature, cost: pMatureCost, buy: () => Game.pMature++,
+      max: () => Game.pMature >= PMATURE_MAX,
+      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' }
   ];
 
   const U_SECTS = [
     ['Fish', 'fish', ['u_eggup']],
     ['Income', 'income', ['u_income']],
     ['Food', 'kelp', ['u_kelp']],
-    ['Life', 'life', ['u_life']]
+    ['Life', 'life', ['u_mature']]
   ];
 
   const M_SECTS = [

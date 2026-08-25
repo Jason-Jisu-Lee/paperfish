@@ -15,6 +15,7 @@ const Game = {
   pLantFish: 0,
   pAutoEgg: 0,
   pAdultGold: 0,
+  pMature: 0,
   autoEggOn: 1,
   hideDone: 1,
   paperEarned: 0,
@@ -70,7 +71,7 @@ const PAPER_BASE = [1, 3, 12, 60];
 const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
 const UNLOCK_COST = 5;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
-const adultAtOf = () => 30 / 60;
+const adultAtOf = () => 30 * (1 - 0.05 * Game.pMature) / 60;
 const HUNGER_FULL = 30;
 const HUNGER_HATCH = 24;
 const HUNGER_FIRST = 18;
@@ -114,7 +115,9 @@ const pLantFishCost = () => 200 * 2 ** Game.pLantFish;
 const pAutoEggCost = () => 50;
 const pAdultGoldCost = () => 100;
 const pBurnCost = () => 500;
-const KELP_UNLOCK_COST = 100;
+const KELP_UNLOCK_COST = 50;
+const PMATURE_MAX = 4;
+const pMatureCost = () => 100 * 2 ** Game.pMature;
 
 const doBurn = () => {
   if (!Game.pBurn || Game.burnUsed || !Game.started) return false;
@@ -165,6 +168,7 @@ const saveGame = () => {
       plf: Game.pLantFish,
       pae: Game.pAutoEgg,
       pag: Game.pAdultGold,
+      pm: Game.pMature,
       aeo: Game.autoEggOn ? 1 : 0,
       hd: Game.hideDone ? 1 : 0,
       se: Math.round(Game.paperEarned),
@@ -209,6 +213,7 @@ const loadGame = () => {
     Game.pLantFish = d.plf || 0;
     Game.pAutoEgg = d.pae || 0;
     Game.pAdultGold = d.pag || 0;
+    Game.pMature = d.pm || 0;
     Game.autoEggOn = d.aeo ?? 1;
     Game.hideDone = d.hd ?? 1;
     Game.paperEarned = d.se ?? (d.paper || 0) + (d.bank || 0);
