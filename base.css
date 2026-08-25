@@ -641,13 +641,12 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 @keyframes prfade{ from{ opacity:0; } }
 .pr-inner{
   max-width:920px; margin:0 auto;
-  padding:9vh 26px 150px;
+  padding:3vh 26px 150px;
   text-align:center;
 }
 .pr-souls{
   font-family:'Shippori Mincho',serif; font-weight:500;
   font-size:clamp(58px, 7vw, 86px); letter-spacing:.03em;
-  margin-top:18px;
   color:#3e546e;
   text-shadow:0 0 26px rgba(62,84,110,.25);
   animation:soulglow 3.2s ease-in-out infinite;
@@ -656,10 +655,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   0%,100%{ text-shadow:0 0 18px rgba(62,84,110,.15); }
   50%{ text-shadow:0 0 30px rgba(62,84,110,.35); }
 }
-.pr-lab{
-  font-family:'Zen Maru Gothic',sans-serif; font-size:17px; font-weight:500;
-  letter-spacing:.24em; color:rgba(62,84,110,.7); margin-left:12px; vertical-align:middle;
-}
+.pr-drop{ width:.42em; height:.42em; margin-right:.16em; }
+.pr-drop path{ fill:none; stroke:#3e546e; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
 .pr-tabs{ display:flex; justify-content:center; gap:7px; margin:34px 0 8px; }
 .pr-tabs button{
   font-size:13px; letter-spacing:.1em; text-transform:uppercase;
@@ -730,24 +727,21 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   border-color:rgba(180,58,43,.45);
 }
 .pr-metric{
-  position:fixed; top:24px; left:28px; z-index:1;
-  display:flex; align-items:center; gap:13px;
-  padding:12px 20px 12px 16px;
-  background:rgba(255,255,255,.7);
-  border:1px solid rgba(62,84,110,.3); border-radius:14px;
-  box-shadow:0 2px 8px rgba(28,27,24,.07);
+  position:fixed; top:22px; left:30px; z-index:1;
+  text-align:left;
 }
-.pr-metric svg{ width:24px; height:24px; flex:none; }
-.pr-metric path{ fill:none; stroke:#3e546e; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-.pr-metric b{
-  display:block;
+.prm-n{ display:flex; align-items:center; gap:9px; }
+.prm-n svg{ width:16px; height:16px; flex:none; }
+.prm-n path{ fill:none; stroke:#3e546e; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.prm-n b{
   font-family:'Shippori Mincho',serif; font-weight:500;
-  font-size:24px; line-height:1.15; letter-spacing:.03em;
+  font-size:30px; line-height:1.1; letter-spacing:.03em;
   color:#3e546e; font-feature-settings:'tnum';
 }
-.pr-metric span{
-  font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
-  color:rgba(28,27,24,.68);
+.pr-metric > span{
+  display:block; margin-top:3px;
+  font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(28,27,24,.62);
 }
 .pctip{
   position:fixed; z-index:60;

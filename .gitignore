@@ -1,4 +1,5 @@
-CLAUDE.md
+*.md
+demo-*.html
 Thumbs.db
 .DS_Store
 desktop.ini
