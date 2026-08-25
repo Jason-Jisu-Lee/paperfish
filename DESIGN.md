@@ -114,9 +114,9 @@ Exact numbers live in core/state.js.
   covers the fish. The whole arrangement re-anchors on window resize.
   Step 1 spotlights the card's life bar: "Fish dies when the life
   timer reaches 0, and grants Soul which is used for Research" -> Next.
-  Step 2 spotlights the card's hunger bar: "Fish gets Hungry, and then
-  Starving as hunger bar drops. Starving fish do not grant soul. Click
-  empty space to feed the fish" -> Sure, and the game resumes. Both
+  Step 2 spotlights the card's hunger bar: "This is their hunger bar.
+  Starving fish do not grant soul. Click any empty space to drop
+  food" -> Sure, and the game resumes. Both
   lines are CEO-dictated copy, verbatim. Feeding stays locked until
   Sure. During any tutorial an ink scrim dims the screen with an exact
   rectangular cutout on the subject, framed by a seal-red hairline; a
