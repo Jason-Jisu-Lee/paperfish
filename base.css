@@ -662,9 +662,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .pr-tabs{ display:flex; justify-content:center; gap:7px; margin:34px 0 8px; }
 .pr-tabs button{
-  font-size:11.5px; letter-spacing:.18em; text-transform:uppercase;
+  font-size:13px; letter-spacing:.1em; text-transform:uppercase;
   padding:9px 22px; border-radius:999px;
-  color:rgba(28,27,24,.5);
+  color:rgba(28,27,24,.68);
   border:1px solid transparent;
   transition:color .2s ease, border-color .2s ease, background .2s ease;
 }
@@ -676,11 +676,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .pc-done path{ fill:none; stroke:var(--seal); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
 .pcard.hiding{ transition:opacity .2s ease, transform .2s ease; opacity:0; transform:scale(.85); pointer-events:none; }
 .p-cat{
-  font-size:14px; letter-spacing:.34em; text-transform:uppercase;
-  color:rgba(28,27,24,.85);
+  font-size:17px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(28,27,24,.92);
   margin:38px 0 18px;
 }
-.p-cat svg{ width:18px; height:18px; opacity:.85; vertical-align:-4px; margin-right:9px; }
+.p-cat svg{ width:20px; height:20px; opacity:.9; vertical-align:-4.5px; margin-right:9px; }
 .p-cat svg path, .p-cat svg circle, .p-cat svg rect{ fill:none; stroke:var(--ink); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .p-cat.dim{ opacity:.4; }
 .p-grid{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
@@ -714,8 +714,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   stroke-linecap:round; stroke-linejoin:round;
 }
 .pcard.owned .pc-ico path, .pcard.owned .pc-ico circle, .pcard.owned .pc-ico rect{ stroke:#3e546e; }
-.pc-name{ font-size:14.5px; letter-spacing:.04em; }
-.pc-cost{ font-size:13.5px; font-weight:500; color:#3e546e; font-feature-settings:'tnum'; }
+.pc-name{ font-size:16px; letter-spacing:.03em; color:rgba(28,27,24,.95); }
+.pc-cost{ font-size:15px; font-weight:500; color:#3e546e; font-feature-settings:'tnum'; }
 .pc-lv{
   position:absolute; top:-8px; right:-6px;
   min-width:24px; height:24px; padding:0 6px;
@@ -739,8 +739,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   font-size:27px; letter-spacing:.03em;
 }
 .pr-metric span{
-  font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
-  color:rgba(28,27,24,.55);
+  font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(28,27,24,.7);
 }
 .pctip{
   position:fixed; z-index:60;
@@ -748,12 +748,12 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   background:var(--paper);
   border:1px solid rgba(28,27,24,.3); border-radius:10px;
   box-shadow:0 6px 20px rgba(28,27,24,.16);
-  padding:11px 14px;
-  font-size:12px; line-height:1.65; letter-spacing:.02em;
-  color:rgba(28,27,24,.9);
+  padding:12px 15px;
+  font-size:13.5px; line-height:1.65; letter-spacing:.02em;
+  color:rgba(28,27,24,.92);
   pointer-events:none;
 }
-.pct-name{ display:block; font-size:13.5px; letter-spacing:.05em; color:#3e546e; margin-bottom:4px; }
+.pct-name{ display:block; font-size:15px; letter-spacing:.04em; color:#3e546e; margin-bottom:4px; }
 .fi-head{
   display:flex; align-items:center; gap:12px;
   width:642px; max-width:92vw; margin:40px auto 16px;
@@ -766,8 +766,8 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   font-size:12px; font-weight:500;
   display:flex; align-items:center; justify-content:center;
 }
-.fi-t{ font-size:11.5px; letter-spacing:.3em; text-transform:uppercase; color:rgba(28,27,24,.6); }
-.fi-count{ margin-left:auto; font-size:12px; color:rgba(28,27,24,.42); font-feature-settings:'tnum'; }
+.fi-t{ font-size:14px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(28,27,24,.85); }
+.fi-count{ margin-left:auto; font-size:13.5px; color:rgba(28,27,24,.6); font-feature-settings:'tnum'; }
 .fi-grid{
   display:grid; grid-template-columns:repeat(auto-fit, 150px);
   gap:14px; justify-content:center;
@@ -790,7 +790,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fi-card.unknown path{ stroke:rgba(28,27,24,.2); }
 .fi-card.unknown .dot{ fill:rgba(28,27,24,.2); }
 .fi-q{ font-size:32px; color:rgba(28,27,24,.22); }
-.fi-name{ font-size:12.5px; letter-spacing:.05em; }
+.fi-name{ font-size:14px; letter-spacing:.04em; }
 .fi-card.unknown .fi-name{ color:rgba(28,27,24,.38); letter-spacing:.24em; }
 
 .pr-dive{
