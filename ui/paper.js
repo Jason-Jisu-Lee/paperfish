@@ -13,7 +13,7 @@ const Paper = (() => {
     gold: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><rect x="9.8" y="9.8" width="4.4" height="4.4" rx=".5"/></svg>',
     income: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.2"/><path d="M12 8 V16"/><path d="M8 12 H16"/></svg>',
     kelp: '<svg viewBox="0 0 24 24"><path d="M12 21.5 C8.6 17.4 8.4 13.2 9.6 9.6 C10.3 7.1 11.3 4.9 12.8 2.9 C14.5 5.2 15.1 8 14.6 10.9 C14.1 14.2 13.9 17.9 12 21.5 Z"/><path d="M12.1 19 C11.7 15.4 11.9 11.6 12.6 5.8"/></svg>',
-    paper: '<svg viewBox="0 0 24 24"><g transform="rotate(9 12 12)"><path d="M5.5 5.5 H15.5 L18.5 8.5 V18.5 H5.5 Z"/><path d="M15.5 5.5 V8.5 H18.5"/></g></svg>',
+    paper: '<svg viewBox="0 0 24 24"><path d="M2.5 12 L10 4.5 L21 8 L16.5 12 L21 16 L10 19.5 Z"/><path d="M2.5 12 L16.5 12"/></svg>',
     life: '<svg viewBox="0 0 24 24"><path d="M12 21 C12 18 12 16 12 13.5"/><path d="M12 13.5 C6.5 13.5 5 9.5 4.8 6.2 C9.8 6.6 11.8 9.8 12 13.5 Z"/><path d="M12 13.5 C16.2 13.2 17.6 10.4 18 7.6 C14.2 8 12.3 10.4 12 13.5 Z"/></svg>',
     egg: '<svg viewBox="-23 -29 46 58"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>',
     lock: '<svg viewBox="0 0 24 24"><rect x="5.5" y="10.8" width="13" height="8.7" rx="2"/><path d="M8.6 10.8 V8.4 a3.4 3.4 0 0 1 6.8 0 V10.8"/></svg>',
@@ -137,6 +137,9 @@ const Paper = (() => {
       </div>`;
   };
 
+  const phCard = (code, name) => `<div class="fi-card unknown"><span class="fi-art fi-ph">${code}</span><span class="fi-name">${name}</span></div>`;
+  const unkCard = '<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span></div>';
+
   const complete = u => !!(u.max && u.max());
   const shown = u => (Game.devMode || !u.reveal || u.reveal()) && !(Game.hideDone && complete(u));
   const hideBtn = document.getElementById('p-hidedone');
@@ -179,7 +182,7 @@ const Paper = (() => {
             <span class="fi-t" style="color:rgb(${TIER_TINT[i]})">Tier ${i + 1}</span>
             <span class="fi-count">${arr.filter(seen).length} / ${arr.length}</span>
           </div>
-          <div class="fi-grid">${arr.map(fiCard).join('')}</div>`;
+          <div class="fi-grid">${arr.map(fiCard).join('')}${i === 3 ? phCard('OrigamiC', 'Origami Crane') : ''}</div>`;
       });
       for (let t = TIER_FISH.length + 1; t <= 6; t++) {
         h += `<div class="fi-head">
@@ -187,7 +190,7 @@ const Paper = (() => {
             <span class="fi-t">Tier ${t}</span>
             <span class="fi-count">0 / 2</span>
           </div>
-          <div class="fi-grid">${'<div class="fi-card unknown"><span class="fi-art fi-q">?</span><span class="fi-name">???</span></div>'.repeat(2)}</div>`;
+          <div class="fi-grid">${(t === 5 ? phCard('PaperB', 'Paper Boat') : unkCard) + unkCard}</div>`;
       }
     }
     list.innerHTML = h;
