@@ -888,26 +888,29 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   background:var(--paper);
   border:1px solid rgba(180,58,43,.6);
   box-shadow:0 8px 24px rgba(28,27,24,.18);
-  padding:18px 24px;
+  padding:20px 26px;
   width:max-content;
-  max-width:340px;
+  max-width:360px;
   text-align:center;
   transition:left .5s ease, top .5s ease;
 }
 .tutbox.up{ transform:translate(-50%, -100%); }
 .tutbox.right{ transform:translate(0, -50%); }
 .tutbox.left{ transform:translate(-100%, -50%); }
-.tut-text{ font-size:14px; letter-spacing:.03em; line-height:1.8; }
+.tut-text{ font-size:16px; letter-spacing:.03em; line-height:1.7; }
+.tut-text b{ color:var(--seal); font-weight:700; }
 #tut-next{
-  margin-top:14px;
-  padding:9px 32px;
+  display:block;
+  margin:16px auto 0;
+  padding:10px 34px;
   background:var(--ink);
   color:var(--paper);
   border:0;
   border-radius:999px;
   font-family:'Zen Maru Gothic',sans-serif;
-  font-size:12.5px;
+  font-size:14px;
   letter-spacing:.18em;
+  text-indent:.18em;
   cursor:pointer;
   transition:background .18s ease, transform .12s ease, box-shadow .18s ease;
 }

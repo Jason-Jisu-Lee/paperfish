@@ -16,8 +16,8 @@ const Tut = (() => {
   };
 
   const fishRect = f => {
-    const hw = SPECIES[f.s].len * 0.62 + 10, hh = SPECIES[f.s].len * 0.38 + 10;
-    return { x: f.x - hw, y: f.y - hh, w: hw * 2, h: hh * 2 };
+    const a = SPECIES[f.s].len * 0.62 * 0.72 + 3;
+    return { x: f.x - a, y: f.y - a, w: a * 2, h: a * 2 };
   };
 
   const place = (el, r) => Object.assign(el.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' });
@@ -62,9 +62,9 @@ const Tut = (() => {
   };
 
   const I_STEPS = [
-    ['fish', 'Paperfish do not live long.', 'Oh no'],
-    ['fc-lbar', 'But they still have a soul and will grant Paper Points once their life bar reaches 0', 'I see'],
-    ['fc-hun', 'This is their hunger bar.<br>Starving fish do not grant paper.<br>Click any empty space to drop food', 'Sure']
+    ['fish', '<b>Paperfish</b> do not live long.', 'Oh no'],
+    ['fc-lbar', 'But they will grant <b>Paper</b> points once their <b>Life Bar</b> reaches 0.', 'I see'],
+    ['fc-hun', 'This is their <b>Hunger Bar</b>.<br><b>Starving</b> paperfish do not grant <b>Paper</b> at the time of death.<br><b>Click</b> any empty space to drop food.', 'Sure']
   ];
   let istep = -1;
   let iside = 'right', ifish = null;
@@ -75,13 +75,13 @@ const Tut = (() => {
     if (id === 'fish') {
       const side = iside === 'right' ? 'left' : 'right';
       const avail = side === 'right' ? innerWidth - (fr.x + fr.w) : fr.x;
-      const gap = Math.min(HGAP, Math.max(56, avail - 354));
+      const gap = Math.min(HGAP, Math.max(56, avail - 374));
       show(fr, null, text, label, side, side === 'right' ? fr.x + fr.w + gap : fr.x - gap);
       return;
     }
     const card = document.getElementById('fishcard').getBoundingClientRect();
     const avail = iside === 'right' ? innerWidth - card.right : card.left;
-    const gap = Math.min(HGAP, Math.max(56, avail - 354));
+    const gap = Math.min(HGAP, Math.max(56, avail - 374));
     show(rectOf(document.getElementById(id)), fr, text, label, iside, iside === 'right' ? card.right + gap : card.left - gap);
   };
 
@@ -103,9 +103,9 @@ const Tut = (() => {
   };
 
   const P_STEPS = [
-    ['up', 'You can find universal Research here.'],
-    ['tier', 'Tier Research improves every fish in that tier.'],
-    ['index', 'Each fish is unique. You can view them here.']
+    ['up', 'You can find universal <b>Research</b> here.'],
+    ['tier', '<b>Tier Research</b> improves every paperfish in that tier.'],
+    ['index', 'Each paperfish is <b>Unique</b>. You can view them here.']
   ];
   let pstep = -1;
 
