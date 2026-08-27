@@ -22,9 +22,12 @@
       saveGame();
     }
     if (b.dataset.paper) {
-      Game.paper += +b.dataset.paper;
-      Game.paperEarned += +b.dataset.paper;
-      if (Paper.shopOpen) Paper.render();
+      const v = +b.dataset.paper;
+      Game.paperEarned += v;
+      if (Paper.shopOpen) {
+        Game.bank += v;
+        Paper.render();
+      } else Game.paper += v;
     }
     if (b.dataset.act === 'shop' && Game.started && !Paper.shopOpen) {
       Game.shop = 1;
