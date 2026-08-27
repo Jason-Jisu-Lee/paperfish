@@ -48,7 +48,7 @@ const TICK = 5;
 const FIRSTF_CAP = 20;
 
 const TIER_FISH = [[0], [12, 1, 3, 4, 2], [13, 7, 8, 9], [14, 10, 11]];
-const TIER_TINT = ['28,27,24', '62,84,110', '180,58,43', '138,109,31'];
+const TIER_TINT = ['28,27,24', '52,112,166', '180,58,43', '203,128,14'];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
 const SG_GAIN = [10, 20, 30, 30];

@@ -35,7 +35,7 @@ const Lantern = (() => {
     if (lan.charges <= 0) lan.gone = true;
   };
 
-  const hit = (x, y) => lan && !lan.gone && Math.hypot(x - lan.x, y - lan.y) < 24;
+  const hit = (x, y) => lan && !lan.gone && Math.hypot(x - lan.x, y - lan.y) < 29;
 
   const clickAt = (x, y) => {
     if (!Game.started || !hit(x, y)) return false;
@@ -63,7 +63,7 @@ const Lantern = (() => {
       }
       return;
     }
-    lan.y += 6.5 * mdt;
+    lan.y += 19.5 * mdt;
     lan.x += Math.sin(lan.ph * 0.7) * 6 * mdt;
     if (lan.y > Stage.open.b - 20) lan.gone = true;
     const chance = lantTapChance();
@@ -99,16 +99,17 @@ const Lantern = (() => {
     const x = lan.x, y = lan.y + Math.sin(lan.ph * 1.4) * 4 + (lan.jolt || 0) * 3;
     ctx.save();
     ctx.globalAlpha = a;
+    ctx.translate(x, y);
+    ctx.scale(1.2, 1.2);
     if (lit > 0) {
-      const g = ctx.createRadialGradient(x, y, 2, x, y, 48);
+      const g = ctx.createRadialGradient(0, 0, 2, 0, 0, 48);
       g.addColorStop(0, 'rgba(190,150,40,' + 0.15 * lit + ')');
       g.addColorStop(1, 'rgba(190,150,40,0)');
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(x, y, 48, 0, Math.PI * 2);
+      ctx.arc(0, 0, 48, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.translate(x, y);
     ctx.strokeStyle = 'rgba(28,27,24,0.8)';
     ctx.fillStyle = 'rgba(255,251,240,' + (0.35 + 0.3 * lit) + ')';
     ctx.lineWidth = 1.4;

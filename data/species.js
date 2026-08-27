@@ -49,15 +49,15 @@ const SPECIES = [
     dots: [{ cx: 13, cy: 9, r: 5.5 }]
   },
   {
-    file: 'paperminnow', name: 'firstF2', vb: [340, 200], sw: 6.5, len: 74, tint: '62,84,110',
+    file: 'paperminnow', name: 'firstF2', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '52,112,166',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
   },
   {
-    file: 'paperminnow', name: 'firstF3', vb: [340, 200], sw: 6.5, len: 74, tint: '180,58,43',
+    file: 'paperminnow', name: 'firstF3', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '180,58,43',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
   },
   {
-    file: 'paperminnow', name: 'firstF4', vb: [340, 200], sw: 6.5, len: 74, tint: '138,109,31',
+    file: 'paperminnow', name: 'firstF4', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '203,128,14',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
   }
 ];
