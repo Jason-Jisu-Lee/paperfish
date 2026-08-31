@@ -424,8 +424,12 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   white-space:nowrap;
 }
 #fishtip{ transform:translate(-50%, -100%); text-align:center; padding:11px 17px; }
-.tip-stage{ display:block; font-size:19px; letter-spacing:.3em; text-transform:uppercase; color:rgba(28,27,24,.6); margin-top:8px; }
-.tip-name{ display:block; font-family:'Shippori Mincho',serif; font-size:21px; letter-spacing:.04em; }
+.tip-stage{ display:flex; align-items:center; justify-content:center; gap:5px; margin-top:6px; }
+.tip-stage .pip{ width:7px; height:7px; border-radius:50%; border:1px solid rgba(28,27,24,.4); }
+.tip-stage .pip.on{ background:rgba(28,27,24,.5); border-color:rgba(28,27,24,.5); }
+.tip-stage .pip.now{ background:var(--seal); border-color:var(--seal); }
+.tip-stage b{ font-weight:400; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:rgba(28,27,24,.55); margin-left:4px; }
+.tip-name{ display:block; font-family:'Zen Maru Gothic',sans-serif; font-weight:500; font-size:19px; letter-spacing:.06em; }
 .tip-meter{ display:flex; align-items:center; gap:8px; width:128px; margin:7px auto 0; }
 .tip-meter svg{ width:16px; height:16px; flex:none; }
 .tip-meter path{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:2; stroke-linecap:round; }

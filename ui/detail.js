@@ -145,14 +145,17 @@ const Detail = (() => {
     if (hover) {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
+      const stages = sp.stages || ['Baby', 'Adult'];
+      const si = hover.egg ? -1 : hover.adult ? stages.length - 1 : 0;
+      tipStage.innerHTML = stages.map((n, i) =>
+        `<i class="pip${i < si ? ' on' : ''}${i === si ? ' now' : ''}"></i>`).join('') +
+        `<b>${hover.egg ? 'Egg' : stages[si]}</b>`;
       if (hover.egg) {
-        tipStage.textContent = 'egg';
         tipStage.removeAttribute('hidden');
         tipHun.setAttribute('hidden', '');
         tipLife.setAttribute('hidden', '');
         tip.style.top = (hover.y - 26) + 'px';
       } else {
-        tipStage.textContent = hover.adult ? 'adult' : 'baby';
         tipStage.removeAttribute('hidden');
         tipHFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
         tipHun.classList.toggle('low', hover.hstate >= 1);
@@ -203,7 +206,7 @@ const Detail = (() => {
       elFill.style.width = (1 - age / life) * 100 + '%';
       elHFill.style.width = Math.min(Math.max((sel.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
       elHun.classList.toggle('low', sel.hstate >= 1);
-      elFreq.textContent = fmt(fishIncome(sel.s, sel.adult)) + ' G / ' + TICK + 's';
+      elFreq.textContent = fmtG1(fishIncome(sel.s, sel.adult)) + ' G / ' + TICK + 's';
       elDeath.textContent = sel.hstate >= 2 ? '0' : '+' + paperYieldOf(sel.s);
     }
   };

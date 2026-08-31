@@ -65,7 +65,7 @@ const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
 const ADULT_GOLD = 1.2;
 const fishIncome = (s, adult) => {
   const g = 3 ** (tierOf(s) - 1) + Game.incomeUp + Game.pIncome;
-  return Game.pAdultGold && adult && tierOf(s) >= 3 ? g * ADULT_GOLD : g;
+  return Game.pAdultGold && adult ? g * ADULT_GOLD : g;
 };
 const PAPER_BASE = [1, 3, 12, 60];
 const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
@@ -152,6 +152,11 @@ const fmtG = n => {
   if (n >= 1e6) return one(n / 1e6) + 'm';
   if (n >= 1e5) return one(n / 1e3) + 'k';
   return n.toLocaleString('en-US');
+};
+
+const fmtG1 = v => {
+  const r = Math.round(v * 10) / 10;
+  return r < 10 && !Number.isInteger(r) ? r.toFixed(1) : fmtG(Math.round(v));
 };
 
 const fmtPct = c => c >= 0.995 ? '100%' : c >= 0.01 ? Math.round(c * 100) + '%' : c > 0 ? '&lt;1%' : '0%';

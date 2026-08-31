@@ -29,7 +29,7 @@ const Paper = (() => {
       max: () => Game.pStartGold >= SG_MAX },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
-    { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'A Tier 3 or higher fish, once fully grown, earns 1.2x the gold it earned as a baby.',
+    { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'A fish, once fully grown, earns 1.2x the gold it earned as a baby.',
       lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
       max: () => Game.pAdultGold >= 1, once: 1,
       reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
@@ -264,7 +264,7 @@ const Paper = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG(fishIncome(s))} G / ${TICK}s<br>+${paperYieldOf(s)} paper`;
+        `Tier ${tierOf(s)}<br>${fmtG1(fishIncome(s))} G / ${TICK}s<br>+${paperYieldOf(s)} paper`;
       placeTip(fi);
       return;
     }
