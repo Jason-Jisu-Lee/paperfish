@@ -131,8 +131,7 @@ const Stage = (() => {
 
   const hatch = f => {
     f.egg = false;
-    let t = 1;
-    while (t < maxTier() && Math.random() < tierRung(t)) t++;
+    const t = rollTier();
     const pool = TIER_FISH[t - 1];
     f.s = pool[Math.floor(Math.random() * pool.length)];
     Game.seen[f.s] = 1;

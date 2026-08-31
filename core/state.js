@@ -8,7 +8,6 @@ const Game = {
   pIncome: 0,
   pKelp: 0,
   pLife: 0,
-  pLife2: 0,
   pTier: [0, 0, 0, 0, 0],
   pLantGold: 0,
   pLantRate: 0,
@@ -16,7 +15,7 @@ const Game = {
   pAutoEgg: 0,
   pAdultGold: 0,
   pMature: 0,
-  autoEggOn: 1,
+  autoEggOn: 0,
   hideDone: 1,
   paperEarned: 0,
   pBurn: 0,
@@ -39,7 +38,7 @@ const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
 const EGG_COSTS = [2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
-const EGG_CD = 500;
+const EGG_CD = 2000;
 let eggCdUntil = 0;
 const eggCd = () => Game.devMode ? 0 : Math.max(eggCdUntil - Date.now(), 0);
 const TIER_HATCH = [8, 12, 20, 30, 45, 60];
@@ -72,7 +71,7 @@ const PAPER_BASE = [1, 3, 12, 60];
 const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
 const UNLOCK_COST = 5;
 const EGGUP_UNLOCK_COST = 10;
-const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
+const lifeOf = () => (20 + Game.pLife * 5 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 * (1 - 0.05 * Game.pMature) / 60;
 const HUNGER_FULL = 30;
 const HUNGER_HATCH = 24;
@@ -92,17 +91,28 @@ const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;
 const pLifeCost = () => 10 * 2 ** Game.pLife;
-const pLife2Cost = () => 50 * 2 ** Game.pLife2;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const maxTier = () => TIER_FISH.length;
-const eggUpMax = () => 3 * (maxTier() - 2) + 9;
-const tierRung = r => Math.min(Math.max(0.1 * (Game.eggUp - 3 * (r - 1)), 0), 0.9);
+const eggUpMax = () => 5 * (maxTier() - 2) + 10;
+const tierIntro = t => t === 2 ? 1 : 5 * (t - 2);
+const tierWeight = t => t === 1 ? 10 : Math.max(0, Game.eggUp - tierIntro(t) + 1);
 const tierChance = t => {
   const m = maxTier();
   if (t > m) return 0;
-  let c = 1;
-  for (let r = 1; r < t; r++) c *= tierRung(r);
-  return t < m ? c * (1 - tierRung(t)) : c;
+  let sum = 0;
+  for (let i = 1; i <= m; i++) sum += tierWeight(i);
+  return tierWeight(t) / sum;
+};
+const rollTier = () => {
+  const m = maxTier();
+  let sum = 0;
+  for (let i = 1; i <= m; i++) sum += tierWeight(i);
+  let r = Math.random() * sum;
+  for (let i = 1; i < m; i++) {
+    r -= tierWeight(i);
+    if (r < 0) return i;
+  }
+  return m;
 };
 const eggUpCost = () => Math.round(25 * 1.25 ** Game.eggUp);
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
@@ -166,7 +176,6 @@ const saveGame = () => {
       pin: Game.pIncome,
       pkl: Game.pKelp,
       pl: Game.pLife,
-      pl2: Game.pLife2,
       pt: Game.pTier,
       plg: Game.pLantGold,
       plr: Game.pLantRate,
@@ -211,7 +220,6 @@ const loadGame = () => {
     Game.pIncome = d.pin || 0;
     Game.pKelp = d.pkl || 0;
     Game.pLife = d.pl || 0;
-    Game.pLife2 = d.pl2 || 0;
     Game.pTier = Array.isArray(d.pt) && d.pt.length === 5 ? d.pt : [0, 0, 0, 0, 0];
     Game.pLantGold = d.plg || 0;
     Game.pLantRate = d.plr || 0;
@@ -219,7 +227,7 @@ const loadGame = () => {
     Game.pAutoEgg = d.pae || 0;
     Game.pAdultGold = d.pag || 0;
     Game.pMature = d.pm || 0;
-    Game.autoEggOn = d.aeo ?? 1;
+    Game.autoEggOn = d.aeo ?? 0;
     Game.hideDone = d.hd ?? 1;
     Game.paperEarned = d.se ?? (d.paper || 0) + (d.bank || 0);
     Game.pBurn = d.pb || 0;

@@ -29,7 +29,7 @@ const Paper = (() => {
       max: () => Game.pStartGold >= SG_MAX },
     { key: 'pIncome', ico: 'income', name: 'Base Income', desc: 'Every fish earns 1 more gold each tick, forever.',
       lvl: () => Game.pIncome, cost: pIncomeCost, buy: () => Game.pIncome++ },
-    { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'Tier 3 and higher adults earn 1.2x the gold of a baby.',
+    { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'A Tier 3 or higher fish, once fully grown, earns 1.2x the gold it earned as a baby.',
       lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
       max: () => Game.pAdultGold >= 1, once: 1,
       reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
@@ -58,18 +58,9 @@ const Paper = (() => {
       reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
-      max: () => Game.pAutoEgg >= 1, once: 1 }
-  ];
-
-  const TIERS = [
-    { tier: 1, ups: [
-      { key: 'pLife', ico: 'life', name: 'Lifespan', desc: 'Tier 1 fish live 5 seconds longer.',
-        lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
-    ] },
-    { tier: 2, ups: [
-      { key: 'pLife2', ico: 'life', name: 'Lifespan', desc: 'Fish live 10 seconds longer.',
-        lvl: () => Game.pLife2, cost: pLife2Cost, buy: () => Game.pLife2++ }
-    ] }
+      max: () => Game.pAutoEgg >= 1, once: 1 },
+    { key: 'pLife', ico: 'life', name: 'Lifespan', desc: 'Every fish lives 5 seconds longer.',
+      lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
   ];
 
   const UNLOCKS = [
@@ -100,11 +91,12 @@ const Paper = (() => {
     ['Fish', 'fish', ['autoEgg']],
     ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
+    ['Life', 'life', ['pLife']],
     ['Paper', 'paper', ['paperUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
 
-  const ALL = [...CORE, ...TIERS.flatMap(t => t.ups), ...UNLOCKS];
+  const ALL = [...CORE, ...UNLOCKS];
 
   const card = (u, locked) => {
     const maxed = u.max && u.max();
@@ -193,13 +185,6 @@ const Paper = (() => {
         if (!ups.length) continue;
         h += `<div class="p-cat">${ICO[ico]}${label}</div>` +
           `<div class="p-grid">${ups.map(u => card(u, u.req && !u.req())).join('')}</div>`;
-      }
-    } else if (tab === 'tier') {
-      for (const t of TIERS) {
-        const ups = t.ups.filter(shown);
-        if (!ups.length) continue;
-        h += `<div class="p-cat" style="color:rgb(${TIER_TINT[t.tier - 1]})">Tier ${t.tier}</div>` +
-          `<div class="p-grid">${ups.map(u => card(u, false)).join('')}</div>`;
       }
     } else {
       TIER_FISH.forEach((arr, i) => {

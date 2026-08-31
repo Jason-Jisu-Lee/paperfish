@@ -2,7 +2,7 @@ const SPECIES = [
   {
     file: 'paperminnow', name: 'firstF', vb: [340, 200], sw: 6.5, len: 74,
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52'],
-    dots: [{ cx: 272, cy: 92, r: 7 }]
+    dots: [{ cx: 264, cy: 98, r: 8 }]
   },
   {
     file: 'perch', name: 'secondF', vb: [170, 64], sw: 4.8, len: 92, swf: 0.78,
@@ -60,17 +60,17 @@ const SPECIES = [
   {
     file: 'paperminnow', name: 'firstF2', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '52,112,166',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52'],
-    dots: [{ cx: 272, cy: 92, r: 7 }]
+    dots: [{ cx: 264, cy: 98, r: 8 }]
   },
   {
     file: 'paperminnow', name: 'firstF3', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '180,58,43',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52'],
-    dots: [{ cx: 272, cy: 92, r: 7 }]
+    dots: [{ cx: 264, cy: 98, r: 8 }]
   },
   {
     file: 'paperminnow', name: 'firstF4', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '203,128,14',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52'],
-    dots: [{ cx: 272, cy: 92, r: 7 }]
+    dots: [{ cx: 264, cy: 98, r: 8 }]
   },
   {
     file: 'tuna', name: 'thirteenthF', vb: [170, 60], sw: 4.4, len: 96,

@@ -423,11 +423,11 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   pointer-events:none;
   white-space:nowrap;
 }
-#fishtip{ transform:translate(-50%, -100%); text-align:center; padding:18px 27px; }
+#fishtip{ transform:translate(-50%, -100%); text-align:center; padding:11px 17px; }
 .tip-stage{ display:block; font-size:19px; letter-spacing:.3em; text-transform:uppercase; color:rgba(28,27,24,.6); margin-top:8px; }
-.tip-name{ display:block; font-family:'Shippori Mincho',serif; font-size:29px; letter-spacing:.04em; }
-.tip-meter{ display:flex; align-items:center; gap:10px; width:174px; margin:10px auto 0; }
-.tip-meter svg{ width:20px; height:20px; flex:none; }
+.tip-name{ display:block; font-family:'Shippori Mincho',serif; font-size:21px; letter-spacing:.04em; }
+.tip-meter{ display:flex; align-items:center; gap:8px; width:128px; margin:7px auto 0; }
+.tip-meter svg{ width:16px; height:16px; flex:none; }
 .tip-meter path{ fill:none; stroke:rgba(28,27,24,.5); stroke-width:2; stroke-linecap:round; }
 .tip-meter circle{ fill:rgba(28,27,24,.5); }
 .tip-meter .mtrack{ height:8px; border-radius:4px; }
