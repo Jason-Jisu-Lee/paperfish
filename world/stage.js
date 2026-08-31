@@ -638,10 +638,17 @@ const Stage = (() => {
     }
 
     if (sp.b2d) {
-      const b = f.tailAmp > 0.62 ? 0 : f.tailAmp > 0.34 ? 1 : 2;
+      const dt = Math.min(tNow - (f.sprT ?? tNow), 0.1);
+      f.sprT = tNow;
+      const dist = Math.hypot(f.x - (f.sprX ?? f.x), f.y - (f.sprY ?? f.y));
+      f.sprX = f.x;
+      f.sprY = f.y;
+      const v = dt > 0 ? dist / dt : 0;
+      f.sprV = (f.sprV ?? v) + (v - (f.sprV ?? v)) * Math.min(3 * dt, 1);
+      f.sprPh = (f.sprPh ?? f.ph) + dist * 0.09 + dt * 0.9;
+      const b = f.sprV > 55 ? 0 : f.sprV > 18 ? 1 : 2;
       const n = sp.b2d[b].length;
-      const TAU = Math.PI * 2;
-      const i = Math.floor((f.tailPh % TAU + TAU) % TAU / TAU * n) % n;
+      const i = Math.floor(f.sprPh / (Math.PI * 2) * n) % n;
       for (const p of sp.b2d[b][i]) ctx.stroke(p);
       const e = sp.banks[b][i].e;
       ctx.beginPath();
