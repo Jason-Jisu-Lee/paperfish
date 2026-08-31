@@ -85,7 +85,7 @@ const SPECIES = [
   {
     file: 'hammerhead', name: 'fifteenthF', vb: [200, 64], sw: 4.2, len: 116,
     paths: ['M32 34 C70 20 126 18 158 27 L172 17', 'M32 34 C70 46 126 44 158 39 L172 47', 'M172 11 L172 53', 'M8 8 L32 34 L14 48 Z', 'M88 23 C94 8 100 3 108 3 C107 9 109 16 113 21'],
-    dots: [{ cx: 172, cy: 16, r: 2.4 }]
+    dots: [{ cx: 166, cy: 26, r: 2.4 }]
   },
   {
     file: 'eel', name: 'sixteenthF', vb: [210, 70], sw: 3.2, len: 318,
