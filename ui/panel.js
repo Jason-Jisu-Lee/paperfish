@@ -27,9 +27,9 @@ const Panel = (() => {
       key: 'eggup', name: 'Fish Tier', cat: 'fish', unlock: 'eggup',
       icon: '<svg viewBox="-26 -32 52 64"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/><path class="chev" d="M-7.5,7 L0,-3.5 L7.5,7"/></svg>',
       cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
-      maxed: () => Game.eggUp >= EGGUP_MAX,
-      desc: 'eggs may climb tiers, one roll per tier; early levels give the most',
-      cur: () => 'Current: ' + fmtPct(tierUpChance()) + ' per climb'
+      maxed: () => Game.eggUp >= eggUpMax(),
+      desc: 'eggs may climb tiers, one roll per tier; every level lifts the ladder',
+      cur: () => 'Current: ' + fmtPct(tierRung(1)) + ' first climb'
     },
     {
       key: 'life', name: 'Lifespan', cat: 'life', unlock: 'life',
@@ -178,12 +178,13 @@ const Panel = (() => {
     } else if (living() >= FIRSTF_CAP) {
       uptip.textContent = 'Max ' + FIRSTF_CAP + ' fish';
     } else {
-      const m = maxTier();
       uptip.classList.add('eggtip');
-      uptip.innerHTML = TIER_FISH.map((arr, i) =>
-        `<div class="ei-tier" style="color:rgb(${TIER_TINT[i]})">Tier ${i + 1}<span class="ei-pct">${i + 1 > m ? 'Locked' : fmtPct(tierChance(i + 1))}</span></div>` +
-        arr.map(s => `<div class="ei-row">${thumb(s)}<span>${Game.seen[s] ? SPECIES[s].name : '???'}</span></div>`).join('')
-      ).join('');
+      const tiers = TIER_FISH.map((arr, i) => ({ t: i + 1, c: tierChance(i + 1), arr })).filter(x => x.c > 0);
+      const block = x =>
+        `<div class="ei-tier" style="color:rgb(${TIER_TINT[x.t - 1]})">Tier ${x.t}<span class="ei-pct">${fmtPct(x.c)}</span></div>` +
+        x.arr.map(s => `<div class="ei-row">${thumb(s)}<span>${Game.seen[s] ? SPECIES[s].name : '???'}</span></div>`).join('');
+      const cols = tiers.length > 3 ? [tiers.slice(0, 3), tiers.slice(3)] : [tiers];
+      uptip.innerHTML = cols.map(c => `<div class="ei-col">${c.map(block).join('')}</div>`).join('');
     }
     const r = (ub || eb).getBoundingClientRect();
     uptip.style.right = 'auto';

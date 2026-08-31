@@ -838,13 +838,14 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   100%{ transform:translate(-5px, -110vh); opacity:0; }
 }
 
-#uptip.eggtip{ max-width:310px; }
+#uptip.eggtip{ max-width:640px; display:flex; align-items:flex-start; gap:20px; background:rgba(252,250,244,.84); backdrop-filter:blur(1.5px); }
+.ei-col{ width:236px; }
 .ei-tier{
   display:flex; align-items:baseline;
   font-size:13.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
   margin:14px 2px 8px;
 }
-#uptip .ei-tier:first-child{ margin-top:4px; }
+.ei-col .ei-tier:first-child{ margin-top:4px; }
 .ei-row + .ei-row{ margin-top:6px; }
 .ei-row{
   display:flex; align-items:center; gap:13px; font-size:15px;

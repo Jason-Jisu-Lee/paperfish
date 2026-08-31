@@ -94,12 +94,15 @@ const pKelpCost = () => 20;
 const pLifeCost = () => 10 * 2 ** Game.pLife;
 const pLife2Cost = () => 50 * 2 ** Game.pLife2;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
-const EGGUP_MAX = 50;
-const tierUpChance = () => Game.eggUp ? 0.5 - 0.3 * 0.9 ** (Game.eggUp - 1) : 0;
 const maxTier = () => TIER_FISH.length;
+const eggUpMax = () => 3 * (maxTier() - 2) + 9;
+const tierRung = r => Math.min(Math.max(0.1 * (Game.eggUp - 3 * (r - 1)), 0), 0.9);
 const tierChance = t => {
-  const p = tierUpChance(), m = maxTier();
-  return t > m ? 0 : t < m ? p ** (t - 1) * (1 - p) : p ** (t - 1);
+  const m = maxTier();
+  if (t > m) return 0;
+  let c = 1;
+  for (let r = 1; r < t; r++) c *= tierRung(r);
+  return t < m ? c * (1 - tierRung(t)) : c;
 };
 const eggUpCost = () => Math.round(25 * 1.25 ** Game.eggUp);
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
@@ -283,7 +286,7 @@ const buyIncomeUp = () => {
 };
 
 const buyEggUp = () => {
-  if (Game.eggUp >= EGGUP_MAX) return false;
+  if (Game.eggUp >= eggUpMax()) return false;
   const c = eggUpCost();
   if (Game.gold < c) return false;
   Game.gold -= c;
