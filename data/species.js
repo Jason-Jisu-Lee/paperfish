@@ -59,5 +59,60 @@ const SPECIES = [
   {
     file: 'paperminnow', name: 'firstF4', vb: [340, 200], sw: 6.5, len: 74, swf: 1.15, tint: '203,128,14',
     paths: ['M310 100 Q180 10 30 148', 'M310 100 Q180 190 30 52']
+  },
+  {
+    file: 'tuna', name: 'thirteenthF', vb: [170, 60], sw: 4.4, len: 96,
+    paths: ['M28 31 C60 10 128 14 162 31', 'M28 31 C60 52 128 48 162 31', 'M28 31 C20 27 12 20 5 10 L12 31 L6 52 C11 44 19 36 28 31 Z', 'M62 18 L72 4 C78 7 82 12 86 16', 'M102 17 L110 9 C113 12 116 14 118 17']
+  },
+  {
+    file: 'marlin', name: 'fourteenthF', vb: [200, 64], sw: 4.2, len: 118,
+    paths: ['M30 34 C62 16 114 16 152 32 L197 26', 'M30 34 C62 52 114 50 152 32', 'M5 8 L30 34 L5 60 Z', 'M54 25 L66 2 C82 2 96 12 106 21']
+  },
+  {
+    file: 'hammerhead', name: 'fifteenthF', vb: [200, 64], sw: 4.2, len: 116,
+    paths: ['M32 34 C70 20 126 18 158 27 L172 17', 'M32 34 C70 46 126 44 158 39 L172 47', 'M172 11 L172 53', 'M8 8 L32 34 L14 48 Z', 'M88 23 C94 8 100 3 108 3 C107 9 109 16 113 21']
+  },
+  {
+    file: 'eel', name: 'sixteenthF', vb: [210, 70], sw: 3.2, len: 106,
+    paths: []
   }
 ];
+
+(() => {
+  const sp = SPECIES[18];
+  const N = 15, P = 40;
+  const rise = u => Math.sin(Math.min(u / 0.12, 1) * Math.PI / 2);
+  const taper = u => u < 0.55 ? 1 : Math.pow(1 - (u - 0.55) / 0.45, 0.9);
+  const path = pts => {
+    let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+    for (let i = 1; i < pts.length - 1; i++)
+      d += ` Q${pts[i][0].toFixed(1)} ${pts[i][1].toFixed(1)} ${((pts[i][0] + pts[i + 1][0]) / 2).toFixed(1)} ${((pts[i][1] + pts[i + 1][1]) / 2).toFixed(1)}`;
+    const l = pts[pts.length - 1];
+    return d + ` L${l[0].toFixed(1)} ${l[1].toFixed(1)}`;
+  };
+  sp.banks = [1, 0.68, 0.42].map(scale => {
+    const bank = [];
+    for (let f = 0; f < N; f++) {
+      const ph = 2 * Math.PI * f / N, spn = [], top = [], bot = [];
+      let e;
+      for (let i = 0; i <= P; i++) {
+        const u = i / P;
+        const A = 15 * scale * (0.10 + 0.90 * Math.pow(u, 1.5));
+        spn.push([200 - 190 * u, 35 + A * Math.sin(2 * Math.PI * 1.35 * u - ph), u]);
+      }
+      for (let i = 0; i <= P; i++) {
+        const p = spn[i], a = spn[Math.max(i - 1, 0)], b = spn[Math.min(i + 1, P)];
+        const m = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+        const nx = -(b[1] - a[1]) / m, ny = (b[0] - a[0]) / m;
+        const r = 4.8 * rise(p[2]) * taper(p[2]);
+        top.push([p[0] + nx * r, p[1] + ny * r]);
+        bot.push([p[0] - nx * r, p[1] - ny * r]);
+        if (i === 3) e = [p[0] + nx * 1.1, p[1] + ny * 1.1];
+      }
+      bank.push({ p: [path(top), path(bot)], e });
+    }
+    return bank;
+  });
+  sp.paths = sp.banks[0][0].p;
+  sp.dots = [{ cx: sp.banks[0][0].e[0], cy: sp.banks[0][0].e[1], r: 1.5 }];
+})();

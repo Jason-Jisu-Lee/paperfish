@@ -15,6 +15,7 @@ const Stage = (() => {
     document.body.appendChild(svg);
     for (const sp of SPECIES) {
       sp.p2d = sp.paths.map(d => new Path2D(d));
+      if (sp.banks) sp.b2d = sp.banks.map(b => b.map(fr => fr.p.map(d => new Path2D(d))));
       sp.plen = sp.paths.map(d => {
         const p = document.createElementNS(ns, 'path');
         p.setAttribute('d', d);
@@ -636,6 +637,19 @@ const Stage = (() => {
       return;
     }
 
+    if (sp.b2d) {
+      const b = f.tailAmp > 0.62 ? 0 : f.tailAmp > 0.34 ? 1 : 2;
+      const n = sp.b2d[b].length;
+      const TAU = Math.PI * 2;
+      const i = Math.floor((f.tailPh % TAU + TAU) % TAU / TAU * n) % n;
+      for (const p of sp.b2d[b][i]) ctx.stroke(p);
+      const e = sp.banks[b][i].e;
+      ctx.beginPath();
+      ctx.arc(e[0], e[1], 1.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
     const amp = f.tailAmp * vbH * 0.075;
     const sw = vbW / SLICES;
     for (let i = 0; i < SLICES; i++) {

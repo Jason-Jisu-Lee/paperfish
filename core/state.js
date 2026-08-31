@@ -47,13 +47,13 @@ const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
 
-const TIER_FISH = [[0], [12, 1, 3, 4, 2], [13, 7, 8, 9], [14, 10, 11]];
+const TIER_FISH = [[0], [12, 1, 3, 4, 2, 18], [13, 7, 8, 9, 15], [14, 10, 11, 16, 17]];
 const TIER_TINT = ['28,27,24', '52,112,166', '180,58,43', '203,128,14'];
 const tierOf = s => TIER_FISH.findIndex(a => a.includes(s)) + 1;
 
-const SG_GAIN = [10, 20, 30, 30];
-const SG_TOTAL = [0, 10, 30, 60, 90];
-const SG_MAX = 4;
+const SG_GAIN = [20, 30, 40];
+const SG_TOTAL = [0, 20, 50, 90];
+const SG_MAX = 3;
 const startGold = () => 10 + SG_TOTAL[Math.min(Game.pStartGold, SG_MAX)];
 const eggCost = () => {
   const n = Game.eggsBought;
@@ -71,6 +71,7 @@ const fishIncome = (s, adult) => {
 const PAPER_BASE = [1, 3, 12, 60];
 const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
 const UNLOCK_COST = 5;
+const EGGUP_UNLOCK_COST = 10;
 const lifeOf = () => (20 + Game.pLife * 5 + Game.pLife2 * 10 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 * (1 - 0.05 * Game.pMature) / 60;
 const HUNGER_FULL = 30;
@@ -86,7 +87,7 @@ const EAT_R = 234;
 const hatchTime = () => TIER_HATCH[0];
 
 const paperUpCost = () => 20 * 2 ** Game.paperUp;
-const startGoldCost = () => 4 * 2 ** Game.pStartGold;
+const startGoldCost = () => 10 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;

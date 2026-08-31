@@ -672,7 +672,6 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .p-hidedone .toggle{ display:inline-block; transform:scale(.72); margin:-4px; }
 .pc-done{ width:20px; height:20px; }
 .pc-done path{ fill:none; stroke:var(--seal); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
-.pcard.hiding{ transition:opacity .2s ease, transform .2s ease; opacity:0; transform:scale(.85); pointer-events:none; }
 .p-cat{
   font-size:17px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
   color:rgba(28,27,24,.92);
@@ -803,16 +802,16 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   text-align:center;
 }
 .pr-dive svg{ width:120px; height:70px; overflow:visible; display:block; margin:0 auto; transition:transform .3s ease; }
-.pr-dive path{ fill:none; stroke:var(--ink); stroke-width:6.5; stroke-linecap:round; }
+.pr-dive path{ fill:none; stroke:var(--ink); stroke-width:6.5; stroke-linecap:round; transition:stroke .2s ease; }
 .pr-dive span{
   display:block; margin-top:8px;
-  font-family:'Shippori Mincho',serif; font-size:22px; letter-spacing:.34em; text-indent:.34em;
+  font-family:'Zen Maru Gothic',sans-serif; font-weight:500; font-size:19px; letter-spacing:.34em; text-indent:.34em;
   color:var(--ink);
   transition:color .2s ease;
 }
-.pr-dive:hover svg{ transform:rotate(18deg) translate(10px, 10px); }
 .pr-dive:hover span{ color:var(--seal); }
-.pr-dive:active svg{ transform:rotate(24deg) translate(16px, 18px) scale(.96); }
+.pr-dive:hover path{ stroke:var(--seal); }
+.pr-dive:active svg{ transform:scale(.96); }
 .pr-wisps i{
   position:fixed; bottom:-46px;
   width:5px; height:5px; border-radius:50%;

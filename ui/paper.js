@@ -81,7 +81,7 @@ const Paper = (() => {
       max: () => !!Game.unlocks.kelp, once: 1,
       reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
     { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
-      lvl: () => Game.unlocks.eggup, cost: () => UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
+      lvl: () => Game.unlocks.eggup, cost: () => EGGUP_UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup, once: 1 },
     { key: 'u_mature', ico: 'life', name: 'Unlock Maturity', desc: 'Fish mature 5% faster.',
       lvl: () => Game.pMature, cost: pMatureCost, buy: () => Game.pMature++,
@@ -147,6 +147,32 @@ const Paper = (() => {
   const syncHide = () => {
     hideBtn.toggleAttribute('hidden', !ALL.some(complete));
     hideBtn.querySelector('.toggle').classList.toggle('on', !!Game.hideDone);
+  };
+
+  const keyEls = () => [...list.querySelectorAll('[data-p],.p-cat')];
+  const keyOf = el => el.dataset.p || 'cat:' + el.textContent;
+  const popOut = el => el.animate(
+    [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.22)', opacity: 0 }],
+    { duration: 150, easing: 'ease-out', fill: 'forwards' });
+  const flipRender = () => {
+    const first = new Map(keyEls().map(el => [keyOf(el), el.getBoundingClientRect()]));
+    render();
+    for (const el of keyEls()) {
+      const a = first.get(keyOf(el));
+      if (!a) {
+        el.animate(
+          [{ transform: 'scale(.2)', opacity: 0 },
+           { transform: 'scale(1.08)', opacity: 1, offset: .7 },
+           { transform: 'scale(1)', opacity: 1 }],
+          { duration: 200, easing: 'cubic-bezier(.2,.8,.3,1)' });
+        continue;
+      }
+      const b = el.getBoundingClientRect();
+      const dx = a.left - b.left, dy = a.top - b.top;
+      if (dx || dy) el.animate(
+        [{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'none' }],
+        { duration: 300, easing: 'cubic-bezier(.3,.9,.35,1)' });
+    }
   };
 
   const render = () => {
@@ -217,8 +243,8 @@ const Paper = (() => {
     if (Game.hideDone && complete(u)) {
       bankEl.textContent = fmtG(Game.bank);
       syncHide();
-      el.classList.add('hiding');
-      setTimeout(render, 200);
+      popOut(el);
+      setTimeout(flipRender, 140);
     } else render();
   });
 
@@ -231,13 +257,13 @@ const Paper = (() => {
       for (const el of list.querySelectorAll('[data-p]')) {
         const u = ALL.find(x => x.key === el.dataset.p);
         if (u && complete(u)) {
-          el.classList.add('hiding');
+          popOut(el);
           any = true;
         }
       }
-      if (any) setTimeout(render, 200);
+      if (any) setTimeout(flipRender, 140);
       else render();
-    } else render();
+    } else flipRender();
   });
 
   const placeTip = el => {
