@@ -90,7 +90,7 @@ const startGoldCost = () => 10 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;
-const pLifeCost = () => 10 * 2 ** Game.pLife;
+const pLifeCost = () => 8 * 2 ** Game.pLife;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const maxTier = () => TIER_FISH.length;
 const eggUpMax = () => 5 * (maxTier() - 2) + 10;
