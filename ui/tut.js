@@ -118,7 +118,7 @@ const Tut = (() => {
 
   const eEnd = () => {
     estep = -1;
-    eggWait = 8;
+    eggWait = 11;
     hide();
   };
 
@@ -133,7 +133,7 @@ const Tut = (() => {
 
   const tick = mdt => {
     if (active || Game.devMode || Game.tuts.eggTut || !Game.tuts.introTut) return;
-    if (eggWait < 0) { eggWait = 8; return; }
+    if (eggWait < 0) { eggWait = 11; return; }
     if (!mdt) return;
     if (eggWait > 0) { eggWait = Math.max(eggWait - mdt, 0); return; }
     if (Game.gold < eggCost()) return;
