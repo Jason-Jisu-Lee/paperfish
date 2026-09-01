@@ -49,7 +49,8 @@ const Tut = (() => {
     box.classList.remove('up', 'right', 'left');
     box.classList.add(side);
     txt.innerHTML = text;
-    btn.textContent = label;
+    btn.textContent = label || '';
+    btn.toggleAttribute('hidden', !label);
     dim.removeAttribute('hidden');
     line.removeAttribute('hidden');
     box.removeAttribute('hidden');
@@ -102,6 +103,54 @@ const Tut = (() => {
     iShow();
   };
 
+  const E_STEPS = [
+    ["Every <b>Paperfish</b> specie is born from an <b>Egg</b>.<br>It's where <b>Paper</b> is folded into a life.", 'Interesting'],
+    ['Try creating an <b>Egg</b>!', null]
+  ];
+  let estep = -1, eggWait = -1;
+
+  const eShow = () => {
+    const [text, label] = E_STEPS[estep];
+    const r = rectOf(document.querySelector('#fish-grid [data-egg]'));
+    const gap = Math.min(HGAP, Math.max(56, innerWidth - (r.x + r.w) - 374));
+    show(r, null, text, label, 'right', r.x + r.w + gap);
+  };
+
+  const eEnd = () => {
+    estep = -1;
+    eggWait = 5;
+    hide();
+  };
+
+  const eggLocked = () => !Game.devMode && !Game.tuts.eggTut && estep < 0;
+
+  const eggClicked = () => {
+    if (estep < 0) return;
+    estep = -1;
+    Game.tuts.eggTut = 1;
+    hide();
+  };
+
+  const tick = mdt => {
+    if (active || Game.devMode || Game.tuts.eggTut || !Game.tuts.introTut) return;
+    if (eggWait < 0) { eggWait = 5; return; }
+    if (!mdt) return;
+    if (eggWait > 0) { eggWait = Math.max(eggWait - mdt, 0); return; }
+    if (Game.gold < eggCost()) return;
+    const el = document.querySelector('#fish-grid [data-egg]');
+    if (!el || !el.getBoundingClientRect().width) return;
+    active = true;
+    estep = 0;
+    eShow();
+  };
+
+  document.addEventListener('click', e => {
+    if (estep < 0) return;
+    if (e.target.closest('#tut-next') || (estep === 1 && e.target.closest('[data-egg]'))) return;
+    e.stopPropagation();
+    e.preventDefault();
+  }, true);
+
   const P_STEPS = [
     ['up', 'You can find universal <b>Research</b> here.'],
     ['tier', '<b>Tier Research</b> improves every paperfish in that tier.'],
@@ -128,6 +177,11 @@ const Tut = (() => {
   };
 
   btn.addEventListener('click', () => {
+    if (estep >= 0) {
+      estep = 1;
+      eShow();
+      return;
+    }
     if (istep >= 0) {
       istep += 1;
       if (istep < I_STEPS.length) iShow();
@@ -145,6 +199,7 @@ const Tut = (() => {
     if (!active) return;
     if (istep >= 0) return iEnd();
     if (pstep >= 0) return pEnd();
+    if (estep >= 0) return eEnd();
   };
 
   window.addEventListener('resize', () => {
@@ -154,7 +209,8 @@ const Tut = (() => {
       Detail.tick();
       iShow();
     } else if (pstep >= 0) pShow();
+    else if (estep >= 0) eShow();
   });
 
-  return { intro, abort, prestige, get active() { return active; } };
+  return { intro, abort, prestige, tick, eggLocked, eggClicked, get active() { return active; } };
 })();

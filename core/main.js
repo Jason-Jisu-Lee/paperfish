@@ -58,6 +58,7 @@ const startGame = () => {
     }
     Paper.tick();
     Detail.tick();
+    Tut.tick(mdt);
     saveT += mdt;
     if (saveT >= 5) {
       saveT = 0;

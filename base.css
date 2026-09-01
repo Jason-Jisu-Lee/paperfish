@@ -919,6 +919,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   cursor:pointer;
   transition:background .18s ease, transform .12s ease, box-shadow .18s ease;
 }
+#tut-next[hidden]{ display:none; }
 #tut-next:hover{ background:var(--seal); box-shadow:0 4px 14px rgba(180,58,43,.35); }
 #tut-next:active{ transform:scale(.96); }
 

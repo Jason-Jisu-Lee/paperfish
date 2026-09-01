@@ -97,8 +97,8 @@ const Panel = (() => {
     const eb = fishGrid.querySelector('[data-egg]');
     if (eb) {
       const cd = eggCd();
-      eb.classList.toggle('off', Game.gold < eggCost() || living() >= FIRSTF_CAP || cd > 0);
-      eb.classList.toggle('pulse', !Game.tuts.eggBought);
+      eb.classList.toggle('off', Tut.eggLocked() || Game.gold < eggCost() || living() >= FIRSTF_CAP || cd > 0);
+      eb.classList.toggle('pulse', !Game.tuts.eggBought && !Tut.eggLocked());
       const bar = eb.querySelector('.eggcd');
       bar.toggleAttribute('hidden', !cd);
       if (cd) bar.style.width = (cd / EGG_CD * 100) + '%';
@@ -146,7 +146,10 @@ const Panel = (() => {
       if (u && u.buy()) refresh();
       return;
     }
-    if (e.target.closest('[data-egg]') && buyEgg()) refresh();
+    if (e.target.closest('[data-egg]') && buyEgg()) {
+      Tut.eggClicked();
+      refresh();
+    }
   });
 
   upGrid.addEventListener('click', e => {

@@ -265,6 +265,7 @@ const resetGame = () => {
 };
 
 const buyEgg = () => {
+  if (Tut.eggLocked()) return false;
   if (eggCd()) return false;
   const c = eggCost();
   if (Game.gold < c) return false;
