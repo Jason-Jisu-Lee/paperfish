@@ -78,13 +78,13 @@ const Sim = (() => {
               if (p.kind) {
                 const reach = SPECIES[f.s].len * 0.45;
                 const mouth = f.x + f.dir * reach;
-                if ((px - mouth) ** 2 + (pyy - f.y) ** 2 < 14 * 14) {
+                if ((px - mouth) ** 2 + (pyy - f.y) ** 2 < 9 * 9) {
                   Stage.eatPellet(p);
                   f.dir = f.x < px ? 1 : -1;
                   f.eating = { t: 0.8, sat: PELLET_SAT, x: px - f.dir * reach, y: pyy };
                   refresh = true;
                 }
-              } else if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 70 * 70) {
+              } else if ((px - f.x) ** 2 + (pyy - f.y) ** 2 < 32 * 32) {
                 Stage.biteKelp(p);
                 if (p.bites <= 0) Game.plants -= 1;
                 const side = f.x < px ? -1 : 1;

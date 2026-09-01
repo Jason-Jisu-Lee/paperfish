@@ -46,7 +46,7 @@ const Detail = (() => {
     if (!sel) return;
     const f = sel;
     Stage.release();
-    if (!f.egg && (f.heldT || 0) < 15) Stage.escape(f, 1);
+    if (!f.egg) Stage.escape(f, 1);
     sel = null;
     cardMode = null;
   };

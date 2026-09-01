@@ -209,13 +209,15 @@ const Stage = (() => {
 
   const escape = (f, level) => {
     if (f.egg || f.eating || f.dying !== undefined || f.birth < 1) return;
+    const panic = 1 - Math.min((f.heldT || 0) / 6, 1);
+    if (panic <= 0) return;
     f.dir = Math.random() < 0.5 ? -1 : 1;
-    f.spd = Math.min(240 + level * 32 + Math.random() * 150, 450);
+    f.spd = Math.min((240 + level * 32 + Math.random() * 150) * (0.4 + 0.6 * panic), 450);
     f.kick = 0.15 + Math.random() * 0.25;
     f.kickTop = f.spd;
-    f.vyT = (Math.random() * 2 - 1) * (50 + level * 20);
+    f.vyT = (Math.random() * 2 - 1) * (50 + level * 20) * (0.5 + 0.5 * panic);
     f.vy = f.vyT * 0.8;
-    f.fleeT = 0.5 + Math.random() * 0.4;
+    f.fleeT = (0.5 + Math.random() * 0.4) * (0.5 + 0.5 * panic);
     f.turnT = Math.max(f.turnT || 0, 2);
   };
 
@@ -274,9 +276,10 @@ const Stage = (() => {
       if (f.birth < 1) { f.birth += mdt / 2.3; continue; }
       if (f === held) {
         f.heldT = (f.heldT || 0) + mdt;
-        const calm = Math.min(f.heldT / 15, 1);
-        f.tailPh += mdt * Math.PI * 2 * (2.3 - calm * 1.8);
-        f.tailAmp += ((0.95 - calm * 0.83) - f.tailAmp) * Math.min(6 * mdt, 1);
+        const q = Math.min(f.heldT / 6, 1);
+        const calm = 1 - (1 - q) * (1 - q);
+        f.tailPh += mdt * Math.PI * 2 * (2.1 - calm * 1.7);
+        f.tailAmp += ((0.85 - calm * 0.73) - f.tailAmp) * Math.min(6 * mdt, 1);
         continue;
       }
       if (f.eating) {
@@ -368,13 +371,13 @@ const Stage = (() => {
         f.kick = 0;
         const urgent = f.hstate === 2;
         const desired = urgent
-          ? Math.min(Math.max(Math.abs(dx) * 4 + 80, 180), 320)
+          ? Math.min(Math.max(Math.abs(dx) * 2.2 + 50, 110), 230)
           : f.hstate === 1
-            ? Math.min(Math.max(Math.abs(dx) * 2 + 30, 45), 130)
-            : Math.min(Math.max(Math.abs(dx) * 1.5 + 25, 35), 90);
-        f.spd += (desired - f.spd) * Math.min((urgent ? 10 : 6) * mdt, 1);
+            ? Math.min(Math.max(Math.abs(dx) * 1.6 + 25, 40), 105)
+            : Math.min(Math.max(Math.abs(dx) * 1.2 + 20, 30), 80);
+        f.spd += (desired - f.spd) * Math.min(6 * mdt, 1);
         f.vyT = urgent
-          ? Math.min(Math.max((pyy - f.y) * 1.2, -150), 150)
+          ? Math.min(Math.max((pyy - f.y) * 0.9, -110), 110)
           : Math.min(Math.max((pyy - f.y) * 0.6, -70), 70);
         if (target.kind && pyy > f.y + 4 && f.vyT < 26) f.vyT = 26;
       } else {
@@ -415,13 +418,13 @@ const Stage = (() => {
         if (f.dir > 0 && f.x > topZone.l - zm && f.x < topZone.l) { f.dir = -1; flipKick(f); }
         else if (f.dir < 0 && f.x < topZone.r + zm && f.x > topZone.r) { f.dir = 1; flipKick(f); }
       }
-      const vcap = seeking ? (f.hstate === 2 ? 150 : 70) : f.spd * 0.34;
+      const vcap = seeking ? (f.hstate === 2 ? 110 : 70) : f.spd * 0.34;
       if (f.vyT > vcap) f.vyT = vcap;
       if (f.vyT < -vcap) f.vyT = -vcap;
       const dv = f.vyT - f.vy;
       const vacc = (8 + f.spd * 0.1) * mdt * (seeking ? 3 : 1);
       f.vy += Math.min(Math.max(dv, -vacc), vacc);
-      const vmax = (seeking ? (f.hstate === 2 ? 90 : 50) : f.spd * 0.35) + 8;
+      const vmax = (seeking ? (f.hstate === 2 ? 70 : 50) : f.spd * 0.35) + 8;
       if (f.vy > vmax) f.vy = vmax;
       if (f.vy < -vmax) f.vy = -vmax;
       if (topZone && f.y < topZone.b && f.x > topZone.l && f.x < topZone.r) {
