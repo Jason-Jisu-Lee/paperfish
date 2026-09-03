@@ -34,5 +34,5 @@
     return bank;
   });
   sp.paths = sp.banks[0][0].p;
-  sp.dots = [{ cx: sp.banks[0][0].e[0], cy: sp.banks[0][0].e[1], r: 1.5 }];
+  sp.dots = [{ cx: sp.banks[0][0].e[0], cy: sp.banks[0][0].e[1], r: 2 }];
 })();
