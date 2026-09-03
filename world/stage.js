@@ -573,6 +573,34 @@ const Stage = (() => {
       ctx.fill();
       ctx.restore();
     }
+    if (born && f.dying === undefined && f !== held) {
+      const bw = sp.len * grow * f.depth * 0.26;
+      const lifeT = lifeOf();
+      const bars = [
+        [Math.min(Math.max((f.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1), f.hstate >= 1 ? 'rgba(180,58,43,0.85)' : 'rgba(28,27,24,0.55)'],
+        [Math.max(1 - Math.min(f.age || 0, lifeT) / lifeT, 0), 'rgba(62,84,110,0.7)']
+      ];
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 2.4;
+      let by = f.y + (vbH / 2) * sc + 9;
+      for (const [q, fill] of bars) {
+        ctx.strokeStyle = 'rgba(28,27,24,0.13)';
+        ctx.beginPath();
+        ctx.moveTo(f.x - bw, by);
+        ctx.lineTo(f.x + bw, by);
+        ctx.stroke();
+        if (q > 0.02) {
+          ctx.strokeStyle = fill;
+          ctx.beginPath();
+          ctx.moveTo(f.x - bw, by);
+          ctx.lineTo(f.x - bw + 2 * bw * q, by);
+          ctx.stroke();
+        }
+        by += 5;
+      }
+      ctx.restore();
+    }
     const dying = f.dying !== undefined;
     let flipY = 1, alpha = 0.92;
     if (dying) {
