@@ -1,6 +1,6 @@
 :root{ --paper:#f2efe6; --ink:#1c1b18; --seal:#b43a2b; }
 *{ margin:0; padding:0; box-sizing:border-box; }
-html,body{ height:100%; overflow:hidden; }
+html,body{ height:100%; overflow:hidden; cursor:url("assets/cursor.svg") 2 2, auto; }
 body{
   background:
     radial-gradient(140% 100% at 30% 20%, rgba(255,255,255,.55), transparent 60%),
@@ -12,7 +12,7 @@ body{
   -webkit-user-select:none;
 }
 [hidden]{ display:none !important; }
-button{ background:none; border:none; cursor:pointer; color:inherit; font-family:inherit; }
+button{ background:none; border:none; cursor:inherit; color:inherit; font-family:inherit; }
 
 #sea{ position:absolute; inset:0; }
 
@@ -85,7 +85,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .goldrate{
   color:rgba(122,88,0,.85); margin-top:3px; font-size:12px;
   letter-spacing:normal; text-transform:none;
-  pointer-events:auto; cursor:default;
+  pointer-events:auto; cursor:inherit;
   display:inline-block;
 }
 .goldsrc{
@@ -149,7 +149,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .ubtn-name{ font-size:15px; letter-spacing:.04em; }
 .ubtn-cost{ font-size:14.5px; font-weight:500; color:#6e4f00; font-feature-settings:'tnum'; }
 .ubtn-lvl{ position:absolute; top:7px; right:10px; font-size:12px; opacity:.85; }
-.ubtn.off{ opacity:.4; cursor:default; }
+.ubtn.off{ opacity:.4; cursor:inherit; }
 .eggcd{ position:absolute; left:0; top:0; bottom:0; background:rgba(28,27,24,.12); border-radius:inherit; pointer-events:none; }
 .ubtn.off:hover{ transform:none; box-shadow:0 1px 4px rgba(28,27,24,.12); }
 .thumb{ width:38px; flex:none; display:flex; align-items:center; }
@@ -437,8 +437,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .tip-meter .mtrack{ height:8px; border-radius:4px; }
 .mtrack{ flex:1; height:4px; background:rgba(28,27,24,.14); border-radius:2px; }
 .mtrack b{ display:block; height:100%; background:rgba(28,27,24,.75); border-radius:2px; }
+#fishtip-hunger .mtrack b{ background:rgba(203,128,14,.9); }
 #fishtip-hunger.low .mtrack b{ background:var(--seal); }
-#fishtip-life .mtrack b{ background:#3e546e; }
+#fishtip-life .mtrack b{ background:#508a44; }
 #uptip{
   max-width:236px;
   white-space:normal;
@@ -498,8 +499,9 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .fc-meter circle{ fill:rgba(28,27,24,.5); }
 .fc-meter .mtrack{ height:8px; border-radius:4px; }
 .fc-meter .mtrack b{ transition:width .3s linear; }
-#fc-lbar .mtrack b{ background:#3e546e; }
-.fc-meter.low .mtrack b{ background:var(--seal); }
+#fc-lbar .mtrack b{ background:#508a44; }
+#fc-hun .mtrack b{ background:rgba(203,128,14,.9); }
+#fc-hun.low .mtrack b{ background:var(--seal); }
 .fc-row{
   display:flex; align-items:center; gap:10px;
   padding:8px 0; font-size:13.5px;
@@ -535,7 +537,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   position:absolute; inset:0; z-index:14;
   background:rgba(242,239,230,.62);
   display:grid; place-items:center;
-  cursor:pointer;
+  cursor:inherit;
   animation:veilin .35s ease;
 }
 @keyframes veilin{ from{ opacity:0; } }
@@ -570,7 +572,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   border:1px solid rgba(28,27,24,.3);
   border-radius:6px;
   padding:4px 8px;
-  cursor:pointer;
+  cursor:inherit;
   font-feature-settings:'tnum';
   transition:border-color .2s ease, background .2s ease;
 }
@@ -606,7 +608,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   display:block; margin:6px auto 0;
   font-family:'Zen Maru Gothic',sans-serif; font-size:12.5px; letter-spacing:.12em;
   padding:6px 18px; border:1px solid rgba(62,84,110,.6); border-radius:999px;
-  background:rgba(62,84,110,.06); color:#3e546e; cursor:pointer;
+  background:rgba(62,84,110,.06); color:#3e546e; cursor:inherit;
   transition:background .2s ease, opacity .2s ease;
 }
 .collect:hover{ background:rgba(62,84,110,.13); }
@@ -706,7 +708,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 }
 .pcard:not(.off):active{ transform:translateY(-1px) scale(.97); }
 .pcard.owned{ border-color:rgba(62,84,110,.4); background:rgba(62,84,110,.05); }
-.pcard.off{ opacity:.42; cursor:default; }
+.pcard.off{ opacity:.42; cursor:inherit; }
 .pcard.locked{ border-style:dashed; }
 .pc-ico{ height:34px; display:flex; align-items:center; }
 .pc-ico svg{ width:30px; height:30px; overflow:visible; }
@@ -802,7 +804,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
 .pr-dive{
   position:fixed; right:clamp(24px, 4vw, 64px); top:50%; transform:translateY(-50%);
   width:200px; padding:14px 0; z-index:51;
-  background:none; border:0; cursor:pointer;
+  background:none; border:0; cursor:inherit;
   text-align:center;
 }
 .pr-dive svg{ width:120px; height:70px; overflow:visible; display:block; margin:0 auto; transition:transform .3s ease; }
@@ -916,7 +918,7 @@ button{ background:none; border:none; cursor:pointer; color:inherit; font-family
   font-size:14px;
   letter-spacing:.18em;
   text-indent:.18em;
-  cursor:pointer;
+  cursor:inherit;
   transition:background .18s ease, transform .12s ease, box-shadow .18s ease;
 }
 #tut-next[hidden]{ display:none; }

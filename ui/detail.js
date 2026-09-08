@@ -134,7 +134,6 @@ const Detail = (() => {
     if (sel && (Game.fish.indexOf(sel) < 0 || sel.dying !== undefined)) close();
     hover = hitTest();
     const oceanHover = mx !== null && (Ocean.hoverAt(mx, my) || Lantern.hoverAt(mx, my));
-    canvas.style.cursor = hover || oceanHover ? 'pointer' : '';
     if (hover) {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;

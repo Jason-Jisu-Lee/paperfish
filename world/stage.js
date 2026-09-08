@@ -577,8 +577,8 @@ const Stage = (() => {
       const bw = sp.len * grow * f.depth * 0.26;
       const lifeT = lifeOf();
       const bars = [
-        [Math.min(Math.max((f.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1), f.hstate >= 1 ? 'rgba(180,58,43,0.85)' : 'rgba(28,27,24,0.55)'],
-        [Math.max(1 - Math.min(f.age || 0, lifeT) / lifeT, 0), 'rgba(62,84,110,0.7)']
+        [Math.min(Math.max((f.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1), f.hstate >= 1 ? 'rgba(180,58,43,0.85)' : 'rgba(203,128,14,0.85)'],
+        [Math.max(1 - Math.min(f.age || 0, lifeT) / lifeT, 0), 'rgba(80,138,68,0.85)']
       ];
       ctx.save();
       ctx.lineCap = 'round';

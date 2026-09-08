@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>upgrades, birds eye</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f2efe6; color: #1c1b18; font: 14px/1.45 Georgia, serif; padding: 40px clamp(20px, 4vw, 70px) 70px; cursor: url("../assets/cursor.svg") 2 2, auto; }
+  h1 { font-size: 20px; font-weight: normal; letter-spacing: .08em; }
+  .note { opacity: .55; font-size: 13px; margin: 4px 0 30px; }
+  .shops { display: grid; grid-template-columns: minmax(300px, 5fr) minmax(420px, 9fr); gap: 34px; align-items: start; }
+  @media (max-width: 900px) { .shops { grid-template-columns: 1fr; } }
+  h2 { font-size: 15px; font-weight: normal; letter-spacing: .14em; margin-bottom: 4px; }
+  .cur { font-size: 12px; opacity: .55; margin-bottom: 14px; }
+  .sect { margin-bottom: 18px; }
+  .sect h3 { font-size: 11.5px; font-weight: normal; letter-spacing: .22em; text-transform: uppercase; opacity: .5; margin-bottom: 7px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 8px; }
+  .u { border: 1px solid rgba(28,27,24,.2); border-radius: 7px; padding: 9px 11px; background: rgba(255,255,255,.28); }
+  .u b { font-weight: normal; font-size: 14.5px; display: block; }
+  .u .fx { font-size: 12.5px; opacity: .75; display: block; margin: 2px 0 5px; }
+  .u .meta { font-size: 11.5px; opacity: .55; display: block; }
+  .u .rev { font-size: 11.5px; color: #b43a2b; opacity: .8; display: block; }
+  .u.gap { border-color: #b43a2b; background: rgba(180,58,43,.06); }
+  .u.gap .rev { opacity: 1; }
+  .tag { display: inline-block; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid rgba(28,27,24,.3); border-radius: 99px; padding: 1px 8px; margin-left: 8px; vertical-align: 2px; opacity: .6; }
+</style>
+</head>
+<body>
+<h1>upgrades, birds eye</h1>
+<div class="note">21 purchasables. seal red marks a reveal condition or a gap.</div>
+
+<div class="shops">
+<div>
+  <h2>in-game<span class="tag">gold</span></h2>
+  <div class="cur">rail tabs, reset every dive</div>
+
+  <div class="sect"><h3>fish</h3>
+    <div class="cards">
+      <div class="u"><b>Egg</b><span class="fx">rolls a tier, hatches in 8s</span><span class="meta">2 to 300 ladder, then 300 x 1.3^n · cap 20 fish · 2s cooldown</span></div>
+      <div class="u"><b>Auto Egg toggle</b><span class="fx">buys an egg whenever affordable</span><span class="meta">free on/off</span><span class="rev">needs prestige Auto Egg</span></div>
+      <div class="u"><b>Fish Tier</b><span class="fx">shifts egg odds up the weight table</span><span class="meta">25 x 2^lvl · max 5</span><span class="rev">needs prestige Unlock Fish Tier</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>income</h3>
+    <div class="cards">
+      <div class="u"><b>Income</b><span class="fx">+1 G / 5s for every fish</span><span class="meta">5 first, then 25 x 2^(lvl-1) · no max</span><span class="rev">needs prestige Unlock Income</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>food</h3>
+    <div class="cards">
+      <div class="u"><b>Kelp</b><span class="fx">floating food, two bites, a bite feeds 20s</span><span class="meta">2 flat · no max</span><span class="rev">needs prestige Unlock Kelp</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>life</h3>
+    <div class="cards">
+      <div class="u gap"><b>Lifespan</b><span class="fx">every fish lives 5s longer this run</span><span class="meta">40 x 2^lvl · no max</span><span class="rev">gap: no prestige card unlocks this, tab unreachable</span></div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h2>prestige<span class="tag">paper</span></h2>
+  <div class="cur">permanent, two tabs</div>
+
+  <div class="sect"><h3>upgrades · fish</h3>
+    <div class="cards">
+      <div class="u"><b>Auto Egg</b><span class="fx">adds the in-run auto egg toggle</span><span class="meta">50 · once</span></div>
+      <div class="u"><b>Sixth Tier</b><span class="fx">permanent +1 Fish Tier level, the only level 6</span><span class="meta">500 · once</span><span class="rev">reveals at 500 paper</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>upgrades · income</h3>
+    <div class="cards">
+      <div class="u"><b>Starting Gold</b><span class="fx">dive starts +20/+30/+40 gold, 100 total</span><span class="meta">10 x 2^lvl · max 3</span></div>
+      <div class="u"><b>Base Income</b><span class="fx">every fish earns +1 gold per tick, forever</span><span class="meta">3 x 2^lvl · no max</span></div>
+      <div class="u"><b>Adult Gold</b><span class="fx">grown fish earn 1.2x</span><span class="meta">100 · once</span><span class="rev">reveals at 200 paper</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>upgrades · food</h3>
+    <div class="cards">
+      <div class="u"><b>Starting Kelp</b><span class="fx">dive starts with +1 kelp floating</span><span class="meta">20 flat · max 5</span><span class="rev">reveals when Unlock Kelp owned</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>upgrades · life</h3>
+    <div class="cards">
+      <div class="u"><b>Lifespan</b><span class="fx">every fish lives 5s longer, forever</span><span class="meta">8 x 2^lvl · no max</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>upgrades · paper</h3>
+    <div class="cards">
+      <div class="u"><b>Extra Paper</b><span class="fx">every fish leaves +1 paper at death</span><span class="meta">20 x 2^lvl · no max</span><span class="rev">reveals at 100 paper</span></div>
+      <div class="u"><b>Life Burn</b><span class="fx">once per dive, burn one minute of life from every fish</span><span class="meta">500 · once</span><span class="rev">reveals at 100 paper</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>upgrades · lantern</h3>
+    <div class="cards">
+      <div class="u"><b>Lantern Gold</b><span class="fx">+1 gold per lantern tap</span><span class="meta">12 x 2^lvl · max 10</span><span class="rev">reveals at 100 paper</span></div>
+      <div class="u"><b>Curious Fish</b><span class="fx">tier 1 fish may tap a lantern, +4% per lvl</span><span class="meta">200 x 2^lvl · max 5</span><span class="rev">reveals at 200 paper</span></div>
+      <div class="u"><b>Lantern Tide</b><span class="fx">lanterns drift in 1s sooner</span><span class="meta">150 x 2^lvl · max 5</span><span class="rev">reveals at 100 paper</span></div>
+    </div>
+  </div>
+  <div class="sect"><h3>unlocks</h3>
+    <div class="cards">
+      <div class="u"><b>Unlock Fish Tier</b><span class="fx">opens the in-run Fish Tier card</span><span class="meta">10 · once</span></div>
+      <div class="u"><b>Unlock Income</b><span class="fx">opens the in-run Income card</span><span class="meta">5 · once</span></div>
+      <div class="u"><b>Unlock Kelp</b><span class="fx">opens in-run kelp buying</span><span class="meta">50 · once</span><span class="rev">reveals at 100 paper</span></div>
+      <div class="u"><b>Unlock Maturity</b><span class="fx">fish mature 5% faster per lvl</span><span class="meta">100 x 2^lvl · max 4</span><span class="rev">reveals at 500 paper</span></div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
