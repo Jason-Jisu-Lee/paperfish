@@ -164,12 +164,12 @@ const Stage = (() => {
   const resetPlants = () => { plants.length = 0; pellets.length = 0; };
 
   const spawnPellet = (x, y) => {
+    const px = Math.min(Math.max(x, bounds.l + 8), bounds.r - 8);
+    const py = Math.min(Math.max(y, bounds.t + 8), bounds.b - 10);
+    for (const p of pellets) if ((p.x - px) ** 2 + (p.y - py) ** 2 < 64) return false;
     if (pellets.length >= 30) pellets.shift();
-    pellets.push({
-      x: Math.min(Math.max(x, bounds.l + 8), bounds.r - 8),
-      y: Math.min(Math.max(y, bounds.t + 8), bounds.b - 10),
-      hx: 0, hy: 0, ph: rand(0, Math.PI * 2), kind: 1
-    });
+    pellets.push({ x: px, y: py, vx: 0, vy: 0, hx: 0, hy: 0, ph: rand(0, Math.PI * 2), kind: 1 });
+    return true;
   };
 
   const eatPellet = p => {
@@ -481,12 +481,55 @@ const Stage = (() => {
         p.x += Math.sin(p.ph) * 4 * mdt;
       } else {
         p.rest = (p.rest || 0) + mdt;
-        if (p.rest > 12) pellets.splice(i, 1);
+        if (p.rest > 12) { pellets.splice(i, 1); continue; }
+      }
+      p.x += p.vx * mdt;
+      p.y += p.vy * mdt;
+      const drag = Math.exp(-3 * mdt);
+      p.vx *= drag;
+      p.vy *= drag;
+      for (const f of Game.fish) {
+        if (f.egg || f.dying !== undefined || f.birth < 1 || f === held) continue;
+        const sp = SPECIES[f.s];
+        const u = Math.min((f.age || 0) / adultAtOf(), 1);
+        const rf = sp.len * (0.6 + 0.4 * u * u * (3 - 2 * u)) * (f.depth || 1) * 0.3 + 3;
+        const dx = p.x - f.x, dy = p.y - f.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= rf * rf) continue;
+        if ((p.x - f.x - f.dir * sp.len * 0.45) ** 2 + dy * dy < 196) continue;
+        const d = Math.sqrt(d2) || 1;
+        const nx = dx / d, ny = dy / d;
+        const fs = f.eating ? 0 : f.spd;
+        const k = Math.min(mdt * 10, 1);
+        p.vx += (nx * (rf - d) * (2.5 + fs * 0.02) + f.dir * fs * 0.25) * k;
+        p.vy += (ny * (rf - d) * (2.5 + fs * 0.02) + (f.eating ? 0 : f.vy) * 0.25) * k;
+        p.x += nx * (rf - d) * Math.min(4 * mdt, 1);
+        p.y += ny * (rf - d) * Math.min(4 * mdt, 1);
+        p.rest = 0;
+      }
+      for (let j = i - 1; j >= 0; j--) {
+        const q = pellets[j];
+        const qx = p.x - q.x, qy = p.y - q.y;
+        const q2 = qx * qx + qy * qy;
+        if (!q2 || q2 >= 36) continue;
+        const qd = Math.sqrt(q2), o = (6 - qd) / 2;
+        p.x += qx / qd * o;
+        p.y += qy / qd * o;
+        q.x -= qx / qd * o;
+        q.y -= qy / qd * o;
+      }
+      const v2 = p.vx * p.vx + p.vy * p.vy;
+      if (v2 > 140 * 140) {
+        const s = 140 / Math.sqrt(v2);
+        p.vx *= s;
+        p.vy *= s;
       }
       if (btnUnion && p.x > btnUnion.l && p.x < btnUnion.r && p.y > btnUnion.t && p.y < btnUnion.b) {
         p.x = Math.min(p.x + 120 * mdt, bounds.r - 8);
         p.rest = 0;
       }
+      p.x = Math.min(Math.max(p.x, bounds.l + 6), bounds.r - 6);
+      p.y = Math.min(Math.max(p.y, bounds.t + 6), bounds.b - 10);
     }
     updatePops(mdt);
   };
