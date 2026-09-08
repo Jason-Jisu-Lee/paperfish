@@ -27,9 +27,9 @@ const Panel = (() => {
       key: 'eggup', name: 'Fish Tier', cat: 'fish', unlock: 'eggup',
       icon: '<svg viewBox="-26 -32 52 64"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/><path class="chev" d="M-7.5,7 L0,-3.5 L7.5,7"/></svg>',
       cost: eggUpCost, lvl: () => Game.eggUp, buy: buyEggUp,
-      maxed: () => Game.eggUp >= eggUpMax(),
-      desc: 'eggs may hatch higher tiers; every 5th level opens a new tier',
-      cur: () => 'Current: up to Tier ' + (Game.eggUp ? Math.min(2 + Math.floor(Game.eggUp / 5), maxTier()) : 1)
+      maxed: () => Game.eggUp >= EGGUP_MAX,
+      desc: 'eggs may hatch higher tiers; each level opens the next tier',
+      cur: () => 'Current: up to Tier ' + Math.min(eggLevel() + 1, maxTier())
     },
     {
       key: 'life', name: 'Lifespan', cat: 'life', unlock: 'life',

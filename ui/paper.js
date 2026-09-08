@@ -59,6 +59,10 @@ const Paper = (() => {
     { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1, once: 1 },
+    { key: 'pEggUp', ico: 'egg', name: 'Sixth Tier', desc: 'A permanent sixth Fish Tier level, active every dive.',
+      lvl: () => Game.pEggUp, cost: pEggUpCost, buy: () => Game.pEggUp = 1,
+      max: () => Game.pEggUp >= 1, once: 1,
+      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' },
     { key: 'pLife', ico: 'life', name: 'Lifespan', desc: 'Every fish lives 5 seconds longer.',
       lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
   ];
@@ -88,7 +92,7 @@ const Paper = (() => {
   ];
 
   const M_SECTS = [
-    ['Fish', 'fish', ['autoEgg']],
+    ['Fish', 'fish', ['autoEgg', 'pEggUp']],
     ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
     ['Life', 'life', ['pLife']],

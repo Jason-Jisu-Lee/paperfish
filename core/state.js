@@ -8,7 +8,7 @@ const Game = {
   pIncome: 0,
   pKelp: 0,
   pLife: 0,
-  pTier: [0, 0, 0, 0, 0],
+  pEggUp: 0,
   pLantGold: 0,
   pLantRate: 0,
   pLantFish: 0,
@@ -93,9 +93,18 @@ const pKelpCost = () => 20;
 const pLifeCost = () => 8 * 2 ** Game.pLife;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const maxTier = () => TIER_FISH.length;
-const eggUpMax = () => 5 * (maxTier() - 2) + 10;
-const tierIntro = t => t === 2 ? 1 : 5 * (t - 2);
-const tierWeight = t => t === 1 ? 10 : Math.max(0, Game.eggUp - tierIntro(t) + 1);
+const EGGUP_MAX = 5;
+const TIER_WEIGHTS = [
+  [100, 0, 0, 0, 0, 0],
+  [75, 25, 0, 0, 0, 0],
+  [50, 35, 15, 0, 0, 0],
+  [40, 30, 20, 10, 0, 0],
+  [31, 26, 21, 14, 8, 0],
+  [28, 23, 19, 15, 10, 5],
+  [25, 21, 18, 15, 12, 9]
+];
+const eggLevel = () => Math.min(Game.eggUp, EGGUP_MAX) + (Game.pEggUp ? 1 : 0);
+const tierWeight = t => t > maxTier() ? 0 : TIER_WEIGHTS[eggLevel()][t - 1];
 const tierChance = t => {
   const m = maxTier();
   if (t > m) return 0;
@@ -114,7 +123,7 @@ const rollTier = () => {
   }
   return m;
 };
-const eggUpCost = () => Math.round(25 * 1.25 ** Game.eggUp);
+const eggUpCost = () => 25 * 2 ** Game.eggUp;
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;
 
 const PLANTGOLD_MAX = 10;
@@ -130,6 +139,7 @@ const pLantFishCost = () => 200 * 2 ** Game.pLantFish;
 const pAutoEggCost = () => 50;
 const pAdultGoldCost = () => 100;
 const pBurnCost = () => 500;
+const pEggUpCost = () => 500;
 const KELP_UNLOCK_COST = 50;
 const PMATURE_MAX = 4;
 const pMatureCost = () => 100 * 2 ** Game.pMature;
@@ -181,7 +191,7 @@ const saveGame = () => {
       pin: Game.pIncome,
       pkl: Game.pKelp,
       pl: Game.pLife,
-      pt: Game.pTier,
+      peu: Game.pEggUp,
       plg: Game.pLantGold,
       plr: Game.pLantRate,
       plf: Game.pLantFish,
@@ -225,7 +235,7 @@ const loadGame = () => {
     Game.pIncome = d.pin || 0;
     Game.pKelp = d.pkl || 0;
     Game.pLife = d.pl || 0;
-    Game.pTier = Array.isArray(d.pt) && d.pt.length === 5 ? d.pt : [0, 0, 0, 0, 0];
+    Game.pEggUp = d.peu || 0;
     Game.pLantGold = d.plg || 0;
     Game.pLantRate = d.plr || 0;
     Game.pLantFish = d.plf || 0;
@@ -239,7 +249,7 @@ const loadGame = () => {
     Game.burnUsed = d.bu || 0;
     Game.eggsBought = d.eggs || 0;
     Game.incomeUp = d.iu || 0;
-    Game.eggUp = d.eu || 0;
+    Game.eggUp = Math.min(d.eu || 0, EGGUP_MAX);
     Game.lifeUp = d.lu || 0;
     Game.seen = d.sn || { 0: 1 };
     Game.unlocks = Object.assign({ income: 0, kelp: 0, life: 0, eggup: 0 }, d.un || {});
@@ -300,7 +310,7 @@ const buyIncomeUp = () => {
 };
 
 const buyEggUp = () => {
-  if (Game.eggUp >= eggUpMax()) return false;
+  if (Game.eggUp >= EGGUP_MAX) return false;
   const c = eggUpCost();
   if (Game.gold < c) return false;
   Game.gold -= c;
