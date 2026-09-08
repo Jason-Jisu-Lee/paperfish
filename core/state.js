@@ -7,7 +7,6 @@ const Game = {
   pStartGold: 0,
   pIncome: 0,
   pKelp: 0,
-  pLife: 0,
   pEggUp: 0,
   pLantGold: 0,
   pLantRate: 0,
@@ -70,7 +69,7 @@ const PAPER_BASE = [1, 3, 12, 60];
 const paperYieldOf = s => PAPER_BASE[tierOf(s) - 1] + Game.paperUp;
 const UNLOCK_COST = 5;
 const EGGUP_UNLOCK_COST = 10;
-const lifeOf = () => (20 + Game.pLife * 5 + Game.lifeUp * 5) / 60;
+const lifeOf = () => (20 + Game.lifeUp * 5) / 60;
 const adultAtOf = () => 30 * (1 - 0.05 * Game.pMature) / 60;
 const HUNGER_FULL = 30;
 const HUNGER_HATCH = 24;
@@ -89,7 +88,7 @@ const startGoldCost = () => 10 * 2 ** Game.pStartGold;
 const pIncomeCost = () => 3 * 2 ** Game.pIncome;
 const PKELP_MAX = 5;
 const pKelpCost = () => 20;
-const pLifeCost = () => 8 * 2 ** Game.pLife;
+const LIFE_UNLOCK_COST = 8;
 const incomeUpCost = () => Game.incomeUp ? 25 * 2 ** (Game.incomeUp - 1) : 5;
 const maxTier = () => TIER_FISH.length;
 const EGGUP_MAX = 5;
@@ -181,7 +180,6 @@ const saveGame = () => {
       psg: Game.pStartGold,
       pin: Game.pIncome,
       pkl: Game.pKelp,
-      pl: Game.pLife,
       peu: Game.pEggUp,
       plg: Game.pLantGold,
       plr: Game.pLantRate,
@@ -225,7 +223,6 @@ const loadGame = () => {
     Game.pStartGold = d.psg || 0;
     Game.pIncome = d.pin || 0;
     Game.pKelp = d.pkl || 0;
-    Game.pLife = d.pl || 0;
     Game.pEggUp = d.peu || 0;
     Game.pLantGold = d.plg || 0;
     Game.pLantRate = d.plr || 0;

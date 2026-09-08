@@ -62,9 +62,7 @@ const Paper = (() => {
     { key: 'pEggUp', ico: 'egg', name: 'Sixth Tier', desc: 'A permanent sixth Fish Tier level, active every dive.',
       lvl: () => Game.pEggUp, cost: pEggUpCost, buy: () => Game.pEggUp = 1,
       max: () => Game.pEggUp >= 1, once: 1,
-      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' },
-    { key: 'pLife', ico: 'life', name: 'Lifespan', desc: 'Every fish lives 5 seconds longer.',
-      lvl: () => Game.pLife, cost: pLifeCost, buy: () => Game.pLife++ }
+      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' }
   ];
 
   const UNLOCKS = [
@@ -78,6 +76,9 @@ const Paper = (() => {
     { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
       lvl: () => Game.unlocks.eggup, cost: () => EGGUP_UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup, once: 1 },
+    { key: 'u_life', ico: 'life', name: 'Unlock Life', desc: 'Unlock in-run Lifespan.',
+      lvl: () => Game.unlocks.life, cost: () => LIFE_UNLOCK_COST, buy: () => Game.unlocks.life = 1,
+      max: () => !!Game.unlocks.life, once: 1 },
     { key: 'u_mature', ico: 'life', name: 'Unlock Maturity', desc: 'Fish mature 5% faster.',
       lvl: () => Game.pMature, cost: pMatureCost, buy: () => Game.pMature++,
       max: () => Game.pMature >= PMATURE_MAX,
@@ -88,14 +89,13 @@ const Paper = (() => {
     ['Fish', 'fish', ['u_eggup']],
     ['Income', 'income', ['u_income']],
     ['Food', 'kelp', ['u_kelp']],
-    ['Life', 'life', ['u_mature']]
+    ['Life', 'life', ['u_life', 'u_mature']]
   ];
 
   const M_SECTS = [
     ['Fish', 'fish', ['autoEgg', 'pEggUp']],
     ['Income', 'income', ['startGold', 'pIncome', 'adultGold']],
     ['Food', 'kelp', ['pKelp']],
-    ['Life', 'life', ['pLife']],
     ['Paper', 'paper', ['paperUp', 'pBurn']],
     ['Lantern', 'lantern', ['lantGold', 'lantFish', 'lantRate']]
   ];
