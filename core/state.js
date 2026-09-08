@@ -41,7 +41,6 @@ const EGG_COSTS = [2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 25
 const EGG_CD = 2000;
 let eggCdUntil = 0;
 const eggCd = () => Game.devMode ? 0 : Math.max(eggCdUntil - Date.now(), 0);
-const TIER_HATCH = [8, 12, 20, 30, 45, 60];
 const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
@@ -83,7 +82,7 @@ const EAT_LOCK = 0.95;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
 const EAT_R = 234;
-const hatchTime = () => TIER_HATCH[0];
+const hatchTime = () => 8;
 
 const paperUpCost = () => 20 * 2 ** Game.paperUp;
 const startGoldCost = () => 10 * 2 ** Game.pStartGold;
@@ -104,24 +103,16 @@ const TIER_WEIGHTS = [
   [25, 21, 18, 15, 12, 9]
 ];
 const eggLevel = () => Math.min(Game.eggUp, EGGUP_MAX) + (Game.pEggUp ? 1 : 0);
-const tierWeight = t => t > maxTier() ? 0 : TIER_WEIGHTS[eggLevel()][t - 1];
+const tierWeights = () => TIER_WEIGHTS[eggLevel()].slice(0, maxTier());
 const tierChance = t => {
-  const m = maxTier();
-  if (t > m) return 0;
-  let sum = 0;
-  for (let i = 1; i <= m; i++) sum += tierWeight(i);
-  return tierWeight(t) / sum;
+  const w = tierWeights();
+  return (w[t - 1] || 0) / w.reduce((a, b) => a + b);
 };
 const rollTier = () => {
-  const m = maxTier();
-  let sum = 0;
-  for (let i = 1; i <= m; i++) sum += tierWeight(i);
-  let r = Math.random() * sum;
-  for (let i = 1; i < m; i++) {
-    r -= tierWeight(i);
-    if (r < 0) return i;
-  }
-  return m;
+  const w = tierWeights();
+  let r = Math.random() * w.reduce((a, b) => a + b);
+  const i = w.findIndex(x => (r -= x) < 0);
+  return i < 0 ? w.length : i + 1;
 };
 const eggUpCost = () => 25 * 2 ** Game.eggUp;
 const lifeUpCost = () => 40 * 2 ** Game.lifeUp;

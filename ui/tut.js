@@ -104,7 +104,7 @@ const Tut = (() => {
   };
 
   const E_STEPS = [
-    ["Every <b>Paperfish</b> specie is born from an <b>Egg</b>.<br>It's where <b>Paper</b> is folded into a life.", 'Interesting'],
+    ["Every <b>Paperfish</b> specie is born from an <b>Egg</b>.", 'Interesting'],
     ['Try creating an <b>Egg</b>!', null]
   ];
   let estep = -1, eggWait = -1;

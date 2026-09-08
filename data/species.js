@@ -92,3 +92,13 @@ const SPECIES = [
     paths: []
   }
 ];
+
+const speciesSVG = (s, tinted = true, vec = false) => {
+  const sp = SPECIES[s];
+  const ve = vec ? ' vector-effect="non-scaling-stroke"' : '';
+  const tint = tinted && sp.tint ? ` style="stroke:rgb(${sp.tint})"` : '';
+  let inner = sp.paths.map(d => `<path d="${d}"${ve}${tint}/>`).join('');
+  if (sp.dots) inner += sp.dots.map(d => `<circle class="dot" cx="${d.cx}" cy="${d.cy}" r="${d.r}"${tinted && sp.tint ? ` style="fill:rgb(${sp.tint})"` : ''}/>`).join('');
+  if (sp.mirror) inner = `<g transform="translate(${sp.vb[0]},0) scale(-1,1)">${inner}</g>`;
+  return `<svg viewBox="0 0 ${sp.vb[0]} ${sp.vb[1]}">${inner}</svg>`;
+};
