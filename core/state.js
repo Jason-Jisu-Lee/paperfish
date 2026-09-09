@@ -19,7 +19,8 @@ const Game = {
   paperEarned: 0,
   pBurn: 0,
   burnUsed: 0,
-  eggsBought: 0,
+  egg: { lvl: 0, t: 0 },
+  hatched: 0,
   incomeUp: 0,
   eggUp: 0,
   lifeUp: 0,
@@ -36,10 +37,6 @@ const Game = {
 const SAVE_KEY = 'paperfish.save';
 let skipSave = false;
 
-const EGG_COSTS = [2, 3, 5, 8, 12, 20, 25, 30, 40, 50, 70, 90, 120, 150, 200, 250, 300];
-const EGG_CD = 2000;
-let eggCdUntil = 0;
-const eggCd = () => Game.devMode ? 0 : Math.max(eggCdUntil - Date.now(), 0);
 const KELP_COST = 2;
 const TICK = 5;
 const FIRSTF_CAP = 20;
@@ -52,13 +49,6 @@ const SG_GAIN = [20, 30, 40];
 const SG_TOTAL = [0, 20, 50, 90];
 const SG_MAX = 3;
 const startGold = () => 10 + SG_TOTAL[Math.min(Game.pStartGold, SG_MAX)];
-const eggCost = () => {
-  const n = Game.eggsBought;
-  if (n < EGG_COSTS.length) return EGG_COSTS[n];
-  const raw = 300 * 1.3 ** (n - EGG_COSTS.length + 1);
-  const mag = 10 ** Math.floor(Math.log10(raw) - 1);
-  return Math.round(raw / mag) * mag;
-};
 const incomePer5s = () => 1 + Game.incomeUp + Game.pIncome;
 const ADULT_GOLD = 1.2;
 const fishIncome = (s, adult) => {
@@ -81,7 +71,6 @@ const EAT_LOCK = 0.95;
 const PELLET_SAT = 5;
 const KELP_SAT = 20;
 const EAT_R = 234;
-const hatchTime = () => 8;
 
 const paperUpCost = () => 20 * 2 ** Game.paperUp;
 const startGoldCost = () => 10 * 2 ** Game.pStartGold;
@@ -102,7 +91,9 @@ const TIER_WEIGHTS = [
   [25, 21, 18, 15, 12, 9]
 ];
 const eggLevel = () => Math.min(Game.eggUp, EGGUP_MAX) + (Game.pEggUp ? 1 : 0);
-const tierWeights = () => TIER_WEIGHTS[eggLevel()].slice(0, maxTier());
+const eggRollLevel = () => Math.min(eggLevel() + Game.egg.lvl, 6);
+const eggLevelTime = () => 10 * 2 ** Game.egg.lvl * 1.25 ** Game.hatched;
+const tierWeights = () => TIER_WEIGHTS[eggRollLevel()].slice(0, maxTier());
 const tierChance = t => {
   const w = tierWeights();
   return (w[t - 1] || 0) / w.reduce((a, b) => a + b);
@@ -192,7 +183,9 @@ const saveGame = () => {
       se: Math.round(Game.paperEarned),
       pb: Game.pBurn,
       bu: Game.burnUsed,
-      eggs: Game.eggsBought,
+      el: Game.egg.lvl,
+      et: Math.round(Game.egg.t * 10) / 10,
+      ht: Game.hatched,
       iu: Game.incomeUp,
       eu: Game.eggUp,
       lu: Game.lifeUp,
@@ -202,10 +195,10 @@ const saveGame = () => {
       objs: Game.objs || {},
       tuts: Game.tuts || {},
       fish: Game.fish.map(f => ({
-        s: f.s, egg: f.egg ? 1 : 0, t: Math.round(f.t || 0),
+        s: f.s,
         a: Math.round((f.age || 0) * 100) / 100,
         h: f.hstate || 0, hu: Math.round((f.hunger ?? HUNGER_FULL) * 100) / 100,
-        d: f.dying !== undefined ? 1 : 0, ns: f.nopaper ? 1 : 0
+        d: f.dying !== undefined ? 1 : 0
       }))
     }));
   } catch (e) {}
@@ -235,7 +228,8 @@ const loadGame = () => {
     Game.paperEarned = d.se ?? (d.paper || 0) + (d.bank || 0);
     Game.pBurn = d.pb || 0;
     Game.burnUsed = d.bu || 0;
-    Game.eggsBought = d.eggs || 0;
+    Game.egg = { lvl: d.el || 0, t: d.et || 0 };
+    Game.hatched = d.ht || 0;
     Game.incomeUp = d.iu || 0;
     Game.eggUp = Math.min(d.eu || 0, EGGUP_MAX);
     Game.lifeUp = d.lu || 0;
@@ -245,11 +239,10 @@ const loadGame = () => {
     Game.objs = d.objs || {};
     Game.tuts = d.tuts || {};
     Game.fish = (d.fish || [])
-      .filter(f => f && tierOf(f.s) > 0)
+      .filter(f => f && !f.egg && tierOf(f.s) > 0)
       .map(f => {
-        const o = { s: f.s, egg: !!f.egg, t: f.t || 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hunger: f.hu ?? HUNGER_FULL };
+        const o = { s: f.s, egg: false, t: 0, age: f.a || 0, hstate: f.h || 0, hT: 0, hunger: f.hu ?? HUNGER_FULL };
         if (f.d) o.dying = 0;
-        if (f.ns) o.nopaper = true;
         return o;
       });
     return true;
@@ -262,19 +255,18 @@ const resetGame = () => {
   location.reload();
 };
 
-const buyEgg = () => {
+const hatchEgg = () => {
   if (Tut.eggLocked()) return false;
-  if (eggCd()) return false;
-  const c = eggCost();
-  if (Game.gold < c) return false;
   if (Game.fish.filter(f => f.dying === undefined).length >= FIRSTF_CAP) return false;
-  eggCdUntil = Date.now() + EGG_CD;
-  Game.gold -= c;
-  Game.eggsBought += 1;
   Game.tuts.eggBought = 1;
-  const f = { s: 0, egg: true, t: 0 };
+  const t = rollTier();
+  const pool = TIER_FISH[t - 1];
+  const f = { s: pool[Math.floor(Math.random() * pool.length)], egg: false, t: 0 };
+  Game.seen[f.s] = 1;
   Game.fish.push(f);
-  Stage.materialize(f);
+  Stage.hatchAt(f);
+  Game.hatched += 1;
+  Game.egg = { lvl: 0, t: 0 };
   saveGame();
   return true;
 };

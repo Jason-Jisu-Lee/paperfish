@@ -32,37 +32,37 @@ const Paper = (() => {
     { key: 'adultGold', ico: 'income', name: 'Adult Gold', desc: 'A fish, once fully grown, earns 1.2x the gold it earned as a baby.',
       lvl: () => Game.pAdultGold, cost: pAdultGoldCost, buy: () => Game.pAdultGold = 1,
       max: () => Game.pAdultGold >= 1, once: 1,
-      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
+      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Essence collected' },
     { key: 'pKelp', ico: 'kelp', name: 'Starting Kelp', desc: 'Begin every dive with 1 more kelp already floating.',
       lvl: () => Game.pKelp, cost: pKelpCost, buy: () => Game.pKelp++,
       max: () => Game.pKelp >= PKELP_MAX,
       reveal: () => !!Game.unlocks.kelp, revealText: 'Own Unlock Kelp' },
     { key: 'paperUp', ico: 'paper', name: 'Extra Paper', desc: 'Every fish leaves 1 more paper when it dies.',
       lvl: () => Game.paperUp, cost: paperUpCost, buy: () => Game.paperUp++,
-      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Essence collected' },
     { key: 'pBurn', ico: 'paper', name: 'Life Burn', desc: 'Once per dive, burn one minute of life from every fish.',
       lvl: () => Game.pBurn, cost: pBurnCost, buy: () => Game.pBurn = 1,
       max: () => Game.pBurn >= 1, once: 1,
-      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Essence collected' },
     { key: 'lantGold', ico: 'lantern', name: 'Lantern Gold', desc: 'Paper lanterns pay 1 more gold per tap.',
       lvl: () => Game.pLantGold, cost: pLantGoldCost, buy: () => Game.pLantGold++,
       max: () => Game.pLantGold >= PLANTGOLD_MAX,
-      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Essence collected' },
     { key: 'lantFish', ico: 'curious', name: 'Curious Fish', desc: 'Tier 1 fish may tap a passing lantern once themselves, 4% more likely per level.',
       lvl: () => Game.pLantFish, cost: pLantFishCost, buy: () => Game.pLantFish++,
       max: () => Game.pLantFish >= PLANTFISH_MAX,
-      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Paper collected' },
+      reveal: () => Game.paperEarned >= 200, revealText: 'Reach 200 Essence collected' },
     { key: 'lantRate', ico: 'lantern', name: 'Lantern Tide', desc: 'Lanterns drift in 1 second sooner.',
       lvl: () => Game.pLantRate, cost: pLantRateCost, buy: () => Game.pLantRate++,
       max: () => Game.pLantRate >= PLANTRATE_MAX,
-      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
-    { key: 'autoEgg', ico: 'egg', name: 'Auto Egg', desc: 'An egg is bought for you whenever you can afford one.<br>Toggle it during a run.',
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Essence collected' },
+    { key: 'autoEgg', ico: 'egg', name: 'Auto Hatch', desc: 'The egg is hatched for you the moment it appears.<br>Toggle it during a run.',
       lvl: () => Game.pAutoEgg, cost: pAutoEggCost, buy: () => Game.pAutoEgg = 1,
       max: () => Game.pAutoEgg >= 1, once: 1 },
     { key: 'pEggUp', ico: 'egg', name: 'Sixth Tier', desc: 'A permanent sixth Fish Tier level, active every dive.',
       lvl: () => Game.pEggUp, cost: pEggUpCost, buy: () => Game.pEggUp = 1,
       max: () => Game.pEggUp >= 1, once: 1,
-      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' }
+      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Essence collected' }
   ];
 
   const UNLOCKS = [
@@ -72,7 +72,7 @@ const Paper = (() => {
     { key: 'u_kelp', ico: 'kelp', name: 'Unlock Kelp', desc: 'Unlock buying kelp during a run.',
       lvl: () => Game.unlocks.kelp, cost: () => KELP_UNLOCK_COST, buy: () => Game.unlocks.kelp = 1,
       max: () => !!Game.unlocks.kelp, once: 1,
-      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Paper collected' },
+      reveal: () => Game.paperEarned >= 100, revealText: 'Reach 100 Essence collected' },
     { key: 'u_eggup', ico: 'egg', name: 'Unlock Fish Tier', desc: 'Unlock in-run Fish Tier.',
       lvl: () => Game.unlocks.eggup, cost: () => EGGUP_UNLOCK_COST, buy: () => Game.unlocks.eggup = 1,
       max: () => !!Game.unlocks.eggup, once: 1 },
@@ -82,7 +82,7 @@ const Paper = (() => {
     { key: 'u_mature', ico: 'life', name: 'Unlock Maturity', desc: 'Fish mature 5% faster.',
       lvl: () => Game.pMature, cost: pMatureCost, buy: () => Game.pMature++,
       max: () => Game.pMature >= PMATURE_MAX,
-      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Paper collected' }
+      reveal: () => Game.paperEarned >= 500, revealText: 'Reach 500 Essence collected' }
   ];
 
   const U_SECTS = [
@@ -113,7 +113,7 @@ const Paper = (() => {
         ${lv > 0 && !u.once ? `<span class="pc-lv">${lv}</span>` : ''}
         <span class="pc-ico">${locked ? ICO.lock : ICO[u.ico]}</span>
         <span class="pc-name">${locked ? 'Locked' : u.name}</span>
-        <span class="pc-cost">${locked ? '&mdash;' : maxed ? (u.once ? '<svg class="pc-done" viewBox="0 0 24 24"><path d="M5.5 12.5 L10 17 L18.5 7.5"/></svg>' : 'Max') : fmtG(u.cost()) + ' Paper'}</span>
+        <span class="pc-cost">${locked ? '&mdash;' : maxed ? (u.once ? '<svg class="pc-done" viewBox="0 0 24 24"><path d="M5.5 12.5 L10 17 L18.5 7.5"/></svg>' : 'Max') : fmtG(u.cost()) + ' Essence'}</span>
       </button>`;
   };
 
@@ -263,7 +263,7 @@ const Paper = (() => {
     if (fi) {
       const s = +fi.dataset.fi;
       tip.innerHTML = `<span class="pct-name">${SPECIES[s].name}</span>` +
-        `Tier ${tierOf(s)}<br>${fmtG1(fishIncome(s))} G / ${TICK}s<br>+${paperYieldOf(s)} paper`;
+        `Tier ${tierOf(s)}<br>${fmtG1(fishIncome(s))} G / ${TICK}s<br>+${paperYieldOf(s)} essence`;
       placeTip(fi);
       return;
     }
@@ -312,7 +312,8 @@ const Paper = (() => {
     Game.tuts.prestiged = 1;
     Game.gold = startGold();
     Game.paper = 0;
-    Game.eggsBought = 0;
+    Game.hatched = 0;
+    Game.egg = { lvl: 0, t: 0 };
     Game.incomeUp = 0;
     Game.eggUp = 0;
     Game.lifeUp = 0;

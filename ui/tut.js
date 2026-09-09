@@ -64,8 +64,8 @@ const Tut = (() => {
 
   const I_STEPS = [
     ['fish', '<b>Paperfish</b> do not live long.', 'Oh no'],
-    ['fc-lbar', 'But they will grant <b>Paper</b> points once their <b>Life Bar</b> reaches 0.', 'I see'],
-    ['fc-hun', 'This is their <b>Hunger Bar</b>.<br><b>Starving</b> paperfish do not grant <b>Paper</b> at the time of death.<br><b>Click</b> any empty space to drop food.', 'Sure']
+    ['fc-lbar', 'While their <b>Life Bar</b> lasts, they grant <b>Life Essence</b> little by little.', 'I see'],
+    ['fc-hun', 'This is their <b>Hunger Bar</b>.<br><b>Starving</b> paperfish stop granting <b>Life Essence</b>.<br><b>Click</b> any empty space to drop food.', 'Sure']
   ];
   let istep = -1;
   let iside = 'right', ifish = null;
@@ -105,7 +105,7 @@ const Tut = (() => {
 
   const E_STEPS = [
     ["Every <b>Paperfish</b> specie is born from an <b>Egg</b>.", 'Interesting'],
-    ['Try creating an <b>Egg</b>!', null]
+    ['Try hatching the <b>Egg</b>!', null]
   ];
   let estep = -1, eggWait = -1;
 
@@ -136,7 +136,6 @@ const Tut = (() => {
     if (eggWait < 0) { eggWait = 11; return; }
     if (!mdt) return;
     if (eggWait > 0) { eggWait = Math.max(eggWait - mdt, 0); return; }
-    if (Game.gold < eggCost()) return;
     const el = document.querySelector('#fish-grid [data-egg]');
     if (!el || !el.getBoundingClientRect().width) return;
     active = true;

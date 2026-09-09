@@ -129,13 +129,13 @@ const Stage = (() => {
     }
   };
 
-  const hatch = f => {
-    f.egg = false;
-    const t = rollTier();
-    const pool = TIER_FISH[t - 1];
-    f.s = pool[Math.floor(Math.random() * pool.length)];
-    Game.seen[f.s] = 1;
-    f.t = 0;
+  const nestX = () => bounds.l + (bounds.r - bounds.l) * 0.5;
+  const nestY = () => bounds.b - 30;
+
+  const hatchAt = f => {
+    f.x = nestX();
+    f.y = nestY() - 12;
+    f.ph = rand(0, Math.PI * 2);
     f.age = 0;
     f.adult = false;
     f.hstate = 0;
@@ -761,16 +761,10 @@ const Stage = (() => {
 
   const EGGP = new Path2D('M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24');
 
-  const drawEgg = f => {
-    const total = hatchTime();
-    const soon = total - (f.t || 0) <= 2;
-    const q = 1 + Math.sin(f.ph * 1.15) * 0.03;
+  const drawNestEgg = () => {
+    const q = 1 + Math.sin(tNow * 1.15) * 0.03;
     ctx.save();
-    ctx.translate(f.x, f.y + Math.sin(f.ph) * 2.2);
-    if (soon) {
-      ctx.translate(Math.sin(tNow * 34) * 1.5, 0);
-      ctx.rotate(Math.sin(tNow * 27) * 0.05);
-    }
+    ctx.translate(nestX(), nestY() + Math.sin(tNow) * 2.2);
     ctx.scale(q * 0.48, (2 - q) * 0.48);
     ctx.fillStyle = 'rgba(253,250,241,1)';
     ctx.fill(EGGP);
@@ -779,24 +773,10 @@ const Stage = (() => {
     ctx.lineCap = 'round';
     ctx.stroke(EGGP);
     ctx.restore();
-    if (soon) {
-      const pulse = 1 + Math.sin(tNow * 8) * 0.15;
-      ctx.save();
-      ctx.translate(f.x, f.y - 24);
-      ctx.scale(pulse, pulse);
-      ctx.strokeStyle = 'rgba(28,27,24,0.85)';
-      ctx.fillStyle = 'rgba(28,27,24,0.85)';
-      ctx.lineWidth = 1.7;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(0, -7);
-      ctx.lineTo(0, -1.2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(0, 2.6, 1.05, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
+    ctx.fillStyle = 'rgba(28,27,24,0.6)';
+    ctx.font = '11px "Zen Maru Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Lv ' + Game.egg.lvl, nestX(), nestY() + 28);
   };
 
   const drawPlant = p => {
@@ -865,7 +845,7 @@ const Stage = (() => {
       ctx.fill();
     }
     for (const p of plants) drawPlant(p);
-    for (const f of Game.fish) if (f.egg) drawEgg(f);
+    drawNestEgg();
     for (const f of Game.fish) if (!f.egg) drawFish(f);
     if (Game.devMode) {
       ctx.strokeStyle = 'rgba(180,58,43,0.3)';
@@ -881,7 +861,7 @@ const Stage = (() => {
   };
 
   return {
-    ctx, materialize, hatch, spawnPlant, resetPlants, nearestFood, spawnPellet, eatPellet, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize, uiBlocked,
+    ctx, materialize, hatchAt, spawnPlant, resetPlants, nearestFood, spawnPellet, eatPellet, biteKelp, hold, release, escape, spawnPop, update, clear, drawScene, resize, uiBlocked,
     get bounds() { return bounds; },
     get open() { return open; },
     get size() { return { W, H }; }

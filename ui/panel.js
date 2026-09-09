@@ -63,12 +63,13 @@ const Panel = (() => {
 
     fishGrid.innerHTML = `
       <button class="ubtn" data-egg>
+        <span class="ubtn-lvl">Lv ${Game.egg.lvl}</span>
         <span class="ubtn-icon eggicon"><svg viewBox="-24 -30 48 60"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg></span>
-        <span class="ubtn-cost">${fmt(eggCost())} G</span>
+        <span class="ubtn-cost">Hatch</span>
         <i class="eggcd" hidden></i>
       </button>` + (Game.pAutoEgg ? `
       <button class="ubtn autoegg" data-autoegg>
-        <span class="ubtn-name">Auto Egg</span>
+        <span class="ubtn-name">Auto Hatch</span>
         <span class="toggle${Game.autoEggOn ? ' on' : ''}"><span class="tknob"></span></span>
       </button>` : '') + UPS.filter(u => u.cat === 'fish' && owned(u)).map(ucard).join('');
     tick();
@@ -89,12 +90,13 @@ const Panel = (() => {
     goldRate.textContent = '+' + fmt(ratePerMin()) + ' G / min';
     const eb = fishGrid.querySelector('[data-egg]');
     if (eb) {
-      const cd = eggCd();
-      eb.classList.toggle('off', Tut.eggLocked() || Game.gold < eggCost() || living() >= FIRSTF_CAP || cd > 0);
+      eb.classList.toggle('off', Tut.eggLocked() || living() >= FIRSTF_CAP);
       eb.classList.toggle('pulse', !Game.tuts.eggBought && !Tut.eggLocked());
+      eb.querySelector('.ubtn-lvl').textContent = 'Lv ' + Game.egg.lvl;
       const bar = eb.querySelector('.eggcd');
-      bar.toggleAttribute('hidden', !cd);
-      if (cd) bar.style.width = (cd / EGG_CD * 100) + '%';
+      const leveling = eggRollLevel() < 6;
+      bar.toggleAttribute('hidden', !leveling);
+      if (leveling) bar.style.width = Math.min(Game.egg.t / eggLevelTime(), 1) * 100 + '%';
     }
     for (const el of document.querySelectorAll('#up-grid [data-key], #fish-grid [data-key]')) {
       const u = UPS.find(x => x.key === el.dataset.key);
@@ -139,7 +141,7 @@ const Panel = (() => {
       if (u && u.buy()) refresh();
       return;
     }
-    if (e.target.closest('[data-egg]') && buyEgg()) {
+    if (e.target.closest('[data-egg]') && hatchEgg()) {
       Tut.eggClicked();
       refresh();
     }

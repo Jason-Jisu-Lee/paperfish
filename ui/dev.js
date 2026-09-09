@@ -17,9 +17,8 @@
       Panel.tick();
     }
     if (b.dataset.act === 'hatch') {
-      for (const f of Game.fish) if (f.egg) Stage.hatch(f);
+      hatchEgg();
       Panel.refresh();
-      saveGame();
     }
     if (b.dataset.paper) {
       const v = +b.dataset.paper;

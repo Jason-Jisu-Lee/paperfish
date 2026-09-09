@@ -17,14 +17,11 @@ const Detail = (() => {
   const elFreq = document.getElementById('fc-freq');
   const elDeath = document.getElementById('fc-death');
   const hatchRow = document.getElementById('fc-hatch-row');
-  const elHatch = document.getElementById('fc-hatch');
   const elHun = document.getElementById('fc-hun');
   const elHFill = document.getElementById('fc-hfill');
   const ebar = document.getElementById('fc-ebar');
-  const elEFill = document.getElementById('fc-efill');
   const fishRows = ['fc-lbar', 'fc-hun', 'fc-freq-row', 'fc-death-row'].map(id => document.getElementById(id));
 
-  const EGGART = '<svg viewBox="-26 -32 52 64" class="eggart"><path d="M0,-24 C13,-24 19,-9 19,3 C19,17 10,25 0,25 C-10,25 -19,17 -19,3 C-19,-9 -13,-24 0,-24"/></svg>';
   const fishArt = s => speciesSVG(s);
   let cardMode = null;
   let mx = null, my = null, hover = null, sel = null;
@@ -39,7 +36,7 @@ const Detail = (() => {
     if (!sel) return;
     const f = sel;
     Stage.release();
-    if (!f.egg) Stage.escape(f, 1);
+    Stage.escape(f, 1);
     sel = null;
     cardMode = null;
   };
@@ -68,7 +65,7 @@ const Detail = (() => {
     if (sel !== f) {
       releaseSel();
       sel = f;
-      if (!f.egg) Stage.hold(f);
+      Stage.hold(f);
     }
     placeCard(f.x, f.y, f, side);
     card.removeAttribute('hidden');
@@ -94,14 +91,8 @@ const Detail = (() => {
     if (mx === null || !Game.started) return null;
     let best = null, bd = Infinity;
     for (const f of Game.fish) {
-      if (f.dying !== undefined) continue;
-      let r;
-      if (f.egg) {
-        r = 16;
-      } else {
-        if (f.birth < 1) continue;
-        r = SPECIES[f.s].len * 0.6;
-      }
+      if (f.dying !== undefined || f.birth < 1) continue;
+      const r = SPECIES[f.s].len * 0.6;
       const dx = f.x - mx, dy = f.y - my;
       const d = dx * dx + dy * dy;
       if (d < r * r && d < bd) { bd = d; best = f; }
@@ -114,7 +105,7 @@ const Detail = (() => {
     const row = e.target.closest('[data-hint]');
     if (!row) return;
     uptip.classList.remove('cap');
-    uptip.textContent = 'paper granted on death, none while starving';
+    uptip.textContent = 'essence granted while alive, none while starving';
     const r = row.getBoundingClientRect();
     uptip.style.right = 'auto';
     uptip.style.left = r.left + 'px';
@@ -138,47 +129,22 @@ const Detail = (() => {
       const sp = SPECIES[hover.s];
       tipName.textContent = sp.name;
       const stages = sp.stages || ['Baby', 'Adult'];
-      const si = hover.egg ? -1 : hover.adult ? stages.length - 1 : 0;
+      const si = hover.adult ? stages.length - 1 : 0;
       tipStage.innerHTML = stages.map((n, i) =>
         `<i class="pip${i < si ? ' on' : ''}${i === si ? ' now' : ''}"></i>`).join('') +
-        `<b>${hover.egg ? 'Egg' : stages[si]}</b>`;
-      if (hover.egg) {
-        tipStage.removeAttribute('hidden');
-        tipHun.setAttribute('hidden', '');
-        tipLife.setAttribute('hidden', '');
-        tip.style.top = (hover.y - 26) + 'px';
-      } else {
-        tipStage.removeAttribute('hidden');
-        tipHFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
-        tipHun.classList.toggle('low', hover.hstate >= 1);
-        tipHun.removeAttribute('hidden');
-        const lifeT = lifeOf();
-        tipLFill.style.width = Math.max(1 - Math.min(hover.age || 0, lifeT) / lifeT, 0) * 100 + '%';
-        tipLife.removeAttribute('hidden');
-        tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
-      }
+        `<b>${stages[si]}</b>`;
+      tipStage.removeAttribute('hidden');
+      tipHFill.style.width = Math.min(Math.max((hover.hunger ?? HUNGER_FULL) / HUNGER_FULL, 0), 1) * 100 + '%';
+      tipHun.classList.toggle('low', hover.hstate >= 1);
+      tipHun.removeAttribute('hidden');
+      const lifeT = lifeOf();
+      tipLFill.style.width = Math.max(1 - Math.min(hover.age || 0, lifeT) / lifeT, 0) * 100 + '%';
+      tipLife.removeAttribute('hidden');
+      tip.style.top = (hover.y - sp.len * 0.3 - 16) + 'px';
       tip.style.left = hover.x + 'px';
       tip.removeAttribute('hidden');
     } else {
       tip.setAttribute('hidden', '');
-    }
-    if (sel && sel.egg) {
-      if (cardMode !== 'egg') {
-        cardMode = 'egg';
-        for (const r of fishRows) r.setAttribute('hidden', '');
-        hatchRow.removeAttribute('hidden');
-        ebar.removeAttribute('hidden');
-        elPic.innerHTML = EGGART;
-        elTier.textContent = tierOf(sel.s);
-        elName.textContent = 'Egg';
-        elStage.textContent = 'Unhatched';
-      }
-      const total = hatchTime();
-      const left = Math.max(Math.ceil(total - (sel.t || 0)), 0);
-      elAge.textContent = left + 's';
-      elEFill.style.width = Math.min((sel.t || 0) / total, 1) * 100 + '%';
-      elHatch.textContent = left + ' sec';
-      return;
     }
     if (sel) {
       if (cardMode !== 'fish') {

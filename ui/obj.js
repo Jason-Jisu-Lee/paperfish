@@ -24,7 +24,7 @@ const Obj = (() => {
     }
     txt.textContent = cur.text;
     showCount();
-    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.paper ? ' Paper' : ' G');
+    rewardEl.textContent = '+' + fmtG(cur.reward) + (cur.paper ? ' Essence' : ' G');
     rewardEl.classList.toggle('objpaper', !!cur.paper);
     rewardEl.style.transform = '';
     rewardEl.style.opacity = '';

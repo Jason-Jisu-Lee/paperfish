@@ -19,15 +19,20 @@ const Sim = (() => {
   const step = sdt => {
     let refresh = false;
     let earned = 0;
+    if (eggRollLevel() < 6) {
+      Game.egg.t += sdt;
+      const lt = eggLevelTime();
+      if (Game.egg.t >= lt) {
+        Game.egg.t -= lt;
+        Game.egg.lvl += 1;
+        refresh = true;
+      }
+    } else {
+      Game.egg.t = 0;
+    }
     for (let i = Game.fish.length - 1; i >= 0; i--) {
       const f = Game.fish[i];
-      if (f.egg) {
-        f.t += sdt;
-        if (f.t >= hatchTime()) {
-          Stage.hatch(f);
-          refresh = true;
-        }
-      } else if (f.dying !== undefined) {
+      if (f.dying !== undefined) {
         f.dying += sdt;
         if (f.dying >= 2.8) {
           Game.fish.splice(i, 1);
@@ -61,7 +66,6 @@ const Sim = (() => {
           if (f.hunger <= 0) {
             f.hT = (f.hT || 0) + sdt;
             if (f.hT >= 10) {
-              f.nopaper = true;
               f.hstate = 0;
               f.dying = 0;
               firstDeath();
@@ -106,24 +110,20 @@ const Sim = (() => {
             const amt = fishIncome(f.s, f.adult) * fired;
             earned += amt;
             Stage.spawnPop(f.x, f.y - SPECIES[f.s].len * 0.3 - 10, '+' + fmtG(amt) + ' G');
+            if (f.hstate < 2) {
+              const e = paperYieldOf(f.s) * (0.25 + 0.75 * Math.min((f.age || 0) / life, 1)) * fired;
+              Game.paper += e;
+              Game.paperEarned += e;
+              Obj.event('paper3', Math.ceil(e));
+            }
           }
         }
         if (f.age >= life && f.birth >= 1) {
-          if (f.deathWait === undefined) {
-            f.deathWait = 0.4 + Math.random() * 3;
-            f.nopaper = f.hstate >= 2 && !f.eating;
-          }
+          if (f.deathWait === undefined) f.deathWait = 0.4 + Math.random() * 3;
           f.deathWait -= sdt;
           if (f.deathWait <= 0) {
             f.dying = 0;
             firstDeath();
-            if (!f.nopaper) {
-              const n = paperYieldOf(f.s);
-              Game.paper += n;
-              Game.paperEarned += n;
-              Stage.spawnPop(f.x, f.y - 14, '+' + n, 'paper');
-              Obj.event('paper3', n);
-            }
             deathWhisper();
           }
         }
