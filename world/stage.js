@@ -496,13 +496,14 @@ const Stage = (() => {
         const dx = p.x - f.x, dy = p.y - f.y;
         const d2 = dx * dx + dy * dy;
         if (d2 >= rf * rf) continue;
+        if (f.hunger <= HUNGER_FULL * EAT_LOCK && dx * f.dir > 0) continue;
         if ((p.x - f.x - f.dir * sp.len * 0.45) ** 2 + dy * dy < 196) continue;
         const d = Math.sqrt(d2) || 1;
         const nx = dx / d, ny = dy / d;
         const fs = f.eating ? 0 : f.spd;
         const k = Math.min(mdt * 10, 1);
-        p.vx += (nx * (rf - d) * (2.5 + fs * 0.02) + f.dir * fs * 0.25) * k;
-        p.vy += (ny * (rf - d) * (2.5 + fs * 0.02) + (f.eating ? 0 : f.vy) * 0.25) * k;
+        p.vx += (nx * (rf - d) * (2.5 + fs * 0.02) + f.dir * fs * 0.12) * k;
+        p.vy += (ny * (rf - d) * (2.5 + fs * 0.02) + (f.eating ? 0 : f.vy) * 0.12) * k;
         p.x += nx * (rf - d) * Math.min(4 * mdt, 1);
         p.y += ny * (rf - d) * Math.min(4 * mdt, 1);
         p.rest = 0;
